@@ -1,6 +1,0 @@
-Django
-djangorestframework
-django-cors-headers
-djangorestframework-simplejwt
-pillow
-mysqlclient

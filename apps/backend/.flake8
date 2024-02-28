@@ -1,0 +1,8 @@
+[flake8]
+max-line-length = 88
+extend-ignore = E203,D100,D101,D104,D105,D106
+exclude = .git,__pycache__,.venv,.mypy_cache,dist,venv
+docstring-convention=google
+per-file-ignores =
+    src/apt2_api/routers/*:D100,D101,D102,D103,D104,D105,D106
+    tests/*:D100,D101,D102,D103,D104,D105,D106

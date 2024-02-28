@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+    db:
+        image: mysql:8.3.0
+        volumes:
+            - ./data/db:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        ports:
+            - "3306:3306"
+        restart: always
+        networks:
+            - go4success
+
+    backend:
+        build:
+            context: ./apps/backend
+            dockerfile: Dockerfile
+        env_file:
+            - .env
+        command: python manage.py runserver 0.0.0.0:8000
+        volumes:
+            - ./apps/backend:/app
+        ports:
+            - "8000:8000"
+        depends_on:
+            - db
+        networks:
+            - go4success
+
+networks:
+    go4success:

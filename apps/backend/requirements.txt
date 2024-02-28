@@ -1,5 +1,9 @@
-flake8==7.0.0
+flake8>=7.0.0
 
-Django
+Django>=5.0.2
 djangorestframework
 django-cors-headers
+python-decouple
+python-dotenv 
+mysqlclient
+psycopg2>=2.8

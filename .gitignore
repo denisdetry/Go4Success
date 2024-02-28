@@ -182,3 +182,6 @@ Thumbs.db
 venv
 node_modules
 .sass-cache
+
+# Database folders
+data

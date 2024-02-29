@@ -12,6 +12,20 @@ Il y a donc:
 
 ### Installation
 
+Pour installer les environnements virtuel :
+
+1. python (allez dans le dossier backend)
+    
+    pip install virtualenv
+    python3 -m venv env
+    source env/bin/activate
+
+2. react (allez dans le dossier frontend)
+    nodeenv env
+    ./env/bin/activate
+
+
+
 Pour tout installer (packages, dépendances) c'est simple:
 
 1.  Pour le backend vous allez dans le dossier backend et il faut juste faire un:

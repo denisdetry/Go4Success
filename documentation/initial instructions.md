@@ -26,6 +26,14 @@ Pour installer les environnements virtuel :
 
 
 
+Pour installer Commitizen
+ 1. pip install --user -U Commitizen
+
+Pour utiliser Commitizen
+ 1. git add .
+ 2. cz commit
+ 3. git push
+
 Pour tout installer (packages, dépendances) c'est simple:
 
 1.  Pour le backend vous allez dans le dossier backend et il faut juste faire un:

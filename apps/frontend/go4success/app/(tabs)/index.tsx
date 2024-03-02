@@ -3,6 +3,8 @@ import { StyleSheet } from "react-native";
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 
+import HomePage from "./homePage";
+
 export default function TabOneScreen() {
     return (
         <View style={styles.container}>
@@ -13,6 +15,7 @@ export default function TabOneScreen() {
                 darkColor="rgba(255,255,255,0.1)"
             />
             <EditScreenInfo path="app/(tabs)/index.tsx" />
+            <HomePage />
         </View>
     );
 }

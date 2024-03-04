@@ -1,32 +1,39 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, ScrollView, Text } from "react-native";
 import Card from "../../components/Card";
 
 const HomePage: React.FC = () => {
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>Welcome to the Home Page!</Text>
             <Card
-                title="Title 1"
-                location="Location 1"
-                date="Date 1"
-                type="Type1"
+                title="Title 1 Lorem ipsum dolor sit amet, consectetur adipiscing"
+                location="Charleroi"
+                date="30-10-23"
+                type="Normal"
                 description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque. "
             />
             <Card
-                title="Title 2"
-                location="Location 2"
-                date="Date 2"
-                type="Type2"
-                description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque. "
+                title="Title 2 Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?"
+                location="Louvain-la-neuve - Local 115"
+                date="30-10-23"
+                type="Important"
+                description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque. "
             />
-        </View>
+            <Card
+                title="Title 3 Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?"
+                location="Louvain-la-neuve - Local 115"
+                date="30-10-23"
+                type="Warning"
+                description=". Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque. "
+            />
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flexGrow: 1,
         alignItems: "center",
         justifyContent: "center",
     },

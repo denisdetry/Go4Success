@@ -12,36 +12,36 @@ axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 export default function index() {
-  const [allActivities, setAllActivities] = useState([]);
-  const [error, setError] = useState("");
+    const [allActivities, setAllActivities] = useState([]);
+    const [error, setError] = useState("");
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/activity/")
-      .then((res) => {
-        setAllActivities(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-  }, []);
+    useEffect(() => {
+        axios
+            .get("http://localhost:8000/api/activity/")
+            .then((res) => {
+                setAllActivities(res.data);
+                console.log(res.data);
+            })
+            .catch((err) => {
+                setError(err.message);
+            });
+    }, []);
 
-  const renderCards = ({ item }) => {
+    const renderCards = ({ item }) => {
+        return (
+            <Card
+                id={item["activity_id"]}
+                title={item["activity_name"]}
+                location={item["activity_room"]}
+                date={item["activity_date_start"]}
+                type={item["activity_type"]}
+                description={item["activity_description"]}
+            />
+        );
+    };
     return (
-      <Card
-        id={item["activity_id"]}
-        title={item["activity_name"]}
-        location={item["activity_room"]}
-        date={item["activity_date_start"]}
-        type={item["activity_type"]}
-        description={item["activity_description"]}
-      />
+        <View style={styles.mainContainer}>
+            <FlatList data={allActivities} renderItem={renderCards} />
+        </View>
     );
-  };
-  return (
-    <View style={styles.mainContainer}>
-      <FlatList data={allActivities} renderItem={renderCards} />
-    </View>
-  );
 }

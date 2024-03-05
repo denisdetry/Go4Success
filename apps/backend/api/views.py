@@ -73,7 +73,7 @@ class ActivityViewSet(viewsets.ModelViewSet):
 
 
 class registerToActivityView(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsAuthenticated,)
-    # authentication_classes = (SessionAuthentication,)
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = (TokenAuthentication,)
     queryset = ATTENDS.objects.all()
     serializer_class = registerToActivitySerializer

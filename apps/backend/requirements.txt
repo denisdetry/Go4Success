@@ -7,3 +7,4 @@ python-decouple
 python-dotenv 
 mysqlclient
 psycopg2>=2.8
+python-dotenv

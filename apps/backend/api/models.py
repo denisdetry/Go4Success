@@ -32,6 +32,7 @@ class ACTIVITY(models.Model):
     activity_id = models.AutoField(db_column='ACTIVITY_ID', primary_key=True)
     activity_type = models.CharField(db_column='ACTIVITY_TYPE', max_length=255)
     activity_name = models.CharField(db_column='ACTIVITY_NAME', max_length=255)
+    activity_description = models.TextField(db_column='ACTIVITY_DESCRIPTION')
     activity_date_start = models.DateField(db_column='ACTIVITY_DATE_START')
     activity_date_end = models.DateField(db_column='ACTIVITY_DATE_END')
     activity_room = models.ForeignKey(
@@ -51,7 +52,7 @@ class STUDENT(models.Model):
         User, db_column='STUDENT_ID', primary_key=True, on_delete=models.CASCADE)
     noma = models.CharField(db_column='NOMA', max_length=8)
     student_number = models.CharField(
-        db_column='STUDENT_NUMBER', max_length=8, null=True)
+        db_column='STUDENT_NUMBER', max_length=8, blank=True)
 
     def __str__(self):
         return self.student_id.first_name + " " + self.student_id.last_name
@@ -61,17 +62,17 @@ class STUDENT(models.Model):
 
 
 class ATTENDS(models.Model):
-    activty = models.OneToOneField(
+    activity = models.OneToOneField(
         ACTIVITY, on_delete=models.CASCADE, db_column='ACTIVITY')  # primary_key=True
     student = models.OneToOneField(
         STUDENT,  on_delete=models.CASCADE, db_column='STUDENT')  # primary_key=True
 
     def __str__(self):
-        return "%s attends %s" % ((self.student.student_id.last_name + " " + self.student.student_id.first_name), self.activty.activity_name)
+        return "%s attends %s" % ((self.student.student_id.last_name + " " + self.student.student_id.first_name), self.activity.activity_name)
 
     class Meta:
         db_table = 'ATTENDS'
-        unique_together = (('activty', 'student'),)
+        unique_together = (('activity', 'student'),)
 
 
 class TEACHER(models.Model):

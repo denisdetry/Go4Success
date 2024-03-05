@@ -13,10 +13,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()
+# load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,11 +25,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+# SECRET_KEY = os.getenv("SECRET_KEY")
+# DEBUG = os.getenv("DEBUG")
+# ALLOWED_HOSTS = list(os.getenv("ALLOWED_HOSTS").split(","))
 
-DEBUG = os.getenv("DEBUG")
-
-ALLOWED_HOSTS = list(os.getenv("ALLOWED_HOSTS").split(","))
+SECRET_KEY = "django-insecure-l@9qd=)u6^!h&n@6+y(%ctr2=ev3_u-_0yerr@8z5!9u2ivdly"
+DEBUG = True
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -40,6 +42,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'api',
+    'corsheaders',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -50,7 +55,14 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ORIGIN_WHITELIST = ['http://localhost:8081']
+
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = ["http://localhost:8081", "http://127.0.0.1:8081"]
 
 ROOT_URLCONF = "server.urls"
 
@@ -76,7 +88,7 @@ WSGI_APPLICATION = "server.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
+""" DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql',
         "NAME": os.getenv("POSTGRES_DATABASE"),
@@ -86,8 +98,18 @@ DATABASES = {
         # Use "3306" as default from .env
         "PORT": os.getenv("DB_PORT", "5432"),
     }
-}
+} """
 
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "go4success",
+        "USER": "go4success",
+        "PASSWORD": "Django_react_password_123",
+        "HOST": "localhost",
+        "PORT": "3306",
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

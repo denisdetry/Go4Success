@@ -1,4 +1,5 @@
 from django.contrib import admin
+# from .models import *
 from .models import *
 
 
@@ -11,8 +12,8 @@ class CourseAdmin(admin.ModelAdmin):
 
 
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ('activity_id', 'activity_type', 'activity_name', 'activity_date_start',
-                    'activity_date_end', 'activity_room', 'activty_course_code')
+    list_display = ('activity_id', 'activity_type', 'activity_name', 'activity_description',
+                    'activity_date_start', 'activity_date_end', 'activity_room', 'activty_course_code')
 
 
 class StudentAdmin(admin.ModelAdmin):
@@ -20,7 +21,7 @@ class StudentAdmin(admin.ModelAdmin):
 
 
 class AttendsAdmin(admin.ModelAdmin):
-    list_display = ('activty', 'student')
+    list_display = ('activity', 'student')
 
 
 class TeacherAdmin(admin.ModelAdmin):

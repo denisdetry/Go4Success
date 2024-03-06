@@ -8,22 +8,11 @@ from .models import *
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = '__all__'
 
     def create(self, clean_data):
         user_obj = User.objects.create_user(**clean_data)
         return user_obj
-
-
-class StudentRegistrationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = STUDENT
-        fields = ('student_id', 'noma', 'student_number')
-
-    def create(self, clean_data):
-        student_obj = STUDENT.objects.create(**clean_data)
-        return student_obj
-
 
 class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField()

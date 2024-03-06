@@ -3,22 +3,18 @@ from django.contrib import admin
 from .models import *
 
 
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('user_id', 'username', 'email', 'first_name', 'last_name', 'noma', 'is_active')
+
 class RoomAdmin(admin.ModelAdmin):
     list_display = ('site_name', 'room_name')
-
 
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('course_code',)
 
-
 class ActivityAdmin(admin.ModelAdmin):
     list_display = ('activity_id', 'activity_type', 'activity_name', 'activity_description',
                     'activity_date_start', 'activity_date_end', 'activity_room', 'activty_course_code')
-
-
-class StudentAdmin(admin.ModelAdmin):
-    list_display = ('student_id', 'noma', 'student_number')
-
 
 class AttendsAdmin(admin.ModelAdmin):
     list_display = ('activity', 'student')
@@ -53,11 +49,10 @@ class SeesAdmin(admin.ModelAdmin):
 class AdminAdmin(admin.ModelAdmin):
     list_display = ("user",)
 
-
+admin.site.register(User, UserAdmin)
 admin.site.register(ROOM, RoomAdmin)
 admin.site.register(COURSE, CourseAdmin)
 admin.site.register(ACTIVITY, ActivityAdmin)
-admin.site.register(STUDENT, StudentAdmin)
 admin.site.register(ATTENDS, AttendsAdmin)
 admin.site.register(TEACHER, TeacherAdmin)
 admin.site.register(GIVES, GivesAdmin)

@@ -7,8 +7,6 @@ from .validations import custom_validation, validate_username, validate_password
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework import viewsets
 from .models import *
-from django.views.decorators.csrf import csrf_exempt
-
 
 class UserRegisterView(APIView):
     permission_classes = (permissions.AllowAny,)

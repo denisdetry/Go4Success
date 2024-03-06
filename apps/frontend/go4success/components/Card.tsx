@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, StyleSheet, Text, Pressable, View } from "react-native";
 import Colors from "../constants/Colors";
 import Button from "./Button";
 import axios from "axios";
+import GetCurrentUserID from "./GetCurrentUserID";
+import { useRouter } from "expo-router";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -120,18 +122,9 @@ const Card: React.FC<CardProps> = ({
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [currentUserID, setCurrentUserID] = useState("");
+    const router = useRouter();
 
-    useEffect(() => {
-        axios
-            .get("http://localhost:8000/api/current_user/")
-            .then((res) => {
-                setCurrentUserID(res.data.user.id);
-                console.log("userID : ", res.data.user.id);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, []);
+    GetCurrentUserID(setCurrentUserID);
 
     const handleRegister = async () => {
         axios
@@ -144,7 +137,21 @@ const Card: React.FC<CardProps> = ({
                 console.log(res);
             })
             .catch((err) => {
-                alert("Error :" + err);
+                if (err.response.status === 400) {
+                    if (currentUserID === "") {
+                        alert("You need to be logged in to register");
+                        router.push("/login");
+                        setModalVisible(!modalVisible);
+                    } else {
+                        alert("You are already registered to this activity");
+                    }
+                } else if (err.response.status === 403) {
+                    alert("You are not allowed to register to this activity");
+                } else if (err.response.status === 404) {
+                    alert("Activity not found");
+                } else if (err.response.status === 500) {
+                    alert("Server error, please try again later");
+                }
                 console.log(err);
             });
     };
@@ -185,7 +192,7 @@ const Card: React.FC<CardProps> = ({
                         <View style={styles.buttonContainer}>
                             <Button
                                 text="Register"
-                                onClick={() => {}}
+                                onClick={handleRegister}
                                 buttonType={"primary"}
                             />
                             <Button
@@ -240,6 +247,7 @@ const styles = StyleSheet.create({
         width: "100%",
         maxWidth: 350,
         minHeight: 200,
+        minWidth: 300,
         height: "100%",
         maxHeight: 500,
         borderRadius: 10,

@@ -15,12 +15,12 @@ class UserRegisterView(APIView):
 
     def post(self, request):
         clean_data = custom_validation(request.data)
-        serializer = UserRegistrationSerializer(data=clean_data)
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.create(clean_data)
+        user_serializer = UserRegistrationSerializer(data=clean_data)
+        if user_serializer.is_valid(raise_exception=True):
+            user = user_serializer.create(clean_data)
             if user:
                 login(request, user)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(user_serializer.data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -48,7 +48,7 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class UserView(APIView):
+class CurrentUserView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
 
@@ -57,19 +57,16 @@ class UserView(APIView):
         return Response({'user': serializer.data}, status=status.HTTP_200_OK)
 
 
-class CurrentUserView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
-
-    def get(self, request):
-        user = request.user
-        serializer = UserSerializer(user)
-        return Response({'user': serializer.data}, status=status.HTTP_200_OK)
-
-
 class ActivityViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
     queryset = ACTIVITY.objects.all()
     serializer_class = ActivitySerializer
+
+
+class AttendsViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    queryset = ATTENDS.objects.all()
+    serializer_class = AttendsSerializer
 
 
 class registerToActivityView(viewsets.ModelViewSet):

@@ -47,6 +47,14 @@ export default function register() {
                 } else {
                     Alert.alert("Error : " + msg);
                 }
+
+                if (error.response.status === 400) {
+                    setError("Email or Username already taken");
+                } else if (error.response.status === 500) {
+                    setError("Server error, please try again later");
+                } else if (error.response.status === 403) {
+                    setError("You are already logged in");
+                }
             });
     };
 

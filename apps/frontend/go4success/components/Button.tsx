@@ -20,6 +20,7 @@ const Button: React.FC<ButtonProps> = ({ text, onClick, buttonType }) => {
         fontSize: 16,
         border: "none",
         outline: "none",
+        cursor: "pointer",
     };
 
     const buttonStyles = {

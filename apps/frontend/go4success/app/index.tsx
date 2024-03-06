@@ -11,6 +11,15 @@ axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
+interface Activity {
+    activity_id: string;
+    activity_name: string;
+    activity_room: string;
+    activity_date_start: string;
+    activity_type: string;
+    activity_description: string;
+}
+
 export default function index() {
     const [allActivities, setAllActivities] = useState([]);
     const [error, setError] = useState("");
@@ -27,7 +36,7 @@ export default function index() {
             });
     }, []);
 
-    const renderCards = ({ item }) => {
+    const renderCards = ({ item }: { item: Activity }) => {
         return (
             <Card
                 id={item["activity_id"]}

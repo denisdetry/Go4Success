@@ -4,7 +4,7 @@ from .models import *
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('user_id', 'username', 'email', 'first_name', 'last_name', 'noma', 'is_active')
+    list_display = ('id', 'username', 'email', 'first_name', 'last_name', 'noma', 'is_active')
 
 class RoomAdmin(admin.ModelAdmin):
     list_display = ('site_name', 'room_name')

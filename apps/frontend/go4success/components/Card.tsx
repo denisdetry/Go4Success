@@ -1,6 +1,8 @@
+import React, { useState, useEffect } from "react";
+import { Modal, StyleSheet, Text, Pressable, View } from "react-native";
+import Colors from "../constants/Colors";
+import Button from "./Button";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -15,6 +17,98 @@ interface CardProps {
     type: string;
     description: string;
 }
+
+const styleFunctions = {
+    getModalViewTitleStyle: (type: string) => {
+        switch (type) {
+            case "Important":
+                return {
+                    ...styles.modalViewTitle,
+                    backgroundColor: Colors.importantColor,
+                };
+            case "Warning":
+                return {
+                    ...styles.modalViewTitle,
+                    backgroundColor: Colors.warningColor,
+                };
+            case "Appointment":
+                return {
+                    ...styles.modalViewTitle,
+                    backgroundColor: Colors.appointmentColor,
+                };
+            case "Workshop":
+                return {
+                    ...styles.modalViewTitle,
+                    backgroundColor: Colors.workshopColor,
+                };
+            default:
+                return {
+                    ...styles.modalViewTitle,
+                    backgroundColor: Colors.primaryColor,
+                };
+        }
+    },
+
+    getmodalDataStyle: (type: string) => {
+        switch (type) {
+            case "Important":
+                return {
+                    ...styles.modalData,
+                    backgroundColor: Colors.importantLightColor,
+                };
+            case "Warning":
+                return {
+                    ...styles.modalData,
+                    backgroundColor: Colors.warningLightColor,
+                };
+            case "Appointment":
+                return {
+                    ...styles.modalData,
+                    backgroundColor: Colors.appointmentLightColor,
+                };
+            case "Workshop":
+                return {
+                    ...styles.modalData,
+                    backgroundColor: Colors.workshopLightColor,
+                };
+            default:
+                return {
+                    ...styles.modalData,
+                    backgroundColor: Colors.normalLightColor,
+                };
+        }
+    },
+
+    getCardStyle: (type: string) => {
+        switch (type) {
+            case "Important":
+                return {
+                    ...styles.card,
+                    backgroundColor: Colors.importantColor,
+                };
+            case "Warning":
+                return {
+                    ...styles.card,
+                    backgroundColor: Colors.warningColor,
+                };
+            case "Appointment":
+                return {
+                    ...styles.card,
+                    backgroundColor: Colors.appointmentColor,
+                };
+            case "Workshop":
+                return {
+                    ...styles.card,
+                    backgroundColor: Colors.workshopColor,
+                };
+            default:
+                return {
+                    ...styles.card,
+                    backgroundColor: Colors.primaryColor,
+                };
+        }
+    },
+};
 
 const Card: React.FC<CardProps> = ({
     id,
@@ -67,41 +161,106 @@ const Card: React.FC<CardProps> = ({
             >
                 <View style={styles.centeredViewModal}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalTitle}>{title}</Text>{" "}
-                        <Text style={styles.modalText}>{date}</Text>
-                        <Text style={styles.modalText}>{location}</Text>
-                        <Text style={styles.modalText}>{type}</Text>
-                        <Text style={styles.modalText}>{description}</Text>
-                        <TouchableOpacity
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={handleRegister}
-                        >
-                            <Text style={styles.textStyle}>Register</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.button, styles.buttonClose]}
+                        <Pressable
+                            style={styles.closeButton}
                             onPress={() => setModalVisible(!modalVisible)}
                         >
-                            <Text style={styles.textStyle}>Hide Modal</Text>
-                        </TouchableOpacity>
+                            <Text style={styles.closeButtonText}>✖</Text>
+                        </Pressable>
+                        <View
+                            style={styleFunctions.getModalViewTitleStyle(type)}
+                        >
+                            <Text style={styles.modalTitle}>{title}</Text>{" "}
+                        </View>
+                        <View style={styleFunctions.getmodalDataStyle(type)}>
+                            <Text style={styles.modalText}>Date : {date}</Text>
+                            <Text style={styles.modalText}>
+                                Place : {location}
+                            </Text>
+                            <Text style={styles.modalText}>Type : {type}</Text>
+                            <View style={styles.separator} />
+                            <Text style={styles.modalText}>{description}</Text>
+                        </View>
+
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                text="Register"
+                                onClick={() => {}}
+                                buttonType={"primary"}
+                            />
+                            <Button
+                                text="Hide Modal"
+                                onClick={() => setModalVisible(!modalVisible)}
+                                buttonType={"close"}
+                            />
+                        </View>
                     </View>
                 </View>
             </Modal>
 
-            <TouchableOpacity
-                style={styles.card}
+            <Pressable
+                style={styleFunctions.getCardStyle(type)}
                 onPress={() => setModalVisible(true)}
             >
                 <Text style={styles.title}>{title}</Text>
-                <Text style={styles.text}>{location}</Text>
-                <Text style={styles.text}>{date}</Text>
-                <Text style={styles.text}>{type}</Text>
-            </TouchableOpacity>
+                <View style={styles.bottomRow}>
+                    <Text style={styles.text}>{location}</Text>
+                    <Text style={styles.text}>{date}</Text>
+                </View>
+            </Pressable>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    buttonContainer: {
+        paddingTop: 15,
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+    modalViewTitle: {
+        width: "100%",
+    },
+    modalTitle: {
+        fontSize: 24,
+        fontWeight: "bold",
+        color: "white",
+        padding: 20,
+        width: "100%",
+    },
+    modalData: {
+        padding: 20,
+        width: "100%",
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center",
+    },
+    card: {
+        width: "100%",
+        maxWidth: 350,
+        minHeight: 200,
+        height: "100%",
+        maxHeight: 500,
+        borderRadius: 10,
+        padding: 20,
+        paddingHorizontal: 10,
+        flex: 1,
+        flexDirection: "column",
+        justifyContent: "space-between",
+        paddingBottom: 100,
+    },
+    bottomRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        position: "absolute",
+        bottom: 0,
+        width: "100%",
+        paddingTop: 20,
+        paddingRight: 20,
+        paddingLeft: 5,
+        paddingBottom: 10,
+    },
     centeredView: {
         marginTop: 22,
     },
@@ -112,11 +271,10 @@ const styles = StyleSheet.create({
         marginTop: 22,
     },
     modalView: {
-        width: "60%",
         margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
-        padding: 35,
+        padding: 30,
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
@@ -127,46 +285,28 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
-    button: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2,
+    closeButton: {
+        position: "absolute",
+        top: 10,
+        right: 10,
     },
-    buttonOpen: {
-        backgroundColor: "#F194FF",
-    },
-    buttonClose: {
-        backgroundColor: "#2196F3",
-    },
-    textStyle: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center",
-    },
-    modalTitle: {
+    closeButtonText: {
         fontSize: 24,
-        fontWeight: "bold",
-        marginBottom: 15,
-        backgroundColor: "#F194FF",
+        color: "#333",
     },
-    modalText: {
-        marginBottom: 15,
-        textAlign: "center",
-    },
-    card: {
-        width: "100%",
-        height: "100%",
-        borderRadius: 10,
-        padding: 80,
-        paddingHorizontal: 200,
-        backgroundColor: "#F194FF",
+    separator: {
+        borderBottomColor: "#000",
+        borderBottomWidth: 1,
+        marginVertical: 10,
     },
     title: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: "bold",
+        color: "white",
     },
     text: {
         fontSize: 16,
+        color: "white",
     },
 });
 

@@ -140,7 +140,7 @@ const Card: React.FC<CardProps> = ({
                 if (err.response.status === 400) {
                     if (currentUserID === "") {
                         alert("You need to be logged in to register");
-                        router.push("/login");
+                       //TODO router.push("/login");
                         setModalVisible(!modalVisible);
                     } else {
                         alert("You are already registered to this activity");

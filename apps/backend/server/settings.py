@@ -82,7 +82,7 @@ WSGI_APPLICATION = "server.wsgi.application"
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql',
-        "NAME": os.getenv("POSTGRES_DATABASE", "Go4Successdatabase"),
+        "NAME": os.getenv("POSTGRES_DB", "Go4Successdatabase"),
         "USER": os.getenv("POSTGRES_USER", "PMUser"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "UCpassword"),
         # Use "db" as default from .env

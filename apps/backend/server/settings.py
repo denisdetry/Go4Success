@@ -25,11 +25,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv(
+    "SECRET_KEY") if os.getenv("SECRET_KEY") else "django-insecure-gd3+ohzgb(ohbste8=_1m0s&cs#9jynjoqgkh6smn2anxh-37t"
 
-DEBUG = os.getenv("DEBUG")
+DEBUG = os.getenv("DEBUG") if os.getenv("DEBUG") else "DEBUG"
 
-ALLOWED_HOSTS = list(os.getenv("ALLOWED_HOSTS").split(","))
+ALLOWED_HOSTS = list(os.getenv("ALLOWED_HOSTS").split(",")) if os.getenv(
+    "ALLOWED_HOSTS") else ["*"]
 
 # Application definition
 
@@ -79,10 +81,11 @@ WSGI_APPLICATION = "server.wsgi.application"
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql',
-        "NAME": os.getenv("POSTGRES_DATABASE"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": os.getenv("DB_HOST", "db"),  # Use "db" as default from .env
+        "NAME": os.getenv("POSTGRES_DATABASE", "Go4Successdatabase"),
+        "USER": os.getenv("POSTGRES_USER", "PMUser"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "UCpassword"),
+        # Use "db" as default from .env
+        "HOST": os.getenv("DB_HOST", "localhost"),
         # Use "3306" as default from .env
         "PORT": os.getenv("DB_PORT", "5432"),
     }
@@ -130,3 +133,5 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "api.User"

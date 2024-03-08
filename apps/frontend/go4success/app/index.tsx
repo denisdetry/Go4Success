@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import React from "react";
 import styles from "../styles/global";
 import { useEffect, useState } from "react";
@@ -37,10 +37,11 @@ export default function index() {
             .get("http://localhost:8000/api/attends/")
             .then((res) => {
                 setRegisteredActivities(res.data);
-                res.data.map((attend) =>
-                    console.log(
-                        "Activity Name: " + attend.activity.activity_name,
-                    ),
+                res.data.map(
+                    (attend: { activity: { activity_name: string } }) =>
+                        console.log(
+                            "Activity Name: " + attend.activity.activity_name,
+                        ),
                 );
             })
             .catch((err) => {
@@ -79,12 +80,12 @@ export default function index() {
         );
     };
     return (
-        <View style={styles.containerCard}>
+        <ScrollView contentContainerStyle={styles.containerCard}>
             <h2>Registered Workshops</h2>
             <FlatList data={registeredActivities} renderItem={renderCards} />
 
             <h2>Available Workshops</h2>
             <FlatList data={allActivities} renderItem={renderCards} />
-        </View>
+        </ScrollView>
     );
 }

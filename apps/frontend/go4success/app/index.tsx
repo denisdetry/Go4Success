@@ -20,36 +20,70 @@ interface Activity {
     activity_description: string;
 }
 
+interface Attend {
+    activity: Activity;
+    student_id: string;
+}
+
+type ActivityOrAttend = Activity | Attend;
+
 export default function index() {
     const [allActivities, setAllActivities] = useState([]);
+    const [registeredActivities, setRegisteredActivities] = useState([]);
     const [error, setError] = useState("");
 
     useEffect(() => {
         axios
+            .get("http://localhost:8000/api/attends/")
+            .then((res) => {
+                setRegisteredActivities(res.data);
+                res.data.map((attend) =>
+                    console.log(
+                        "Activity Name: " + attend.activity.activity_name,
+                    ),
+                );
+            })
+            .catch((err) => {
+                setError(err.message);
+            });
+
+        axios
             .get("http://localhost:8000/api/activity/")
             .then((res) => {
                 setAllActivities(res.data);
-                console.log(res.data);
+                console.log("All Activity" + res.data);
             })
             .catch((err) => {
                 setError(err.message);
             });
     }, []);
 
-    const renderCards = ({ item }: { item: Activity }) => {
+    const renderCards = ({ item }: { item: ActivityOrAttend }) => {
+        let activity: Activity;
+
+        if ("activity" in item) {
+            activity = item.activity;
+        } else {
+            activity = item;
+        }
+
         return (
             <Card
-                id={item["activity_id"]}
-                title={item["activity_name"]}
-                location={item["activity_room"]}
-                date={item["activity_date_start"]}
-                type={item["activity_type"]}
-                description={item["activity_description"]}
+                id={activity.activity_id}
+                title={activity.activity_name}
+                location={activity.activity_room}
+                date={activity.activity_date_start}
+                type={activity.activity_type}
+                description={activity.activity_description}
             />
         );
     };
     return (
-        <View style={styles.mainContainer}>
+        <View style={styles.containerCard}>
+            <h2>Registered Workshops</h2>
+            <FlatList data={registeredActivities} renderItem={renderCards} />
+
+            <h2>Available Workshops</h2>
             <FlatList data={allActivities} renderItem={renderCards} />
         </View>
     );

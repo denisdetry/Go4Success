@@ -13,6 +13,11 @@ export default StyleSheet.create({
         marginTop: 70,
         margin: 40,
     },
+    containerCard: {
+        flexGrow: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
     container: {
         flexDirection: "row",
         alignItems: "center",

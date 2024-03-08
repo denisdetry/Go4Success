@@ -45,6 +45,8 @@ class ActivitySerializer(serializers.ModelSerializer):
 
 
 class AttendsSerializer(serializers.ModelSerializer):
+    activity = ActivitySerializer(read_only=True)
+
     class Meta:
         model = ATTENDS
         fields = ('activity', 'student')

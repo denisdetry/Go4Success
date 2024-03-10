@@ -3,8 +3,6 @@ import { Modal, StyleSheet, Text, Pressable, View } from "react-native";
 import Colors from "../constants/Colors";
 import Button from "./Button";
 import axios from "axios";
-import GetCurrentUserID from "./GetCurrentUserID";
-import { useRouter } from "expo-router";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -121,40 +119,6 @@ const Card: React.FC<CardProps> = ({
     description,
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [currentUserID, setCurrentUserID] = useState("");
-    const router = useRouter();
-
-    GetCurrentUserID(setCurrentUserID);
-
-    const handleRegister = async () => {
-        axios
-            .post("http://localhost:8000/api/register_activity/", {
-                activity: id,
-                student: currentUserID,
-            })
-            .then((res) => {
-                alert("Registered");
-                console.log(res);
-            })
-            .catch((err) => {
-                if (err.response.status === 400) {
-                    if (currentUserID === "") {
-                        alert("You need to be logged in to register");
-                        router.push("/login");
-                        setModalVisible(!modalVisible);
-                    } else {
-                        alert("You are already registered to this activity");
-                    }
-                } else if (err.response.status === 403) {
-                    alert("You are not allowed to register to this activity");
-                } else if (err.response.status === 404) {
-                    alert("Activity not found");
-                } else if (err.response.status === 500) {
-                    alert("Server error, please try again later");
-                }
-                console.log(err);
-            });
-    };
 
     return (
         <View style={styles.centeredView}>
@@ -192,12 +156,12 @@ const Card: React.FC<CardProps> = ({
                         <View style={styles.buttonContainer}>
                             <Button
                                 text="Register"
-                                onClick={handleRegister}
+                                onPress={() => {}}
                                 buttonType={"primary"}
                             />
                             <Button
                                 text="Hide Modal"
-                                onClick={() => setModalVisible(!modalVisible)}
+                                onPress={() => setModalVisible(!modalVisible)}
                                 buttonType={"close"}
                             />
                         </View>

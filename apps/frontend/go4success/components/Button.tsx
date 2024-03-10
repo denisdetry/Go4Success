@@ -1,59 +1,48 @@
 import React from "react";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import Colors from "../constants/Colors";
 
 type ButtonProps = {
     text: string;
-    onClick: () => void;
+    onPress: () => void;
     buttonType: "primary" | "secondary" | "success" | "danger" | "close";
 };
 
-const Button: React.FC<ButtonProps> = ({ text, onClick, buttonType }) => {
-    const commonStyles = {
-        borderRadius: 20,
-        elevation: 2,
-        padding: 20,
-        paddingHorizontal: 40,
-        margin: 5,
-        fontWeight: "bold",
-        textAlign: "center",
-        color: "white",
-        fontSize: 16,
-        border: "none",
-        outline: "none",
-        cursor: "pointer",
-    };
-
-    const buttonStyles = {
+const Button: React.FC<ButtonProps> = ({ text, onPress, buttonType }) => {
+    const styles = StyleSheet.create({
+        common: {
+            borderRadius: 20,
+            padding: 8,
+            margin: 5,
+            fontWeight: "bold",
+            textAlign: "center",
+            color: "white",
+            fontSize: 16,
+        },
         primary: {
-            ...commonStyles,
             backgroundColor: Colors.primaryColor,
         },
         secondary: {
-            ...commonStyles,
             backgroundColor: Colors.secondaryColor,
         },
         close: {
-            ...commonStyles,
             backgroundColor: Colors.importantColor,
         },
         success: {
-            ...commonStyles,
             backgroundColor: Colors.appointmentColor,
         },
         danger: {
-            ...commonStyles,
             backgroundColor: Colors.importantColor,
         },
-    };
+    });
 
     return (
-        <button
-            className={`button button-${buttonType}`}
-            onClick={onClick}
-            style={buttonStyles[buttonType] as React.CSSProperties}
+        <TouchableOpacity
+            style={[styles.common, styles[buttonType]]}
+            onPress={onPress}
         >
-            {text}
-        </button>
+            <Text style={styles.common}>{text}</Text>
+        </TouchableOpacity>
     );
 };
 

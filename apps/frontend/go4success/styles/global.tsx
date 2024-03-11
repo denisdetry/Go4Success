@@ -43,8 +43,13 @@ export default StyleSheet.create({
     },
     heading: {
         alignItems: "center",
-        fontSize: 20,
+        fontSize: 22,
         color: "green",
         marginBottom: 20,
+    },
+    heading2: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: "black",
     },
 });

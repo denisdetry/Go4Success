@@ -1,6 +1,7 @@
 import { View, Text, ScrollView } from "react-native";
 import React from "react";
 import styles from "../styles/global";
+import { StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "../components/Card";
@@ -81,10 +82,10 @@ export default function index() {
     };
     return (
         <ScrollView contentContainerStyle={styles.containerCard}>
-            <h2>Registered Workshops</h2>
+            <Text style={styles.heading2}>Registered Workshops</Text>
             <FlatList data={registeredActivities} renderItem={renderCards} />
 
-            <h2>Available Workshops</h2>
+            <Text style={styles.heading2}>Available Workshops</Text>
             <FlatList data={allActivities} renderItem={renderCards} />
         </ScrollView>
     );

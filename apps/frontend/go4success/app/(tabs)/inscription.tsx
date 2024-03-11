@@ -26,7 +26,7 @@ export default function inscription() {
 
 
 
-
+ 
 const styles = StyleSheet.create({
     container: {
         flex: 1,

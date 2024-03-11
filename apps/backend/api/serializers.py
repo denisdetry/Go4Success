@@ -58,3 +58,9 @@ class AttendsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ATTENDS
         fields = ('activity', 'student')
+
+
+class LocationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ROOM
+        fields = ('site_name', 'room_name')

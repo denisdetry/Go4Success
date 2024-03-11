@@ -1,11 +1,11 @@
-import { View, Text, ScrollView } from "react-native";
+import { Text, ScrollView } from "react-native";
 import React from "react";
 import styles from "../styles/global";
-import { StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "../components/Card";
 import { FlatList } from "react-native-gesture-handler";
+import { Picker } from "@react-native-picker/picker";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -33,7 +33,31 @@ export default function index() {
     const [registeredActivities, setRegisteredActivities] = useState([]);
     const [error, setError] = useState("");
 
+    const [selectedLocation, setSelectedLocation] = useState("");
+    const [locations, setLocations] = useState([]);
+
+    const [selectedType, setSelectedType] = useState("");
+    const [types, setTypes] = useState<string[]>([]);
+
     useEffect(() => {
+        // LOCATION
+        axios
+            .get("http://localhost:8000/api/locations/")
+            .then((res) => {
+                setLocations(
+                    res.data
+                        .map((location: any) => location.site_name)
+                        .filter(
+                            (value: string, index: number, self: string[]) =>
+                                self.indexOf(value) === index,
+                        ),
+                );
+            })
+            .catch((err: Error) => {
+                console.error(err.message);
+            });
+
+        // ATTENDS
         axios
             .get("http://localhost:8000/api/attends/")
             .then((res) => {
@@ -49,10 +73,19 @@ export default function index() {
                 setError(err.message);
             });
 
+        // ACTIVITY
         axios
             .get("http://localhost:8000/api/activity/")
             .then((res) => {
                 setAllActivities(res.data);
+                setTypes(
+                    res.data
+                        .map((activity: any) => activity.activity_type)
+                        .filter(
+                            (value: string, index: number, self: string[]) =>
+                                self.indexOf(value) === index,
+                        ),
+                );
                 console.log("All Activity" + res.data);
             })
             .catch((err) => {
@@ -80,13 +113,70 @@ export default function index() {
             />
         );
     };
+    const filteredRegisteredActivities = registeredActivities.filter(
+        (item: ActivityOrAttend) => {
+            if ("activity" in item) {
+                const city = item.activity.activity_room.split(" - ")[0];
+                return (
+                    (selectedLocation === "" || city === selectedLocation) &&
+                    (selectedType === "" ||
+                        item.activity.activity_type === selectedType)
+                );
+            }
+            return false;
+        },
+    );
+
+    const filteredAllActivities = allActivities.filter((activity: Activity) => {
+        const city = activity.activity_room.split(" - ")[0];
+        return (
+            (selectedLocation === "" || city === selectedLocation) &&
+            (selectedType === "" || activity.activity_type === selectedType)
+        );
+    });
     return (
         <ScrollView contentContainerStyle={styles.containerCard}>
+            <Picker
+                selectedValue={selectedType}
+                onValueChange={(itemValue) => setSelectedType(itemValue)}
+            >
+                <Picker.Item label="ALL" value="" />
+                {types.map((type) => (
+                    <Picker.Item key={type} label={type} value={type} />
+                ))}
+            </Picker>
+            <Picker
+                selectedValue={selectedLocation}
+                onValueChange={(itemValue) => setSelectedLocation(itemValue)}
+            >
+                <Picker.Item label="ALL" value="" />
+                {locations.map((location) => (
+                    <Picker.Item
+                        key={location}
+                        label={location}
+                        value={location}
+                    />
+                ))}
+            </Picker>
             <Text style={styles.heading2}>Registered Workshops</Text>
-            <FlatList data={registeredActivities} renderItem={renderCards} />
+            {filteredRegisteredActivities.length > 0 ? (
+                <FlatList
+                    data={filteredRegisteredActivities}
+                    renderItem={renderCards}
+                />
+            ) : (
+                <Text>No registered workshops available with this filter.</Text>
+            )}
 
             <Text style={styles.heading2}>Available Workshops</Text>
-            <FlatList data={allActivities} renderItem={renderCards} />
+            {filteredAllActivities.length > 0 ? (
+                <FlatList
+                    data={filteredAllActivities}
+                    renderItem={renderCards}
+                />
+            ) : (
+                <Text>No available workshops with this filter.</Text>
+            )}
         </ScrollView>
     );
 }

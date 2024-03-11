@@ -8,6 +8,7 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework import viewsets
 from .models import *
 
+
 class UserRegisterView(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -72,3 +73,9 @@ class registerToActivityView(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     queryset = ATTENDS.objects.all()
     serializer_class = registerToActivitySerializer
+
+
+class LocationsViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    queryset = ROOM.objects.all()
+    serializer_class = LocationsSerializer

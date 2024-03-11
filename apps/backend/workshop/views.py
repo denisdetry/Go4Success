@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from rest_framework import permissions, viewsets
 
-from serializers import *
+from .serializers import *
 
 class UserViewSet(viewsets.ModelViewSet):
     """

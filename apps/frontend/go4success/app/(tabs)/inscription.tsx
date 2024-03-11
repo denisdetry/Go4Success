@@ -28,20 +28,24 @@ export default function inscription() {
 
  
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: "bold",
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: "80%",
-    },
+/* InscriptionForm */
+
+/* Auto layout */
+display: flex,
+flexDirection: column,
+alignItems: center,
+padding: 50px 16px,
+gap: 16px,
+
+width: 390px,
+height: 453px,
+
+
+/* Inside auto layout */
+flex: none,
+order: 3,
+flex-grow: 0,
+
 });
 
 

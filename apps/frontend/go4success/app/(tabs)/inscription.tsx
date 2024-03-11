@@ -28,23 +28,24 @@ export default function inscription() {
 
  
 const styles = StyleSheet.create({
-/* InscriptionForm */
+    /* InscriptionForm */
 
-/* Auto layout */
-display: flex,
-flexDirection: column,
-alignItems: center,
-padding: 50px 16px,
-gap: 16px,
+    display:'flex',
 
-width: 390px,
-height: 453px,
+    /* Auto layout */
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: 50,
+    gap: 16,
+
+    width: 390,
+    height: 453,
 
 
-/* Inside auto layout */
-flex: none,
-order: 3,
-flex-grow: 0,
+    /* Inside auto layout */
+    flex: 'none',
+    order: 3,
+    flexGrow: 0,
 
 });
 

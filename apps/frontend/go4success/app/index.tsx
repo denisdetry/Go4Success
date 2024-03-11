@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "../components/Card";
 import { FlatList } from "react-native-gesture-handler";
-import { Picker } from "@react-native-picker/picker";
+import FilterActivity from "../components/FilterActivity";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -136,28 +136,14 @@ export default function index() {
     });
     return (
         <ScrollView contentContainerStyle={styles.containerCard}>
-            <Picker
-                selectedValue={selectedType}
-                onValueChange={(itemValue) => setSelectedType(itemValue)}
-            >
-                <Picker.Item label="ALL" value="" />
-                {types.map((type) => (
-                    <Picker.Item key={type} label={type} value={type} />
-                ))}
-            </Picker>
-            <Picker
-                selectedValue={selectedLocation}
-                onValueChange={(itemValue) => setSelectedLocation(itemValue)}
-            >
-                <Picker.Item label="ALL" value="" />
-                {locations.map((location) => (
-                    <Picker.Item
-                        key={location}
-                        label={location}
-                        value={location}
-                    />
-                ))}
-            </Picker>
+            <FilterActivity
+                types={types}
+                locations={locations}
+                selectedType={selectedType}
+                selectedLocation={selectedLocation}
+                onTypeChange={(itemValue) => setSelectedType(itemValue)}
+                onLocationChange={(itemValue) => setSelectedLocation(itemValue)}
+            />
             <Text style={styles.heading2}>Registered Workshops</Text>
             {filteredRegisteredActivities.length > 0 ? (
                 <FlatList
@@ -167,7 +153,6 @@ export default function index() {
             ) : (
                 <Text>No registered workshops available with this filter.</Text>
             )}
-
             <Text style={styles.heading2}>Available Workshops</Text>
             {filteredAllActivities.length > 0 ? (
                 <FlatList

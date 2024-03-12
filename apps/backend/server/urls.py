@@ -30,8 +30,8 @@ urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('workshop/', include('workshop.urls')),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
-    path("api/", include("api.urls")),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path("api/", include("api.urls"))
 ]
 
 

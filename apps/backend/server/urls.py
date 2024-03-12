@@ -17,19 +17,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, include
 from rest_framework import routers
-from workshop import views
-
+from workshop import views as wk
+from userregistration import views as regis
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'room', views.RoomViewSet)
-router.register(r'room', views.CourseViewSet)
-
+router.register(r'users', wk.UserViewSet)
+router.register(r'room', wk.RoomViewSet)
+router.register(r'course', wk.CourseViewSet)
+router.register(r'registration', regis.UserRegistration)
 
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('workshop/', include('workshop.urls')),
+    path('userresgistration', include('userregistration.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path("api/", include("api.urls"))
 ]

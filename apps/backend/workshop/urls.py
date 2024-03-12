@@ -1,7 +1,12 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
-from . import views
+from .views import ActivityViewSet
+
+router = DefaultRouter()
+
+router.register(r'', ActivityViewSet)
 
 urlpatterns = [
-    path('add', views.add, name='index'),
+    path('', include(router.urls)),
 ]

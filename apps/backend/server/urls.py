@@ -24,7 +24,6 @@ router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'room', views.RoomViewSet)
 router.register(r'room', views.CourseViewSet)
-router.register(r'room', views.ActivityViewSet)
 
 
 urlpatterns = [

@@ -1,4 +1,4 @@
-import { Text, ScrollView } from "react-native";
+import { Text, ScrollView, TextInput } from "react-native";
 import React from "react";
 import styles from "../styles/global";
 import { useEffect, useState } from "react";
@@ -38,6 +38,8 @@ export default function index() {
 
     const [selectedType, setSelectedType] = useState("");
     const [types, setTypes] = useState<string[]>([]);
+
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         // LOCATION
@@ -120,7 +122,10 @@ export default function index() {
                 return (
                     (selectedLocation === "" || city === selectedLocation) &&
                     (selectedType === "" ||
-                        item.activity.activity_type === selectedType)
+                        item.activity.activity_type === selectedType) &&
+                    item.activity.activity_name
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
                 );
             }
             return false;
@@ -131,7 +136,8 @@ export default function index() {
         const city = activity.activity_room.split(" - ")[0];
         return (
             (selectedLocation === "" || city === selectedLocation) &&
-            (selectedType === "" || activity.activity_type === selectedType)
+            (selectedType === "" || activity.activity_type === selectedType) &&
+            activity.activity_name.toLowerCase().includes(search.toLowerCase())
         );
     });
     return (
@@ -139,10 +145,12 @@ export default function index() {
             <FilterActivity
                 types={types}
                 locations={locations}
+                search={search}
                 selectedType={selectedType}
                 selectedLocation={selectedLocation}
                 onTypeChange={(itemValue) => setSelectedType(itemValue)}
                 onLocationChange={(itemValue) => setSelectedLocation(itemValue)}
+                onSearchChange={setSearch}
             />
             <Text style={styles.heading2}>Registered Workshops</Text>
             {filteredRegisteredActivities.length > 0 ? (

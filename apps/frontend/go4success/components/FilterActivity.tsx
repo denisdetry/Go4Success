@@ -1,26 +1,36 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
 interface FilterActivityProps {
     types: string[];
     locations: string[];
+    search: string;
     selectedType: string;
     selectedLocation: string;
     onTypeChange: (itemValue: string) => void;
     onLocationChange: (itemValue: string) => void;
+    onSearchChange: (text: string) => void;
 }
 
 const FilterActivity: React.FC<FilterActivityProps> = ({
     types,
     locations,
+    search,
     selectedType,
     selectedLocation,
     onTypeChange,
     onLocationChange,
+    onSearchChange,
 }) => {
     return (
         <>
+            <TextInput
+                style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
+                onChangeText={onSearchChange}
+                value={search}
+                placeholder="Rechercher par titre"
+            />
             <Picker
                 style={styles.picker}
                 selectedValue={selectedType}

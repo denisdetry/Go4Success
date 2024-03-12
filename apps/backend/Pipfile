@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flake8 = ">=7.0.0"
+django = ">=5.0.2"
+djangorestframework = "*"
+django-cors-headers = "*"
+python-decouple = "*"
+python-dotenv = "*"
+mysqlclient = "*"
+psycopg2 = ">=2.8"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

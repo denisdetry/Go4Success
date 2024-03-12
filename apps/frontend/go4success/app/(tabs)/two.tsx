@@ -1,26 +1,24 @@
 import { StyleSheet } from "react-native";
 
-import { Text, View } from "@/components/Themed";
-
 export default function TabTwoScreen() {
     return (
         <View>
-            
             <Text>Nom : </Text>
-                 <TextInput defaultValue=""/>
+            <TextInput defaultValue="" />
 
-            <Text>Prénom : </Text>     
-                 <TextInput defaultValue=""/>
+            <Text>Prénom : </Text>
+            <TextInput defaultValue="" />
 
             <Text>Adresse mail :</Text>
-                <TextInput defaultValue=""/>
+            <TextInput defaultValue="" />
 
             <Text>Mot de passe :</Text>
-            <TextInput secureTextEntry={true} style={styles.default}/>
+            <TextInput secureTextEntry={true} style={styles.default} />
         </View>
     );
 }
 
+/**
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -37,3 +35,4 @@ const styles = StyleSheet.create({
         width: "80%",
     },
 });
+**/

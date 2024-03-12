@@ -1,4 +1,6 @@
-from .serializers import *
+from .serializers import (UserRegistrationSerializer, UserLoginSerializer,
+                          UserSerializer, RegisterToActivitySerializer,
+                          ActivitySerializer, AttendsSerializer)
 from django.contrib.auth import login, logout
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,7 +8,8 @@ from rest_framework import status, permissions
 from .validations import custom_validation, validate_username, validate_password
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework import viewsets
-from .models import *
+from .models import (ACTIVITY, ATTENDS)
+
 
 class UserRegisterView(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -67,8 +70,8 @@ class AttendsViewSet(viewsets.ModelViewSet):
     serializer_class = AttendsSerializer
 
 
-class registerToActivityView(viewsets.ModelViewSet):
+class RegisterToActivityView(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = (TokenAuthentication,)
     queryset = ATTENDS.objects.all()
-    serializer_class = registerToActivitySerializer
+    serializer_class = RegisterToActivitySerializer

@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import *
+from .models import (User, ROOM, COURSE, ACTIVITY, ATTENDS, TEACHER,
+                     GIVES, ANNOUNCEMENT, REGISTERED, MESSAGE, SEES, ADMIN)
+
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'email', 'first_name',
@@ -15,8 +17,9 @@ class CourseAdmin(admin.ModelAdmin):
 
 
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ('activity_id', 'activity_type', 'activity_name', 'activity_description',
-                    'activity_date_start', 'activity_date_end', 'activity_room', 'activty_course_code')
+    list_display = ('activity_id', 'activity_type', 'activity_name',
+                    'activity_description', 'activity_date_start', 'activity_date_end',
+                    'activity_room', 'activty_course_code')
 
 
 class AttendsAdmin(admin.ModelAdmin):
@@ -32,8 +35,9 @@ class GivesAdmin(admin.ModelAdmin):
 
 
 class AnnouncementAdmin(admin.ModelAdmin):
-    list_display = ("announcement_id", "announcement_title", "announcement_description",
-                    "announcement_publication_date", "announcement_course_code", "announcement_teacher_id")
+    list_display = ("announcement_id", "announcement_title",
+                    "announcement_description", "announcement_publication_date",
+                    "announcement_course_code", "announcement_teacher_id")
 
 
 class RegisteredAdmin(admin.ModelAdmin):

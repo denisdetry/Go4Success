@@ -5,7 +5,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 
 router.register(r'register_activity',
-                views.registerToActivityView, "register_activity")
+                views.RegisterToActivityView, "register_activity")
 router.register(r'activity', views.ActivityViewSet, "activity")
 router.register(r'attends', views.AttendsViewSet, "attends")
 

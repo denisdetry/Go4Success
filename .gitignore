@@ -185,3 +185,8 @@ node_modules
 
 # Database folders
 data
+
+# Backend
+apps/backend/Pipfile
+apps/backend/Pipfile.lock
+apps/backend/api/migrations/0001_initial.py

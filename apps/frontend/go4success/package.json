@@ -6,7 +6,8 @@
         "start": "expo start",
         "android": "expo start --android",
         "ios": "expo start --ios",
-        "web": "expo start --web"
+        "web": "expo start --web",
+        "lint": "eslint . --ext .ts,.tsx"
     },
     "dependencies": {
         "@react-native-picker/picker": "^2.6.1",

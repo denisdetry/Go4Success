@@ -4,7 +4,6 @@ from django.contrib.auth import authenticate
 from rest_framework.exceptions import ValidationError
 from .models import *
 
-
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -24,18 +23,22 @@ class UserLoginSerializer(serializers.Serializer):
         if not user:
             raise ValidationError("User not found")
         return user
-
-
+        
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name')
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'noma', 'is_active')
 
 
 class registerToActivitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = ATTENDS
+        model = Attends
         fields = ('activity', 'student')
+
+class RoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ('site_name', 'room_name')
 
 
 class ActivitySerializer(serializers.ModelSerializer):
@@ -43,18 +46,16 @@ class ActivitySerializer(serializers.ModelSerializer):
     activity_room = serializers.SerializerMethodField()
 
     class Meta:
-        model = ACTIVITY
-        fields = ('activity_id', 'activity_type', 'activity_name', 'activity_description',
-                  'activity_date_start', 'activity_date_end', 'activity_room', 'activty_course_code')
+        model = Activity
+        fields = ('activity_id', 'activity_type', 'activity_name', 'activity_description', 'activity_date_start', 'activity_date_end', 'activity_room', 'activity_course_code')
 
     # Méthode pour personnaliser la représentation du champ activity_room
     def get_activity_room(self, obj):
         return f"{obj.activity_room.site_name} - {obj.activity_room.room_name}"
 
-
 class AttendsSerializer(serializers.ModelSerializer):
     activity = ActivitySerializer(read_only=True)
 
     class Meta:
-        model = ATTENDS
+        model = Attends
         fields = ('activity', 'student')

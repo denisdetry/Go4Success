@@ -52,6 +52,7 @@ class SeesAdmin(admin.ModelAdmin):
     list_display = ("announcement_id", "user_id")
 
 
+
 admin.site.register(User, UserAdmin)
 admin.site.register(SiteNames, SiteNameAdmin)
 admin.site.register(RoomNames, RoomNameAdmin)

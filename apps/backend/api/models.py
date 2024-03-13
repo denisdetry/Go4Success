@@ -68,46 +68,37 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.first_name
 
 
-class SiteNames(models.Model):
-    site_name = models.CharField(primary_key=True, max_length=255)
+class Site(models.Model):
+    id = models.AutoField(primary_key=True)
+    site_name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.site_name
 
-    class Meta:
-        db_table = 'SiteNames'
 
-
-class RoomNames(models.Model):
-    room_name = models.CharField(primary_key=True, max_length=255)
+class Room(models.Model):
+    id = models.AutoField(primary_key=True)
+    room_name = models.CharField(max_length=255)
+    site_name = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.room_name
 
     class Meta:
-        db_table = 'RoomNames'
+        unique_together = (('room_name', 'site_name'),)
 
-
-class Room(models.Model):
-    site_name = models.ForeignKey(SiteNames, max_length=255, on_delete=models.CASCADE)  # primary_key=True
-    room_name = models.ForeignKey(RoomNames, max_length=255, on_delete=models.CASCADE)  # primary_key=True
-
-    def __str__(self):
-        return "%s - %s " % (self.room_name,self.site_name)
-
-    class Meta:
-        db_table = 'Room'
-        unique_together = (('site_name', 'room_name'),)
 
 
 class Course(models.Model):
-    course_code = models.CharField(primary_key=True, max_length=9)
+    id = models.AutoField(primary_key=True)
+    course_code = models.CharField(max_length=32)
+    course_name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.course_code
 
     class Meta:
-        db_table = 'Course'
+        unique_together = (('course_code', 'course_name'),)
 
 
 class Activity(models.Model):
@@ -153,7 +144,7 @@ class Teacher(models.Model):
         if self.is_tutor and self.is_professeur:
             raise ValidationError(
                 "Un Teacher ne peut pas être à la fois un tutor et un professeur !")
-        if self.is_tutor == False and self.is_professeur == False:
+        if self.is_tutor is False and self.is_professeur is False:
             raise ValidationError(
                 "Un Teacher doit soit être un tutor, soit un professeur !")
         super().clean()

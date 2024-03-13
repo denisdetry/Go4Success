@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from rest_framework import routers
-
+from django.contrib import admin
 router = routers.DefaultRouter()
 
 router.register(r'register_activity',
@@ -16,3 +16,7 @@ urlpatterns = [
     path('current_user/', views.CurrentUserView.as_view(), name='users'),
     path("", include(router.urls)),
 ]
+
+admin.site.site_title = "Go4success administration"
+admin.site.site_header = "Go4success administration"
+admin.site.index_title = "Go4success"

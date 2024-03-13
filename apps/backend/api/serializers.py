@@ -21,6 +21,7 @@ class RoomSerializer(serializers.ModelSerializer):
         model = Room
         fields = ('site_name', 'room_name')
 
+
 class ActivitySerializer(serializers.ModelSerializer):
     # Utilisation d'un SerializerMethodField pour personnaliser la représentation du champ activity_room
     activity_room = serializers.SerializerMethodField()

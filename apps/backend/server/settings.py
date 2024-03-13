@@ -56,7 +56,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
-]
 
 CORS_ORIGIN_WHITELIST = ['http://localhost:8081']
 

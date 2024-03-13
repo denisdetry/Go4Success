@@ -57,18 +57,18 @@ class CurrentUserView(APIView):
 
 class ActivityViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
-    queryset = ACTIVITY.objects.all()
+    queryset = Activity.objects.all()
     serializer_class = ActivitySerializer
 
 
 class AttendsViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
-    queryset = ATTENDS.objects.all()
+    queryset = Attends.objects.all()
     serializer_class = AttendsSerializer
 
 
 class registerToActivityView(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = (TokenAuthentication,)
-    queryset = ATTENDS.objects.all()
+    queryset = Attends.objects.all()
     serializer_class = registerToActivitySerializer

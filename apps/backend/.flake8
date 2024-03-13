@@ -1,5 +1,5 @@
 [flake8]
-max-line-length = 90
+max-line-length = 120
 extend-ignore = E203
 exclude = .git,__pycache__,.venv,.mypy_cache,dist,venv, ./api/migrations, ./api/tests
 docstring-convention=google

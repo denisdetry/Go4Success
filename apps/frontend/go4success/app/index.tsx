@@ -11,17 +11,17 @@ axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 interface Activity {
-    activity_id: string;
-    activity_name: string;
-    activity_room: string;
-    activity_date_start: string;
-    activity_type: string;
-    activity_description: string;
+    id: string;
+    name: string;
+    room: string;
+    date_start: string;
+    type: string;
+    description: string;
 }
 
 interface Attend {
     activity: Activity;
-    student_id: string;
+    student: string;
 }
 
 type ActivityOrAttend = Activity | Attend;
@@ -29,18 +29,15 @@ type ActivityOrAttend = Activity | Attend;
 export default function index() {
     const [allActivities, setAllActivities] = useState([]);
     const [registeredActivities, setRegisteredActivities] = useState([]);
-    const [setError] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
         axios
             .get("http://localhost:8000/api/attends/")
             .then((res) => {
                 setRegisteredActivities(res.data);
-                res.data.map(
-                    (attend: { activity: { activity_name: string } }) =>
-                        console.log(
-                            "Activity Name: " + attend.activity.activity_name,
-                        ),
+                res.data.map((attend: { activity: { name: string } }) =>
+                    console.log("Activity Name: " + attend.activity.name),
                 );
             })
             .catch((err) => {
@@ -69,12 +66,12 @@ export default function index() {
 
         return (
             <Card
-                id={activity.activity_id}
-                title={activity.activity_name}
-                location={activity.activity_room}
-                date={activity.activity_date_start}
-                type={activity.activity_type}
-                description={activity.activity_description}
+                id={activity.id}
+                title={activity.name}
+                location={activity.room}
+                date={activity.date_start}
+                type={activity.type}
+                description={activity.description}
             />
         );
     };

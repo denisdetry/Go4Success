@@ -54,7 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["email"]
 
     def __str__(self):
-        return self.username
+        return "%s (%s %s) " % (self.username, self.first_name, self.last_name)
 
     class Meta:
         verbose_name = "user"
@@ -81,8 +81,7 @@ class Room(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
-
+        return "%s - %s" % (self.site, self.name)
     class Meta:
         unique_together = (('name', 'site'),)
 
@@ -93,7 +92,7 @@ class Course(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.code
+        return "%s - %s" % (self.code, self.name)
 
     class Meta:
         unique_together = (('code', 'name'),)
@@ -144,7 +143,7 @@ class Teacher(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.user
+        return self.user.username
 
 
 class Give(models.Model):
@@ -153,6 +152,9 @@ class Give(models.Model):
 
     class Meta:
         unique_together = (('activity', 'teacher'),)
+
+    def __str__(self):
+        return "%s gives %s" % (self.teacher, self.activity)
 
 
 class Announcement(models.Model):
@@ -200,4 +202,4 @@ class See(models.Model):
         unique_together = (('announcement', 'user'),)
 
     def __str__(self):
-        return "%s sees %s" % (self.user, self.announcement)
+        return "%s sees %s" % (self.user.username, self.announcement)

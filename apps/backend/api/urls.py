@@ -1,13 +1,15 @@
+from django.contrib import admin
 from django.urls import path, include
-from . import views
 from rest_framework import routers
+
+from . import views
 
 router = routers.DefaultRouter()
 
 router.register(r'register_activity',
-                views.registerToActivityView, "register_activity")
+                views.RegisterToActivityView, "register_activity")
 router.register(r'activity', views.ActivityViewSet, "activity")
-router.register(r'attends', views.AttendsViewSet, "attends")
+router.register(r'attends', views.AttendViewSet, "attends")
 router.register(r'locations', views.LocationsViewSet, "locations")
 
 urlpatterns = [
@@ -17,3 +19,7 @@ urlpatterns = [
     path('current_user/', views.CurrentUserView.as_view(), name='users'),
     path("", include(router.urls)),
 ]
+
+admin.site.site_title = "Go4success administration"
+admin.site.site_header = "Go4success administration"
+admin.site.index_title = "Go4success"

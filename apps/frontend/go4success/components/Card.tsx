@@ -10,12 +10,12 @@ axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 interface CardProps {
-    id: string;
-    title: string;
-    location: string;
-    date: string;
-    type: string;
-    description: string;
+    readonly id: string;
+    readonly title: string;
+    readonly location: string;
+    readonly date: string;
+    readonly type: string;
+    readonly description: string;
 }
 
 const styleFunctions = {
@@ -111,7 +111,6 @@ const styleFunctions = {
 };
 
 const Card: React.FC<CardProps> = ({
-    id,
     title,
     location,
     date,

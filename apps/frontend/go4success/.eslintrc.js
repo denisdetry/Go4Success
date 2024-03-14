@@ -9,7 +9,7 @@ module.exports = {
         "no-dupe-keys": "error",
         "no-with": "error",
         eqeqeq: ["error", "always"],
-        quotes: ["error", "single", { avoidEscape: true }],
+        quotes: ["error", "double", { avoidEscape: true }],
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "error",
         "@typescript-eslint/array-type": "error",

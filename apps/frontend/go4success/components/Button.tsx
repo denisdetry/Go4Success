@@ -3,9 +3,14 @@ import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import Colors from "../constants/Colors";
 
 type ButtonProps = {
-    text: string;
-    onPress: () => void;
-    buttonType: "primary" | "secondary" | "success" | "danger" | "close";
+    readonly text: string;
+    readonly onPress: () => void;
+    readonly buttonType:
+        | "primary"
+        | "secondary"
+        | "success"
+        | "danger"
+        | "close";
 };
 
 const Button: React.FC<ButtonProps> = ({ text, onPress, buttonType }) => {

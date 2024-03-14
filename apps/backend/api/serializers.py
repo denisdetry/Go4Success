@@ -77,5 +77,5 @@ class AttendSerializer(serializers.ModelSerializer):
 
 class LocationsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ROOM
+        model = Room
         fields = ('site_name', 'room_name')

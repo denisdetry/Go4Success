@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 
 from .models import Activity, Attend
 from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSerializer, ActivitySerializer, \
-    AttendSerializer, RegisterToActivityserializer
+    AttendSerializer, RegisterToActivityserializer, LocationsSerializer
 from .validations import custom_validation, validate_username, validate_password
 
 
@@ -79,5 +79,5 @@ class RegisterToActivityView(viewsets.ModelViewSet):
 
 class LocationsViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
-    queryset = ROOM.objects.all()
+    queryset = Attend.objects.all()
     serializer_class = LocationsSerializer

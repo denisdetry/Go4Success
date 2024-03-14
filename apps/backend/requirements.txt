@@ -1,11 +1,11 @@
 flake8>=7.0.0
-pep8-naming
+pep8-naming>=0.11.1
 
 Django>=5.0.2
-djangorestframework
+djangorestframework>=3.14.0
 django-cors-headers
 python-decouple
-python-dotenv 
+python-dotenv
 mysqlclient
 psycopg2>=2.8
 python-dotenv

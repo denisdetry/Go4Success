@@ -1,8 +1,6 @@
-import { View, Text, ScrollView } from "react-native";
-import React from "react";
+import { Text, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/global";
-import { StyleSheet } from "react-native";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "../components/Card";
 import { FlatList } from "react-native-gesture-handler";
@@ -31,7 +29,7 @@ type ActivityOrAttend = Activity | Attend;
 export default function index() {
     const [allActivities, setAllActivities] = useState([]);
     const [registeredActivities, setRegisteredActivities] = useState([]);
-    const [error, setError] = useState("");
+    const [setError] = useState("");
 
     useEffect(() => {
         axios

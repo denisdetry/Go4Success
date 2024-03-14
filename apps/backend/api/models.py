@@ -1,6 +1,6 @@
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.utils import timezone
 
 
@@ -93,7 +93,7 @@ class Room(models.Model):
     room_name = models.ForeignKey(RoomNames, max_length=255, on_delete=models.CASCADE)  # primary_key=True
 
     def __str__(self):
-        return "%s - %s " % (self.room_name,self.site_name)
+        return "%s - %s " % (self.room_name, self.site_name)
 
     class Meta:
         db_table = 'Room'
@@ -153,7 +153,7 @@ class Teacher(models.Model):
         if self.is_tutor and self.is_professeur:
             raise ValidationError(
                 "Un Teacher ne peut pas être à la fois un tutor et un professeur !")
-        if self.is_tutor == False and self.is_professeur == False:
+        if not (self.is_tutor or self.is_professeur):
             raise ValidationError(
                 "Un Teacher doit soit être un tutor, soit un professeur !")
         super().clean()
@@ -207,7 +207,7 @@ class Message(models.Model):
     message_content = models.TextField()
     message_date = models.DateTimeField()
     message_to_user_id = models.ForeignKey(
-        User, on_delete=models.CASCADE,max_length=8, blank=True, null=True, related_name='message_to_user_id')
+        User, on_delete=models.CASCADE, max_length=8, blank=True, null=True, related_name='message_to_user_id')
     message_from_user_id = models.ForeignKey(
         User, on_delete=models.CASCADE, max_length=8, blank=True, null=True, related_name='message_from_user_id')
 
@@ -215,7 +215,9 @@ class Message(models.Model):
         db_table = 'Message'
 
     def __str__(self):
-        return "the message %s sent from user %s to user %s" % (self.message_id, self.message_from_user_id, self.message_to_user_id)
+        return "the message %s sent from user %s to user %s" % (
+            self.message_id, self.message_from_user_id, self.message_to_user_id)
+
 
 class Sees(models.Model):
     announcement_id = models.ForeignKey(Announcement, on_delete=models.CASCADE)

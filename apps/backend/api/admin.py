@@ -1,26 +1,33 @@
 from django.contrib import admin
-# from .models import *
-from .models import *
+
+from .models import User, SiteNames, RoomNames, Room, Course, Activity, Attends, Teacher, Gives, Announcement, \
+    Registered, Message, Sees
 
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'email', 'first_name', 'last_name', 'noma', 'is_active')
 
+
 class SiteNameAdmin(admin.ModelAdmin):
     list_display = ('site_name',)
+
 
 class RoomNameAdmin(admin.ModelAdmin):
     list_display = ('room_name',)
 
+
 class RoomAdmin(admin.ModelAdmin):
     list_display = ('site_name', 'room_name')
+
 
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('course_code',)
 
+
 class ActivityAdmin(admin.ModelAdmin):
     list_display = ('activity_id', 'activity_type', 'activity_name', 'activity_description',
                     'activity_date_start', 'activity_date_end', 'activity_room', 'activity_course_code')
+
 
 class AttendsAdmin(admin.ModelAdmin):
     list_display = ('activity', 'student')
@@ -50,7 +57,6 @@ class MessageAdmin(admin.ModelAdmin):
 
 class SeesAdmin(admin.ModelAdmin):
     list_display = ("announcement_id", "user_id")
-
 
 
 admin.site.register(User, UserAdmin)

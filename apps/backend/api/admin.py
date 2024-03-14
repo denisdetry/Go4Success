@@ -1,67 +1,69 @@
 from django.contrib import admin
-from .models import *
+
+from .models import User, Site, Room, Course, Activity, Attend, Teacher, Give, Announcement, \
+    Registered, Message, See
+
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'email', 'first_name',
-                    'last_name', 'noma', 'is_active')
+    list_display = ('id', 'username', 'email', 'first_name', 'last_name', 'noma', 'is_active')
+
+
+class SiteAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name',)
 
 
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ('site_name', 'room_name')
+    list_display = ('id', 'name', 'site')
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('course_code',)
+    list_display = ('id', 'code', 'name')
 
 
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ('activity_id', 'activity_type', 'activity_name', 'activity_description',
-                    'activity_date_start', 'activity_date_end', 'activity_room', 'activty_course_code')
+    list_display = ('id', 'type', 'name', 'description',
+                    'date_start', 'date_end', 'room', 'course')
 
 
-class AttendsAdmin(admin.ModelAdmin):
+class AttendAdmin(admin.ModelAdmin):
     list_display = ('activity', 'student')
 
 
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ("user", "is_tutor", "is_professeur")
+    list_display = ('user', 'is_tutor', 'is_professor')
 
 
-class GivesAdmin(admin.ModelAdmin):
-    list_display = ("activity_id", "teacher_id")
+class GiveAdmin(admin.ModelAdmin):
+    list_display = ("activity", "teacher")
 
 
 class AnnouncementAdmin(admin.ModelAdmin):
-    list_display = ("announcement_id", "announcement_title", "announcement_description",
-                    "announcement_publication_date", "announcement_course_code", "announcement_teacher_id")
+    list_display = ("id", "title", "description",
+                    "publication_date", "course", "teacher")
 
 
 class RegisteredAdmin(admin.ModelAdmin):
-    list_display = ("student_id", "course_code")
+    list_display = ("student", "course")
 
 
-class MessageAdmon(admin.ModelAdmin):
-    list_display = ("message_id", "message_content", "message_date",
-                    "message_to_user_id", "message_from_user_id")
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ("id", "content", "date",
+                    "to_user", "from_user")
 
 
-class SeesAdmin(admin.ModelAdmin):
-    list_display = ("announcement_id", "user_id")
-
-
-class AdminAdmin(admin.ModelAdmin):
-    list_display = ("user",)
+class SeeAdmin(admin.ModelAdmin):
+    list_display = ("announcement", "user")
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(ROOM, RoomAdmin)
-admin.site.register(COURSE, CourseAdmin)
-admin.site.register(ACTIVITY, ActivityAdmin)
-admin.site.register(ATTENDS, AttendsAdmin)
-admin.site.register(TEACHER, TeacherAdmin)
-admin.site.register(GIVES, GivesAdmin)
-admin.site.register(ANNOUNCEMENT, AnnouncementAdmin)
-admin.site.register(REGISTERED, RegisteredAdmin)
-admin.site.register(MESSAGE, MessageAdmon)
-admin.site.register(SEES, SeesAdmin)
-admin.site.register(ADMIN, AdminAdmin)
+admin.site.register(Site, SiteAdmin)
+admin.site.register(Room, RoomAdmin)
+admin.site.register(Course, CourseAdmin)
+admin.site.register(Activity, ActivityAdmin)
+admin.site.register(Attend, AttendAdmin)
+admin.site.register(Teacher, TeacherAdmin)
+admin.site.register(Give, GiveAdmin)
+admin.site.register(Announcement, AnnouncementAdmin)
+admin.site.register(Registered, RegisteredAdmin)
+admin.site.register(Message, MessageAdmin)
+admin.site.register(See, SeeAdmin)

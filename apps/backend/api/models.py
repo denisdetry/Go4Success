@@ -39,7 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    noma = models.CharField(max_length=8, blank=True, null=True)
+    noma = models.CharField(max_length=63, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -54,12 +54,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["email"]
 
     def __str__(self):
-        return self.username
+        return "%s (%s %s) " % (self.username, self.first_name, self.last_name)
 
     class Meta:
         verbose_name = "user"
         verbose_name_plural = "users"
-        db_table = "User"
 
     def get_full_name(self):
         return "%s %s" % (self.last_name, self.first_name)
@@ -68,94 +67,75 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.first_name
 
 
-class SiteNames(models.Model):
-    site_name = models.CharField(primary_key=True, max_length=255)
+class Site(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
-        return self.site_name
-
-    class Meta:
-        db_table = 'SiteNames'
-
-
-class RoomNames(models.Model):
-    room_name = models.CharField(primary_key=True, max_length=255)
-
-    def __str__(self):
-        return self.room_name
-
-    class Meta:
-        db_table = 'RoomNames'
+        return self.name
 
 
 class Room(models.Model):
-    site_name = models.ForeignKey(SiteNames, max_length=255, on_delete=models.CASCADE)  # primary_key=True
-    room_name = models.ForeignKey(RoomNames, max_length=255, on_delete=models.CASCADE)  # primary_key=True
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s - %s " % (self.room_name, self.site_name)
-
+        return "%s - %s" % (self.site, self.name)
     class Meta:
-        db_table = 'Room'
-        unique_together = (('site_name', 'room_name'),)
+        unique_together = (('name', 'site'),)
 
 
 class Course(models.Model):
-    course_code = models.CharField(primary_key=True, max_length=9)
+    id = models.AutoField(primary_key=True)
+    code = models.CharField(max_length=63)
+    name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.course_code
+        return "%s - %s" % (self.code, self.name)
 
     class Meta:
-        db_table = 'Course'
+        unique_together = (('code', 'name'),)
 
 
 class Activity(models.Model):
-    activity_id = models.AutoField(primary_key=True)
-    activity_type = models.CharField(max_length=255)
-    activity_name = models.CharField(max_length=255)
-    activity_description = models.TextField()
-    activity_date_start = models.DateTimeField()
-    activity_date_end = models.DateTimeField()
-    activity_room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    activity_course_code = models.ForeignKey(
-        Course, on_delete=models.CASCADE, max_length=9, blank=True, null=True)
+    id = models.AutoField(primary_key=True)
+    type = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    date_start = models.DateTimeField()
+    date_end = models.DateTimeField()
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, max_length=63, blank=True, null=True)
 
     def __str__(self):
-        return "(%s) %s" % (self.activity_id, self.activity_name)
-
-    class Meta:
-        db_table = 'Activity'
+        return "(%s) %s" % (self.id, self.name)
 
 
-class Attends(models.Model):
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)  # primary_key=True
-    student = models.ForeignKey(User, on_delete=models.CASCADE)  # primary_key=True
+class Attend(models.Model):
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return "%s attends %s" % (self.student, self.activity)
 
     class Meta:
-        db_table = 'Attends'
         unique_together = (('activity', 'student'),)
 
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     is_tutor = models.BooleanField()
-    is_professeur = models.BooleanField()
+    is_professor = models.BooleanField()
 
-    class Meta:
-        db_table = 'Teacher'
-
-    # check if the user is either tutor or professeur
+    # check if the user is either tutor or professor
     def clean(self):
-        if self.is_tutor and self.is_professeur:
+        if self.is_tutor and self.is_professor:
             raise ValidationError(
-                "Un Teacher ne peut pas être à la fois un tutor et un professeur !")
-        if not (self.is_tutor or self.is_professeur):
+                "A Teacher can't be a tutor and a professor at the same time!")
+        if not (self.is_tutor or self.is_professor):
             raise ValidationError(
-                "Un Teacher doit soit être un tutor, soit un professeur !")
+                "A Teacher has to be a tutor or a professor!")
         super().clean()
 
     def save(self, *args, **kwargs):
@@ -163,69 +143,63 @@ class Teacher(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.user
+        return self.user.username
 
 
-class Gives(models.Model):
-    activity_id = models.ForeignKey(Activity, on_delete=models.CASCADE)
-    teacher_id = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+class Give(models.Model):
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'Gives'
-        unique_together = (('activity_id', 'teacher_id'),)
+        unique_together = (('activity', 'teacher'),)
+
+    def __str__(self):
+        return "%s gives %s" % (self.teacher, self.activity)
 
 
 class Announcement(models.Model):
-    announcement_id = models.AutoField(primary_key=True)
-    announcement_title = models.CharField(max_length=255)
-    announcement_description = models.TextField()
-    announcement_publication_date = models.DateTimeField()
-    announcement_course_code = models.ForeignKey(Course, on_delete=models.CASCADE, max_length=9, blank=True, null=True)
-    announcement_teacher_id = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'Announcement'
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    publication_date = models.DateTimeField()
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, max_length=63, blank=True, null=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.announcement_title
+        return self.title
 
 
 class Registered(models.Model):
-    student_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    course_code = models.ForeignKey(Course, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'Registered'
-        unique_together = (('student_id', 'course_code'),)
+        unique_together = (('student', 'course'),)
 
     def __str__(self):
-        return "%s is registered to %s" % (self.student_id, self.course_code)
+        return "%s is registered to %s" % (self.student, self.course)
 
 
 class Message(models.Model):
-    message_id = models.AutoField(primary_key=True)
-    message_content = models.TextField()
-    message_date = models.DateTimeField()
-    message_to_user_id = models.ForeignKey(
-        User, on_delete=models.CASCADE, max_length=8, blank=True, null=True, related_name='message_to_user_id')
-    message_from_user_id = models.ForeignKey(
-        User, on_delete=models.CASCADE, max_length=8, blank=True, null=True, related_name='message_from_user_id')
-
-    class Meta:
-        db_table = 'Message'
+    id = models.AutoField(primary_key=True)
+    content = models.TextField()
+    date = models.DateTimeField()
+    to_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, max_length=63, blank=True, null=True, related_name='to_user')
+    from_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, max_length=63, blank=True, null=True, related_name='from_user')
 
     def __str__(self):
         return "the message %s sent from user %s to user %s" % (
-            self.message_id, self.message_from_user_id, self.message_to_user_id)
+            self.id, self.from_user, self.to_user)
 
 
-class Sees(models.Model):
-    announcement_id = models.ForeignKey(Announcement, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+class See(models.Model):
+    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'Sees'
-        unique_together = (('announcement_id', 'user_id'),)
+        unique_together = (('announcement', 'user'),)
 
     def __str__(self):
-        return "%s sees %s" % (self.user_id, self.announcement_id)
+        return "%s sees %s" % (self.user.username, self.announcement)

@@ -110,13 +110,7 @@ const styleFunctions = {
     },
 };
 
-const Card: React.FC<CardProps> = ({
-    title,
-    location,
-    date,
-    type,
-    description,
-}) => {
+const Card: React.FC<CardProps> = ({ title, location, date, type, description }) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     return (
@@ -137,16 +131,12 @@ const Card: React.FC<CardProps> = ({
                         >
                             <Text style={styles.closeButtonText}>✖</Text>
                         </Pressable>
-                        <View
-                            style={styleFunctions.getModalViewTitleStyle(type)}
-                        >
+                        <View style={styleFunctions.getModalViewTitleStyle(type)}>
                             <Text style={styles.modalTitle}>{title}</Text>{" "}
                         </View>
                         <View style={styleFunctions.getmodalDataStyle(type)}>
                             <Text style={styles.modalText}>Date : {date}</Text>
-                            <Text style={styles.modalText}>
-                                Place : {location}
-                            </Text>
+                            <Text style={styles.modalText}>Place : {location}</Text>
                             <Text style={styles.modalText}>Type : {type}</Text>
                             <View style={styles.separator} />
                             <Text style={styles.modalText}>{description}</Text>

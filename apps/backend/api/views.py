@@ -5,9 +5,9 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Activity, Attends
+from .models import Activity, Attend
 from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSerializer, ActivitySerializer, \
-    AttendsSerializer, Registertoactivityserializer
+    AttendSerializer, RegisterToActivityserializer
 from .validations import custom_validation, validate_username, validate_password
 
 
@@ -64,14 +64,14 @@ class ActivityViewSet(viewsets.ModelViewSet):
     serializer_class = ActivitySerializer
 
 
-class AttendsViewSet(viewsets.ModelViewSet):
+class AttendViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
-    queryset = Attends.objects.all()
-    serializer_class = AttendsSerializer
+    queryset = Attend.objects.all()
+    serializer_class = AttendSerializer
 
 
-class Registertoactivityview(viewsets.ModelViewSet):
+class RegisterToActivityView(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = (TokenAuthentication,)
-    queryset = Attends.objects.all()
-    serializer_class = Registertoactivityserializer
+    queryset = Attend.objects.all()
+    serializer_class = RegisterToActivityserializer

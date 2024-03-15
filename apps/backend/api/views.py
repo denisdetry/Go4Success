@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from django.db.models import Q
 
 from .models import Activity, Attend, Room, Site
 from .serializers import SiteSerializer, UserRegistrationSerializer, UserLoginSerializer, UserSerializer, ActivitySerializer, \
@@ -94,10 +94,18 @@ class ActivityViewSet(viewsets.ModelViewSet):
         qs = Activity.objects.all()
         name = self.request.query_params.get('name')
         room = self.request.query_params.get('room')
+        date_start = self.request.query_params.get('date_start')
+        date_end = self.request.query_params.get('date_end')
         if name is not None:
             qs = qs.filter(name__icontains=name)
         if room is not None:
             qs = qs.filter(room__name__icontains=room)
+        if date_start not in [None, 'undefined', 'null', '']:
+            if date_end not in [None, 'undefined', 'null', '']:
+                qs = qs.filter(
+                    Q(date_start__date__gte=date_start,
+                      date_end__date__lte=date_end)
+                )
         return qs
 
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     Text,
     ScrollView,
@@ -14,6 +14,8 @@ import { FlatList } from "react-native-gesture-handler";
 import { Picker } from "@react-native-picker/picker";
 import stylesGlobal from "../styles/global";
 import { API_BASE_URL } from "../constants/ConfigApp";
+import DateTimePicker, { DateType, ModeType } from "react-native-ui-datepicker";
+import dayjs from "dayjs";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -56,6 +58,27 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const [selectedSite, setSelectedSite] = useState("");
     const [sites, setSites] = useState<Site[]>([]);
 
+    const [locale, setLocale] = useState("fr");
+    const [mode, setMode] = useState<ModeType>("range");
+    const [date, setDate] = useState<DateType | undefined>();
+    const [range, setRange] = React.useState<{
+        startDate: DateType;
+        endDate: DateType;
+    }>({ startDate: undefined, endDate: undefined });
+
+    type ParamsType = { date: DateType } | { startDate: DateType; endDate: DateType };
+
+    const onChange = useCallback(
+        (params: ParamsType) => {
+            if (mode === "single") {
+                setDate((params as { date: DateType }).date);
+            } else if (mode === "range") {
+                setRange(params as { startDate: DateType; endDate: DateType });
+            }
+        },
+        [mode],
+    );
+
     const onSearchChange = (text: string) => {
         setSearchName(text);
     };
@@ -67,6 +90,37 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const onSiteChange = (type: string) => {
         setSelectedSite(type);
     };
+
+    const toggleMode = () => {
+        setMode((prevMode) => (prevMode === "single" ? "range" : "single"));
+    };
+
+    let startDateISO: string | null;
+    let endDateISO: string | null;
+
+    if (range.startDate instanceof Date) {
+        startDateISO = range.startDate.toISOString().split("T")[0];
+    } else if (typeof range.startDate === "string" && range.startDate !== "") {
+        startDateISO = range.startDate;
+    } else if (typeof range.startDate === "number") {
+        startDateISO = new Date(range.startDate).toISOString().split("T")[0];
+    } else if (range.startDate instanceof dayjs) {
+        startDateISO = range.startDate.format("YYYY-MM-DD");
+    } else {
+        startDateISO = null;
+    }
+
+    if (range.endDate instanceof Date) {
+        endDateISO = range.endDate.toISOString().split("T")[0];
+    } else if (typeof range.endDate === "string" && range.endDate !== "") {
+        endDateISO = range.endDate;
+    } else if (typeof range.endDate === "number") {
+        endDateISO = new Date(range.endDate).toISOString().split("T")[0];
+    } else if (range.endDate instanceof dayjs) {
+        endDateISO = range.endDate.format("YYYY-MM-DD");
+    } else {
+        endDateISO = null;
+    }
 
     useEffect(() => {
         if (filterType === "attend") {
@@ -81,7 +135,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         } else {
             axios
                 .get(
-                    `${API_BASE_URL}/api/activity/?name=${searchName}&room=${selectedRoom}`,
+                    `${API_BASE_URL}/api/activity/?name=${searchName}&room=${selectedRoom}&date_start=${startDateISO}&date_end=${endDateISO}`,
                 )
                 .then((res) => {
                     setAllActivities(res.data);
@@ -93,6 +147,9 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         axios
             .get(`${API_BASE_URL}/api/room/?site=${selectedSite}`)
             .then((res) => {
+                if (selectedSite != "" && selectedRoom === "") {
+                    setSelectedRoom("");
+                }
                 setRooms(
                     res.data
                         .map((Room: any) => Room.name)
@@ -108,7 +165,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         axios
             .get(`${API_BASE_URL}/api/site/`)
             .then((res) => {
-                if (selectedSite === "" && selectedRoom === "") {
+                if (selectedSite === "" && selectedRoom != "") {
                     setSelectedRoom("");
                 }
                 setSites(
@@ -124,7 +181,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
             .catch((err: Error) => {
                 console.error(err.message);
             });
-    }, [filterType, searchName, selectedRoom, selectedSite]);
+    }, [filterType, searchName, selectedRoom, selectedSite, range]);
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         let activity: Activity;
@@ -193,6 +250,77 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                                 <Picker.Item key={room} label={room} value={room} />
                             ))}
                         </Picker>
+                        <View style={styles.container}>
+                            <Button
+                                title={`Switch to ${mode === "single" ? "range" : "single"} mode`}
+                                onPress={toggleMode}
+                            />
+                            <DateTimePicker
+                                mode={mode as "single" | "range"}
+                                date={date}
+                                startDate={range.startDate}
+                                endDate={range.endDate}
+                                onChange={onChange}
+                            />
+                            <Button
+                                title="Clear dates"
+                                onPress={() => {
+                                    setDate(null);
+                                    setRange({ startDate: null, endDate: null });
+                                }}
+                            />
+                            <View style={{ gap: 3 }}>
+                                {mode === "single" && date && (
+                                    <Text>
+                                        <Text
+                                            style={{
+                                                marginRight: 5,
+                                                fontWeight: "bold",
+                                            }}
+                                        >
+                                            Date:
+                                        </Text>
+                                        {dayjs(date)
+                                            .locale(locale)
+                                            .format("MMMM, DD, YYYY")}
+                                    </Text>
+                                )}
+                                {mode === "range" && (
+                                    <>
+                                        <Text>
+                                            <Text
+                                                style={{
+                                                    marginRight: 5,
+                                                    fontWeight: "bold",
+                                                }}
+                                            >
+                                                Start Date:
+                                            </Text>
+                                            {range.startDate
+                                                ? dayjs(range.startDate)
+                                                      .locale(locale)
+                                                      .format("MMMM, DD, YYYY")
+                                                : "..."}
+                                        </Text>
+                                        <Text>
+                                            <Text
+                                                style={{
+                                                    marginRight: 5,
+                                                    fontWeight: "bold",
+                                                }}
+                                            >
+                                                End Date:
+                                            </Text>
+                                            {range.endDate
+                                                ? dayjs(range.endDate)
+                                                      .locale(locale)
+                                                      .format("MMMM, DD, YYYY")
+                                                : "..."}
+                                        </Text>
+                                    </>
+                                )}
+                            </View>
+                        </View>
                         <Button title="Close Filter" onPress={toggleModal} />
                     </View>
                 </View>
@@ -226,6 +354,10 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#F5FCFF",
+    },
     picker: {
         height: 50,
         width: "100%",

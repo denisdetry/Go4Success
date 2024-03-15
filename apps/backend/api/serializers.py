@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from .models import Room, Activity, Attend, Course
+from .models import Room, Activity, Attend, Course, Site
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -75,7 +75,7 @@ class AttendSerializer(serializers.ModelSerializer):
         fields = ('activity', 'student')
 
 
-class LocationsSerializer(serializers.ModelSerializer):
+class SiteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Room
-        fields = ('site_name', 'room_name')
+        model = Site
+        fields = ['id', 'name']

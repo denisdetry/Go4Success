@@ -5,9 +5,10 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Activity, Attend
-from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSerializer, ActivitySerializer, \
-    AttendSerializer, RegisterToActivityserializer, LocationsSerializer
+
+from .models import Activity, Attend, Room, Site
+from .serializers import SiteSerializer, UserRegistrationSerializer, UserLoginSerializer, UserSerializer, ActivitySerializer, \
+    AttendSerializer, RegisterToActivityserializer, RoomSerializer
 from .validations import custom_validation, validate_username, validate_password
 
 
@@ -58,18 +59,6 @@ class CurrentUserView(APIView):
         return Response({'user': serializer.data}, status=status.HTTP_200_OK)
 
 
-class ActivityViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.AllowAny,)
-    queryset = Activity.objects.all()
-    serializer_class = ActivitySerializer
-
-
-class AttendViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.AllowAny,)
-    queryset = Attend.objects.all()
-    serializer_class = AttendSerializer
-
-
 class RegisterToActivityView(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = (TokenAuthentication,)
@@ -77,7 +66,52 @@ class RegisterToActivityView(viewsets.ModelViewSet):
     serializer_class = RegisterToActivityserializer
 
 
-class LocationsViewSet(viewsets.ModelViewSet):
+class RoomViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+
+    def get_queryset(self):
+        qs = Room.objects.all()
+        site = self.request.query_params.get('site')
+        if site and site.isdigit():
+            qs = qs.filter(site_id=int(site))
+        return qs
+
+
+class SiteViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Site.objects.all()
+    serializer_class = SiteSerializer
+
+
+class ActivityViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Activity.objects.all()
+    serializer_class = ActivitySerializer
+
+    def get_queryset(self):
+        qs = Activity.objects.all()
+        name = self.request.query_params.get('name')
+        room = self.request.query_params.get('room')
+        if name is not None:
+            qs = qs.filter(name__icontains=name)
+        if room is not None:
+            qs = qs.filter(room__name__icontains=room)
+        return qs
+
+
+class AttendViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = Attend.objects.all()
-    serializer_class = LocationsSerializer
+    serializer_class = AttendSerializer
+
+    def get_queryset(self):
+        qs = Attend.objects.all()
+        name = self.request.query_params.get('name')
+        room = self.request.query_params.get('room')
+        if name is not None:
+            qs = qs.filter(name__icontains=name)
+        if room is not None:
+            qs = qs.filter(room__name__icontains=room)
+        return qs

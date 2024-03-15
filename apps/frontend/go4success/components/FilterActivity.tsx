@@ -13,6 +13,7 @@ import Card from "../components/Card";
 import { FlatList } from "react-native-gesture-handler";
 import { Picker } from "@react-native-picker/picker";
 import stylesGlobal from "../styles/global";
+import { API_BASE_URL } from "../constants/ConfigApp";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -20,12 +21,12 @@ axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 interface Activity {
-    activity_id: string;
-    activity_name: string;
-    activity_room: string;
-    activity_date_start: string;
-    activity_type: string;
-    activity_description: string;
+    id: string;
+    name: string;
+    room: string;
+    date_start: string;
+    type: string;
+    description: string;
 }
 
 interface Attend {
@@ -33,41 +34,68 @@ interface Attend {
     student_id: string;
 }
 
+interface Site {
+    id: string;
+    name: string;
+}
+
+interface FilterActivityProps {
+    filterType: "activity" | "attend";
+}
+
 type ActivityOrAttend = Activity | Attend;
 
-const FilterActivity = ({}) => {
+const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const [allActivities, setAllActivities] = useState([]);
     const [registeredActivities, setRegisteredActivities] = useState([]);
     const [error, setError] = useState("");
 
-    const [selectedLocation, setSelectedLocation] = useState("");
-    const [locations, setLocations] = useState([]);
-
-    const [selectedType, setSelectedType] = useState("");
-    const [types, setTypes] = useState<string[]>([]);
-
-    const [search, setSearch] = useState("");
+    const [searchName, setSearchName] = useState("");
+    const [selectedRoom, setSelectedRoom] = useState("");
+    const [rooms, setRooms] = useState<string[]>([]);
+    const [selectedSite, setSelectedSite] = useState("");
+    const [sites, setSites] = useState<Site[]>([]);
 
     const onSearchChange = (text: string) => {
-        setSearch(text);
+        setSearchName(text);
     };
 
-    const onTypeChange = (type: string) => {
-        setSelectedType(type);
+    const onRoomChange = (type: string) => {
+        setSelectedRoom(type);
     };
 
-    const onLocationChange = (location: string) => {
-        setSelectedLocation(location);
+    const onSiteChange = (type: string) => {
+        setSelectedSite(type);
     };
 
     useEffect(() => {
-        // LOCATION
+        if (filterType === "attend") {
+            axios
+                .get(`${API_BASE_URL}/api/attends/?name=${searchName}`)
+                .then((res) => {
+                    setRegisteredActivities(res.data);
+                })
+                .catch((err) => {
+                    setError(err.message);
+                });
+        } else {
+            axios
+                .get(
+                    `${API_BASE_URL}/api/activity/?name=${searchName}&room=${selectedRoom}`,
+                )
+                .then((res) => {
+                    setAllActivities(res.data);
+                })
+                .catch((err) => {
+                    setError(err.message);
+                });
+        }
         axios
-            .get("http://localhost:8000/api/locations/")
+            .get(`${API_BASE_URL}/api/room/?site=${selectedSite}`)
             .then((res) => {
-                setLocations(
+                setRooms(
                     res.data
-                        .map((location: any) => location.site_name)
+                        .map((Room: any) => Room.name)
                         .filter(
                             (value: string, index: number, self: string[]) =>
                                 self.indexOf(value) === index,
@@ -77,42 +105,26 @@ const FilterActivity = ({}) => {
             .catch((err: Error) => {
                 console.error(err.message);
             });
-
-        // ATTENDS
         axios
-            .get("http://localhost:8000/api/attends/")
+            .get(`${API_BASE_URL}/api/site/`)
             .then((res) => {
-                setRegisteredActivities(res.data);
-                res.data.map(
-                    (attend: { activity: { activity_name: string } }) =>
-                        console.log(
-                            "Activity Name: " + attend.activity.activity_name,
-                        ),
-                );
-            })
-            .catch((err) => {
-                setError(err.message);
-            });
-
-        // ACTIVITY
-        axios
-            .get("http://localhost:8000/api/activity/")
-            .then((res) => {
-                setAllActivities(res.data);
-                setTypes(
+                if (selectedSite === "" && selectedRoom === "") {
+                    setSelectedRoom("");
+                }
+                setSites(
                     res.data
-                        .map((activity: any) => activity.activity_type)
+                        .map((Site: any) => ({ id: Site.id, name: Site.name }))
                         .filter(
-                            (value: string, index: number, self: string[]) =>
-                                self.indexOf(value) === index,
+                            (value: any, index: number, self: any[]) =>
+                                self.findIndex((v: any) => v.name === value.name) ===
+                                index,
                         ),
                 );
-                console.log("All Activity" + res.data);
             })
-            .catch((err) => {
-                setError(err.message);
+            .catch((err: Error) => {
+                console.error(err.message);
             });
-    }, []);
+    }, [filterType, searchName, selectedRoom, selectedSite]);
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         let activity: Activity;
@@ -125,40 +137,16 @@ const FilterActivity = ({}) => {
 
         return (
             <Card
-                id={activity.activity_id}
-                title={activity.activity_name}
-                location={activity.activity_room}
-                date={activity.activity_date_start}
-                type={activity.activity_type}
-                description={activity.activity_description}
+                id={activity.id}
+                title={activity.name}
+                location={activity.room}
+                date={activity.date_start}
+                type={activity.type}
+                description={activity.description}
             />
         );
     };
-    const filteredRegisteredActivities = registeredActivities.filter(
-        (item: ActivityOrAttend) => {
-            if ("activity" in item) {
-                const city = item.activity.activity_room.split(" - ")[0];
-                return (
-                    (selectedLocation === "" || city === selectedLocation) &&
-                    (selectedType === "" ||
-                        item.activity.activity_type === selectedType) &&
-                    item.activity.activity_name
-                        .toLowerCase()
-                        .includes(search.toLowerCase())
-                );
-            }
-            return false;
-        },
-    );
 
-    const filteredAllActivities = allActivities.filter((activity: Activity) => {
-        const city = activity.activity_room.split(" - ")[0];
-        return (
-            (selectedLocation === "" || city === selectedLocation) &&
-            (selectedType === "" || activity.activity_type === selectedType) &&
-            activity.activity_name.toLowerCase().includes(search.toLowerCase())
-        );
-    });
     const [modalVisible, setModalVisible] = useState(false);
 
     const toggleModal = () => {
@@ -178,35 +166,31 @@ const FilterActivity = ({}) => {
                         <TextInput
                             style={styles.input}
                             onChangeText={onSearchChange}
-                            value={search}
+                            value={searchName}
                             placeholder="Search title activity"
                         />
                         <Picker
                             style={styles.picker}
-                            selectedValue={selectedType}
-                            onValueChange={onTypeChange}
+                            onValueChange={onSiteChange}
+                            selectedValue={selectedSite}
                         >
                             <Picker.Item label="ALL" value="" />
-                            {types.map((type) => (
+                            {sites.map((site: Site) => (
                                 <Picker.Item
-                                    key={type}
-                                    label={type}
-                                    value={type}
+                                    key={site.id}
+                                    label={site.name}
+                                    value={site.id}
                                 />
                             ))}
                         </Picker>
                         <Picker
                             style={styles.picker}
-                            selectedValue={selectedLocation}
-                            onValueChange={onLocationChange}
+                            onValueChange={onRoomChange}
+                            selectedValue={selectedRoom}
                         >
                             <Picker.Item label="ALL" value="" />
-                            {locations.map((location) => (
-                                <Picker.Item
-                                    key={location}
-                                    label={location}
-                                    value={location}
-                                />
+                            {rooms.map((room) => (
+                                <Picker.Item key={room} label={room} value={room} />
                             ))}
                         </Picker>
                         <Button title="Close Filter" onPress={toggleModal} />
@@ -214,23 +198,24 @@ const FilterActivity = ({}) => {
                 </View>
             </Modal>
 
-            <Text style={stylesGlobal.heading2}>Registered Workshops</Text>
-            {filteredRegisteredActivities.length > 0 ? (
-                <FlatList
-                    data={filteredRegisteredActivities}
-                    renderItem={renderCards}
-                />
-            ) : (
-                <Text style={styles.noDataText}>
-                    No registered workshops available with this filter.
-                </Text>
+            {filterType === "attend" && (
+                <>
+                    <Text style={stylesGlobal.heading2}>Registered Workshops</Text>
+                    {registeredActivities.length > 0 ? (
+                        <FlatList
+                            data={registeredActivities}
+                            renderItem={renderCards}
+                        />
+                    ) : (
+                        <Text style={styles.noDataText}>
+                            No registered workshops available with this filter.
+                        </Text>
+                    )}
+                </>
             )}
             <Text style={stylesGlobal.heading2}>Available Workshops</Text>
-            {filteredAllActivities.length > 0 ? (
-                <FlatList
-                    data={filteredAllActivities}
-                    renderItem={renderCards}
-                />
+            {allActivities.length > 0 ? (
+                <FlatList data={allActivities} renderItem={renderCards} />
             ) : (
                 <Text style={styles.noDataText}>
                     No available workshops with this filter.

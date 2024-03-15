@@ -19,7 +19,7 @@ class RoomViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
     """
-    queryset = ROOM.objects.all()
+    queryset = Room.objects.all()
     serializer_class = RoomSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -28,7 +28,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
     """
-    queryset = COURSE.objects.all()
+    queryset = Course.objects.all()
     serializer_class = CourseSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -37,7 +37,7 @@ class ActivityViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
     """
-    queryset = ACTIVITY.objects.all()
+    queryset = Activity.objects.all()
     serializer_class = ActivitySerializer
     # permission_classes = [permissions.IsAuthenticated]
 

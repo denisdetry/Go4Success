@@ -67,13 +67,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.first_name
 
 
-class ROOM(models.Model):
-    site_name = models.CharField(
-        db_column='SITE_NAME', max_length=255)  # primary_key=True
-    room_name = models.CharField(
-        db_column='ROOM_NAME', max_length=255)  # primary_key=True
-
-
 class Site(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, unique=True)

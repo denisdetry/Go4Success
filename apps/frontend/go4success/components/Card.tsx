@@ -111,10 +111,6 @@ const styleFunctions = {
 };
 
 const Card: React.FC<CardProps> = ({
-<<<<<<< HEAD
-    id,
-=======
->>>>>>> main
     title,
     location,
     date,

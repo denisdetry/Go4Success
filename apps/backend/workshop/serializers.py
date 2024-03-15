@@ -10,17 +10,17 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 class RoomSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = ROOM
+        model = Room
         fields = ['site_name', 'room_name']
 
 
 class CourseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = COURSE
+        model = Course
         fields = ['course_code']
 
 
 class ActivitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = ACTIVITY
+        model = Activity
         fields = '__all__'

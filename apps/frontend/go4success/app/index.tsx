@@ -1,8 +1,6 @@
-import { View, Text, ScrollView } from "react-native";
-import React from "react";
+import { Text, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/global";
-import { StyleSheet } from "react-native";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "../components/Card";
 import { FlatList } from "react-native-gesture-handler";
@@ -19,11 +17,17 @@ interface Activity {
     activity_date_start: string;
     activity_type: string;
     activity_description: string;
+    id: string;
+    name: string;
+    room: string;
+    date_start: string;
+    type: string;
+    description: string;
 }
 
 interface Attend {
     activity: Activity;
-    student_id: string;
+    student: string;
 }
 
 type ActivityOrAttend = Activity | Attend;
@@ -38,11 +42,8 @@ export default function index() {
             .get("http://localhost:8000/api/attends/")
             .then((res) => {
                 setRegisteredActivities(res.data);
-                res.data.map(
-                    (attend: { activity: { activity_name: string } }) =>
-                        console.log(
-                            "Activity Name: " + attend.activity.activity_name,
-                        ),
+                res.data.map((attend: { activity: { name: string } }) =>
+                    console.log("Activity Name: " + attend.activity.name),
                 );
             })
             .catch((err) => {
@@ -71,12 +72,12 @@ export default function index() {
 
         return (
             <Card
-                id={activity.activity_id}
-                title={activity.activity_name}
-                location={activity.activity_room}
-                date={activity.activity_date_start}
-                type={activity.activity_type}
-                description={activity.activity_description}
+                id={activity.id}
+                title={activity.name}
+                location={activity.room}
+                date={activity.date_start}
+                type={activity.type}
+                description={activity.description}
             />
         );
     };

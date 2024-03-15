@@ -44,10 +44,12 @@ class RoomSerializer(serializers.ModelSerializer):
         model = Room
         fields = ('id', 'name', 'site')
 
+
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ('id', 'code', 'name')
+
 
 class ActivitySerializer(serializers.ModelSerializer):
     # Utilisation d'un SerializerMethodField pour personnaliser la représentation du champ activity_room
@@ -70,4 +72,3 @@ class AttendSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attend
         fields = ('activity', 'student')
-

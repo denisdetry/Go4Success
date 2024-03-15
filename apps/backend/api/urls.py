@@ -8,6 +8,7 @@ router.register(r'register_activity',
                 views.registerToActivityView, "register_activity")
 router.register(r'activity', views.ActivityViewSet, "activity")
 router.register(r'attends', views.AttendsViewSet, "attends")
+router.register(r'unregister', views.unregister_from_activity_view, "unregister")
 
 urlpatterns = [
     path('register/', views.UserRegisterView.as_view(), name='register'),

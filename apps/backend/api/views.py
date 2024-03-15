@@ -1,6 +1,7 @@
 from .serializers import *
 from django.contrib.auth import login, logout
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from .validations import custom_validation, validate_username, validate_password
@@ -8,8 +9,8 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework import viewsets
 from .models import *
 
-@APIView(['POST'])
-def unregisterFromActivityView(request):
+@api_view(['POST'])
+def unregister_from_activity_view(request):
     serializer = UnregisterFromActivitySerializer(data=request.data)
     if serializer.is_valid():
         activity = serializer.validated_data['activity']
@@ -21,6 +22,7 @@ def unregisterFromActivityView(request):
         except ATTENDS.DoesNotExist:
             return Response({'message': 'You are not registered to this activity'}, status=status.HTTP_400_BAD_REQUEST)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class UserRegisterView(APIView):
     permission_classes = (permissions.AllowAny,)
 

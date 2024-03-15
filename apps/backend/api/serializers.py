@@ -1,8 +1,9 @@
-from rest_framework import serializers
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from .models import *
+
+from .models import Room, Activity, Attend, Course
 
 class UnregisterFromActivitySerializer(serializers.Serializer):
     
@@ -34,32 +35,44 @@ class UserLoginSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name')
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'noma', 'is_active')
 
 
-class registerToActivitySerializer(serializers.ModelSerializer):
+class RegisterToActivityserializer(serializers.ModelSerializer):
     class Meta:
-        model = ATTENDS
+        model = Attend
         fields = ('activity', 'student')
 
+
+class RoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ('id', 'name', 'site')
+
+class CourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ('id', 'code', 'name')
 
 class ActivitySerializer(serializers.ModelSerializer):
     # Utilisation d'un SerializerMethodField pour personnaliser la représentation du champ activity_room
-    activity_room = serializers.SerializerMethodField()
+    room = serializers.SerializerMethodField()
+    course = CourseSerializer(read_only=True)
 
     class Meta:
-        model = ACTIVITY
-        fields = ('activity_id', 'activity_type', 'activity_name', 'activity_description',
-                  'activity_date_start', 'activity_date_end', 'activity_room', 'activty_course_code')
+        model = Activity
+        fields = ('id', 'type', 'name', 'description', 'date_start',
+                  'date_end', 'room', 'course')
 
     # Méthode pour personnaliser la représentation du champ activity_room
-    def get_activity_room(self, obj):
-        return f"{obj.activity_room.site_name} - {obj.activity_room.room_name}"
+    def get_room(self, obj):
+        return f"{obj.room.name} - {obj.room.site.name}"
 
 
-class AttendsSerializer(serializers.ModelSerializer):
+class AttendSerializer(serializers.ModelSerializer):
     activity = ActivitySerializer(read_only=True)
 
     class Meta:
-        model = ATTENDS
+        model = Attend
         fields = ('activity', 'student')
+

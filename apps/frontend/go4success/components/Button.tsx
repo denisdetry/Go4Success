@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import Colors from "../constants/Colors";
 
-type ButtonProps = {
+type ButtonComponentrops = {
     readonly text: string;
     readonly onPress: () => void;
     readonly buttonType:
@@ -10,10 +10,15 @@ type ButtonProps = {
         | "secondary"
         | "success"
         | "danger"
-        | "close";
+        | "close"
+        | "filter";
 };
 
-const Button: React.FC<ButtonProps> = ({ text, onPress, buttonType }) => {
+const ButtonComponent: React.FC<ButtonComponentrops> = ({
+    text,
+    onPress,
+    buttonType,
+}) => {
     const styles = StyleSheet.create({
         common: {
             borderRadius: 20,
@@ -39,16 +44,19 @@ const Button: React.FC<ButtonProps> = ({ text, onPress, buttonType }) => {
         danger: {
             backgroundColor: Colors.importantColor,
         },
+        filter: {
+            backgroundColor: Colors.secondaryColor,
+            borderRadius: 0,
+            padding: 2,
+            margin: 4,
+        },
     });
 
     return (
-        <TouchableOpacity
-            style={[styles.common, styles[buttonType]]}
-            onPress={onPress}
-        >
+        <TouchableOpacity style={[styles.common, styles[buttonType]]} onPress={onPress}>
             <Text style={styles.common}>{text}</Text>
         </TouchableOpacity>
     );
 };
 
-export default Button;
+export default ButtonComponent;

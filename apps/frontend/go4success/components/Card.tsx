@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, StyleSheet, Text, Pressable, View } from "react-native";
 import Colors from "../constants/Colors";
-import Button from "./Button";
+import ButtonComponent from "./Button";
 import axios from "axios";
 
 // Set the default values for axios
@@ -143,12 +143,12 @@ const Card: React.FC<CardProps> = ({ title, location, date, type, description })
                         </View>
 
                         <View style={styles.buttonContainer}>
-                            <Button
+                            <ButtonComponent
                                 text="Register"
                                 onPress={() => {}}
                                 buttonType={"primary"}
                             />
-                            <Button
+                            <ButtonComponent
                                 text="Hide Modal"
                                 onPress={() => setModalVisible(!modalVisible)}
                                 buttonType={"close"}

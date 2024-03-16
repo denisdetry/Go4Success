@@ -7,7 +7,8 @@ from rest_framework.views import APIView
 from django.db.models import Q
 
 from .models import Activity, Attend, Room, Site
-from .serializers import SiteSerializer, UserRegistrationSerializer, UserLoginSerializer, UserSerializer, ActivitySerializer, \
+from .serializers import SiteSerializer, UserRegistrationSerializer, \
+    UserLoginSerializer, UserSerializer, ActivitySerializer, \
     AttendSerializer, RegisterToActivityserializer, RoomSerializer
 from .validations import custom_validation, validate_username, validate_password
 
@@ -99,7 +100,9 @@ class ActivityViewSet(viewsets.ModelViewSet):
         if name is not None:
             qs = qs.filter(name__icontains=name)
         if room is not None:
-            qs = qs.filter(room__name__icontains=room)
+            for word in room.split():
+                qs = qs.filter(Q(room__name__icontains=word) |
+                               Q(room__site__name__icontains=word))
         if date_start not in [None, 'undefined', 'null', '']:
             if date_end not in [None, 'undefined', 'null', '']:
                 qs = qs.filter(

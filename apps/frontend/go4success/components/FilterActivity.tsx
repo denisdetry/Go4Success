@@ -122,6 +122,18 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         endDateISO = null;
     }
 
+    if (mode === "single") {
+        if (date instanceof Date) {
+            startDateISO = date.toISOString().split("T")[0];
+        } else if (typeof date === "string" || typeof date === "number") {
+            startDateISO = new Date(date).toISOString().split("T")[0];
+        } else if (date instanceof dayjs) {
+            startDateISO = date.format("YYYY-MM-DD");
+        } else {
+            startDateISO = null;
+        }
+    }
+
     useEffect(() => {
         if (filterType === "attend") {
             axios
@@ -181,7 +193,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
             .catch((err: Error) => {
                 console.error(err.message);
             });
-    }, [filterType, searchName, selectedRoom, selectedSite, range]);
+    }, [filterType, searchName, selectedRoom, selectedSite, range, date]);
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         let activity: Activity;

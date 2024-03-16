@@ -106,6 +106,11 @@ class ActivityViewSet(viewsets.ModelViewSet):
                     Q(date_start__date__gte=date_start,
                       date_end__date__lte=date_end)
                 )
+            else:
+                qs = qs.filter(
+                    Q(date_start__date__gte=date_start,
+                      date_end__date__lte=date_start)
+                )
         return qs
 
 

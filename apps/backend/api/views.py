@@ -4,9 +4,8 @@ from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.db.models import Q
 
-from .models import Activity, Attend, Room, Site
+from .models import Attend, Room, Site
 from .serializers import SiteSerializer, UserRegistrationSerializer, \
     UserLoginSerializer, UserSerializer, \
     RegisterToActivityserializer, RoomSerializer

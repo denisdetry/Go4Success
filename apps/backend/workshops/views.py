@@ -1,6 +1,4 @@
-from api.models import Activity, Site
-from rest_framework import viewsets, status, permissions
-from rest_framework.response import Response
+from rest_framework import viewsets, permissions
 from django.db.models import Q
 
 from api.models import Activity, Attend, Room, Site

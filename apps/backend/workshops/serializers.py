@@ -1,4 +1,3 @@
-from api.models import Activity, Site
 from rest_framework import serializers
 
 from api.models import Activity, Attend, Course, Site, Room

@@ -1,33 +1,89 @@
 from api.models import Activity, Site
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
+from django.db.models import Q
 
-from .serializers import ActivitySerializer, SiteSerializer
-
-
-class ActivityViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows activities to be viewed
-    """
-    queryset = Activity.objects.all()
-    serializer_class = ActivitySerializer
-
-    # permission_classes = [permissions.IsAuthenticated]
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            self.perform_create(serializer)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+from api.models import Activity, Attend, Room, Site
+from .serializers import SiteSerializer, ActivitySerializer, \
+    AttendSerializer, RoomSerializer
 
 
-class SiteViewSet(viewsets.ReadOnlyModelViewSet):
+class RoomViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+
+    def get_queryset(self):
+        qs = Room.objects.all()
+        site = self.request.query_params.get('site')
+        if site and site.isdigit():
+            qs = qs.filter(site_id=int(site))
+        return qs
+
+
+class SiteViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
     queryset = Site.objects.all()
     serializer_class = SiteSerializer
 
-    def get(self, request):
-        if request == "GET":
-            serializer = self.get_serializer(data=request.data)
-            return Response(serializer.data, status.HTTP_200_OK)
+
+class ActivityViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Activity.objects.all()
+    serializer_class = ActivitySerializer
+
+    def get_queryset(self):
+        qs = Activity.objects.all()
+        name = self.request.query_params.get('name')
+        room = self.request.query_params.get('room')
+        date_start = self.request.query_params.get('date_start')
+        date_end = self.request.query_params.get('date_end')
+        if name is not None:
+            qs = qs.filter(name__icontains=name)
+        if room is not None:
+            for word in room.split():
+                qs = qs.filter(Q(room__name__icontains=word) |
+                               Q(room__site__name__icontains=word))
+        if date_start not in [None, 'undefined', 'null', '']:
+            if date_end not in [None, 'undefined', 'null', '']:
+                qs = qs.filter(
+                    Q(date_start__date__gte=date_start,
+                      date_end__date__lte=date_end)
+                )
+            else:
+                qs = qs.filter(
+                    Q(date_start__date__gte=date_start,
+                      date_end__date__lte=date_start)
+                )
+        return qs
+
+
+class AttendViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Attend.objects.all()
+    serializer_class = AttendSerializer
+
+    def get_queryset(self):
+        qs = Attend.objects.all()
+        name = self.request.query_params.get('name')
+        room = self.request.query_params.get('room')
+        date_start = self.request.query_params.get('date_start')
+        date_end = self.request.query_params.get('date_end')
+        if name is not None:
+            qs = qs.filter(name__icontains=name)
+        if room is not None:
+            for word in room.split():
+                qs = qs.filter(Q(room__name__icontains=word) |
+                               Q(room__site__name__icontains=word))
+        if date_start not in [None, 'undefined', 'null', '']:
+            if date_end not in [None, 'undefined', 'null', '']:
+                qs = qs.filter(
+                    Q(date_start__date__gte=date_start,
+                      date_end__date__lte=date_end)
+                )
+            else:
+                qs = qs.filter(
+                    Q(date_start__date__gte=date_start,
+                      date_end__date__lte=date_start)
+                )
+        return qs

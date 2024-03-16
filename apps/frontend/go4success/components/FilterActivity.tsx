@@ -82,7 +82,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     useEffect(() => {
         if (filterType === "attend") {
             axios
-                .get(`${API_BASE_URL}/api/attends/?name=${searchName}`)
+                .get(`${API_BASE_URL}/workshops/attends/?name=${searchName}`)
                 .then((res) => {
                     setRegisteredActivities(res.data);
                 })
@@ -92,7 +92,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         } else {
             axios
                 .get(
-                    `${API_BASE_URL}/api/activity/?name=${searchName}&room=${selectedRoom} ${selectedSite}&date_start=${startDateISO}&date_end=${endDateISO}`,
+                    `${API_BASE_URL}/workshops/activity/?name=${searchName}&room=${selectedRoom} ${selectedSite}&date_start=${startDateISO}&date_end=${endDateISO}`,
                 )
                 .then((res) => {
                     setAllActivities(res.data);
@@ -102,7 +102,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 });
         }
         axios
-            .get(`${API_BASE_URL}/api/room/?site=${selectedSite}`)
+            .get(`${API_BASE_URL}/workshops/rooms/?site=${selectedSite}`)
             .then((res) => {
                 setRooms(
                     res.data
@@ -117,7 +117,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 console.error(err.message);
             });
         axios
-            .get(`${API_BASE_URL}/api/site/`)
+            .get(`${API_BASE_URL}/workshops/sites/`)
             .then((res) => {
                 setSites(
                     res.data

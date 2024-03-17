@@ -3,17 +3,14 @@ import Drawer from "expo-router/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/context/auth";
-import { useRouter } from "expo-router";
 import Colors from "@/constants/Colors";
 import {
     DrawerContentScrollView,
     DrawerItem,
     DrawerItemList,
-    DrawerToggleButton,
 } from "@react-navigation/drawer";
 
 function customDrawerContent(props: any) {
-    const router = useRouter();
     const { signOut } = useAuth();
     return (
         <DrawerContentScrollView {...props} scrollEnabled={false}>

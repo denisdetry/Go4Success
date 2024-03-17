@@ -33,11 +33,10 @@ interface Message {
     to_user: string;
 }
 
-export default function index() {
+export default function accueil() {
     const [allActivities, setAllActivities] = useState([]);
     const [registeredActivities, setRegisteredActivities] = useState([]);
     const [allMessages, setAllMessages] = useState([]);
-    const [isAuthentificated, setIsAuthentificated] = useState(false);
 
     useEffect(() => {
         axios

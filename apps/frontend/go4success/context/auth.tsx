@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useSegments, useRouter } from "expo-router";
+import { useRouter, useSegments } from "expo-router";
 
 const AuthContext = React.createContext<any>(null);
 
@@ -15,7 +15,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
     React.useEffect(() => {
         if (user === undefined) return;
 
-        if (!user && rootSegment != "(auth)") {
+        if (!user && rootSegment !== "(auth)") {
             router.replace("/(auth)/login");
         } else if (user && rootSegment !== "(app)") {
             router.replace("/");

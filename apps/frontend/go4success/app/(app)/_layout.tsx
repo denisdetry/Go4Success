@@ -1,7 +1,7 @@
 import React from "react";
 import Drawer from "expo-router/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Ionicons, FontAwesome, Feather } from "@expo/vector-icons";
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useAuth } from "@/context/auth";
 import Colors from "@/constants/Colors";
 import {

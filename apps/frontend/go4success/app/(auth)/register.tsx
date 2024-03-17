@@ -1,10 +1,9 @@
-import { View, Text } from "react-native";
+// import Button from "@/components/Button";
+import { Text, View } from "react-native";
+import Button from "@/components/Button";
 import React from "react";
 import styles from "@/styles/global";
-// import Button from "@/components/Button";
-import { Button } from "react-native";
 import { useAuth } from "@/context/auth";
-import Colors from "@/constants/Colors";
 
 export default function register() {
     const { signIn } = useAuth();
@@ -14,11 +13,7 @@ export default function register() {
             <View style={styles.container}>
                 <Text style={styles.title}>Inscription</Text>
                 {/* add forms */}
-                <Button
-                    title="S'inscrire"
-                    color={Colors.primaryColor}
-                    onPress={signIn}
-                />
+                <Button text="Se connecter" onPress={signIn} buttonType={"primary"} />
             </View>
         </View>
     );

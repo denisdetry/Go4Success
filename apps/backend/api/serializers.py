@@ -8,8 +8,8 @@ from .models import Room, Activity, Attend, Course
 class UnregisterFromActivitySerializer(serializers.Serializer):
     
     class Meta:
-        model = ATTENDS
-        fields = ('activity', 'student')
+        model = Attend
+        fields = ['activity', 'student']
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:

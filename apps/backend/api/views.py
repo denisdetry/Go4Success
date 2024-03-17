@@ -7,26 +7,29 @@ from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from .serializers import UnregisterFromActivitySerializer
+from .models import *
+from rest_framework.parsers import JSONParser
+import json
 from .models import Activity, Attend
 from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSerializer, ActivitySerializer, \
     AttendSerializer, RegisterToActivityserializer
 from .validations import custom_validation, validate_username, validate_password
 
-
-@api_view(['POST'])
-def unregister_from_activity_view(request):
-    serializer = UnregisterFromActivitySerializer(data=request.data)
-    if serializer.is_valid():
-        activity = serializer.validated_data['activity']
-        student = serializer.validated_data['student']
+class UnregisterFromActivityView(APIView):
+    def post(self, request):
         try:
-            attends = ATTENDS.objects.get(activity=activity, student=student)
+            data = json.loads(request.body)
+            activity = int(data.get('activity'))
+            student = int(data.get('student'))
+            attends = Attend.objects.get(activity=activity, student=student)
             attends.delete()
             return Response({'message': 'Successfully unregistered from activity'}, status=status.HTTP_200_OK)
-        except ATTENDS.DoesNotExist:
+        except Attend.DoesNotExist:
             return Response({'message': 'You are not registered to this activity'}, status=status.HTTP_400_BAD_REQUEST)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except json.JSONDecodeError:
+            return Response({'message': 'Invalid JSON'}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserRegisterView(APIView):
     permission_classes = (permissions.AllowAny,)

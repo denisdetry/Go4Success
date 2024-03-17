@@ -1,6 +1,10 @@
-import React from "react";
-import Drawer from "expo-router/drawer";
+import { AuthProvider } from "@/context/auth";
+import { Slot } from "expo-router";
 
 export default function Layout() {
-    return <Drawer />;
+    return (
+        <AuthProvider>
+            <Slot />
+        </AuthProvider>
+    );
 }

@@ -1,5 +1,6 @@
 import { Dimensions, ScaledSize, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
+import Colors from "@/constants/Colors";
 
 const windowDimensions = Dimensions.get("window");
 export default StyleSheet.create({
@@ -39,14 +40,28 @@ export default StyleSheet.create({
         shadowColor: "lightgray",
         backgroundColor: "white",
     },
+
+    form: {
+        flex: 1,
+        gap: 15,
+        justifyContent: "center",
+    },
+
+    inputField: {
+        flex: 1,
+        shadowRadius: 2,
+        shadowColor: "#000",
+        borderRadius: 10,
+        flexDirection: "row",
+        alignItems: "center",
+        padding: 10,
+    },
+
     input: {
         flex: 1,
         color: "#333",
-        paddingVertical: 10,
-        paddingRight: 10,
         fontSize: 16,
         borderColor: "#777",
-        padding: 8,
         margin: 10,
     },
 

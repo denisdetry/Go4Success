@@ -10,7 +10,7 @@ export function useAuth() {
 export function AuthProvider({ children }: React.PropsWithChildren) {
     const rootSegment = useSegments()[0];
     const router = useRouter();
-    const [user, setUser] = React.useState<string | undefined>("");
+    const [user, setUser] = React.useState<string | undefined>("Artak");
 
     React.useEffect(() => {
         if (user === undefined) return;

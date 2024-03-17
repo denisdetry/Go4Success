@@ -13,7 +13,7 @@ export default function register() {
             <View style={styles.container}>
                 <Text style={styles.title}>Inscription</Text>
                 {/* add forms */}
-                <Button text="Se connecter" onPress={signIn} buttonType={"primary"} />
+                <Button text="S'inscrire" onPress={signIn} buttonType={"primary"} />
             </View>
         </View>
     );

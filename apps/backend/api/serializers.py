@@ -52,7 +52,35 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = ('id', 'code', 'name')
 
 
+class ActivitySerializer(serializers.ModelSerializer):
+    # Utilisation d'un SerializerMethodField pour personnaliser la représentation du champ activity_room
+    room = serializers.SerializerMethodField()
+    course = serializers.SerializerMethodField()
+    date_start = serializers.DateTimeField(format="%d-%m-%Y - %H:%M")
+    date_end = serializers.DateTimeField(format="%d-%m-%Y - %H:%M")
+
+
 class SiteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Site
-        fields = ['id', 'name']
+        model = Activity
+        fields = ('id', 'type', 'name', 'description', 'date_start',
+                  'date_end', 'room', 'course')
+
+    # Méthode pour personnaliser la représentation du champ activity_room
+    def get_room(self, obj):
+        if obj.room:
+            return f"{obj.room.name} - {obj.room.site.name}"
+        return
+
+    def get_course(self, obj):
+        if obj.course:
+            return f"{obj.course.code} - {obj.course.name}"
+        return
+
+
+class AttendSerializer(serializers.ModelSerializer):
+    activity = ActivitySerializer(read_only=True)
+
+    class Meta:
+        model = Attend
+        fields = ('activity', 'student')

@@ -1,8 +1,16 @@
 import React, { useState } from "react";
-import { Modal, StyleSheet, Text, Pressable, View } from "react-native";
+import {
+    Modal,
+    Pressable,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./Button";
 import axios from "axios";
+import { useRouter } from "expo-router";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -110,11 +118,53 @@ const styleFunctions = {
     },
 };
 
-const Card: React.FC<CardProps> = ({ title, location, date, type, description }) => {
+const Card: React.FC<CardProps> = ({
+    id,
+    title,
+    location,
+    date,
+    type,
+    description,
+}) => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [currentUserID, setCurrentUserID] = useState("");
+    const router = useRouter();
+
+    //GetCurrentUserID(setCurrentUserID);
+
+    const handleRegister = () => {
+        axios
+            .post("http://localhost:8000/api/register_activity/", {
+                activity: id,
+                student: currentUserID,
+            })
+            .then((res) => {
+                alert("Registered");
+                console.log(res);
+            })
+            .catch((err) => {
+                if (err.response.status === 400) {
+                    if (currentUserID === "") {
+                        alert("You need to be logged in to register");
+                        router.push("/login");
+                        setModalVisible(!modalVisible);
+                    } else {
+                        alert("You are already registered to this activity");
+                    }
+                } else if (err.response.status === 403) {
+                    alert("You are not allowed to register to this activity");
+                } else if (err.response.status === 404) {
+                    alert("Activity not found");
+                } else if (err.response.status === 500) {
+                    alert("Server error, please try again later");
+                }
+                console.log(err);
+            });
+    };
 
     return (
         <View style={styles.centeredView}>
+            {/* Modal content */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -125,15 +175,16 @@ const Card: React.FC<CardProps> = ({ title, location, date, type, description })
             >
                 <View style={styles.centeredViewModal}>
                     <View style={styles.modalView}>
-                        <Pressable
-                            style={styles.closeButton}
-                            onPress={() => setModalVisible(!modalVisible)}
-                        >
-                            <Text style={styles.closeButtonText}>✖</Text>
-                        </Pressable>
                         <View style={styleFunctions.getModalViewTitleStyle(type)}>
-                            <Text style={styles.modalTitle}>{title}</Text>{" "}
+                            <Text style={styles.modalTitle}>{title}</Text>
+                            <Pressable
+                                style={styles.closeButton}
+                                onPress={() => setModalVisible(!modalVisible)}
+                            >
+                                <Text style={styles.closeButtonText}>✖</Text>
+                            </Pressable>
                         </View>
+
                         <View style={styleFunctions.getmodalDataStyle(type)}>
                             <Text style={styles.modalText}>Date : {date}</Text>
                             <Text style={styles.modalText}>Place : {location}</Text>
@@ -145,7 +196,7 @@ const Card: React.FC<CardProps> = ({ title, location, date, type, description })
                         <View style={styles.buttonContainer}>
                             <ButtonComponent
                                 text="Register"
-                                onPress={() => {}}
+                                onPress={handleRegister}
                                 buttonType={"primary"}
                             />
                             <ButtonComponent
@@ -158,7 +209,8 @@ const Card: React.FC<CardProps> = ({ title, location, date, type, description })
                 </View>
             </Modal>
 
-            <Pressable
+            {/* Card content */}
+            <TouchableOpacity
                 style={styleFunctions.getCardStyle(type)}
                 onPress={() => setModalVisible(true)}
             >
@@ -167,7 +219,7 @@ const Card: React.FC<CardProps> = ({ title, location, date, type, description })
                     <Text style={styles.text}>{location}</Text>
                     <Text style={styles.text}>{date}</Text>
                 </View>
-            </Pressable>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -177,8 +229,11 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         flexDirection: "row",
         justifyContent: "space-between",
+        padding: 20,
     },
     modalViewTitle: {
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
         width: "100%",
     },
     modalTitle: {
@@ -197,33 +252,26 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     card: {
-        width: "100%",
-        maxWidth: 350,
-        minHeight: 200,
-        minWidth: 300,
-        height: "100%",
-        maxHeight: 500,
-        borderRadius: 10,
-        padding: 20,
-        paddingHorizontal: 10,
+        // flexDirection: "column",
+        alignItems: "stretch",
+        alignSelf: "center",
         flex: 1,
-        flexDirection: "column",
-        justifyContent: "space-between",
-        paddingBottom: 100,
+        borderRadius: 10,
+        padding: 15,
+        gap: 50,
+        minWidth: 350,
+        maxWidth: 350,
+        minHeight: 180,
+        maxHeight: 180,
     },
     bottomRow: {
+        flex: 1,
         flexDirection: "row",
-        justifyContent: "space-between",
-        position: "absolute",
-        bottom: 0,
-        width: "100%",
-        paddingTop: 20,
-        paddingRight: 20,
-        paddingLeft: 5,
-        paddingBottom: 10,
     },
     centeredView: {
         marginTop: 22,
+        justifyContent: "center",
+        alignItems: "center",
     },
     centeredViewModal: {
         flex: 1,
@@ -233,9 +281,9 @@ const styles = StyleSheet.create({
     },
     modalView: {
         margin: 20,
-        backgroundColor: "white",
+        backgroundColor: Colors.workshopLightColor,
         borderRadius: 20,
-        padding: 30,
+        //padding: 30,
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
@@ -252,8 +300,8 @@ const styles = StyleSheet.create({
         right: 10,
     },
     closeButtonText: {
-        fontSize: 24,
-        color: "#333",
+        color: "white",
+        fontSize: 20,
     },
     separator: {
         borderBottomColor: "#000",
@@ -266,6 +314,9 @@ const styles = StyleSheet.create({
         color: "white",
     },
     text: {
+        flex: 1,
+        alignSelf: "flex-end",
+        alignItems: "stretch",
         fontSize: 16,
         color: "white",
     },

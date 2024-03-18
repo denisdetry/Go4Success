@@ -2,29 +2,12 @@ import { Platform, ScrollView, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "@/styles/global";
-import Card from "@/components/Card";
 import FilterActivity from "@/components/FilterActivity";
 import { FlatList } from "react-native-gesture-handler";
 // Set the default values for axios
 axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
-
-interface Activity {
-    id: string;
-    name: string;
-    room: string;
-    date_start: string;
-    type: string;
-    description: string;
-}
-
-interface Attend {
-    activity: Activity;
-    student: string;
-}
-
-type ActivityOrAttend = Activity | Attend;
 
 interface Message {
     id: string;

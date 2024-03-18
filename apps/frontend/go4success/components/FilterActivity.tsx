@@ -223,7 +223,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                             <ButtonComponent
                                 text="Clear dates"
                                 onPress={handleClearDates}
-                                buttonType={"secondary"}
+                                buttonType={"primary"}
                             />
                         </View>
                         <ButtonComponent

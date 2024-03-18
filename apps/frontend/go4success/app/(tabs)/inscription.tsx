@@ -9,11 +9,18 @@ import {
 } from "react-native";
 
 import axios from "axios";
+
+
+
+
+
+
+
 export default function inscription() {
-    const [name,setName] = useState('');
-    const [lastname,setLastName] = useState('');
-    const [mail,setMail] = useState('');
-    const [password,setPassword] = useState('');
+const [name,setName] = useState('');
+const [lastname,setLastName] = useState('');
+const [mail,setMail] = useState('');
+const [password,setPassword] = useState('');
     return (
         <View>
             <Text>Nom : </Text>
@@ -30,18 +37,20 @@ export default function inscription() {
 
         
     );
-        axios.post('127.0.0.1:8000/registration', {
-            name: name,
-            lastName: lastname,
-            mail :mail,
-            password : password
-        })
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+
+    
+    axios.post('127.0.0.1:8000/registration', {
+        name: name,
+        lastName: lastname,
+        mail :mail,
+        password : password
+    })
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
 
     
 }

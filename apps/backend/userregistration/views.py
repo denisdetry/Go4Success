@@ -37,6 +37,18 @@ class UserRegistration(viewsets.ModelViewSet):
 
 @api_view(['POST'])
 def register_user(request):
+    """
+    allows to register a user
+
+    parameters
+    ----------
+    request : it's the request from the backend (JSON)
+
+    return 
+    ------
+    Response : it's the response to the backend
+
+    """
     if request.method == 'POST':
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid() and check_isSha256(request.data.get('password')):

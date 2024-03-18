@@ -134,6 +134,18 @@ export default function Layout() {
                         ),
                     }}
                 />
+
+                <Drawer.Screen
+                    
+                    name="roleManagement"
+                    options={{
+                        drawerLabel: "Gestion des rôles",
+                        headerTitle: "Gestion des rôles",
+                        drawerIcon: ({ size, color }) => (
+                            <Ionicons name="calendar" size={size} color={color} />
+                        ),
+                    }}
+                />
             </Drawer>
         </GestureHandlerRootView>
     );

@@ -179,7 +179,6 @@ export default function register() {
                             </View>
                         )}
                         name="noma"
-                        defaultValue=""
                     />
 
                     {/*Error message for noma field*/}

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "@/styles/global";
 import Card from "@/components/Card";
+import FilterActivity from "@/components/FilterActivity";
 import { FlatList } from "react-native-gesture-handler";
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -34,52 +35,9 @@ interface Message {
 }
 
 export default function accueil() {
-    const [allActivities, setAllActivities] = useState([]);
-    const [registeredActivities, setRegisteredActivities] = useState([]);
     const [allMessages, setAllMessages] = useState([]);
 
-    useEffect(() => {
-        axios
-            .get("http://localhost:8000/api/attends/")
-            .then((res) => {
-                setRegisteredActivities(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-        axios
-            .get("http://localhost:8000/api/activity/")
-            .then((res) => {
-                setAllActivities(res.data);
-                if (Platform.OS === "ios") {
-                    console.log(res.data);
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, []);
-
-    const renderCards = ({ item }: { item: ActivityOrAttend }) => {
-        let activity = item;
-
-        if ("activity" in item) {
-            activity = item.activity;
-        } else {
-            activity = item;
-        }
-        return (
-            <Card
-                id={activity.id}
-                title={activity.name}
-                location={activity.room}
-                date={activity.date_start}
-                type={activity.type}
-                description={activity.description}
-            />
-        );
-    };
+    useEffect(() => {}, []);
 
     const renderMessages = ({ item }: { item: Message }) => {
         return <Text> {item.content}</Text>;
@@ -102,39 +60,16 @@ export default function accueil() {
             </View>
             <View style={styles.container}>
                 <Text style={styles.title}>Atelier inscrits</Text>
-
-                {registeredActivities.length > 0 ? (
-                    <FlatList
-                        contentContainerStyle={styles.containerCard}
-                        data={registeredActivities}
-                        renderItem={renderCards}
-                        horizontal
-                        pagingEnabled
-                        showsHorizontalScrollIndicator={false}
-                    />
-                ) : (
-                    <Text style={styles.text}>Vous n'êtes inscrit à aucun atelier</Text>
-                )}
+                <ScrollView contentContainerStyle={styles.containerCard}>
+                    <FilterActivity filterType={"attend"} />
+                </ScrollView>
             </View>
 
             <View style={styles.container}>
                 <Text style={styles.title}>Ateliers disponibles</Text>
-
-                {allActivities.length > 0 ? (
-                    <>
-                        <FlatList
-                            contentContainerStyle={styles.containerCard}
-                            data={allActivities}
-                            renderItem={renderCards}
-                            horizontal
-                            pagingEnabled
-                            showsHorizontalScrollIndicator={false}
-                            keyExtractor={(item: Activity) => item.id}
-                        />
-                    </>
-                ) : (
-                    <Text style={styles.text}>Aucun atelier disponible</Text>
-                )}
+                <ScrollView contentContainerStyle={styles.containerCard}>
+                    <FilterActivity filterType={"activity"} />
+                </ScrollView>
             </View>
 
             <View style={styles.container}>

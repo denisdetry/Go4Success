@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from .models import Room, Attend, Course, Site
+from .models import Room, Activity, Attend, Course, Site
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -59,8 +59,6 @@ class ActivitySerializer(serializers.ModelSerializer):
     date_start = serializers.DateTimeField(format="%d-%m-%Y - %H:%M")
     date_end = serializers.DateTimeField(format="%d-%m-%Y - %H:%M")
 
-
-class SiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = ('id', 'type', 'name', 'description', 'date_start',
@@ -84,3 +82,9 @@ class AttendSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attend
         fields = ('activity', 'student')
+
+
+class SiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Site
+        fields = ['id', 'name']

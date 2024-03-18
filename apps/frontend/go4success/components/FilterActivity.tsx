@@ -165,7 +165,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         setModalVisible(!modalVisible);
     };
     return (
-        <ScrollView contentContainerStyle={stylesGlobal.containerCard}>
+        <ScrollView>
             <ButtonComponent
                 text="Open Filter"
                 onPress={toggleModal}
@@ -235,29 +235,34 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 </View>
             </Modal>
 
-            {filterType === "attend" && (
-                <>
-                    <Text style={stylesGlobal.heading2}>Registered Workshops</Text>
-                    {registeredActivities.length > 0 ? (
-                        <FlatList
-                            data={registeredActivities}
-                            renderItem={renderCards}
-                        />
-                    ) : (
-                        <Text style={styles.noDataText}>
-                            No registered workshops available with this filter.
-                        </Text>
-                    )}
-                </>
-            )}
-            <Text style={stylesGlobal.heading2}>Available Workshops</Text>
-            {allActivities.length > 0 ? (
-                <FlatList data={allActivities} renderItem={renderCards} />
-            ) : (
-                <Text style={styles.noDataText}>
-                    No available workshops with this filter.
-                </Text>
-            )}
+            {filterType === "attend" &&
+                (registeredActivities.length > 0 ? (
+                    <FlatList
+                        contentContainerStyle={stylesGlobal.containerCard}
+                        data={registeredActivities}
+                        renderItem={renderCards}
+                        horizontal
+                        pagingEnabled
+                        showsHorizontalScrollIndicator={false}
+                    />
+                ) : (
+                    <Text style={styles.noDataText}>
+                        Vous n'êtes inscrit à aucun atelier.
+                    </Text>
+                ))}
+            {filterType === "activity" &&
+                (allActivities.length > 0 ? (
+                    <FlatList
+                        contentContainerStyle={stylesGlobal.containerCard}
+                        data={allActivities}
+                        renderItem={renderCards}
+                        horizontal
+                        pagingEnabled
+                        showsHorizontalScrollIndicator={false}
+                    />
+                ) : (
+                    <Text style={styles.noDataText}>Aucun atelier disponible.</Text>
+                ))}
         </ScrollView>
     );
 };

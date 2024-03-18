@@ -1,6 +1,4 @@
-import { Dimensions, ScaledSize, StyleSheet } from "react-native";
-import { useEffect, useState } from "react";
-import Colors from "@/constants/Colors";
+import { Dimensions, StyleSheet } from "react-native";
 
 const windowDimensions = Dimensions.get("window");
 export default StyleSheet.create({

@@ -45,10 +45,11 @@ const ButtonComponent: React.FC<ButtonComponentrops> = ({
             backgroundColor: Colors.importantColor,
         },
         filter: {
-            backgroundColor: Colors.secondaryColor,
+            backgroundColor: Colors.primaryColor,
             borderRadius: 0,
             padding: 2,
             margin: 4,
+            width: 160,
         },
     });
 

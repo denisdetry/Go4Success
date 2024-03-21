@@ -137,7 +137,7 @@ export default function Layout() {
 
                 <Drawer.Screen
                     
-                    name="roleManagement"
+                    name="Gestion des rôles"
                     options={{
                         drawerLabel: "Gestion des rôles",
                         headerTitle: "Gestion des rôles",

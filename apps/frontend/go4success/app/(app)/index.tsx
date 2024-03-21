@@ -1,13 +1,12 @@
-import { Platform, Text, View, ScrollView } from "react-native";
+import { Platform, ScrollView, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 import axios from "axios";
 import styles from "@/styles/global";
 import Card from "@/components/Card";
 import { Message } from "@/types/Message";
-import { ActivityOrAttend } from "@/types/ActivityOrAttend";
 import RenderCarousel from "@/components/RenderCarousel";
-import { Activity } from "@/types/Activity";
+import { ActivityOrAttend } from "@/types/ActivityOrAttend";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -123,7 +122,7 @@ export default function accueil() {
             });
     }, []);
 
-    const renderCards = ({ item }: any) => {
+    const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         let activity = item;
 
         if ("activity" in item) {
@@ -132,7 +131,7 @@ export default function accueil() {
             activity = item;
         }
 
-        return Platform.OS == "web" ? (
+        return Platform.OS === "web" ? (
             <Card
                 id={activity.id}
                 title={activity.name}

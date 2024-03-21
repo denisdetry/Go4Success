@@ -1,13 +1,11 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, Platform, StyleSheet } from "react-native";
 import Colors from "@/constants/Colors";
 
-const windowDimensions = Dimensions.get("window");
+const { width, height } = Dimensions.get("screen");
 export default StyleSheet.create({
     mainContainer: {
         flex: 1,
         alignItems: "center",
-        height: windowDimensions.height,
-        width: windowDimensions.width,
     },
     title: {
         fontSize: 28,
@@ -21,25 +19,19 @@ export default StyleSheet.create({
     },
     containerCard: {
         flex: 1,
-        width: windowDimensions.width - windowDimensions.width * 0.13,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        gap: 20,
+        padding: 15,
     },
     container: {
-        flex: 1,
-        width: windowDimensions.width - windowDimensions.width * 0.1,
-        padding: 50,
-        margin: 30,
+        width: "90%",
+        borderRadius: 10,
+        shadowRadius: 5,
+        shadowColor: "lightgray",
+        backgroundColor: "white",
         justifyContent: "center",
         alignItems: "center",
         alignContent: "center",
-
-        shadowRadius: 5,
-        borderRadius: 10,
-        shadowColor: "lightgray",
-        backgroundColor: "white",
+        padding: 50,
+        margin: 30,
     },
 
     form: {

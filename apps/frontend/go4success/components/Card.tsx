@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import {
+    Dimensions,
     Modal,
+    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -127,7 +129,7 @@ const Card: React.FC<CardProps> = ({
     description,
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [currentUserID, setCurrentUserID] = useState("");
+    const [currentUserID, setCurrentUserID] = useState("1");
     const router = useRouter();
 
     //GetCurrentUserID(setCurrentUserID);
@@ -252,21 +254,15 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     card: {
-        // flexDirection: "column",
-        alignItems: "stretch",
-        alignSelf: "center",
-        flex: 1,
         borderRadius: 10,
         padding: 15,
-        gap: 50,
-        minWidth: 350,
+        height: 180,
         maxWidth: 350,
-        minHeight: 180,
-        maxHeight: 180,
     },
     bottomRow: {
         flex: 1,
         flexDirection: "row",
+        gap: 30,
     },
     centeredView: {
         marginTop: 22,
@@ -314,7 +310,6 @@ const styles = StyleSheet.create({
         color: "white",
     },
     text: {
-        flex: 1,
         alignSelf: "flex-end",
         alignItems: "stretch",
         fontSize: 16,

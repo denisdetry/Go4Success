@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, Picker,TouchableOpacity,Alert} from 'react-native';
+import { View, Text, FlatList, Picker, TouchableOpacity, Alert } from 'react-native';
 
 export default function RoleManagement() {
   const [selectedValues, setSelectedValues] = useState({});
@@ -34,11 +34,20 @@ export default function RoleManagement() {
     </View>
   );
 
+  const handlePress = () => {
+    Alert.alert('Bouton cliqué !');
+  };
+
   return (
-    <FlatList
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={item => item.id.toString()}
-    />
+    <View>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={item => item.id.toString()}
+      />
+      <TouchableOpacity onPress={handlePress} style={{ backgroundColor: 'blue', padding: 10 }}>
+        <Text style={{ color: 'white', textAlign: 'center' }}>sauvegarder</Text>
+      </TouchableOpacity>
+    </View>
   );
-}
+};

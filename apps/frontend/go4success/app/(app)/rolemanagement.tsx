@@ -46,7 +46,7 @@ export default function RoleManagement() {
         keyExtractor={item => item.id.toString()}
       />
       <TouchableOpacity onPress={handlePress} style={{ backgroundColor: 'blue', padding: 10 }}>
-        <Text style={{ color: 'white', textAlign: 'center' }}>sauvegarder</Text>
+        <Text style={{ color: 'white', textAlign: 'center' }}>sauvegarder </Text>
       </TouchableOpacity>
     </View>
   );

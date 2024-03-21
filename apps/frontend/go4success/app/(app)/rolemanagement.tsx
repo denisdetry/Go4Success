@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, Picker, TouchableOpacity, Alert } from 'react-native';
+import axios from 'axios';
+
 
 export default function RoleManagement() {
   const [selectedValues, setSelectedValues] = useState({});
@@ -11,6 +13,28 @@ export default function RoleManagement() {
     // Ajoutez autant d'éléments que nécessaire
   ];
 
+
+
+  const handleValueChange = (itemValue, itemId) => {
+    setSelectedValues({
+      ...selectedValues,
+      [itemId]: itemValue
+    });
+    console.log(`L'état de l'élément ${itemId} est :`, itemValue);
+  };
+
+
+  const sendDataToBackend = () => {
+    axios.post('http://example.com/your-backend-endpoint', selectedValues)
+      .then(response => {
+        console.log('Réponse du serveur:', response.data);
+        // Gérer la réponse si nécessaire
+      })
+      .catch(error => {
+        console.error('Erreur lors de l\'envoi des données au backend:', error);
+        // Gérer les erreurs
+      });
+  };
   const renderItem = ({ item }) => (
     <View style={{ flexDirection: 'row', padding: 10 }}>
       <Text style={{ flex: 1 }}>{item.nom}</Text>
@@ -19,10 +43,10 @@ export default function RoleManagement() {
         <Picker
           selectedValue={selectedValues[item.id]}
           onValueChange={(itemValue, itemIndex) =>
-            setSelectedValues({
-              ...selectedValues,
-              [item.id]: itemValue
-            })
+           
+          handleValueChange(itemValue, item.id)
+           
+           
           }>
           <Picker.Item label="Étudiant" value="étudiant" />
           <Picker.Item label="Tuteur" value="tuteur" />

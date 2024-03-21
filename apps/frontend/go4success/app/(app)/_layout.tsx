@@ -142,7 +142,7 @@ export default function Layout() {
                         drawerLabel: "Gestion des rôles",
                         headerTitle: "Gestion des rôles",
                         drawerIcon: ({ size, color }) => (
-                            <Ionicons name="calendar" size={size} color={color} />
+                            <Ionicons name="Gestions des rôles" size={size} color={color} />
                         ),
                     }}
                 />

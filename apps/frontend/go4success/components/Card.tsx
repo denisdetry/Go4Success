@@ -128,16 +128,13 @@ const Card: React.FC<CardProps> = ({
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
 
-    const userID = "1"; // a modifier
-
     const { user } = useAuth();
-    console.log("User : " + user);
 
     const handleRegister = () => {
         axios
             .post("http://localhost:8000/api/register_activity/", {
                 activity: id,
-                student: userID,
+                student: user.id,
             })
             .then((res) => {
                 alert("Registered");

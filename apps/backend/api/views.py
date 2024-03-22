@@ -69,8 +69,12 @@ class ActivityViewSet(viewsets.ModelViewSet):
 
 class AttendViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
-    queryset = Attend.objects.all()
     serializer_class = AttendSerializer
+
+    # garder uniquement les activités de l'utilisateur connecté
+    def get_queryset(self):
+        user_id = self.request.user.id
+        return Attend.objects.filter(student_id=user_id)
 
 
 class RegisterToActivityView(viewsets.ModelViewSet):

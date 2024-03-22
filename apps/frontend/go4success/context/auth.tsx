@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useRouter, useSegments } from "expo-router";
 import axios from "axios";
+import Toast from "react-native-root-toast";
+import { Platform } from "react-native";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -55,6 +57,20 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         })
                         .catch((err) => {
                             console.log(err);
+                            if (err.response.status === 400) {
+                                if (Platform.OS === "web") {
+                                    alert(
+                                        "Nom d'utilisateur ou mot de passe incorrect",
+                                    );
+                                } else {
+                                    Toast.show(
+                                        "Nom d'utilisateur ou mot de passe incorrect",
+                                        {
+                                            duration: Toast.durations.LONG,
+                                        },
+                                    );
+                                }
+                            }
                         });
                 },
 

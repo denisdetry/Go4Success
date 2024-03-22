@@ -1,7 +1,6 @@
-import { Dimensions, Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import Colors from "@/constants/Colors";
 
-const { width, height } = Dimensions.get("screen");
 export default StyleSheet.create({
     mainContainer: {
         flex: 1,

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import {
-    Dimensions,
     Modal,
-    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -12,7 +10,7 @@ import {
 import Colors from "../constants/Colors";
 import Button from "./Button";
 import axios from "axios";
-import { useRouter } from "expo-router";
+import { useAuth } from "@/context/auth";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -129,16 +127,17 @@ const Card: React.FC<CardProps> = ({
     description,
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [currentUserID, setCurrentUserID] = useState("1");
-    const router = useRouter();
 
-    //GetCurrentUserID(setCurrentUserID);
+    const userID = "1"; // a modifier
+
+    const { user } = useAuth();
+    console.log("User : " + user);
 
     const handleRegister = () => {
         axios
             .post("http://localhost:8000/api/register_activity/", {
                 activity: id,
-                student: currentUserID,
+                student: userID,
             })
             .then((res) => {
                 alert("Registered");
@@ -146,13 +145,7 @@ const Card: React.FC<CardProps> = ({
             })
             .catch((err) => {
                 if (err.response.status === 400) {
-                    if (currentUserID === "") {
-                        alert("You need to be logged in to register");
-                        router.push("/login");
-                        setModalVisible(!modalVisible);
-                    } else {
-                        alert("You are already registered to this activity");
-                    }
+                    alert("You are already registered to this activity");
                 } else if (err.response.status === 403) {
                     alert("You are not allowed to register to this activity");
                 } else if (err.response.status === 404) {

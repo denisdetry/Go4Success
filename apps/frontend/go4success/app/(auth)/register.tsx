@@ -9,7 +9,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "expo-router";
 
 const schema = yup.object().shape({
     email: yup
@@ -65,7 +64,7 @@ export default function register() {
     });
 
     const onSubmit = (data: any) => {
-        signIn(data);
+        signIn(data.username);
     };
 
     return (

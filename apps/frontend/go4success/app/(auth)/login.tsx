@@ -1,4 +1,4 @@
-import { Text, TextInput, View, ScrollView } from "react-native";
+import { ScrollView, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import styles from "@/styles/global";
 import Button from "@/components/Button";
@@ -24,13 +24,13 @@ export default function login() {
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            username: "",
-            password: "",
+            username: "artak",
+            password: "azerty123",
         },
     });
 
     const onSubmit = (data: any) => {
-        signIn(data);
+        signIn(data.username, data.password);
     };
 
     return (

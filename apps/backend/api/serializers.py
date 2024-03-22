@@ -1,9 +1,8 @@
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from .models import Room, Activity, Attend, Course
+from .models import Room, Activity, Attend, Course, User
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):

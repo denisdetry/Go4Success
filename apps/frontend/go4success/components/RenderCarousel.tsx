@@ -1,7 +1,6 @@
 import React from "react";
 import { Platform, Dimensions } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-//import Carousel, { PaginationLight, Pagination } from "react-native-x-carousel";
 import Carousel from "react-native-reanimated-carousel";
 import styles from "@/styles/global";
 

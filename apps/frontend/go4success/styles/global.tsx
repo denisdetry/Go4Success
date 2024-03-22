@@ -1,12 +1,10 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import Colors from "@/constants/Colors";
 
-const windowDimensions = Dimensions.get("window");
 export default StyleSheet.create({
     mainContainer: {
         flex: 1,
         alignItems: "center",
-        height: windowDimensions.height,
-        width: windowDimensions.width,
     },
     title: {
         fontSize: 28,
@@ -20,39 +18,34 @@ export default StyleSheet.create({
     },
     containerCard: {
         flex: 1,
-        width: windowDimensions.width - windowDimensions.width * 0.13,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        gap: 20,
+        padding: 15,
     },
     container: {
-        width: windowDimensions.width - windowDimensions.width * 0.1,
-        padding: 50,
-        margin: 30,
+        width: "90%",
+        borderRadius: 10,
+        shadowRadius: 5,
+        shadowColor: "lightgray",
+        backgroundColor: "white",
         justifyContent: "center",
         alignItems: "center",
         alignContent: "center",
-        shadowRadius: 5,
-        borderRadius: 10,
-        shadowColor: "lightgray",
-        backgroundColor: "white",
+        padding: 50,
+        margin: 30,
     },
 
     form: {
-        flex: 1,
-        gap: 15,
+        gap: 10,
         justifyContent: "center",
     },
 
     inputField: {
-        flex: 1,
-        shadowRadius: 2,
-        shadowColor: "#000",
+        borderWidth: 0.5,
+        borderColor: Colors.primaryColor,
         borderRadius: 10,
         flexDirection: "row",
         alignItems: "center",
         padding: 10,
+        minWidth: 300,
     },
 
     input: {
@@ -60,7 +53,7 @@ export default StyleSheet.create({
         color: "#333",
         fontSize: 16,
         borderColor: "#777",
-        margin: 10,
+        padding: 10,
     },
 
     errorMsg: {

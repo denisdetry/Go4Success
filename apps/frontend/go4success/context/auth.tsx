@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useRouter, useSegments } from "expo-router";
-import { User } from "@/types/User";
 import axios from "axios";
 
 // Set the default values for axios
@@ -17,7 +16,7 @@ export function useAuth() {
 export function AuthProvider({ children }: React.PropsWithChildren) {
     const rootSegment = useSegments()[0];
     const router = useRouter();
-    const [user, setUser] = React.useState<User | undefined | string>("");
+    const [user, setUser] = React.useState<string | undefined>("");
 
     React.useEffect(() => {
         axios
@@ -28,7 +27,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
             .catch((err) => {
                 console.log(err);
             });
+    }, []);
 
+    React.useEffect(() => {
         if (user === undefined) return;
 
         if (!user && rootSegment !== "(auth)") {
@@ -55,7 +56,6 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         .catch((err) => {
                             console.log(err);
                         });
-                    // setUser(username);
                 },
 
                 signOut: () => {

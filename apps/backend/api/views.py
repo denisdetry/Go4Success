@@ -38,7 +38,9 @@ class LoginView(APIView):
             user = serializer.check_user(data)
             login(request, user)
             return Response({"id": user.id, "username": serializer.data['username'],
-                             "password": serializer.data["password"]}, status=status.HTTP_200_OK)
+                             "password": serializer.data["password"], "email": user.email,
+                             "first_name": user.first_name, "last_name": user.last_name, "is_active": user.is_active},
+                            status=status.HTTP_200_OK)
 
 
 class LogoutView(APIView):

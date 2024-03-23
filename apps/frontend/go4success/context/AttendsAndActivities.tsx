@@ -1,5 +1,6 @@
 import * as React from "react";
 import axios from "axios";
+import { useAuth } from "@/context/auth";
 
 const AttendsAndActivitiesContext = React.createContext<any>(null);
 
@@ -10,6 +11,8 @@ export function useAttendsAndActivities() {
 export function AttendsAndActivitiesProvider({ children }: React.PropsWithChildren) {
     const [attends, setAttends] = React.useState([]);
     const [activities, setActivities] = React.useState([]);
+
+    const { user } = useAuth();
 
     const refreshAttendsAndActivities = () => {
         getAttends(setAttends);
@@ -40,7 +43,7 @@ export function AttendsAndActivitiesProvider({ children }: React.PropsWithChildr
 
     React.useEffect(() => {
         refreshAttendsAndActivities();
-    }, []);
+    }, [user]);
 
     return (
         <AttendsAndActivitiesContext.Provider

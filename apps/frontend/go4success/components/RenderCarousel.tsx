@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform, Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import Carousel from "react-native-reanimated-carousel";
 import styles from "@/styles/global";
@@ -27,7 +27,6 @@ const RenderCarousel: React.FC<CarouselProps> = ({ data, renderItem }) => {
             height={width / 1.9}
             renderItem={renderItem}
             data={data}
-            loop={true}
             autoPlay={true}
             autoPlayInterval={3000}
             panGestureHandlerProps={{

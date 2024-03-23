@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
     Modal,
+    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -12,6 +13,7 @@ import Button from "./Button";
 import axios from "axios";
 import { useAuth } from "@/context/auth";
 import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
+import Toast from "react-native-root-toast";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -139,21 +141,41 @@ const Card: React.FC<CardProps> = ({
                 student: user.id,
             })
             .then((res) => {
-                alert("Registered");
+                if (Platform.OS === "web") {
+                    alert("Registered");
+                } else {
+                    Toast.show("Registered", {
+                        duration: Toast.durations.LONG,
+                    });
+                }
                 refreshAttendsAndActivities();
                 setModalVisible(!modalVisible);
                 console.log(res);
             })
             .catch((err) => {
                 if (err.response.status === 400) {
-                    alert("You are already registered to this activity");
+                    if (Platform.OS === "web") {
+                        alert("Vous êtes déjà inscrit à cette activité");
+                    } else {
+                        Toast.show("Vous êtes déjà inscrit à cette activité", {
+                            duration: Toast.durations.LONG,
+                        });
+                    }
                 } else if (err.response.status === 403) {
-                    alert("You are not allowed to register to this activity");
-                } else if (err.response.status === 404) {
-                    alert("Activity not found");
-                } else if (err.response.status === 500) {
-                    alert("Server error, please try again later");
+                    if (Platform.OS === "web") {
+                        alert(
+                            "Vous n'êtes pas autorisé à vous inscrire à cette activité",
+                        );
+                    } else {
+                        Toast.show(
+                            "Vous n'êtes pas autorisé à vous inscrire à cette activité",
+                            {
+                                duration: Toast.durations.LONG,
+                            },
+                        );
+                    }
                 }
+                setModalVisible(!modalVisible);
                 console.log(err);
             });
     };

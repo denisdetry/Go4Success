@@ -1,12 +1,16 @@
 import React, { useState ,useEffect} from 'react';
-import { View, Text, FlatList, Picker, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, FlatList, Picker, TouchableOpacity} from 'react-native';
 import axios from 'axios';
 
 
 export default function RoleManagement() {
   const [selectedValues, setSelectedValues] = useState({});
-
   const [backdata,setData] = useState(null);
+  const [item,setItem] = useState();
+
+
+  const items = [];
+
 
   useEffect(() => {
     fetchData();
@@ -26,6 +30,13 @@ export default function RoleManagement() {
 
 
 
+
+  const addItem = (newItem) =>{
+
+    const newItems = items.concat(newItem);
+    setItem(newItems);
+
+  };
 
 
 
@@ -58,6 +69,9 @@ export default function RoleManagement() {
         // Gérer les erreurs
       });
   };
+
+
+  
   const renderItem = ({ item }) => (
     <View style={{ flexDirection: 'row', padding: 10 }}>
       <Text style={{ flex: 1 }}>{item.nom}</Text>

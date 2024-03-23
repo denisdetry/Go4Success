@@ -11,6 +11,7 @@ import Colors from "../constants/Colors";
 import Button from "./Button";
 import axios from "axios";
 import { useAuth } from "@/context/auth";
+import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -129,6 +130,7 @@ const Card: React.FC<CardProps> = ({
     const [modalVisible, setModalVisible] = useState(false);
 
     const { user } = useAuth();
+    const { refreshAttendsAndActivities } = useAttendsAndActivities();
 
     const handleRegister = () => {
         axios
@@ -138,6 +140,8 @@ const Card: React.FC<CardProps> = ({
             })
             .then((res) => {
                 alert("Registered");
+                refreshAttendsAndActivities();
+                setModalVisible(!modalVisible);
                 console.log(res);
             })
             .catch((err) => {

@@ -1,5 +1,5 @@
 import { Platform, ScrollView, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import axios from "axios";
 import styles from "@/styles/global";
@@ -7,6 +7,7 @@ import Card from "@/components/Card";
 import { Message } from "@/types/Message";
 import RenderCarousel from "@/components/RenderCarousel";
 import { ActivityOrAttend } from "@/types/ActivityOrAttend";
+import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -14,113 +15,9 @@ axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 export default function accueil() {
-    const [allActivities, setAllActivities] = useState([
-        {
-            course: null,
-            date_end: "21-12-2023 - 16:00",
-            date_start: "21-12-2023 - 14:00",
-            description: "Atelier planning #2",
-            id: 11,
-            name: "Atelier 4 : Atelier planning #2",
-            room: "Vauban - UNamur",
-            type: "Planning",
-        },
-        {
-            course: null,
-            date_end: "21-12-2023 - 16:00",
-            date_start: "21-12-2023 - 14:00",
-            description: "Atelier planning #2",
-            id: 12,
-            name: "Atelier 5 : Atelier planning #2",
-            room: "Vauban - UNamur",
-            type: "Planning",
-        },
-        {
-            course: null,
-            date_end: "21-12-2023 - 16:00",
-            date_start: "21-12-2023 - 14:00",
-            description: "Atelier planning #2",
-            id: 13,
-            name: "Atelier 6 : Atelier planning #2",
-            room: "Vauban - UNamur",
-            type: "Planning",
-        },
-        {
-            course: null,
-            date_end: "21-12-2023 - 16:00",
-            date_start: "21-12-2023 - 14:00",
-            description: "Atelier planning #2",
-            id: 14,
-            name: "Atelier 6 : Atelier planning #2",
-            room: "Vauban - UNamur",
-            type: "Planning",
-        },
-    ]);
-    const [registeredActivities, setRegisteredActivities] = useState([
-        {
-            course: null,
-            date_end: "21-12-2023 - 16:00",
-            date_start: "21-12-2023 - 14:00",
-            description: "Atelier planning #2",
-            id: 11,
-            name: "Atelier 4 : Atelier planning #2",
-            room: "Vauban - UNamur",
-            type: "Planning",
-        },
-        {
-            course: null,
-            date_end: "21-12-2023 - 16:00",
-            date_start: "21-12-2023 - 14:00",
-            description: "Atelier planning #2",
-            id: 12,
-            name: "Atelier 5 : Atelier planning #2",
-            room: "Vauban - UNamur",
-            type: "Planning",
-        },
-        {
-            course: null,
-            date_end: "21-12-2023 - 16:00",
-            date_start: "21-12-2023 - 14:00",
-            description: "Atelier planning #2",
-            id: 13,
-            name: "Atelier 6 : Atelier planning #2",
-            room: "Vauban - UNamur",
-            type: "Planning",
-        },
-        {
-            course: null,
-            date_end: "21-12-2023 - 16:00",
-            date_start: "21-12-2023 - 14:00",
-            description: "Atelier planning #2",
-            id: 14,
-            name: "Atelier 6 : Atelier planning #2",
-            room: "Vauban - UNamur",
-            type: "Planning",
-        },
-    ]);
     const [allMessages, setAllMessages] = useState([]);
 
-    useEffect(() => {
-        axios
-            .get("http://localhost:8000/api/attends/")
-            .then((res) => {
-                setRegisteredActivities(res.data);
-                console.log(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-        axios
-            .get("http://localhost:8000/api/activity/")
-            .then((res) => {
-                setAllActivities(res.data);
-                console.log(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, []);
+    const { allActivities, registeredActivities } = useAttendsAndActivities();
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         let activity = item;

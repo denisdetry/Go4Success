@@ -60,7 +60,7 @@ const styleFunctions = {
         }
     },
 
-    getmodalDataStyle: (type: string) => {
+    getModalDataStyle: (type: string) => {
         switch (type) {
             case "Important":
                 return {
@@ -203,7 +203,7 @@ const Card: React.FC<CardProps> = ({
                             </Pressable>
                         </View>
 
-                        <View style={styleFunctions.getmodalDataStyle(type)}>
+                        <View style={styleFunctions.getModalDataStyle(type)}>
                             <Text style={styles.modalText}>Date : {date}</Text>
                             <Text style={styles.modalText}>Place : {location}</Text>
                             <Text style={styles.modalText}>Type : {type}</Text>
@@ -213,12 +213,12 @@ const Card: React.FC<CardProps> = ({
 
                         <View style={styles.buttonContainer}>
                             <Button
-                                text="Register"
+                                text="S'inscrire"
                                 onPress={handleRegister}
                                 buttonType={"primary"}
                             />
                             <Button
-                                text="Hide Modal"
+                                text="Fermer"
                                 onPress={() => setModalVisible(!modalVisible)}
                                 buttonType={"close"}
                             />
@@ -253,6 +253,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         width: "100%",
+        padding: 10,
     },
     modalTitle: {
         fontSize: 24,
@@ -292,16 +293,10 @@ const styles = StyleSheet.create({
         marginTop: 22,
     },
     modalView: {
-        margin: 20,
         backgroundColor: Colors.workshopLightColor,
         borderRadius: 20,
-        //padding: 30,
         alignItems: "center",
         shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,

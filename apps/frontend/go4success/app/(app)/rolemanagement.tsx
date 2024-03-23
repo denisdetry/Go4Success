@@ -1,10 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { View, Text, FlatList, Picker, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 
 
 export default function RoleManagement() {
   const [selectedValues, setSelectedValues] = useState({});
+
+  const [backdata,setData] = useState(null);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/rolemanagement/');
+      setData(response.data);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données:', error);
+      // Gérer les erreurs
+    }
+  };
+
+
+
+
+
+
 
   const data = [
     { id: 1, nom: 'Jean Dupond', valeur: 'Admin' },
@@ -25,7 +48,7 @@ export default function RoleManagement() {
 
 
   const sendDataToBackend = () => {
-    axios.post('http://example.com/your-backend-endpoint', selectedValues)
+    axios.post('http://127.0.0.1:8000/api/rolemanagement/', selectedValues)
       .then(response => {
         console.log('Réponse du serveur:', response.data);
         // Gérer la réponse si nécessaire
@@ -58,9 +81,7 @@ export default function RoleManagement() {
     </View>
   );
 
-  const handlePress = () => {
-    Alert.alert('Bouton cliqué !');
-  };
+
 
   return (
     <View>
@@ -69,7 +90,7 @@ export default function RoleManagement() {
         renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
       />
-      <TouchableOpacity onPress={handlePress} style={{ backgroundColor: 'blue', padding: 10 }}>
+      <TouchableOpacity onPress={sendDataToBackend} style={{ backgroundColor: 'blue', padding: 10 }}>
         <Text style={{ color: 'white', textAlign: 'center' }}>sauvegarder </Text>
       </TouchableOpacity>
     </View>

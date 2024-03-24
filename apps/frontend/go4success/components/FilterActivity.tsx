@@ -1,5 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Text, ScrollView, TextInput, StyleSheet, Modal, View } from "react-native";
+import {
+    ActivityIndicator,
+    Text,
+    ScrollView,
+    TextInput,
+    StyleSheet,
+    Modal,
+    Button,
+    View,
+} from "react-native";
 import axios from "axios";
 import Card from "../components/Card";
 import ButtonComponent from "../components/Button";
@@ -10,11 +19,14 @@ import stylesGlobal from "../styles/global";
 import { API_BASE_URL } from "../constants/ConfigApp";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 import dayjs from "dayjs";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
+
+const queryClient = new QueryClient();
 
 interface Activity {
     id: string;
@@ -82,7 +94,9 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     useEffect(() => {
         if (filterType === "attend") {
             axios
-                .get(`${API_BASE_URL}/workshops/attends/?name=${searchName}`)
+                .get(
+                    `${API_BASE_URL}/workshops/attends/?name=${searchName}&room=${selectedRoom} ${selectedSite}&date_start=${startDateISO}&date_end=${endDateISO}`,
+                )
                 .then((res) => {
                     setRegisteredActivities(res.data);
                 })

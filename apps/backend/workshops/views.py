@@ -68,7 +68,7 @@ class AttendViewSet(viewsets.ModelViewSet):
         date_start = self.request.query_params.get('date_start')
         date_end = self.request.query_params.get('date_end')
         if name is not None:
-            qs = qs.filter(name__icontains=name)
+            qs = qs.filter(activity__name__icontains=name)
         if room is not None:
             for word in room.split():
                 qs = qs.filter(Q(room__name__icontains=word) |

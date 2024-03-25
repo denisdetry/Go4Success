@@ -45,6 +45,42 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         <AuthContext.Provider
             value={{
                 user: user,
+                signUp: (
+                    username: string,
+                    email: string,
+                    lastname: string,
+                    firstname: string,
+                    noma: number,
+                    password: string,
+                ) => {
+                    {
+                        axios
+                            .post("http://localhost:8000/api/register/", {
+                                username: username,
+                                email: email,
+                                last_name: lastname,
+                                first_name: firstname,
+                                noma: noma,
+                                password: password,
+                            })
+                            .then((res) => {
+                                console.log(res.data);
+                                setUser(res.data);
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                                if (err.response.status === 400) {
+                                    if (Platform.OS === "web") {
+                                        alert(err.response.data);
+                                    } else {
+                                        Toast.show(err.response.data, {
+                                            duration: Toast.durations.LONG,
+                                        });
+                                    }
+                                }
+                            });
+                    }
+                },
                 signIn: (username: string, password: string) => {
                     axios
                         .post("http://localhost:8000/api/login/", {

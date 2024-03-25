@@ -16,6 +16,8 @@ class UserRegisterView(APIView):
 
     def post(self, request):
         clean_data = custom_validation(request.data)
+        if isinstance(clean_data, Response):
+            return Response(clean_data.data, status=clean_data.status_code)
         user_serializer = UserRegistrationSerializer(data=clean_data)
         if user_serializer.is_valid(raise_exception=True):
             user = user_serializer.create(clean_data)

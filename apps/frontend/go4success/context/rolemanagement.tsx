@@ -3,7 +3,7 @@ import { useRouter, useSegments } from "expo-router";
 import axios from "axios";
 import Toast from "react-native-root-toast";
 import { Platform } from "react-native";
-
+import RoleManagement from "@/app/(app)/rolemanagement";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -17,7 +17,7 @@ const ManagementContext = React.createContext<any>(null);
 
 
 export function useRole() {
-    return React.useContext(AuthContext);
+    return React.useContext(RoleManagement);
 }
 
 
@@ -52,9 +52,9 @@ export function ManagementProvider({ children }: React.PropsWithChildren) {
 
 
     return (
-        <AuthContext.Provider
+        <RoleManagement.Provider
             value={{
-                user: role,
+                role: role,
                 manageRole: (
                     user_id: string,
                     is_tutor: string,
@@ -94,7 +94,7 @@ export function ManagementProvider({ children }: React.PropsWithChildren) {
             }}
         >
             {children}
-        </AuthContext.Provider>
+        </RoleManagement.Provider>
     );
 
 }

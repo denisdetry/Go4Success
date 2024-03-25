@@ -30,7 +30,7 @@ export default function login() {
     });
 
     const onSubmit = (data: any) => {
-        signIn(data);
+        signIn(data.username, data.password);
     };
 
     return (

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
     Modal,
+    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -10,7 +11,9 @@ import {
 import Colors from "../constants/Colors";
 import ButtonComponent from "./Button";
 import axios from "axios";
-import { useRouter } from "expo-router";
+import { useAuth } from "@/context/auth";
+import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
+import Toast from "react-native-root-toast";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -57,7 +60,7 @@ const styleFunctions = {
         }
     },
 
-    getmodalDataStyle: (type: string) => {
+    getModalDataStyle: (type: string) => {
         switch (type) {
             case "Important":
                 return {
@@ -127,37 +130,52 @@ const Card: React.FC<CardProps> = ({
     description,
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [currentUserID, setCurrentUserID] = useState("");
-    const router = useRouter();
 
-    //GetCurrentUserID(setCurrentUserID);
+    const { user } = useAuth();
+    const { refreshAttendsAndActivities } = useAttendsAndActivities();
 
     const handleRegister = () => {
         axios
             .post("http://localhost:8000/api/register_activity/", {
                 activity: id,
-                student: currentUserID,
+                student: user.id,
             })
             .then((res) => {
-                alert("Registered");
+                if (Platform.OS === "web") {
+                    alert("Registered");
+                } else {
+                    Toast.show("Registered", {
+                        duration: Toast.durations.LONG,
+                    });
+                }
+                refreshAttendsAndActivities();
+                setModalVisible(!modalVisible);
                 console.log(res);
             })
             .catch((err) => {
                 if (err.response.status === 400) {
-                    if (currentUserID === "") {
-                        alert("You need to be logged in to register");
-                        router.push("/login");
-                        setModalVisible(!modalVisible);
+                    if (Platform.OS === "web") {
+                        alert("Vous êtes déjà inscrit à cette activité");
                     } else {
-                        alert("You are already registered to this activity");
+                        Toast.show("Vous êtes déjà inscrit à cette activité", {
+                            duration: Toast.durations.LONG,
+                        });
                     }
                 } else if (err.response.status === 403) {
-                    alert("You are not allowed to register to this activity");
-                } else if (err.response.status === 404) {
-                    alert("Activity not found");
-                } else if (err.response.status === 500) {
-                    alert("Server error, please try again later");
+                    if (Platform.OS === "web") {
+                        alert(
+                            "Vous n'êtes pas autorisé à vous inscrire à cette activité",
+                        );
+                    } else {
+                        Toast.show(
+                            "Vous n'êtes pas autorisé à vous inscrire à cette activité",
+                            {
+                                duration: Toast.durations.LONG,
+                            },
+                        );
+                    }
                 }
+                setModalVisible(!modalVisible);
                 console.log(err);
             });
     };
@@ -185,7 +203,7 @@ const Card: React.FC<CardProps> = ({
                             </Pressable>
                         </View>
 
-                        <View style={styleFunctions.getmodalDataStyle(type)}>
+                        <View style={styleFunctions.getModalDataStyle(type)}>
                             <Text style={styles.modalText}>Date : {date}</Text>
                             <Text style={styles.modalText}>Place : {location}</Text>
                             <Text style={styles.modalText}>Type : {type}</Text>
@@ -194,13 +212,13 @@ const Card: React.FC<CardProps> = ({
                         </View>
 
                         <View style={styles.buttonContainer}>
-                            <ButtonComponent
-                                text="Register"
+                            <Button
+                                text="S'inscrire"
                                 onPress={handleRegister}
                                 buttonType={"primary"}
                             />
-                            <ButtonComponent
-                                text="Hide Modal"
+                            <Button
+                                text="Fermer"
                                 onPress={() => setModalVisible(!modalVisible)}
                                 buttonType={"close"}
                             />
@@ -235,6 +253,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         width: "100%",
+        padding: 10,
     },
     modalTitle: {
         fontSize: 24,
@@ -252,21 +271,15 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     card: {
-        // flexDirection: "column",
-        alignItems: "stretch",
-        alignSelf: "center",
-        flex: 1,
         borderRadius: 10,
         padding: 15,
-        gap: 50,
-        minWidth: 350,
+        height: 180,
         maxWidth: 350,
-        minHeight: 180,
-        maxHeight: 180,
     },
     bottomRow: {
         flex: 1,
         flexDirection: "row",
+        gap: 30,
     },
     centeredView: {
         marginTop: 22,
@@ -280,16 +293,10 @@ const styles = StyleSheet.create({
         marginTop: 22,
     },
     modalView: {
-        margin: 20,
         backgroundColor: Colors.workshopLightColor,
         borderRadius: 20,
-        //padding: 30,
         alignItems: "center",
         shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
@@ -314,7 +321,6 @@ const styles = StyleSheet.create({
         color: "white",
     },
     text: {
-        flex: 1,
         alignSelf: "flex-end",
         alignItems: "stretch",
         fontSize: 16,

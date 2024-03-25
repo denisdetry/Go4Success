@@ -1,15 +1,15 @@
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from .models import Room, Activity, Attend, Course, Site
+from .models import Room, Activity, Attend, Course, User, Site
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ('id', 'username', 'email', 'password',
+                  'first_name', 'last_name', 'noma', "is_active")
 
     def create(self, clean_data):
         user_obj = User.objects.create_user(**clean_data)

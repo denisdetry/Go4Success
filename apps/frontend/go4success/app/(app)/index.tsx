@@ -8,6 +8,7 @@ import { Message } from "@/types/Message";
 import RenderCarousel from "@/components/RenderCarousel";
 import { ActivityOrAttend } from "@/types/ActivityOrAttend";
 import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
+import { useAuth } from "@/context/auth";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -16,8 +17,8 @@ axios.defaults.xsrfCookieName = "csrftoken";
 
 export default function accueil() {
     const [allMessages, setAllMessages] = useState([]);
-
     const { allActivities, registeredActivities } = useAttendsAndActivities();
+    const { user } = useAuth();
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         let activity = item;
@@ -57,6 +58,19 @@ export default function accueil() {
 
     return (
         <ScrollView contentContainerStyle={styles.mainContainer}>
+            <View
+                style={{
+                    width: "90%",
+                    alignContent: "flex-start",
+                    margin: 20,
+                    padding: 10,
+                }}
+            >
+                <Text style={[styles.title, { marginBottom: 0 }]}>
+                    Bonjour {user.first_name} ! 👋
+                </Text>
+            </View>
+
             {/* Message container */}
             <View style={styles.container}>
                 <Text style={styles.title}>Mes messages</Text>

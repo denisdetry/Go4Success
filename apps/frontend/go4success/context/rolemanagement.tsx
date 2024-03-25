@@ -33,15 +33,61 @@ export function ManagementProvider({ children }: React.PropsWithChildren) {
     }, []);
 
 
+    React.useEffect(() => {
+        if (role === undefined) return;
+
+        if (!role && rootSegment !== "(auth)") {
+            router.replace("/(auth)/login");
+        } else if (role && rootSegment !== "(app)") {
+            router.replace("/");
+        }
+    }, [role, rootSegment]);
 
 
     return (
+        <AuthContext.Provider
+            value={{
+                user: role,
+                manageRole: (
+                    user_id: string,
+                    is_tutor: string,
+                    is_professor : string,
+                    is_superuser : string,
+                ) => {
+                    {
+                        axios
+                            .post("http://localhost:8000/rolemanagement/", {
+                   
+                                user_id: user_id,
+                                is_tutor: is_tutor,
+                                is_professor : is_professor,
+                                is_superuser : is_superuser,
+                            })
+                            .then((res) => {
+                                console.log(res.data);
+                                setRole(res.data);
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                                if (err.response.status === 400) {
+                                    if (Platform.OS === "web") {
+                                        alert(err.response.data);
+                                    } else {
+                                        Toast.show(err.response.data, {
+                                            duration: Toast.durations.LONG,
+                                        });
+                                    }
+                                }
+                            });
+                    }
+                },
 
 
-    <AuthContext.Provider>
 
-        
-    </AuthContext.Provider>
+            }}
+        >
+            {children}
+        </AuthContext.Provider>
     );
 
 }

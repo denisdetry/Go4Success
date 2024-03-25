@@ -5,8 +5,19 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
-from api.models import User
-from .serializers import UserSerializer
+from api.models import Teacher, User
+from .serializers import TeacherSerializer, UserSerializer
+
+
+class TeacherView(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
+    queryset = Teacher.objects.all()
+
+    serializer_class = TeacherSerializer
 
 
 class UserView(viewsets.ModelViewSet):
@@ -23,12 +34,12 @@ class UserView(viewsets.ModelViewSet):
 @api_view(['GET', 'POST'])
 def role(request):
     if request.method == 'GET':
-        data = User.objects.all()
-        serializer = UserSerializer(data, many=True)
+        data = Teacher.objects.all()
+        serializer = TeacherSerializer(data, many=True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = UserSerializer(data=request.data)
+        serializer = TeacherSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

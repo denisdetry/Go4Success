@@ -15,6 +15,13 @@ axios.defaults.xsrfCookieName = "csrftoken";
 const ManagementContext = React.createContext<any>(null);
 
 
+
+export function useRole() {
+    return React.useContext(AuthContext);
+}
+
+
+
 export function ManagementProvider({ children }: React.PropsWithChildren) {
 
     const rootSegment = useSegments()[0];

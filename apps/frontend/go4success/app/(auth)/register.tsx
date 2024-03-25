@@ -9,7 +9,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "expo-router";
 
 const schema = yup.object().shape({
     email: yup
@@ -41,12 +40,12 @@ const schema = yup.object().shape({
     noma: yup
         .number()
         .typeError("Le noma est composé de chiffres uniquement")
-        .required("Veuillez entrer votre noma (Exemple: 20200574)")
+        .required("Veuillez entrer votre noma (exemple : 20200584)")
         .min(8, "Le noma doit contenir 8 chiffres (Exemple: 20200574)"),
 });
 
 export default function register() {
-    const { signIn } = useAuth();
+    const { signUp } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordRetype, setShowPasswordRetype] = useState(false);
 
@@ -59,13 +58,22 @@ export default function register() {
         defaultValues: {
             email: "",
             username: "",
+            lastname: "",
+            firstname: "",
             password: "",
             passwordRetype: "",
         },
     });
 
     const onSubmit = (data: any) => {
-        signIn(data);
+        signUp(
+            data.username,
+            data.email,
+            data.lastname,
+            data.firstname,
+            data.noma,
+            data.password,
+        );
     };
 
     return (
@@ -179,7 +187,6 @@ export default function register() {
                             </View>
                         )}
                         name="noma"
-                        defaultValue=""
                     />
 
                     {/*Error message for noma field*/}

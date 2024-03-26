@@ -30,7 +30,6 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                 console.log(err);
             });
     }, []);
-
     React.useEffect(() => {
         if (user === undefined) return;
 

@@ -8,7 +8,7 @@ from .models import Room, Activity, Attend, Course, User
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password', 'first_name', 'last_name', 'noma', "is_active")
+        fields = '__all__'
 
     def create(self, clean_data):
         user_obj = User.objects.create_user(**clean_data)

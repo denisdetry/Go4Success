@@ -1,6 +1,11 @@
-import { Navigator } from "expo-router";
-import Slot = Navigator.Slot;
+import { Tabs } from "expo-router";
 
 export default function WorkshopsLayout() {
-    return <Slot />;
+    return (
+        <Tabs
+            screenOptions={{
+                headerShown: false,
+            }}
+        />
+    );
 }

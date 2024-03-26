@@ -137,7 +137,7 @@ export default function Layout() {
                     }}
                 />
                 <Drawer.Screen
-                    name="workshops/index"
+                    name="workshops"
                     options={{
                         drawerLabel: "Ateliers",
                         headerTitle: "Ateliers",

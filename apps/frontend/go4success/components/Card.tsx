@@ -212,12 +212,12 @@ const Card: React.FC<CardProps> = ({
                         </View>
 
                         <View style={styles.buttonContainer}>
-                            <Button
+                            <ButtonComponent
                                 text="S'inscrire"
                                 onPress={handleRegister}
                                 buttonType={"primary"}
                             />
-                            <Button
+                            <ButtonComponent
                                 text="Fermer"
                                 onPress={() => setModalVisible(!modalVisible)}
                                 buttonType={"close"}

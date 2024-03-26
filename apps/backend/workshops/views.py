@@ -62,7 +62,8 @@ class AttendViewSet(viewsets.ModelViewSet):
     serializer_class = AttendSerializer
 
     def get_queryset(self):
-        qs = Attend.objects.all()
+        user_id = self.request.user.id
+        qs = Attend.objects.filter(student_id=user_id)
         name = self.request.query_params.get('name')
         room = self.request.query_params.get('room')
         date_start = self.request.query_params.get('date_start')
@@ -71,17 +72,17 @@ class AttendViewSet(viewsets.ModelViewSet):
             qs = qs.filter(activity__name__icontains=name)
         if room is not None:
             for word in room.split():
-                qs = qs.filter(Q(room__name__icontains=word) |
-                               Q(room__site__name__icontains=word))
+                qs = qs.filter(Q(activity__room__name__icontains=word) |
+                               Q(activity__room__site__name__icontains=word))
         if date_start not in [None, 'undefined', 'null', '']:
             if date_end not in [None, 'undefined', 'null', '']:
                 qs = qs.filter(
-                    Q(date_start__date__gte=date_start,
-                      date_end__date__lte=date_end)
+                    Q(activity__date_start__date__gte=date_start,
+                      activity__date_end__date__lte=date_end)
                 )
             else:
                 qs = qs.filter(
-                    Q(date_start__date__gte=date_start,
-                      date_end__date__lte=date_start)
+                    Q(activity__date_start__date__gte=date_start,
+                      activity__date_end__date__lte=date_start)
                 )
         return qs

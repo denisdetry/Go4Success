@@ -36,7 +36,7 @@ type Course = {
 function ListWorkshops() {
     const [searchName2, setSearchName2] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
-    const { isPending, error, data } = useQuery<Workshop[]>({
+    const { error, data } = useQuery<Workshop[]>({
         queryKey: ["allWorkshops2", searchName2],
         queryFn: async () => {
             const response = await axios.get(
@@ -53,10 +53,6 @@ function ListWorkshops() {
         refetchOnReconnect: true,
         refetchOnWindowFocus: false,
     });
-
-    if (isPending) {
-        return <ActivityIndicator />;
-    }
 
     if (error) {
         return <Text>Error: {error.message}</Text>;

@@ -1,46 +1,30 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    ActivityIndicator,
     Text,
     ScrollView,
     TextInput,
     StyleSheet,
     Modal,
-    Button,
     View,
+    Platform,
 } from "react-native";
 import axios from "axios";
 import Card from "../components/Card";
 import ButtonComponent from "../components/Button";
 import Colors from "../constants/Colors";
-import { FlatList } from "react-native-gesture-handler";
 import { Picker } from "@react-native-picker/picker";
 import stylesGlobal from "../styles/global";
 import { API_BASE_URL } from "../constants/ConfigApp";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 import dayjs from "dayjs";
-import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
+import { ActivityOrAttend } from "@/types/ActivityOrAttend";
+import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
+import RenderCarousel from "./RenderCarousel";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
-
-const queryClient = new QueryClient();
-
-interface Activity {
-    id: string;
-    name: string;
-    room: string;
-    date_start: string;
-    type: string;
-    description: string;
-}
-
-interface Attend {
-    activity: Activity;
-    student_id: string;
-}
 
 interface Site {
     id: string;
@@ -49,25 +33,25 @@ interface Site {
 
 interface FilterActivityProps {
     readonly filterType: "activity" | "attend";
+    readonly onFilterChange: any;
 }
 
-type ActivityOrAttend = Activity | Attend;
-
-const FilterActivity = ({ filterType }: FilterActivityProps) => {
-    const [allActivities, setAllActivities] = useState([]);
-    const [registeredActivities, setRegisteredActivities] = useState([]);
-    const [, setError] = useState("");
+const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => {
+    const { allActivities, registeredActivities } = useAttendsAndActivities();
     const [searchName, setSearchName] = useState("");
     const [selectedRoom, setSelectedRoom] = useState("");
     const [rooms, setRooms] = useState<string[]>([]);
-    const [selectedSite, setSelectedSite] = useState("");
+    const [selectedSite, setSelectedSite] = useState<{
+        id: string;
+        name: string;
+    } | null>(null);
     const [sites, setSites] = useState<Site[]>([]);
     const [range, setRange] = React.useState<{
         startDate: DateType;
         endDate: DateType;
     }>({ startDate: undefined, endDate: undefined });
 
-    const convertDateToISO = (date: DateType): string | null => {
+    const convertDateToISO = (date: DateType): string => {
         if (date instanceof Date) {
             return date.toISOString().split("T")[0];
         } else if (typeof date === "string" && date !== "") {
@@ -77,7 +61,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         } else if (date instanceof dayjs) {
             return date.format("YYYY-MM-DD");
         } else {
-            return null;
+            return "";
         }
     };
 
@@ -91,32 +75,12 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         [],
     );
 
+    let siteId = selectedSite ? selectedSite.id : "";
+    let siteName = selectedSite ? selectedSite.name : "";
+
     useEffect(() => {
-        if (filterType === "attend") {
-            axios
-                .get(
-                    `${API_BASE_URL}/workshops/attends/?name=${searchName}&room=${selectedRoom} ${selectedSite}&date_start=${startDateISO}&date_end=${endDateISO}`,
-                )
-                .then((res) => {
-                    setRegisteredActivities(res.data);
-                })
-                .catch((err) => {
-                    setError(err.message);
-                });
-        } else {
-            axios
-                .get(
-                    `${API_BASE_URL}/workshops/activity/?name=${searchName}&room=${selectedRoom} ${selectedSite}&date_start=${startDateISO}&date_end=${endDateISO}`,
-                )
-                .then((res) => {
-                    setAllActivities(res.data);
-                })
-                .catch((err) => {
-                    setError(err.message);
-                });
-        }
         axios
-            .get(`${API_BASE_URL}/workshops/rooms/?site=${selectedSite}`)
+            .get(`${API_BASE_URL}/workshops/rooms/?site=${siteId}`)
             .then((res) => {
                 setRooms(
                     res.data
@@ -146,18 +110,12 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
             .catch((err: Error) => {
                 console.error(err.message);
             });
-    }, [filterType, searchName, selectedRoom, selectedSite, range]);
+    }, [filterType, selectedRoom, selectedSite]);
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
-        let activity: Activity;
+        let activity = "activity" in item ? item.activity : item;
 
-        if ("activity" in item) {
-            activity = item.activity;
-        } else {
-            activity = item;
-        }
-
-        return (
+        return Platform.OS === "web" ? (
             <Card
                 id={activity.id}
                 title={activity.name}
@@ -166,12 +124,35 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 type={activity.type}
                 description={activity.description}
             />
+        ) : (
+            <View style={stylesGlobal.containerCard}>
+                <Card
+                    id={activity.id}
+                    title={activity.name}
+                    location={activity.room}
+                    date={activity.date_start}
+                    type={activity.type}
+                    description={activity.description}
+                />
+            </View>
         );
     };
 
     const handleClearDates = () => {
         setRange({ startDate: null, endDate: null });
     };
+
+    const handleSearchNameChange = (newSearchName: React.SetStateAction<string>) => {
+        setSearchName(newSearchName);
+        onFilterChange(filterType, "name", newSearchName);
+    };
+
+    useEffect(() => {
+        onFilterChange(filterType, "name", searchName);
+        onFilterChange(filterType, "room", `${selectedRoom} ${siteName}`);
+        onFilterChange(filterType, "date_start", startDateISO);
+        onFilterChange(filterType, "date_end", endDateISO);
+    }, [searchName, selectedSite, selectedRoom, startDateISO, endDateISO]);
 
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -196,13 +177,20 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                         <TextInput
                             style={stylesGlobal.inputLittle}
                             value={searchName}
-                            onChangeText={(text: string) => setSearchName(text)}
+                            onChangeText={handleSearchNameChange}
                             placeholder="Search title activity"
                         />
                         <Picker
                             style={stylesGlobal.picker}
-                            selectedValue={selectedSite}
-                            onValueChange={(type: string) => setSelectedSite(type)}
+                            selectedValue={selectedSite ? selectedSite.name : ""}
+                            onValueChange={(value: string) => {
+                                const site = sites.find(
+                                    (site: Site) => site.name === value,
+                                );
+                                setSelectedSite(
+                                    site ? { id: site.id, name: site.name } : null,
+                                );
+                            }}
                         >
                             <Picker.Item label="ALL" value="" />
                             {sites.map((site: Site) => (
@@ -251,29 +239,18 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
             {filterType === "attend" &&
                 (registeredActivities.length > 0 ? (
-                    <FlatList
-                        contentContainerStyle={stylesGlobal.containerCard}
+                    <RenderCarousel
                         data={registeredActivities}
                         renderItem={renderCards}
-                        horizontal
-                        pagingEnabled
-                        showsHorizontalScrollIndicator={false}
                     />
                 ) : (
-                    <Text style={styles.noDataText}>
-                        Vous n'êtes inscrit à aucun atelier.
+                    <Text style={stylesGlobal.text}>
+                        Vous n'êtes inscrit à aucun atelier
                     </Text>
                 ))}
             {filterType === "activity" &&
                 (allActivities.length > 0 ? (
-                    <FlatList
-                        contentContainerStyle={stylesGlobal.containerCard}
-                        data={allActivities}
-                        renderItem={renderCards}
-                        horizontal
-                        pagingEnabled
-                        showsHorizontalScrollIndicator={false}
-                    />
+                    <RenderCarousel data={allActivities} renderItem={renderCards} />
                 ) : (
                     <Text style={styles.noDataText}>Aucun atelier disponible.</Text>
                 ))}

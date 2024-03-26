@@ -5,8 +5,8 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Attend, Room, Site
-from .serializers import SiteSerializer, UserRegistrationSerializer, \
+from .models import Attend, Room, Site, Activity
+from .serializers import ActivitySerializer, AttendSerializer, SiteSerializer, UserRegistrationSerializer, \
     UserLoginSerializer, UserSerializer, \
     RegisterToActivityserializer, RoomSerializer
 from .validations import custom_validation, validate_username, validate_password

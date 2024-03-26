@@ -1,8 +1,19 @@
 import React, { useState } from "react";
-import { Modal, StyleSheet, Text, Pressable, View } from "react-native";
+import {
+    Modal,
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import Colors from "../constants/Colors";
 import Button from "./Button";
 import axios from "axios";
+import { useAuth } from "@/context/auth";
+import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
+import Toast from "react-native-root-toast";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -49,7 +60,7 @@ const styleFunctions = {
         }
     },
 
-    getmodalDataStyle: (type: string) => {
+    getModalDataStyle: (type: string) => {
         switch (type) {
             case "Important":
                 return {
@@ -111,6 +122,7 @@ const styleFunctions = {
 };
 
 const Card: React.FC<CardProps> = ({
+    id,
     title,
     location,
     date,
@@ -119,8 +131,58 @@ const Card: React.FC<CardProps> = ({
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
 
+    const { user } = useAuth();
+    const { refreshAttendsAndActivities } = useAttendsAndActivities();
+
+    const handleRegister = () => {
+        axios
+            .post("http://localhost:8000/api/register_activity/", {
+                activity: id,
+                student: user.id,
+            })
+            .then((res) => {
+                if (Platform.OS === "web") {
+                    alert("Registered");
+                } else {
+                    Toast.show("Registered", {
+                        duration: Toast.durations.LONG,
+                    });
+                }
+                refreshAttendsAndActivities();
+                setModalVisible(!modalVisible);
+                console.log(res);
+            })
+            .catch((err) => {
+                if (err.response.status === 400) {
+                    if (Platform.OS === "web") {
+                        alert("Vous êtes déjà inscrit à cette activité");
+                    } else {
+                        Toast.show("Vous êtes déjà inscrit à cette activité", {
+                            duration: Toast.durations.LONG,
+                        });
+                    }
+                } else if (err.response.status === 403) {
+                    if (Platform.OS === "web") {
+                        alert(
+                            "Vous n'êtes pas autorisé à vous inscrire à cette activité",
+                        );
+                    } else {
+                        Toast.show(
+                            "Vous n'êtes pas autorisé à vous inscrire à cette activité",
+                            {
+                                duration: Toast.durations.LONG,
+                            },
+                        );
+                    }
+                }
+                setModalVisible(!modalVisible);
+                console.log(err);
+            });
+    };
+
     return (
         <View style={styles.centeredView}>
+            {/* Modal content */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -131,22 +193,19 @@ const Card: React.FC<CardProps> = ({
             >
                 <View style={styles.centeredViewModal}>
                     <View style={styles.modalView}>
-                        <Pressable
-                            style={styles.closeButton}
-                            onPress={() => setModalVisible(!modalVisible)}
-                        >
-                            <Text style={styles.closeButtonText}>✖</Text>
-                        </Pressable>
-                        <View
-                            style={styleFunctions.getModalViewTitleStyle(type)}
-                        >
-                            <Text style={styles.modalTitle}>{title}</Text>{" "}
+                        <View style={styleFunctions.getModalViewTitleStyle(type)}>
+                            <Text style={styles.modalTitle}>{title}</Text>
+                            <Pressable
+                                style={styles.closeButton}
+                                onPress={() => setModalVisible(!modalVisible)}
+                            >
+                                <Text style={styles.closeButtonText}>✖</Text>
+                            </Pressable>
                         </View>
-                        <View style={styleFunctions.getmodalDataStyle(type)}>
+
+                        <View style={styleFunctions.getModalDataStyle(type)}>
                             <Text style={styles.modalText}>Date : {date}</Text>
-                            <Text style={styles.modalText}>
-                                Place : {location}
-                            </Text>
+                            <Text style={styles.modalText}>Place : {location}</Text>
                             <Text style={styles.modalText}>Type : {type}</Text>
                             <View style={styles.separator} />
                             <Text style={styles.modalText}>{description}</Text>
@@ -154,12 +213,12 @@ const Card: React.FC<CardProps> = ({
 
                         <View style={styles.buttonContainer}>
                             <Button
-                                text="Register"
-                                onPress={() => {}}
+                                text="S'inscrire"
+                                onPress={handleRegister}
                                 buttonType={"primary"}
                             />
                             <Button
-                                text="Hide Modal"
+                                text="Fermer"
                                 onPress={() => setModalVisible(!modalVisible)}
                                 buttonType={"close"}
                             />
@@ -168,7 +227,8 @@ const Card: React.FC<CardProps> = ({
                 </View>
             </Modal>
 
-            <Pressable
+            {/* Card content */}
+            <TouchableOpacity
                 style={styleFunctions.getCardStyle(type)}
                 onPress={() => setModalVisible(true)}
             >
@@ -177,7 +237,7 @@ const Card: React.FC<CardProps> = ({
                     <Text style={styles.text}>{location}</Text>
                     <Text style={styles.text}>{date}</Text>
                 </View>
-            </Pressable>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -187,9 +247,13 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         flexDirection: "row",
         justifyContent: "space-between",
+        padding: 20,
     },
     modalViewTitle: {
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
         width: "100%",
+        padding: 10,
     },
     modalTitle: {
         fontSize: 24,
@@ -207,33 +271,20 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     card: {
-        width: "100%",
-        maxWidth: 350,
-        minHeight: 200,
-        minWidth: 300,
-        height: "100%",
-        maxHeight: 500,
         borderRadius: 10,
-        padding: 20,
-        paddingHorizontal: 10,
-        flex: 1,
-        flexDirection: "column",
-        justifyContent: "space-between",
-        paddingBottom: 100,
+        padding: 15,
+        height: 180,
+        maxWidth: 350,
     },
     bottomRow: {
+        flex: 1,
         flexDirection: "row",
-        justifyContent: "space-between",
-        position: "absolute",
-        bottom: 0,
-        width: "100%",
-        paddingTop: 20,
-        paddingRight: 20,
-        paddingLeft: 5,
-        paddingBottom: 10,
+        gap: 30,
     },
     centeredView: {
         marginTop: 22,
+        justifyContent: "center",
+        alignItems: "center",
     },
     centeredViewModal: {
         flex: 1,
@@ -242,16 +293,10 @@ const styles = StyleSheet.create({
         marginTop: 22,
     },
     modalView: {
-        margin: 20,
-        backgroundColor: "white",
+        backgroundColor: Colors.workshopLightColor,
         borderRadius: 20,
-        padding: 30,
         alignItems: "center",
         shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
@@ -262,8 +307,8 @@ const styles = StyleSheet.create({
         right: 10,
     },
     closeButtonText: {
-        fontSize: 24,
-        color: "#333",
+        color: "white",
+        fontSize: 20,
     },
     separator: {
         borderBottomColor: "#000",
@@ -276,6 +321,8 @@ const styles = StyleSheet.create({
         color: "white",
     },
     text: {
+        alignSelf: "flex-end",
+        alignItems: "stretch",
         fontSize: 16,
         color: "white",
     },

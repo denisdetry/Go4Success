@@ -1,55 +1,73 @@
 import { StyleSheet } from "react-native";
+import Colors from "@/constants/Colors";
 
 export default StyleSheet.create({
-    title: {
-        fontSize: 28,
-        fontWeight: "bold",
-    },
     mainContainer: {
         flex: 1,
-        alignSelf: "center",
-        gap: 10,
-        justifyContent: "center",
-        marginTop: 70,
-        margin: 40,
+        alignItems: "center",
+    },
+    title: {
+        fontSize: 28,
+        fontWeight: "600",
+        marginBottom: 10,
+    },
+    text: {
+        fontSize: 16,
+        fontWeight: "200",
+        color: "black",
     },
     containerCard: {
-        flexGrow: 1,
-        alignItems: "center",
-        justifyContent: "center",
+        flex: 1,
+        padding: 15,
     },
     container: {
+        width: "90%",
+        borderRadius: 10,
+        shadowRadius: 5,
+        shadowColor: "lightgray",
+        backgroundColor: "white",
+        justifyContent: "center",
+        alignItems: "center",
+        alignContent: "center",
+        padding: 50,
+        margin: 30,
+    },
+
+    form: {
+        gap: 10,
+        justifyContent: "center",
+    },
+
+    inputField: {
+        borderWidth: 0.5,
+        borderColor: Colors.primaryColor,
+        borderRadius: 10,
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#f3f3f3",
-        borderRadius: 8,
-        paddingHorizontal: 14,
-        borderBlockColor: "#777",
-        borderWidth: 1,
+        padding: 10,
+        minWidth: 300,
     },
+
     input: {
         flex: 1,
         color: "#333",
-        paddingVertical: 10,
-        paddingRight: 10,
         fontSize: 16,
         borderColor: "#777",
-        padding: 8,
-        margin: 10,
+        padding: 10,
     },
+
+    errorMsg: {
+        color: "red",
+        fontSize: 14,
+    },
+
     icon: {
         marginLeft: 10,
     },
     heading: {
         alignItems: "center",
         fontSize: 22,
-        color: "green",
-        marginBottom: 20,
-    },
-    heading2: {
-        fontSize: 20,
         fontWeight: "bold",
-        color: "black",
+        marginBottom: 10,
     },
 });

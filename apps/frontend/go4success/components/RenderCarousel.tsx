@@ -12,7 +12,7 @@ interface CarouselProps {
 }
 
 const RenderCarousel: React.FC<CarouselProps> = ({ data, renderItem }) => {
-    return Platform.OS == "web" ? (
+    return Platform.OS === "web" ? (
         <FlatList
             contentContainerStyle={[styles.containerCard, { gap: 20 }]}
             data={data}

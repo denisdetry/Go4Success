@@ -1,15 +1,14 @@
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from .models import Room, Activity, Attend, Course
+from .models import Room, Activity, Attend, Course, User
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ('id', 'username', 'email', 'password', 'first_name', 'last_name', 'noma', "is_active")
 
     def create(self, clean_data):
         user_obj = User.objects.create_user(**clean_data)
@@ -54,7 +53,9 @@ class CourseSerializer(serializers.ModelSerializer):
 class ActivitySerializer(serializers.ModelSerializer):
     # Utilisation d'un SerializerMethodField pour personnaliser la représentation du champ activity_room
     room = serializers.SerializerMethodField()
-    course = CourseSerializer(read_only=True)
+    course = serializers.SerializerMethodField()
+    date_start = serializers.DateTimeField(format="%d-%m-%Y - %H:%M")
+    date_end = serializers.DateTimeField(format="%d-%m-%Y - %H:%M")
 
     class Meta:
         model = Activity
@@ -63,7 +64,14 @@ class ActivitySerializer(serializers.ModelSerializer):
 
     # Méthode pour personnaliser la représentation du champ activity_room
     def get_room(self, obj):
-        return f"{obj.room.name} - {obj.room.site.name}"
+        if obj.room:
+            return f"{obj.room.name} - {obj.room.site.name}"
+        return
+
+    def get_course(self, obj):
+        if obj.course:
+            return f"{obj.course.code} - {obj.course.name}"
+        return
 
 
 class AttendSerializer(serializers.ModelSerializer):

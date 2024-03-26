@@ -12,7 +12,6 @@ from .validations import custom_validation, validate_username, validate_password
 
 
 class UserRegisterView(APIView):
-    # test
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request):

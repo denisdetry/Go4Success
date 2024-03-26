@@ -1,10 +1,8 @@
 import axios from "axios";
 import { ActivityIndicator, ScrollView, Text } from "react-native";
-import styles from "../../styles/global";
-import Card from "../../components/Card";
-import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
-
-const queryClient = new QueryClient();
+import styles from "../../../styles/global";
+import Card from "../../../components/Card";
+import { useQuery } from "@tanstack/react-query";
 
 type Workshop = {
     id: string;
@@ -58,9 +56,5 @@ function ListWorkshops() {
 }
 
 export default function Workshops() {
-    return (
-        <QueryClientProvider client={queryClient}>
-            <ListWorkshops />
-        </QueryClientProvider>
-    );
+    return <ListWorkshops />;
 }

@@ -101,7 +101,7 @@ export default function accueil() {
                 )}
             </View>
 
-            {/* All Activities container */}
+            {/* All activities container */}
             <View style={styles.container}>
                 <Text style={styles.title}>Ateliers disponibles</Text>
 

@@ -1,4 +1,4 @@
-from api.models import Activity, Site
+from api.models import Activity, Site, Room
 from rest_framework import serializers
 
 
@@ -22,3 +22,8 @@ class SiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Site
         fields = ('id', 'name')
+
+class RoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ('id', 'name', 'site')

@@ -1,8 +1,9 @@
-from api.models import Activity, Site
+from api.models import Activity, Site, Room
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .serializers import ActivitySerializer, SiteSerializer
+from .serializers import SiteSerializer, ActivitySerializer, RoomSerializer
 
 
 class ActivityViewSet(viewsets.ModelViewSet):
@@ -27,7 +28,12 @@ class SiteViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Site.objects.all()
     serializer_class = SiteSerializer
 
-    def get(self, request):
-        if request == "GET":
-            serializer = self.get_serializer(data=request.data)
-            return Response(serializer.data, status.HTTP_200_OK)
+
+class RoomViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+
+    def get_rooms_by_site(self, request, site_id=None):
+        rooms = self.queryset.filter(site_id=site_id)
+        serializer = self.serializer_class(rooms, many=True)
+        return Response(serializer.data)

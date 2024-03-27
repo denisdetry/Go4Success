@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { ActivityIndicator, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, TextInput, View } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 import styles from "@/styles/global";
-import { useState } from "react";
-import SelectSearch from "@/components/SelectSearch";
+import SelectSearch, { SelectItem } from "@/components/SelectSearch";
+import React from "react";
+import SelectMultipleSearch from "@/components/SelectMultipleSearch";
 
 type Site = {
     id: string;
@@ -18,79 +19,91 @@ type Room = {
 };
 
 function useSites() {
-    return useQuery<Site[]>({
-        queryKey: ["allSites"],
-        queryFn: async () => {
-            const response = await axios.get("http://localhost:8000/workshops/sites/");
-            return response.data;
-        },
-    });
-}
-
-function useRoomsFilteredBySite(siteId: string) {
     const {
         isPending,
+        data: sites,
         error,
-        data: roomList,
-    } = useQuery<Room[]>({
+    } = useQuery<SelectItem[]>({
+        queryKey: ["allSites"],
+        queryFn: async () => {
+            const response = await axios.get<Site[]>(
+                "http://localhost:8000/workshops/sites/",
+            );
+            return response.data.map((site) => ({
+                label: site.name,
+                value: site.id,
+            }));
+        },
+    });
+
+    return { isPending, sites, error };
+}
+
+function useRooms(siteId: string | undefined, sites: SelectItem[]) {
+    const {
+        isPending,
+        data: rooms,
+        error,
+    } = useQuery<SelectItem[]>({
         queryKey: ["rooms", siteId],
         queryFn: async () => {
             const response = await axios.get(
-                `http://localhost:8000/rooms/?site=${siteId}`,
+                "http://localhost:8000/workshops/rooms/" +
+                    (siteId ? `site/${siteId}/` : ""),
             );
-            return response.data;
+            return response.data.map((room: Room) => ({
+                label:
+                    room.name +
+                    " - " +
+                    sites.find((site) => site.value === room.site)?.label,
+                value: room.id,
+            }));
         },
     });
 
-    if (isPending) {
-        return <Text>Loading…</Text>;
-    }
-
-    if (error) {
-        return <Text>Error: {error.message}</Text>;
-    }
-
-    return roomList;
+    return { isPending, rooms, error };
 }
 
 export default function Add() {
-    const { control } = useForm();
-    const [selectedSite, setSelectedSite] = useState("");
-    const sites = useSites();
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState("");
-    const sitesList =
-        sites.data?.map((site: { id: any; name: any }) => ({
-            label: site.id,
-            value: site.name,
-        })) ?? [];
+    const { control, watch } = useForm();
 
-    const [rooms, setRooms] = useState<Room[]>([]);
-    const [roomOpen, setRoomOpen] = useState(false);
-    const [roomValue, setRoomValue] = useState("");
+    const { sites, isPending: sitePending, error: siteError } = useSites();
+
+    const watchSite = watch("site", undefined);
+
+    const {
+        rooms,
+        isPending: roomPending,
+        error: roomError,
+    } = useRooms(watchSite?.value, sites ?? []);
+
+    if (siteError) {
+        return <View> Error: {siteError.message} </View>;
+    }
+
+    if (roomError) {
+        return <View> Error: {roomError.message} </View>;
+    }
+
+    if (sitePending || roomPending) {
+        return <ActivityIndicator />;
+    }
+
+    if (sites === undefined) {
+        return <View> Issue loading Sites </View>;
+    }
+
+    if (rooms === undefined) {
+        return <View> Issue loading Rooms </View>;
+    }
 
     return (
-        <View style={[{ shadowRadius: 0, backgroundColor: "" }]}>
-            {sites.isPending && <ActivityIndicator />}
-            {/*<Controller control={control} render={({}) => (
-                <Picker
-                    selectedValue={selectedSite}
-                    onValueChange={(itemValue) =>
-                        setSelectedSite(itemValue)
-                }>
-                    <Picker.Item label={"Select a site"} value={""} />
-                    {sitesList}
-                </Picker>
-            )}
-            name={"site"}
-            defaultValue={""}
-            />*/}
-
+        <View style={[{ backgroundColor: "" }]}>
             <Controller
                 control={control}
                 rules={{ required: true }}
                 render={({ field: { onChange, value } }) => (
-                    <View /*style={styles.inputField}*/>
+                    <View style={styles.inputField}>
                         <TextInput
                             style={styles.input}
                             placeholder={"Workshop name"}
@@ -107,7 +120,7 @@ export default function Add() {
                 control={control}
                 rules={{ required: true }}
                 render={({ field: { onChange, value } }) => (
-                    <View /*style={styles.inputField}*/>
+                    <View style={styles.inputField}>
                         <TextInput
                             style={styles.input}
                             placeholder={"Workshop description"}
@@ -122,39 +135,39 @@ export default function Add() {
 
             <Controller
                 control={control}
-                render={({}) => (
+                render={({ field: { onChange } }) => (
                     <SelectSearch
-                        items={sitesList}
-                        onSelect={(item) => setSelectedSite(item)}
+                        zIndex={100}
+                        items={sites}
                         placeholder={"Select a site"}
                         searchable={true}
-                        open={open}
-                        setOpen={setOpen}
-                        value={value}
-                        setValue={setValue}
+                        onSelectItem={onChange}
+                        open={true}
+                        setOpen={onChange}
                     />
                 )}
                 name={"site"}
                 defaultValue={""}
             />
 
-            <Controller
-                control={control}
-                render={({}) => (
-                    <SelectSearch
-                        items={sitesList}
-                        onSelect={(item) => setSelectedSite(item)}
-                        placeholder={"Select a room"}
-                        searchable={true}
-                        open={roomOpen}
-                        setOpen={setRoomOpen}
-                        value={roomValue}
-                        setValue={setRoomValue}
-                    />
-                )}
-                name={"room"}
-                defaultValue={""}
-            />
+            {
+                <Controller
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                        <SelectMultipleSearch
+                            zIndex={99}
+                            items={rooms}
+                            placeholder={"Select a room"}
+                            searchable={true}
+                            onSelectItem={onChange}
+                            open={true}
+                            setOpen={onChange}
+                        />
+                    )}
+                    name={"room"}
+                    defaultValue={""}
+                />
+            }
         </View>
     );
 }

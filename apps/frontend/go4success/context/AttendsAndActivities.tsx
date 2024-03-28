@@ -4,8 +4,9 @@ import { useAuth } from "@/context/auth";
 import { API_BASE_URL } from "../constants/ConfigApp";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 
-const AttendsAndActivitiesContext = React.createContext<any>(null);
 const queryClient = new QueryClient();
+
+const AttendsAndActivitiesContext = React.createContext<any>(null);
 
 export function useAttendsAndActivities() {
     return React.useContext(AttendsAndActivitiesContext);

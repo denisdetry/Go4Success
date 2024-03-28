@@ -8,25 +8,27 @@ import {
     View,
     Platform,
 } from "react-native";
-import axios from "axios";
 import Card from "../components/Card";
 import ButtonComponent from "../components/Button";
 import Colors from "../constants/Colors";
-import { Picker } from "@react-native-picker/picker";
 import stylesGlobal from "../styles/global";
-import { API_BASE_URL } from "../constants/ConfigApp";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 import dayjs from "dayjs";
 import { ActivityOrAttend } from "@/types/ActivityOrAttend";
 import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
 import RenderCarousel from "./RenderCarousel";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import PickerSite from "../components/PickerSite";
+import PickerRoom from "../components/PickerRoom";
 
-// Set the default values for axios
-axios.defaults.withCredentials = true;
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-axios.defaults.xsrfCookieName = "csrftoken";
+const queryClient = new QueryClient();
 
 interface Site {
+    id: string;
+    name: string;
+}
+
+interface Room {
     id: string;
     name: string;
 }
@@ -39,13 +41,8 @@ interface FilterActivityProps {
 const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => {
     const { allActivities, registeredActivities } = useAttendsAndActivities();
     const [searchName, setSearchName] = useState("");
-    const [selectedRoom, setSelectedRoom] = useState("");
-    const [rooms, setRooms] = useState<string[]>([]);
-    const [selectedSite, setSelectedSite] = useState<{
-        id: string;
-        name: string;
-    } | null>(null);
-    const [sites, setSites] = useState<Site[]>([]);
+    const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+    const [selectedSite, setSelectedSite] = useState<Site | null>(null);
     const [range, setRange] = React.useState<{
         startDate: DateType;
         endDate: DateType;
@@ -75,42 +72,7 @@ const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => 
         [],
     );
 
-    let siteId = selectedSite ? selectedSite.id : "";
-    let siteName = selectedSite ? selectedSite.name : "";
-
-    useEffect(() => {
-        axios
-            .get(`${API_BASE_URL}/workshops/rooms/?site=${siteId}`)
-            .then((res) => {
-                setRooms(
-                    res.data
-                        .map((Room: any) => Room.name)
-                        .filter(
-                            (value: string, index: number, self: string[]) =>
-                                self.indexOf(value) === index,
-                        ),
-                );
-            })
-            .catch((err: Error) => {
-                console.error(err.message);
-            });
-        axios
-            .get(`${API_BASE_URL}/workshops/sites/`)
-            .then((res) => {
-                setSites(
-                    res.data
-                        .map((Site: any) => ({ id: Site.id, name: Site.name }))
-                        .filter(
-                            (value: any, index: number, self: any[]) =>
-                                self.findIndex((v: any) => v.name === value.name) ===
-                                index,
-                        ),
-                );
-            })
-            .catch((err: Error) => {
-                console.error(err.message);
-            });
-    }, [filterType, selectedRoom, selectedSite]);
+    useEffect(() => {}, [filterType, selectedRoom, selectedSite]);
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         let activity = "activity" in item ? item.activity : item;
@@ -147,9 +109,15 @@ const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => 
         onFilterChange(filterType, "name", newSearchName);
     };
 
+    let siteName = selectedSite ? selectedSite.name : "";
+
     useEffect(() => {
         onFilterChange(filterType, "name", searchName);
-        onFilterChange(filterType, "room", `${selectedRoom} ${siteName}`);
+        onFilterChange(
+            filterType,
+            "room",
+            selectedRoom ? `${selectedRoom.name} ${siteName}` : siteName,
+        );
         onFilterChange(filterType, "date_start", startDateISO);
         onFilterChange(filterType, "date_end", endDateISO);
     }, [searchName, selectedSite, selectedRoom, startDateISO, endDateISO]);
@@ -180,37 +148,17 @@ const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => 
                             onChangeText={handleSearchNameChange}
                             placeholder="Search title activity"
                         />
-                        <Picker
-                            style={stylesGlobal.picker}
-                            selectedValue={selectedSite ? selectedSite.name : ""}
-                            onValueChange={(value: string) => {
-                                const site = sites.find(
-                                    (site: Site) => site.name === value,
-                                );
-                                setSelectedSite(
-                                    site ? { id: site.id, name: site.name } : null,
-                                );
-                            }}
-                        >
-                            <Picker.Item label="ALL" value="" />
-                            {sites.map((site: Site) => (
-                                <Picker.Item
-                                    key={site.id}
-                                    label={site.name}
-                                    value={site.name}
-                                />
-                            ))}
-                        </Picker>
-                        <Picker
-                            style={stylesGlobal.picker}
-                            selectedValue={selectedRoom}
-                            onValueChange={(type: string) => setSelectedRoom(type)}
-                        >
-                            <Picker.Item label="ALL" value="" />
-                            {rooms.map((room) => (
-                                <Picker.Item key={room} label={room} value={room} />
-                            ))}
-                        </Picker>
+                        <QueryClientProvider client={queryClient}>
+                            <PickerSite
+                                setSelectedSite={setSelectedSite}
+                                selectedSite={selectedSite}
+                            />
+                            <PickerRoom
+                                setSelectedRoom={setSelectedRoom}
+                                selectedRoom={selectedRoom}
+                                selectedSite={selectedSite}
+                            />
+                        </QueryClientProvider>
                         <View style={stylesGlobal.containerDatePicker}>
                             <DateTimePicker
                                 mode="range"

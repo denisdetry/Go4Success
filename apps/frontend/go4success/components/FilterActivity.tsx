@@ -17,9 +17,11 @@ import dayjs from "dayjs";
 import { ActivityOrAttend } from "@/types/ActivityOrAttend";
 import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
 import RenderCarousel from "./RenderCarousel";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import PickerSite from "../components/PickerSite";
 import PickerRoom from "../components/PickerRoom";
+import SelectSearch, { SelectItem } from "../components/select";
+import axios from "axios";
 
 const queryClient = new QueryClient();
 
@@ -38,7 +40,32 @@ interface FilterActivityProps {
     readonly onFilterChange: any;
 }
 
+function useSites() {
+    const {
+        isPending,
+        data: sites,
+        error,
+    } = useQuery<SelectItem[]>({
+        queryKey: ["allSites"],
+        queryFn: async () => {
+            const response = await axios.get<Site[]>(
+                "http://localhost:8000/workshops/sites/",
+            );
+            return response.data.map((site) => ({
+                label: site.name,
+                value: site.id,
+            }));
+        },
+    });
+
+    return { isPending, sites, error };
+}
+
 const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => {
+    const [open, setOpen] = React.useState(false);
+    const { isPending, sites, error } = useSites();
+    const all_item: SelectItem = { label: "", value: "" };
+    const sites_all = [all_item].concat(sites ?? []);
     const { allActivities, registeredActivities } = useAttendsAndActivities();
     const [searchName, setSearchName] = useState("");
     const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
@@ -127,6 +154,11 @@ const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => 
     const toggleModal = () => {
         setModalVisible(!modalVisible);
     };
+
+    if (sites === undefined) {
+        return <Text>Loading...</Text>;
+    }
+
     return (
         <ScrollView>
             <ButtonComponent
@@ -148,15 +180,23 @@ const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => 
                             onChangeText={handleSearchNameChange}
                             placeholder="Search title activity"
                         />
+
                         <QueryClientProvider client={queryClient}>
-                            <PickerSite
-                                setSelectedSite={setSelectedSite}
-                                selectedSite={selectedSite}
-                            />
-                            <PickerRoom
-                                setSelectedRoom={setSelectedRoom}
-                                selectedRoom={selectedRoom}
-                                selectedSite={selectedSite}
+                            <SelectSearch
+                                zIndex={10}
+                                items={sites_all}
+                                placeholder="Select site"
+                                searchable={false}
+                                onSelectItem={(item) => {
+                                    setSelectedSite({
+                                        id: item.value as string,
+                                        name: item.label as string,
+                                    });
+                                }}
+                                open={open}
+                                setOpen={setOpen}
+                                //setSelectedSite={setSelectedSite}
+                                //selectedSite={selectedSite}
                             />
                         </QueryClientProvider>
                         <View style={stylesGlobal.containerDatePicker}>

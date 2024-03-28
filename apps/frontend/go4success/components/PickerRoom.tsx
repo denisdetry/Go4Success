@@ -22,14 +22,14 @@ function PickerRoom({
 }: {
     setSelectedRoom: React.Dispatch<React.SetStateAction<Room | null>>;
     selectedRoom: Room | null;
-    selectedSite: Site | null;
+    selectedSite?: Site | null;
 } & Readonly<any>) {
     const { error, data: rooms } = useQuery<Room[]>({
         queryKey: ["room", selectedSite ? selectedSite.id : "all"],
         queryFn: async () => {
             const response = await axios.get(`${API_BASE_URL}/workshops/rooms/`, {
                 params: {
-                    site: selectedSite ? selectedSite.id : "",
+                    site: selectedSite ? selectedSite.id : undefined,
                 },
             });
             const data = response.data

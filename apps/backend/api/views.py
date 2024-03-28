@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Activity, Attend
-from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSerializer, ActivitySerializer, \
-    AttendSerializer, RegisterToActivityserializer
+from .serializers import UserRegistrationSerializer, UserSerializer, ActivitySerializer, \
+    AttendSerializer, RegisterToActivityserializer, UserLoginSerializer
 from .validations import custom_validation, validate_username, validate_password
 
 
@@ -17,13 +17,14 @@ class UserRegisterView(APIView):
     def post(self, request):
         clean_data = custom_validation(request.data)
         if isinstance(clean_data, Response):
+            # permet d'afficher les erreurs de validation et d'envoyer le contenu de l'erreur au front pour l'afficher dans un Toast
             return Response(clean_data.data, status=clean_data.status_code)
         user_serializer = UserRegistrationSerializer(data=clean_data)
         if user_serializer.is_valid(raise_exception=True):
             user = user_serializer.create(clean_data)
             if user:
                 login(request, user)
-                return Response(user_serializer.data, status=status.HTTP_201_CREATED)
+                return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -39,10 +40,7 @@ class LoginView(APIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.check_user(data)
             login(request, user)
-            return Response({"id": user.id, "username": serializer.data['username'],
-                             "password": serializer.data["password"], "email": user.email,
-                             "first_name": user.first_name, "last_name": user.last_name, "is_active": user.is_active},
-                            status=status.HTTP_200_OK)
+            return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 
 
 class LogoutView(APIView):

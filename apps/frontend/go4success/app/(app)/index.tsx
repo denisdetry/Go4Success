@@ -94,7 +94,7 @@ export default function accueil() {
                 </ScrollView>
             </View>
 
-            {/* All Activities container */}
+            {/* All activities container */}
             <View style={styles.container}>
                 <Text style={styles.title}>Ateliers disponibles</Text>
                 <ScrollView contentContainerStyle={styles.containerCard}>

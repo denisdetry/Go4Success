@@ -11,5 +11,6 @@ router.register(r'activity', ActivityViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('sites/', include(router.urls)),
+    path('rooms/site/<int:site_id>/',
+         RoomViewSet.as_view({'get': 'get_rooms_by_site'}), name='rooms-by-site'),
 ]

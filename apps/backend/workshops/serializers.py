@@ -1,3 +1,4 @@
+from api.models import Activity, Site, Room
 from rest_framework import serializers
 
 from api.models import Activity, Attend, Course, Site, Room
@@ -50,4 +51,10 @@ class AttendSerializer(serializers.ModelSerializer):
 class SiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Site
-        fields = ['id', 'name']
+        fields = ('id', 'name')
+
+
+class RoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ('id', 'name', 'site')

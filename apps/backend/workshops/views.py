@@ -1,3 +1,8 @@
+from api.models import Activity, Site, Room
+from .serializers import SiteSerializer, ActivitySerializer, RoomSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework import viewsets, status
 from rest_framework import viewsets, permissions
 from django.db.models import Q
 
@@ -86,3 +91,13 @@ class AttendViewSet(viewsets.ModelViewSet):
                       activity__date_end__date__lte=date_start)
                 )
         return qs
+
+
+class RoomViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+
+    def get_rooms_by_site(self, request, site_id=None):
+        rooms = self.queryset.filter(site_id=site_id)
+        serializer = self.serializer_class(rooms, many=True)
+        return Response(serializer.data)

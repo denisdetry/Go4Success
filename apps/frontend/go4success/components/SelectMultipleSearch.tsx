@@ -7,13 +7,11 @@ export interface SelectItem {
     value: string;
 }
 
-type SelectMultipleSearchProps = SelectSearchProps &{
+type SelectMultipleSearchProps = SelectSearchProps & {
     readonly onSelectItem: (items: ItemType<string>[]) => void;
 };
 
-function SelectMultipleSearch (props: SelectMultipleSearchProps) {
-
-    const [open, setOpen] = React.useState(false);
+function SelectMultipleSearch(props: SelectMultipleSearchProps) {
     const [value, setValue] = React.useState([]);
 
     useEffect(() => {
@@ -24,12 +22,12 @@ function SelectMultipleSearch (props: SelectMultipleSearchProps) {
         <DropDownPicker
             zIndex={props.zIndex}
             multiple={true}
-            open={open}
+            open={props.open}
             value={value}
             items={props.items}
             placeholder={props.placeholder}
             searchable={props.searchable}
-            setOpen={setOpen}
+            setOpen={props.setOpen}
             setValue={setValue}
             onSelectItem={props.onSelectItem}
             mode={"BADGE"}

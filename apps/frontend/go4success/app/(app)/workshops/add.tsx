@@ -6,38 +6,13 @@ import styles from "@/styles/global";
 import SelectSearch, { SelectItem } from "@/components/SelectSearch";
 import React from "react";
 import SelectMultipleSearch from "@/components/SelectMultipleSearch";
-
-type Site = {
-    id: string;
-    name: string;
-};
+import { useSites } from "@/hooks/useSites";
 
 type Room = {
     id: string;
     name: string;
     site: string;
 };
-
-function useSites() {
-    const {
-        isPending,
-        data: sites,
-        error,
-    } = useQuery<SelectItem[]>({
-        queryKey: ["allSites"],
-        queryFn: async () => {
-            const response = await axios.get<Site[]>(
-                "http://localhost:8000/workshops/sites/",
-            );
-            return response.data.map((site) => ({
-                label: site.name,
-                value: site.id,
-            }));
-        },
-    });
-
-    return { isPending, sites, error };
-}
 
 function useRooms(siteId: string | undefined, sites: SelectItem[]) {
     const {
@@ -59,12 +34,16 @@ function useRooms(siteId: string | undefined, sites: SelectItem[]) {
                 value: room.id,
             }));
         },
+        enabled: sites.length > 0,
     });
 
     return { isPending, rooms, error };
 }
 
 export default function Add() {
+    const [siteOpen, setSiteOpen] = React.useState(false);
+    const [roomOpen, setRoomOpen] = React.useState(false);
+
     const { control, watch } = useForm();
 
     const { sites, isPending: sitePending, error: siteError } = useSites();
@@ -160,7 +139,7 @@ export default function Add() {
                             placeholder={"Select a room"}
                             searchable={true}
                             onSelectItem={onChange}
-                            open={true}
+                            open={false}
                             setOpen={onChange}
                         />
                     )}

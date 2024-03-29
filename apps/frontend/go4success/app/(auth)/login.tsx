@@ -8,6 +8,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { UserLogin } from "@/types/UserLogin";
 
 const schema = yup.object().shape({
     username: yup.string().required("Entrez votre nom d'utilisateur"),
@@ -29,8 +30,8 @@ export default function login() {
         },
     });
 
-    const onSubmit = (data: any) => {
-        signIn(data.username, data.password);
+    const onSubmit = (userData: UserLogin) => {
+        signIn(userData);
     };
 
     return (

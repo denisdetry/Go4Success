@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
     Modal,
-    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -13,7 +12,7 @@ import Button from "./Button";
 import axios from "axios";
 import { useAuth } from "@/context/auth";
 import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
-import Toast from "react-native-root-toast";
+import Toast from "react-native-toast-message";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -141,39 +140,28 @@ const Card: React.FC<CardProps> = ({
                 student: user.id,
             })
             .then((res) => {
-                if (Platform.OS === "web") {
-                    alert("Registered");
-                } else {
-                    Toast.show("Registered", {
-                        duration: Toast.durations.LONG,
-                    });
-                }
+                Toast.show({
+                    type: "success",
+                    text1: "Félicitation",
+                    text2: "Vous êtes parfaitement inscrit à l'atelier : " + title,
+                });
                 refreshAttendsAndActivities();
                 setModalVisible(!modalVisible);
                 console.log(res);
             })
             .catch((err) => {
                 if (err.response.status === 400) {
-                    if (Platform.OS === "web") {
-                        alert("Vous êtes déjà inscrit à cette activité");
-                    } else {
-                        Toast.show("Vous êtes déjà inscrit à cette activité", {
-                            duration: Toast.durations.LONG,
-                        });
-                    }
+                    Toast.show({
+                        type: "error",
+                        text1: "Erreur",
+                        text2: "Vous êtes déjà inscrit à cet atelier",
+                    });
                 } else if (err.response.status === 403) {
-                    if (Platform.OS === "web") {
-                        alert(
-                            "Vous n'êtes pas autorisé à vous inscrire à cette activité",
-                        );
-                    } else {
-                        Toast.show(
-                            "Vous n'êtes pas autorisé à vous inscrire à cette activité",
-                            {
-                                duration: Toast.durations.LONG,
-                            },
-                        );
-                    }
+                    Toast.show({
+                        type: "error",
+                        text1: "Erreur",
+                        text2: "Vous n'êtes pas autorisé à vous inscrire à cet atelier",
+                    });
                 }
                 setModalVisible(!modalVisible);
                 console.log(err);

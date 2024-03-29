@@ -1,8 +1,9 @@
 import * as React from "react";
 import { useRouter, useSegments } from "expo-router";
 import axios from "axios";
-import Toast from "react-native-root-toast";
-import { Platform } from "react-native";
+import Toast from "react-native-toast-message";
+import { UserRegister } from "@/types/UserRegister";
+import { UserLogin } from "@/types/UserLogin";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -19,6 +20,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
     const rootSegment = useSegments()[0];
     const router = useRouter();
     const [user, setUser] = React.useState<string | undefined>("");
+    const [isRegistered, setIsRegistered] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         axios
@@ -45,67 +47,49 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         <AuthContext.Provider
             value={{
                 user: user,
-                signUp: (
-                    username: string,
-                    email: string,
-                    lastname: string,
-                    firstname: string,
-                    noma: number,
-                    password: string,
-                ) => {
+                signUp: (userData: UserRegister) => {
                     {
                         axios
                             .post("http://localhost:8000/api/register/", {
-                                username: username,
-                                email: email,
-                                last_name: lastname,
-                                first_name: firstname,
-                                noma: noma,
-                                password: password,
+                                username: userData.username,
+                                email: userData.email,
+                                // eslint-disable-next-line camelcase
+                                last_name: userData.lastName,
+                                // eslint-disable-next-line camelcase
+                                first_name: userData.firstName,
+                                noma: userData.noma,
+                                password: userData.password,
                             })
                             .then((res) => {
-                                console.log(res.data);
                                 setUser(res.data);
+                                setIsRegistered(true);
                             })
                             .catch((err) => {
-                                console.log(err);
-                                if (err.response.status === 400) {
-                                    if (Platform.OS === "web") {
-                                        alert(err.response.data);
-                                    } else {
-                                        Toast.show(err.response.data, {
-                                            duration: Toast.durations.LONG,
-                                        });
-                                    }
-                                }
+                                console.log(err.response.data);
+                                Toast.show({
+                                    type: "error",
+                                    text1: "Erreur",
+                                    text2: err.response.data,
+                                });
                             });
                     }
                 },
-                signIn: (username: string, password: string) => {
+                signIn: (userData: UserLogin) => {
                     axios
                         .post("http://localhost:8000/api/login/", {
-                            username: username,
-                            password: password,
+                            username: userData.username,
+                            password: userData.password,
                         })
                         .then((res) => {
-                            console.log(res);
                             setUser(res.data);
                         })
                         .catch((err) => {
-                            console.log(err);
                             if (err.response.status === 400) {
-                                if (Platform.OS === "web") {
-                                    alert(
-                                        "Nom d'utilisateur ou mot de passe incorrect",
-                                    );
-                                } else {
-                                    Toast.show(
-                                        "Nom d'utilisateur ou mot de passe incorrect",
-                                        {
-                                            duration: Toast.durations.LONG,
-                                        },
-                                    );
-                                }
+                                Toast.show({
+                                    type: "error",
+                                    text1: "Erreur",
+                                    text2: "Nom d'utilisateur ou mot de passe incorrect",
+                                });
                             }
                         });
                 },
@@ -113,14 +97,16 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                 signOut: () => {
                     axios
                         .post("http://localhost:8000/api/logout/")
-                        .then((res) => {
-                            console.log(res);
+                        .then(() => {
                             setUser("");
                         })
                         .catch((err) => {
                             console.log(err);
                         });
                 },
+
+                isRegistered: isRegistered,
+                setIsRegistered: setIsRegistered,
             }}
         >
             {children}

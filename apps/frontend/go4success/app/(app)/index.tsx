@@ -9,6 +9,7 @@ import RenderCarousel from "@/components/RenderCarousel";
 import { ActivityOrAttend } from "@/types/ActivityOrAttend";
 import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
 import { useAuth } from "@/context/auth";
+import Toast from "react-native-toast-message";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -18,8 +19,16 @@ axios.defaults.xsrfCookieName = "csrftoken";
 export default function accueil() {
     const [allMessages, setAllMessages] = useState([]);
     const { allActivities, registeredActivities } = useAttendsAndActivities();
-    const { user } = useAuth();
+    const { user, isRegistered, setIsRegistered } = useAuth();
 
+    if (isRegistered) {
+        Toast.show({
+            type: "success",
+            text1: "Félicitations !",
+            text2: "Inscription réussie ! Bienvenue",
+        });
+        setIsRegistered(false);
+    }
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         let activity = item;
 

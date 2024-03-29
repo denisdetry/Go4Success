@@ -18,14 +18,5 @@ export default function Layout() {
                 </RootSiblingParent>
             </AuthProvider>
         </QueryClientProvider>
-        <QueryClientProvider client={queryClient}>
-            <AuthProvider>
-                <RootSiblingParent>
-                    <AttendsAndActivitiesProvider>
-                        <Slot />
-                    </AttendsAndActivitiesProvider>
-                </RootSiblingParent>
-            </AuthProvider>
-        </QueryClientProvider>
     );
 }

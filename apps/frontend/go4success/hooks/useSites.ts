@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { SelectItem } from "@/components/SelectSearch";
 import axios from "axios";
+import { API_BASE_URL } from "@/constants/ConfigApp";
 
-type Site = {
+export type Site = {
     id: string;
     name: string;
 };
@@ -16,7 +17,7 @@ export function useSites() {
         queryKey: ["allSites"],
         queryFn: async () => {
             const response = await axios.get<Site[]>(
-                "http://localhost:8000/workshops/sites/",
+                `${API_BASE_URL}/workshops/sites/`,
             );
             return response.data.map((site) => ({
                 label: site.name,
@@ -25,5 +26,5 @@ export function useSites() {
         },
     });
 
-    return { isPending, sites, error };
+    return { isPending, sites: sites ?? [], error };
 }

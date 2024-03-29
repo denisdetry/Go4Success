@@ -29,15 +29,15 @@ class ActivitySerializer(serializers.ModelSerializer):
 
     # Méthode pour personnaliser la représentation du champ activity_room
 
-    # def get_room(self, obj):
-    #    if obj.room:
-    #        return f"{obj.room.name} - {obj.room.site.name}"
-    #    return
+    def get_room(self, obj):
+        if obj.room:
+            return f"{obj.room.name} - {obj.room.site.name}"
+        return
 
-     # def get_course(self, obj):
-     #    if obj.course:
-     #        return f"{obj.course.code} - {obj.course.name}"
-     #    return
+    def get_course(self, obj):
+        if obj.course:
+            return f"{obj.course.code} - {obj.course.name}"
+        return
 
 
 class AttendSerializer(serializers.ModelSerializer):

@@ -4,9 +4,8 @@ import { FlatList } from "react-native-gesture-handler";
 import axios from "axios";
 import styles from "@/styles/global";
 import FilterActivity from "@/components/FilterActivity";
-import { Message } from "@/types/Message";
+//import { Message } from "@/types/Message";
 import { useAuth } from "@/context/auth";
-import { AttendsAndActivitiesProvider } from "@/context/AttendsAndActivities";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -24,27 +23,6 @@ interface Message {
 export default function accueil() {
     const [allMessages, setAllMessages] = useState([]);
     const { user } = useAuth();
-    const [attendFilters, setAttendFilters] = useState({
-        name: "",
-        room: "",
-        date_start: null,
-        date_end: null,
-    });
-
-    const [activityFilters, setActivityFilters] = useState({
-        name: "",
-        room: "",
-        date_start: null,
-        date_end: null,
-    });
-
-    const handleFilterChange = (filterType: string, name: string, value: string) => {
-        if (filterType === "attend") {
-            setAttendFilters((prevState) => ({ ...prevState, [name]: value }));
-        } else if (filterType === "activity") {
-            setActivityFilters((prevState) => ({ ...prevState, [name]: value }));
-        }
-    };
 
     const renderMessages = ({ item }: { item: Message }) => {
         return <Text> {item.content}</Text>;
@@ -85,12 +63,7 @@ export default function accueil() {
             <View style={styles.container}>
                 <Text style={styles.title}>Atelier inscrits</Text>
                 <ScrollView contentContainerStyle={styles.containerCard}>
-                    <AttendsAndActivitiesProvider filters={attendFilters}>
-                        <FilterActivity
-                            filterType={"attend"}
-                            onFilterChange={handleFilterChange}
-                        />
-                    </AttendsAndActivitiesProvider>
+                    <FilterActivity filterType={"attend"}></FilterActivity>
                 </ScrollView>
             </View>
 
@@ -98,12 +71,7 @@ export default function accueil() {
             <View style={styles.container}>
                 <Text style={styles.title}>Ateliers disponibles</Text>
                 <ScrollView contentContainerStyle={styles.containerCard}>
-                    <AttendsAndActivitiesProvider filters={activityFilters}>
-                        <FilterActivity
-                            filterType={"activity"}
-                            onFilterChange={handleFilterChange}
-                        />
-                    </AttendsAndActivitiesProvider>
+                    <FilterActivity filterType={"activity"}></FilterActivity>
                 </ScrollView>
             </View>
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
     Text,
     ScrollView,
@@ -7,75 +7,63 @@ import {
     Modal,
     View,
     Platform,
+    ActivityIndicator,
 } from "react-native";
 import Card from "../components/Card";
 import ButtonComponent from "../components/Button";
 import Colors from "../constants/Colors";
+import { FlatList } from "react-native-gesture-handler";
 import stylesGlobal from "../styles/global";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
+import SelectSearch, { SelectItem } from "../components/SelectSearch";
 import dayjs from "dayjs";
-import { ActivityOrAttend } from "@/types/ActivityOrAttend";
-import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
-import RenderCarousel from "./RenderCarousel";
-import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
-import PickerSite from "../components/PickerSite";
-import PickerRoom from "../components/PickerRoom";
-import SelectSearch, { SelectItem } from "../components/select";
-import axios from "axios";
+import { useSites } from "@/hooks/useSites";
+import { useRooms } from "@/hooks/useRooms";
+import { ItemType } from "react-native-dropdown-picker";
+import { Workshop, useWorkshops } from "@/hooks/useWorkshops";
 
-const queryClient = new QueryClient();
-
-interface Site {
-    id: string;
-    name: string;
-}
-
-interface Room {
-    id: string;
-    name: string;
+interface Attend {
+    activity: Workshop;
+    student_id: string;
 }
 
 interface FilterActivityProps {
     readonly filterType: "activity" | "attend";
-    readonly onFilterChange: any;
 }
 
-function useSites() {
-    const {
-        isPending,
-        data: sites,
-        error,
-    } = useQuery<SelectItem[]>({
-        queryKey: ["allSites"],
-        queryFn: async () => {
-            const response = await axios.get<Site[]>(
-                "http://localhost:8000/workshops/sites/",
-            );
-            return response.data.map((site) => ({
-                label: site.name,
-                value: site.id,
-            }));
-        },
-    });
+type ActivityOrAttend = Workshop | Attend;
 
-    return { isPending, sites, error };
-}
-
-const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => {
-    const [open, setOpen] = React.useState(false);
-    const { isPending, sites, error } = useSites();
-    const all_item: SelectItem = { label: "", value: "" };
-    const sites_all = [all_item].concat(sites ?? []);
-    const { allActivities, registeredActivities } = useAttendsAndActivities();
+const FilterActivity = ({ filterType }: FilterActivityProps) => {
+    const [siteOpen, setSiteOpen] = React.useState(false);
+    const [roomOpen, setRoomOpen] = React.useState(false);
     const [searchName, setSearchName] = useState("");
-    const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
-    const [selectedSite, setSelectedSite] = useState<Site | null>(null);
+    const [selectedRoom, setSelectedRoom] = useState<SelectItem>();
+    const [selectedSite, setSelectedSite] = useState<SelectItem>();
+
     const [range, setRange] = React.useState<{
         startDate: DateType;
         endDate: DateType;
     }>({ startDate: undefined, endDate: undefined });
 
-    const convertDateToISO = (date: DateType): string => {
+    const { isPending: isPendingSite, sites, error: siteError } = useSites();
+    const allSites = [{ label: "All", value: "" }, ...sites];
+
+    const {
+        isPending: isPendingRoom,
+        rooms,
+        error: roomError,
+    } = useRooms(selectedSite?.value, sites);
+
+    const allRooms = [{ label: "All", value: "" }, ...rooms];
+
+    const onChange = useCallback(
+        (range: { startDate: DateType; endDate: DateType }) => {
+            setRange(range);
+        },
+        [],
+    );
+
+    const convertDateToISO = (date: DateType): string | null => {
         if (date instanceof Date) {
             return date.toISOString().split("T")[0];
         } else if (typeof date === "string" && date !== "") {
@@ -85,21 +73,38 @@ const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => 
         } else if (date instanceof dayjs) {
             return date.format("YYYY-MM-DD");
         } else {
-            return "";
+            return null;
         }
     };
 
     const startDateISO = convertDateToISO(range.startDate);
     const endDateISO = convertDateToISO(range.endDate);
 
-    const onChange = useCallback(
-        (range: { startDate: DateType; endDate: DateType }) => {
-            setRange(range);
-        },
-        [],
+    const {
+        isPending: isPendingAttend,
+        data: registeredActivities,
+        error: attendError,
+    } = useWorkshops(
+        "attends",
+        searchName,
+        selectedRoom?.value,
+        selectedSite?.value,
+        startDateISO,
+        endDateISO,
     );
 
-    useEffect(() => {}, [filterType, selectedRoom, selectedSite]);
+    const {
+        isPending: isPendingActivity,
+        data: allActivities,
+        error: activityError,
+    } = useWorkshops(
+        "activity",
+        searchName,
+        selectedRoom?.value,
+        selectedSite?.value,
+        startDateISO,
+        endDateISO,
+    );
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         let activity = "activity" in item ? item.activity : item;
@@ -108,7 +113,7 @@ const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => 
             <Card
                 id={activity.id}
                 title={activity.name}
-                location={activity.room}
+                location={activity.room.name}
                 date={activity.date_start}
                 type={activity.type}
                 description={activity.description}
@@ -118,7 +123,7 @@ const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => 
                 <Card
                     id={activity.id}
                     title={activity.name}
-                    location={activity.room}
+                    location={activity.room.name}
                     date={activity.date_start}
                     type={activity.type}
                     description={activity.description}
@@ -131,32 +136,22 @@ const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => 
         setRange({ startDate: null, endDate: null });
     };
 
-    const handleSearchNameChange = (newSearchName: React.SetStateAction<string>) => {
-        setSearchName(newSearchName);
-        onFilterChange(filterType, "name", newSearchName);
-    };
-
-    let siteName = selectedSite ? selectedSite.name : "";
-
-    useEffect(() => {
-        onFilterChange(filterType, "name", searchName);
-        onFilterChange(
-            filterType,
-            "room",
-            selectedRoom ? `${selectedRoom.name} ${siteName}` : siteName,
-        );
-        onFilterChange(filterType, "date_start", startDateISO);
-        onFilterChange(filterType, "date_end", endDateISO);
-    }, [searchName, selectedSite, selectedRoom, startDateISO, endDateISO]);
-
     const [modalVisible, setModalVisible] = useState(false);
 
     const toggleModal = () => {
         setModalVisible(!modalVisible);
     };
 
-    if (sites === undefined) {
-        return <Text>Loading...</Text>;
+    if (siteError) {
+        return <View> Error: {siteError.message} </View>;
+    }
+
+    if (roomError) {
+        return <View> Error: {roomError.message} </View>;
+    }
+
+    if (isPendingSite || isPendingRoom) {
+        return <ActivityIndicator />;
     }
 
     return (
@@ -177,28 +172,34 @@ const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => 
                         <TextInput
                             style={stylesGlobal.inputLittle}
                             value={searchName}
-                            onChangeText={handleSearchNameChange}
+                            onChangeText={(text: string) => setSearchName(text)}
                             placeholder="Search title activity"
                         />
 
-                        <QueryClientProvider client={queryClient}>
-                            <SelectSearch
-                                zIndex={10}
-                                items={sites_all}
-                                placeholder="Select site"
-                                searchable={false}
-                                onSelectItem={(item) => {
-                                    setSelectedSite({
-                                        id: item.value as string,
-                                        name: item.label as string,
-                                    });
-                                }}
-                                open={open}
-                                setOpen={setOpen}
-                                //setSelectedSite={setSelectedSite}
-                                //selectedSite={selectedSite}
-                            />
-                        </QueryClientProvider>
+                        <SelectSearch
+                            zIndex={100}
+                            items={allSites}
+                            placeholder={"Select a site"}
+                            searchable={true}
+                            onSelectItem={(item) => {
+                                setSelectedSite(item as Required<ItemType<string>>);
+                            }}
+                            open={siteOpen}
+                            setOpen={setSiteOpen}
+                        />
+
+                        <SelectSearch
+                            zIndex={99}
+                            items={allRooms}
+                            placeholder={"Select one or multiple room(s)"}
+                            searchable={true}
+                            onSelectItem={(item) => {
+                                setSelectedRoom(item as Required<ItemType<string>>);
+                            }}
+                            open={roomOpen}
+                            setOpen={setRoomOpen}
+                        />
+
                         <View style={stylesGlobal.containerDatePicker}>
                             <DateTimePicker
                                 mode="range"
@@ -213,7 +214,7 @@ const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => 
                             <ButtonComponent
                                 text="Clear dates"
                                 onPress={handleClearDates}
-                                buttonType={"primary"}
+                                buttonType={"secondary"}
                             />
                         </View>
                         <ButtonComponent
@@ -226,19 +227,31 @@ const FilterActivity = ({ filterType, onFilterChange }: FilterActivityProps) => 
             </Modal>
 
             {filterType === "attend" &&
-                (registeredActivities.length > 0 ? (
-                    <RenderCarousel
+                (registeredActivities !== undefined &&
+                registeredActivities.length > 0 ? (
+                    <FlatList
+                        contentContainerStyle={stylesGlobal.containerCard}
                         data={registeredActivities}
                         renderItem={renderCards}
+                        horizontal
+                        pagingEnabled
+                        showsHorizontalScrollIndicator={false}
                     />
                 ) : (
-                    <Text style={stylesGlobal.text}>
-                        Vous n'êtes inscrit à aucun atelier
+                    <Text style={styles.noDataText}>
+                        Vous n'êtes inscrit à aucun atelier.
                     </Text>
                 ))}
             {filterType === "activity" &&
-                (allActivities.length > 0 ? (
-                    <RenderCarousel data={allActivities} renderItem={renderCards} />
+                (allActivities !== undefined && allActivities.length > 0 ? (
+                    <FlatList
+                        contentContainerStyle={stylesGlobal.containerCard}
+                        data={allActivities}
+                        renderItem={renderCards}
+                        horizontal
+                        pagingEnabled
+                        showsHorizontalScrollIndicator={false}
+                    />
                 ) : (
                     <Text style={styles.noDataText}>Aucun atelier disponible.</Text>
                 ))}

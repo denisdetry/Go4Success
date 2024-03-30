@@ -191,7 +191,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                         <SelectSearch
                             zIndex={99}
                             items={allRooms}
-                            placeholder={"Select one or multiple room(s)"}
+                            placeholder={"Select one room"}
                             searchable={true}
                             onSelectItem={(item) => {
                                 setSelectedRoom(item as Required<ItemType<string>>);

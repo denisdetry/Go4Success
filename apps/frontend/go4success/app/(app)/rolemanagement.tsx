@@ -11,7 +11,7 @@ export default function RoleManagement() {
   const [backdata,setData] = useState(null);
   const [item,setItem] = useState();
 
-  const {manageRole} = useRole();
+  //const {manageRole} = useRole();
 
   const items = [];
 
@@ -19,7 +19,7 @@ export default function RoleManagement() {
 
 
 
-
+  
 
 
   useEffect(() => {

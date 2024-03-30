@@ -27,6 +27,21 @@ export function ManagementProvider({ children }: React.PropsWithChildren) {
     const rootSegment = useSegments()[0];
     const router = useRouter();
     const [role, setRole] = React.useState<string | undefined>("");
+    const [user, setUser] = React.useState<string | undefined>("");
+
+
+    React.useEffect(() => {
+        axios
+            .get("http://localhost:8000/api/current_user/")
+            .then((res) => {
+                setUser(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
+
 
     React.useEffect(() => {
         axios

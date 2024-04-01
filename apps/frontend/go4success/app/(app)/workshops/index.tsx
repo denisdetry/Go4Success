@@ -3,17 +3,7 @@ import { ActivityIndicator, ScrollView, Text } from "react-native";
 import styles from "../../../styles/global";
 import Card from "../../../components/Card";
 import { useQuery } from "@tanstack/react-query";
-
-type Workshop = {
-    id: string;
-    type: string;
-    name: string;
-    description: string;
-    date_start: string;
-    date_end: string;
-    room: string;
-    course: Course;
-};
+import { Workshop } from "@/hooks/useWorkshops";
 
 type Course = {
     id: number;
@@ -45,7 +35,7 @@ function ListWorkshops() {
                     key={workshop.id}
                     id={workshop.id}
                     title={workshop.name}
-                    location={workshop.room}
+                    location={workshop.room.name}
                     date={workshop.date_start}
                     type={workshop.type}
                     description={workshop.description}

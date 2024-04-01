@@ -7,7 +7,7 @@ router = DefaultRouter()
 router.register(r'sites', SiteViewSet)
 router.register(r'attends', AttendViewSet)
 router.register(r'rooms', RoomViewSet)
-router.register(r'activity', ActivityViewSet)
+router.register(r'', ActivityViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

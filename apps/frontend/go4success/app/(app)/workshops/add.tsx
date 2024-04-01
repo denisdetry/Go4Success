@@ -1,44 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { ActivityIndicator, TextInput, View } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 import styles from "@/styles/global";
-import SelectSearch, { SelectItem } from "@/components/SelectSearch";
+import SelectSearch from "@/components/SelectSearch";
 import React from "react";
 import SelectMultipleSearch from "@/components/SelectMultipleSearch";
 import { useSites } from "@/hooks/useSites";
-
-type Room = {
-    id: string;
-    name: string;
-    site: string;
-};
-
-function useRooms(siteId: string | undefined, sites: SelectItem[]) {
-    const {
-        isPending,
-        data: rooms,
-        error,
-    } = useQuery<SelectItem[]>({
-        queryKey: ["rooms", siteId],
-        queryFn: async () => {
-            const response = await axios.get(
-                "http://localhost:8000/workshops/rooms/" +
-                    (siteId ? `site/${siteId}/` : ""),
-            );
-            return response.data.map((room: Room) => ({
-                label:
-                    room.name +
-                    " - " +
-                    sites.find((site) => site.value === room.site)?.label,
-                value: room.id,
-            }));
-        },
-        enabled: sites.length > 0,
-    });
-
-    return { isPending, rooms, error };
-}
+import { useRooms } from "@/hooks/useRooms";
+import InputAutocomplete from "@/components/InputAutocomplete";
 
 export default function Add() {
     const [siteOpen, setSiteOpen] = React.useState(false);
@@ -54,7 +22,7 @@ export default function Add() {
         rooms,
         isPending: roomPending,
         error: roomError,
-    } = useRooms(watchSite?.value, sites ?? []);
+    } = useRooms(watchSite?.value, sites);
 
     if (siteError) {
         return <View> Error: {siteError.message} </View>;
@@ -121,32 +89,39 @@ export default function Add() {
                         placeholder={"Select a site"}
                         searchable={true}
                         onSelectItem={onChange}
-                        open={true}
-                        setOpen={onChange}
+                        open={siteOpen}
+                        setOpen={setSiteOpen}
                     />
                 )}
                 name={"site"}
                 defaultValue={""}
             />
 
-            {
-                <Controller
-                    control={control}
-                    render={({ field: { onChange } }) => (
-                        <SelectMultipleSearch
-                            zIndex={99}
-                            items={rooms}
-                            placeholder={"Select a room"}
-                            searchable={true}
-                            onSelectItem={onChange}
-                            open={false}
-                            setOpen={onChange}
-                        />
-                    )}
-                    name={"room"}
-                    defaultValue={""}
-                />
-            }
+            <Controller
+                control={control}
+                render={({ field: { onChange } }) => (
+                    <SelectMultipleSearch
+                        zIndex={99}
+                        items={rooms}
+                        placeholder={"Select a room"}
+                        searchable={true}
+                        onSelectItem={onChange}
+                        open={roomOpen}
+                        setOpen={setRoomOpen}
+                    />
+                )}
+                name={"room"}
+                defaultValue={""}
+            />
+
+            <Controller
+                control={control}
+                render={({ field: { onChange } }) => (
+                    <InputAutocomplete placeholder={"Select a time"} />
+                )}
+                name={"time"}
+                defaultValue={""}
+            />
         </View>
     );
 }

@@ -1,13 +1,13 @@
 from django.contrib.auth import login, logout
-from rest_framework import status, permissions
+from rest_framework import status, permissions, generics
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Activity, Attend
+from .models import Activity, Attend, User
 from .serializers import UserRegistrationSerializer, UserSerializer, ActivitySerializer, \
-    AttendSerializer, RegisterToActivityserializer, UserLoginSerializer
+    AttendSerializer, RegisterToActivityserializer, UserLoginSerializer, UpdateUserSerializer
 from .validations import custom_validation, validate_username, validate_password
 
 
@@ -61,6 +61,12 @@ class CurrentUserView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class UpdateProfileView(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = UpdateUserSerializer
+
+
 class ActivityViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = Activity.objects.all()
@@ -68,7 +74,7 @@ class ActivityViewSet(viewsets.ModelViewSet):
 
 
 class AttendViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = AttendSerializer
 
     # garder uniquement les activités de l'utilisateur connecté

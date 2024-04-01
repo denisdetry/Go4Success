@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, Platform } from "react-native";
+import { Dimensions, Platform, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import Carousel from "react-native-reanimated-carousel";
 import styles from "@/styles/global";
@@ -12,15 +12,17 @@ interface CarouselProps {
 }
 
 const RenderCarousel: React.FC<CarouselProps> = ({ data, renderItem }) => {
-    return Platform.OS == "web" ? (
-        <FlatList
-            contentContainerStyle={[styles.containerCard, { gap: 20 }]}
-            data={data}
-            renderItem={renderItem}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-        />
+    return Platform.OS === "web" ? (
+        <View style={styles.containerCard}>
+            <FlatList
+                contentContainerStyle={{ gap: 10 }}
+                data={data}
+                renderItem={renderItem}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+            />
+        </View>
     ) : (
         <Carousel
             width={width * 0.9}

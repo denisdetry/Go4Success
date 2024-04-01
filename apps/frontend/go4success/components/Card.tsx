@@ -13,6 +13,7 @@ import axios from "axios";
 import { useAuth } from "@/context/auth";
 import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
 import Toast from "react-native-toast-message";
+import { isMobile } from "@/constants/screensWidth";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 15,
         height: 180,
-        maxWidth: 350,
+        width: isMobile ? 280 : 350,
     },
     bottomRow: {
         flex: 1,
@@ -304,14 +305,14 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     title: {
-        fontSize: 18,
+        fontSize: isMobile ? 16 : 18,
         fontWeight: "bold",
         color: "white",
     },
     text: {
         alignSelf: "flex-end",
         alignItems: "stretch",
-        fontSize: 16,
+        fontSize: isMobile ? 13 : 16,
         color: "white",
     },
 });

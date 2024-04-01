@@ -16,6 +16,8 @@ const normalLightColor = "#BBBBD1";
 const appointmentLightColor = "#96cc89";
 const workshopLightColor = "#BBBBD1";
 
+const lightBackgroundColor = "#f2f2f2";
+
 export default {
     light: {
         text: "#000",
@@ -43,4 +45,5 @@ export default {
     normalLightColor,
     appointmentLightColor,
     workshopLightColor,
+    lightBackgroundColor,
 };

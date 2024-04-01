@@ -3,6 +3,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from . import views
+from .views import UpdateProfileView
 
 router = routers.DefaultRouter()
 
@@ -16,6 +17,7 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('current_user/', views.CurrentUserView.as_view(), name='users'),
+    path('update_profile/<int:id>/', UpdateProfileView.as_view(), name='auth_update_profile'),
     path("", include(router.urls)),
 ]
 

@@ -67,14 +67,7 @@ export default function accueil() {
 
     return (
         <ScrollView contentContainerStyle={styles.mainContainer}>
-            <View
-                style={{
-                    width: "90%",
-                    alignContent: "flex-start",
-                    margin: 20,
-                    padding: 10,
-                }}
-            >
+            <View style={styles.titleContainer}>
                 <Text style={[styles.title, { marginBottom: 0 }]}>
                     Bonjour {user.first_name} ! 👋
                 </Text>

@@ -64,6 +64,14 @@ export default function Layout() {
                             >
                                 <TouchableOpacity
                                     onPress={() => {
+                                        router.push("/");
+                                    }}
+                                >
+                                    <Ionicons name="home" size={24} color="#fff" />
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    onPress={() => {
                                         console.log("Open notifications");
                                     }}
                                 >

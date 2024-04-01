@@ -1,15 +1,22 @@
 import { StyleSheet } from "react-native";
 import Colors from "@/constants/Colors";
+import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
 
 export default StyleSheet.create({
     mainContainer: {
         flex: 1,
         alignItems: "center",
     },
+    titleContainer: {
+        width: "90%",
+        alignContent: "flex-start",
+        marginHorizontal: 20,
+        marginTop: 20,
+        padding: 10,
+    },
     title: {
         fontSize: 28,
-        fontWeight: "600",
-        marginBottom: 10,
+        fontWeight: "500",
     },
     text: {
         fontSize: 16,
@@ -18,19 +25,22 @@ export default StyleSheet.create({
     },
     containerCard: {
         flex: 1,
-        padding: 15,
+        width: "100%",
+        maxWidth: isMobile ? 360 : isTabletMini ? 360 : isTablet ? 710 : 1435, // isDesktop for the last one
+        paddingBottom: 20,
     },
     container: {
         width: "90%",
         borderRadius: 10,
-        shadowRadius: 5,
+        shadowRadius: 3,
         shadowColor: "lightgray",
         backgroundColor: "white",
         justifyContent: "center",
         alignItems: "center",
-        alignContent: "center",
-        padding: 50,
-        margin: 30,
+        alignContent: "flex-start",
+        paddingVertical: 30,
+        paddingHorizontal: 20,
+        margin: 20,
     },
 
     form: {

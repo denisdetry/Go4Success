@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@npmcli/fs": "^3.1.0",
     "@react-navigation/drawer": "^6.6.9",
     "@tanstack/react-query": "^5.28.8",
     "@types/react": "~18.2.45",
@@ -37,7 +38,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
+    "@babel/core": "^7.24.3",
     "@types/react": "~18.2.45",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",

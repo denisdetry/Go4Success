@@ -9,13 +9,13 @@ import {
     Platform,
     ActivityIndicator,
 } from "react-native";
-import Card from "../components/Card";
-import ButtonComponent from "../components/Button";
+import Card from "./Card";
+import ButtonComponent from "./Button";
 import Colors from "../constants/Colors";
 import { FlatList } from "react-native-gesture-handler";
 import stylesGlobal from "../styles/global";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
-import SelectSearch, { SelectItem } from "../components/SelectSearch";
+import SelectSearch, { SelectItem } from "./SelectSearch";
 import dayjs from "dayjs";
 import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
@@ -27,18 +27,21 @@ interface Attend {
     student_id: string;
 }
 
-interface FilterActivityProps {
-    readonly filterType: "activity" | "attend";
+interface FilterWorkshopProps {
+    readonly filterType: "workshop" | "attend";
 }
 
-type ActivityOrAttend = Workshop | Attend;
+type WorkshopOrAttend = Workshop | Attend;
 
-const FilterActivity = ({ filterType }: FilterActivityProps) => {
+const FilterWorkshop = ({ filterType }: FilterWorkshopProps) => {
     const [siteOpen, setSiteOpen] = React.useState(false);
     const [roomOpen, setRoomOpen] = React.useState(false);
     const [searchName, setSearchName] = useState("");
     const [selectedRoom, setSelectedRoom] = useState<SelectItem>();
     const [selectedSite, setSelectedSite] = useState<SelectItem>();
+    const [registeredActivities, setRegisteredActivities] = useState<Workshop[]>([]);
+    const [allActivities, setAllActivities] = useState<Workshop[]>([]);
+    const [hasLoaded, setHasLoaded] = useState(false);
 
     const [range, setRange] = React.useState<{
         startDate: DateType;
@@ -48,11 +51,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const { isPending: isPendingSite, sites, error: siteError } = useSites();
     const allSites = [{ label: "All", value: "" }, ...sites];
 
-    const {
-        isPending: isPendingRoom,
-        rooms,
-        error: roomError,
-    } = useRooms(selectedSite?.value, sites);
+    const { rooms, error: roomError } = useRooms(selectedSite?.value, sites);
 
     const allRooms = [{ label: "All", value: "" }, ...rooms];
 
@@ -77,56 +76,46 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         }
     };
 
-    const startDateISO = convertDateToISO(range.startDate);
-    const endDateISO = convertDateToISO(range.endDate);
-
-    const {
-        isPending: isPendingAttend,
-        data: registeredActivities,
-        error: attendError,
-    } = useWorkshops(
+    const { data: registeredActivitiesData } = useWorkshops(
         "attends",
         searchName,
         selectedRoom?.value,
         selectedSite?.value,
-        startDateISO,
-        endDateISO,
+        convertDateToISO(range.startDate),
+        convertDateToISO(range.endDate),
     );
 
-    const {
-        isPending: isPendingActivity,
-        data: allActivities,
-        error: activityError,
-    } = useWorkshops(
+    const { data: allActivitiesData } = useWorkshops(
         "activity",
         searchName,
         selectedRoom?.value,
         selectedSite?.value,
-        startDateISO,
-        endDateISO,
+        convertDateToISO(range.startDate),
+        convertDateToISO(range.endDate),
     );
 
-    const renderCards = ({ item }: { item: ActivityOrAttend }) => {
-        let activity = "activity" in item ? item.activity : item;
+    const renderCards = ({ item }: { item: WorkshopOrAttend }) => {
+        let workshop = "activity" in item ? item.activity : item;
+        const siteName = sites.find((site) => site.value === workshop.room.site)?.label;
 
         return Platform.OS === "web" ? (
             <Card
-                id={activity.id}
-                title={activity.name}
-                location={activity.room.name}
-                date={activity.date_start}
-                type={activity.type}
-                description={activity.description}
+                id={workshop.id}
+                title={workshop.name}
+                location={workshop.room.name + " - " + siteName}
+                date={workshop.date_start}
+                type={workshop.type}
+                description={workshop.description}
             />
         ) : (
             <View style={stylesGlobal.containerCard}>
                 <Card
-                    id={activity.id}
-                    title={activity.name}
-                    location={activity.room.name}
-                    date={activity.date_start}
-                    type={activity.type}
-                    description={activity.description}
+                    id={workshop.id}
+                    title={workshop.name}
+                    location={workshop.room.name}
+                    date={workshop.date_start}
+                    type={workshop.type}
+                    description={workshop.description}
                 />
             </View>
         );
@@ -150,9 +139,34 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         return <View> Error: {roomError.message} </View>;
     }
 
-    if (isPendingSite || isPendingRoom) {
+    if (isPendingSite) {
         return <ActivityIndicator />;
     }
+
+    const handleFilterClose = () => {
+        if (registeredActivitiesData) {
+            setRegisteredActivities(registeredActivitiesData);
+        }
+        if (allActivitiesData) {
+            setAllActivities(allActivitiesData);
+        }
+
+        if (hasLoaded) {
+            toggleModal();
+        }
+    };
+
+    if (!hasLoaded) {
+        handleFilterClose();
+        setHasLoaded(true);
+    }
+
+    const handleClearFilter = () => {
+        setSearchName("");
+        setSelectedRoom(undefined);
+        setSelectedSite(undefined);
+        setRange({ startDate: null, endDate: null });
+    };
 
     return (
         <ScrollView>
@@ -173,7 +187,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                             style={stylesGlobal.inputLittle}
                             value={searchName}
                             onChangeText={(text: string) => setSearchName(text)}
-                            placeholder="Search title activity"
+                            placeholder="Search title Workshop"
                         />
 
                         <SelectSearch
@@ -186,7 +200,10 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                             }}
                             open={siteOpen}
                             setOpen={setSiteOpen}
+                            value={selectedSite?.value ?? null}
                         />
+
+                        <View style={{ height: 10 }} />
 
                         <SelectSearch
                             zIndex={99}
@@ -198,30 +215,48 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                             }}
                             open={roomOpen}
                             setOpen={setRoomOpen}
+                            value={selectedRoom?.value ?? null}
                         />
 
-                        <View style={stylesGlobal.containerDatePicker}>
-                            <DateTimePicker
-                                mode="range"
-                                locale="fr"
-                                startDate={range.startDate}
-                                endDate={range.endDate}
-                                onChange={onChange}
-                                selectedItemColor={Colors.primaryColor}
-                                headerContainerStyle={{ backgroundColor: "white" }}
-                                headerTextStyle={{ color: Colors.thirdColor }}
-                            />
+                        <View
+                            style={{ flexDirection: "column", alignItems: "flex-end" }}
+                        >
+                            <View style={stylesGlobal.containerDatePicker}>
+                                <DateTimePicker
+                                    mode="range"
+                                    locale="fr"
+                                    startDate={range.startDate}
+                                    endDate={range.endDate}
+                                    onChange={onChange}
+                                    selectedItemColor={Colors.primaryColor}
+                                    headerContainerStyle={{ backgroundColor: "white" }}
+                                    headerTextStyle={{ color: Colors.thirdColor }}
+                                />
+                            </View>
                             <ButtonComponent
                                 text="Clear dates"
                                 onPress={handleClearDates}
+                                buttonType={"clear"}
+                            />
+                        </View>
+
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <ButtonComponent
+                                text="Clear Filter"
+                                onPress={handleClearFilter}
+                                buttonType={"close"}
+                            />
+                            <ButtonComponent
+                                text="Save Filter"
+                                onPress={handleFilterClose}
                                 buttonType={"secondary"}
                             />
                         </View>
-                        <ButtonComponent
-                            text="Close Filter"
-                            onPress={toggleModal}
-                            buttonType={"close"}
-                        />
                     </View>
                 </View>
             </Modal>
@@ -242,7 +277,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                         Vous n'êtes inscrit à aucun atelier.
                     </Text>
                 ))}
-            {filterType === "activity" &&
+            {filterType === "workshop" &&
                 (allActivities !== undefined && allActivities.length > 0 ? (
                     <FlatList
                         contentContainerStyle={stylesGlobal.containerCard}
@@ -287,4 +322,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default FilterActivity;
+export default FilterWorkshop;

@@ -8,7 +8,7 @@ export type Site = {
     name: string;
 };
 
-export function useSites() {
+export function useSites(siteId?: string) {
     const {
         isPending,
         data: sites,
@@ -18,6 +18,9 @@ export function useSites() {
         queryFn: async () => {
             const response = await axios.get<Site[]>(
                 `${API_BASE_URL}/workshops/sites/`,
+                {
+                    params: { id: siteId },
+                },
             );
             return response.data.map((site) => ({
                 label: site.name,

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import axios from "axios";
 import styles from "@/styles/global";
-import FilterActivity from "@/components/FilterActivity";
+import FilterWorkshop from "@/components/FilterWorkshop";
 //import { Message } from "@/types/Message";
 import { useAuth } from "@/context/auth";
 
@@ -63,7 +63,7 @@ export default function accueil() {
             <View style={styles.container}>
                 <Text style={styles.title}>Atelier inscrits</Text>
                 <ScrollView contentContainerStyle={styles.containerCard}>
-                    <FilterActivity filterType={"attend"}></FilterActivity>
+                    <FilterWorkshop filterType={"attend"}></FilterWorkshop>
                 </ScrollView>
             </View>
 
@@ -71,7 +71,7 @@ export default function accueil() {
             <View style={styles.container}>
                 <Text style={styles.title}>Ateliers disponibles</Text>
                 <ScrollView contentContainerStyle={styles.containerCard}>
-                    <FilterActivity filterType={"activity"}></FilterActivity>
+                    <FilterWorkshop filterType={"workshop"}></FilterWorkshop>
                 </ScrollView>
             </View>
 

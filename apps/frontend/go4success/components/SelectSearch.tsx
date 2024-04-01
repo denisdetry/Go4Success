@@ -14,10 +14,15 @@ export type SelectSearchProps = {
     readonly onSelectItem: (item: ItemType<string>) => void;
     readonly open: boolean;
     readonly setOpen: Dispatch<SetStateAction<boolean>>;
+    readonly value: string | null;
 };
 
 function SelectSearch(props: SelectSearchProps) {
-    const [value, setValue] = React.useState(null);
+    const [value, setValue] = React.useState(props.value);
+
+    React.useEffect(() => {
+        setValue(props.value);
+    }, [props.value]);
 
     DropDownPicker.setLanguage("FR");
 

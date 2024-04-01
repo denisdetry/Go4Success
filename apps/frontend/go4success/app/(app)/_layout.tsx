@@ -136,16 +136,6 @@ export default function Layout() {
                         ),
                     }}
                 />
-                <Drawer.Screen
-                    name="workshops"
-                    options={{
-                        drawerLabel: "Ateliers",
-                        headerTitle: "Ateliers",
-                        drawerIcon: ({ size, color }) => (
-                            <Ionicons name="calendar" size={size} color={color} />
-                        ),
-                    }}
-                />
             </Drawer>
         </GestureHandlerRootView>
     );

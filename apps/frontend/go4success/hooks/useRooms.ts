@@ -10,11 +10,7 @@ export type Room = {
 };
 
 export function useRooms(siteId: string | undefined, sites: SelectItem[]) {
-    const {
-        isPending,
-        data: rooms,
-        error,
-    } = useQuery<SelectItem[]>({
+    const { data: rooms, error } = useQuery<SelectItem[]>({
         queryKey: ["rooms", siteId],
         queryFn: async () => {
             const response = await axios.get(
@@ -31,5 +27,5 @@ export function useRooms(siteId: string | undefined, sites: SelectItem[]) {
         enabled: sites.length > 0,
     });
 
-    return { isPending, rooms: rooms ?? [], error };
+    return { rooms: rooms ?? [], error };
 }

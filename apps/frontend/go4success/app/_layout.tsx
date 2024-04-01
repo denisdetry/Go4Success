@@ -12,7 +12,7 @@ export default function Layout() {
         <QueryClientProvider client={queryClient}>
             <AuthProvider>
                 <RootSiblingParent>
-                    <AttendsAndActivitiesProvider>
+                    <AttendsAndActivitiesProvider filters={undefined}>
                         <Slot />
                     </AttendsAndActivitiesProvider>
                 </RootSiblingParent>

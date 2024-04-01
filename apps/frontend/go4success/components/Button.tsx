@@ -11,6 +11,7 @@ type ButtonComponentrops = {
         | "success"
         | "danger"
         | "close"
+        | "clear"
         | "filter";
 };
 
@@ -50,6 +51,13 @@ const ButtonComponent: React.FC<ButtonComponentrops> = ({
             padding: 2,
             margin: 4,
             width: 160,
+        },
+        clear: {
+            backgroundColor: Colors.primaryColor,
+            borderRadius: 0,
+            padding: 0,
+            margin: 10,
+            marginTop: -25,
         },
     });
 

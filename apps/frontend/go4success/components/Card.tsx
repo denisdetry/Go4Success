@@ -151,17 +151,23 @@ const Card: React.FC<CardProps> = ({
                 console.log(res);
             })
             .catch((err) => {
-                if (err.response.status === 400) {
+                if (err.response.status === 400 && user.id) {
                     Toast.show({
                         type: "error",
                         text1: "Erreur",
                         text2: "Vous êtes déjà inscrit à cet atelier",
                     });
-                } else if (err.response.status === 403) {
+                } else if (err.response.status === 403 && user.id) {
                     Toast.show({
                         type: "error",
                         text1: "Erreur",
                         text2: "Vous n'êtes pas autorisé à vous inscrire à cet atelier",
+                    });
+                } else {
+                    Toast.show({
+                        type: "error",
+                        text1: "Erreur",
+                        text2: "Veuillez réessayer plus tard. Le serveur ne répond pas.",
                     });
                 }
                 setModalVisible(!modalVisible);

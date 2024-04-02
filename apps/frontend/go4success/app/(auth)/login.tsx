@@ -46,9 +46,7 @@ export default function login() {
     };
 
     return (
-        <ScrollView
-            contentContainerStyle={[styles.mainContainer, { justifyContent: "center" }]}
-        >
+        <ScrollView contentContainerStyle={styles.mainContainer}>
             <View style={[styles.container, { shadowRadius: 0, backgroundColor: "" }]}>
                 <Text style={styles.title}>Connexion</Text>
                 <View style={styles.form}>

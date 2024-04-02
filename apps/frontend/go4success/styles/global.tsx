@@ -4,8 +4,9 @@ import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
 
 export default StyleSheet.create({
     mainContainer: {
-        flex: 1,
         alignItems: "center",
+        justifyContent: "center",
+        flexGrow: 1,
     },
     titleContainer: {
         width: "90%",

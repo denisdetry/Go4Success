@@ -4,24 +4,12 @@ import {
     SuccessToast,
     ToastConfigParams,
 } from "react-native-toast-message";
-import { Dimensions, Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import Colors from "@/constants/Colors";
-import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
 
 const styles = StyleSheet.create({
     main: {
         marginTop: Platform.OS === "web" ? 30 : 65,
-        maxWidth: Dimensions.get("screen").width,
-        width:
-            Platform.OS === "web"
-                ? isMobile
-                    ? "80%"
-                    : isTablet
-                      ? "70%"
-                      : isTabletMini
-                        ? "50%"
-                        : "30%"
-                : "80%", // real Mobile IOS and Android
     },
     success: {
         borderLeftColor: Colors.appointmentColor,

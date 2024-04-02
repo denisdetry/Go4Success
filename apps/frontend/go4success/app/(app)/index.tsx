@@ -1,7 +1,6 @@
 import { ScrollView, Text, View } from "react-native";
 import React, { useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
-import axios from "axios";
 import styles from "@/styles/global";
 import Card from "@/components/Card";
 import { Message } from "@/types/Message";
@@ -10,11 +9,9 @@ import { ActivityOrAttend } from "@/types/ActivityOrAttend";
 import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
 import { useAuth } from "@/context/auth";
 import Toast from "react-native-toast-message";
+import axiosConfig from "@/constants/axiosConfig";
 
-// Set the default values for axios
-axios.defaults.withCredentials = true;
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-axios.defaults.xsrfCookieName = "csrftoken";
+axiosConfig();
 
 export default function accueil() {
     const [allMessages, setAllMessages] = useState([]);
@@ -66,7 +63,11 @@ export default function accueil() {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.mainContainer}>
+        <ScrollView
+            scrollEnabled={true}
+            nestedScrollEnabled={true}
+            contentContainerStyle={styles.mainContainer}
+        >
             <View style={styles.titleContainer}>
                 {user.first_name ? (
                     <Text style={styles.titleNoPadding}>
@@ -95,7 +96,6 @@ export default function accueil() {
             </View>
 
             {/* Registered Activities container */}
-
             <View style={styles.container}>
                 <Text style={styles.titleNoPadding}>Atelier inscrits</Text>
 
@@ -106,6 +106,17 @@ export default function accueil() {
                     />
                 ) : (
                     <Text style={styles.text}>Vous n'êtes inscrit à aucun atelier</Text>
+                )}
+            </View>
+
+            {/* All Activities container */}
+            <View style={styles.container}>
+                <Text style={styles.titleNoPadding}>Ateliers disponibles</Text>
+
+                {allActivities.length > 0 ? (
+                    <RenderCarousel data={allActivities} renderItem={renderCards} />
+                ) : (
+                    <Text style={styles.text}>Aucun atelier disponible</Text>
                 )}
             </View>
 

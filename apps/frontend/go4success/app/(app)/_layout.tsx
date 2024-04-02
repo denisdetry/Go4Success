@@ -24,7 +24,7 @@ function customDrawerContent(props: any) {
                 <Image
                     source={require("@/assets/images/profile-picture.jpg")}
                     style={{
-                        borderRadius: 50,
+                        borderRadius: 100,
                         borderWidth: 0.5,
                         width: 100,
                         height: 100,

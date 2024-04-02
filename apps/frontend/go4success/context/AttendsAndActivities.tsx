@@ -43,7 +43,7 @@ export function AttendsAndActivitiesProvider({ children }: React.PropsWithChildr
 
     React.useEffect(() => {
         refreshAttendsAndActivities();
-    }, [user]);
+    }, [user.id]);
 
     return (
         <AttendsAndActivitiesContext.Provider

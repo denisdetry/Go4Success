@@ -20,6 +20,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
     const [user, setUser] = React.useState<string | undefined>("");
     const [isRegistered, setIsRegistered] = React.useState<boolean>(false);
     const [isSignedIn, setIsSignedIn] = React.useState<boolean>(false);
+    const [isSignedOut, setIsSignedOut] = React.useState<boolean>(false);
 
     const refreshUser = () => {
         axios
@@ -69,12 +70,19 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 setIsRegistered(true);
                             })
                             .catch((err) => {
-                                console.log(err.response.data);
-                                Toast.show({
-                                    type: "error",
-                                    text1: "Erreur",
-                                    text2: err.response.data,
-                                });
+                                try {
+                                    Toast.show({
+                                        type: "error",
+                                        text1: "Erreur",
+                                        text2: err.response.data,
+                                    });
+                                } catch (e) {
+                                    Toast.show({
+                                        type: "error",
+                                        text1: "Erreur",
+                                        text2: "Veuillez réessayer plus tard. Le serveur ne répond pas.",
+                                    });
+                                }
                             });
                     }
                 },
@@ -89,11 +97,19 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             setIsSignedIn(true);
                         })
                         .catch((err) => {
-                            if (err.response.status === 400) {
+                            try {
+                                if (err.response.status === 400) {
+                                    Toast.show({
+                                        type: "error",
+                                        text1: "Erreur",
+                                        text2: "Nom d'utilisateur ou mot de passe incorrect",
+                                    });
+                                }
+                            } catch (e) {
                                 Toast.show({
                                     type: "error",
                                     text1: "Erreur",
-                                    text2: "Nom d'utilisateur ou mot de passe incorrect",
+                                    text2: "Veuillez réessayer plus tard. Le serveur ne répond pas.",
                                 });
                             }
                         });
@@ -104,6 +120,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         .post("http://localhost:8000/api/logout/")
                         .then(() => {
                             setUser("");
+                            setIsSignedOut(true);
                         })
                         .catch((err) => {
                             console.log(err);
@@ -114,6 +131,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                 setIsRegistered: setIsRegistered,
                 isSignedIn: isSignedIn,
                 setIsSignedIn: setIsSignedIn,
+                isSignedOut: isSignedOut,
+                setIsSignedOut: setIsSignedOut,
             }}
         >
             {children}

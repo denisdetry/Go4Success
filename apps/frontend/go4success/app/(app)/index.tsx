@@ -68,9 +68,15 @@ export default function accueil() {
     return (
         <ScrollView contentContainerStyle={styles.mainContainer}>
             <View style={styles.titleContainer}>
-                <Text style={styles.titleNoPadding}>
-                    Bonjour {user.first_name} ! 👋
-                </Text>
+                {user.first_name ? (
+                    <Text style={styles.titleNoPadding}>
+                        Bonjour {user.first_name} ! 👋
+                    </Text>
+                ) : (
+                    <Text style={styles.titleNoPadding}>
+                        Bonjour {user.username} ! 👋
+                    </Text>
+                )}
             </View>
 
             {/* Message container */}

@@ -35,11 +35,13 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=255, unique=True)
-    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=255, unique=True,
+                                error_messages={"unique": "Ce nom d'utilisateur est déjà utilisé."})
+    email = models.EmailField(unique=True, error_messages={"unique": "Cette adresse mail est déjà utilisée."})
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    noma = models.CharField(max_length=63, blank=True, null=True)
+    noma = models.CharField(max_length=63, blank=True, null=True, unique=True,
+                            error_messages={"unique": "Ce noma est déjà utilisé."})
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

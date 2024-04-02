@@ -4,11 +4,9 @@ import axios from "axios";
 import Toast from "react-native-toast-message";
 import { UserRegister } from "@/types/UserRegister";
 import { UserLogin } from "@/types/UserLogin";
+import axiosConfig from "@/constants/axiosConfig";
 
-// Set the default values for axios
-axios.defaults.withCredentials = true;
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-axios.defaults.xsrfCookieName = "csrftoken";
+axiosConfig();
 
 const AuthContext = React.createContext<any>(null);
 
@@ -21,8 +19,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
     const router = useRouter();
     const [user, setUser] = React.useState<string | undefined>("");
     const [isRegistered, setIsRegistered] = React.useState<boolean>(false);
+    const [isSignedIn, setIsSignedIn] = React.useState<boolean>(false);
 
-    React.useEffect(() => {
+    const refreshUser = () => {
         axios
             .get("http://localhost:8000/api/current_user/")
             .then((res) => {
@@ -31,6 +30,10 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
             .catch((err) => {
                 console.log(err);
             });
+    };
+
+    React.useEffect(() => {
+        refreshUser();
     }, []);
 
     React.useEffect(() => {
@@ -47,6 +50,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         <AuthContext.Provider
             value={{
                 user: user,
+                refreshUser: refreshUser,
                 signUp: (userData: UserRegister) => {
                     {
                         axios
@@ -82,6 +86,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         })
                         .then((res) => {
                             setUser(res.data);
+                            setIsSignedIn(true);
                         })
                         .catch((err) => {
                             if (err.response.status === 400) {
@@ -107,6 +112,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
                 isRegistered: isRegistered,
                 setIsRegistered: setIsRegistered,
+                isSignedIn: isSignedIn,
+                setIsSignedIn: setIsSignedIn,
             }}
         >
             {children}

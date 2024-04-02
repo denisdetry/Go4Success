@@ -11,13 +11,13 @@ router.register(r'register_activity',
                 views.RegisterToActivityView, "register_activity")
 router.register(r'activity', views.ActivityViewSet, "activity")
 router.register(r'attends', views.AttendViewSet, "attends")
+router.register(r'user_profile', UpdateProfileView, "user_profile")
 
 urlpatterns = [
     path('register/', views.UserRegisterView.as_view(), name='register'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('current_user/', views.CurrentUserView.as_view(), name='users'),
-    path('update_profile/<int:id>/', UpdateProfileView.as_view(), name='auth_update_profile'),
     path("", include(router.urls)),
 ]
 

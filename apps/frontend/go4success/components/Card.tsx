@@ -143,7 +143,7 @@ const Card: React.FC<CardProps> = ({
             .then((res) => {
                 Toast.show({
                     type: "success",
-                    text1: "Félicitation",
+                    text1: "Félicitation ! 🎉",
                     text2: "Vous êtes parfaitement inscrit à l'atelier : " + title,
                 });
                 refreshAttendsAndActivities();
@@ -173,7 +173,7 @@ const Card: React.FC<CardProps> = ({
         <View style={styles.centeredView}>
             {/* Modal content */}
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => {
@@ -280,6 +280,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginTop: 22,
+        backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     modalView: {
         backgroundColor: Colors.workshopLightColor,

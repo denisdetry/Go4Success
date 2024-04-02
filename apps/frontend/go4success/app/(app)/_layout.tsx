@@ -84,7 +84,6 @@ export default function Layout() {
 
                                 <TouchableOpacity
                                     onPress={() => {
-                                        console.log("Open Calendar");
                                         router.push("/calendar");
                                     }}
                                 >
@@ -93,7 +92,6 @@ export default function Layout() {
 
                                 <TouchableOpacity
                                     onPress={() => {
-                                        console.log("Open profile");
                                         router.push("/profile");
                                     }}
                                 >

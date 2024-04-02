@@ -1,16 +1,11 @@
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import Colors from "../constants/Colors";
 
 type ButtonProps = {
     readonly text: string;
     readonly onPress: () => void;
-    readonly buttonType:
-        | "primary"
-        | "secondary"
-        | "success"
-        | "danger"
-        | "close";
+    readonly buttonType: "primary" | "secondary" | "success" | "danger" | "close";
 };
 
 const Button: React.FC<ButtonProps> = ({ text, onPress, buttonType }) => {
@@ -19,7 +14,7 @@ const Button: React.FC<ButtonProps> = ({ text, onPress, buttonType }) => {
             borderRadius: 20,
             padding: 8,
             margin: 5,
-            fontWeight: "bold",
+            fontWeight: "500",
             textAlign: "center",
             color: "white",
             fontSize: 16,
@@ -42,10 +37,7 @@ const Button: React.FC<ButtonProps> = ({ text, onPress, buttonType }) => {
     });
 
     return (
-        <TouchableOpacity
-            style={[styles.common, styles[buttonType]]}
-            onPress={onPress}
-        >
+        <TouchableOpacity style={[styles.common, styles[buttonType]]} onPress={onPress}>
             <Text style={styles.common}>{text}</Text>
         </TouchableOpacity>
     );

@@ -1,4 +1,4 @@
-import { Platform, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import React, { useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import axios from "axios";
@@ -19,16 +19,27 @@ axios.defaults.xsrfCookieName = "csrftoken";
 export default function accueil() {
     const [allMessages, setAllMessages] = useState([]);
     const { allActivities, registeredActivities } = useAttendsAndActivities();
-    const { user, isRegistered, setIsRegistered } = useAuth();
+    const { user, isRegistered, setIsRegistered, isSignedIn, setIsSignedIn } =
+        useAuth();
 
     if (isRegistered) {
         Toast.show({
             type: "success",
-            text1: "Félicitations !",
-            text2: "Inscription réussie ! Bienvenue",
+            text1: "Félicitations ! 🎉",
+            text2: "Inscription réussie ! Bienvenue sur Go4Success",
         });
         setIsRegistered(false);
     }
+
+    if (isSignedIn) {
+        Toast.show({
+            type: "success",
+            text1: "Félicitation ! 🎉",
+            text2: "Connexion réussie ! Bienvenue sur Go4Success",
+        });
+        setIsSignedIn(false);
+    }
+
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         let activity = item;
 
@@ -38,7 +49,7 @@ export default function accueil() {
             activity = item;
         }
 
-        return Platform.OS === "web" ? (
+        return (
             <Card
                 id={activity.id}
                 title={activity.name}
@@ -47,17 +58,6 @@ export default function accueil() {
                 type={activity.type}
                 description={activity.description}
             />
-        ) : (
-            <View style={styles.containerCard}>
-                <Card
-                    id={activity.id}
-                    title={activity.name}
-                    location={activity.room}
-                    date={activity.date_start}
-                    type={activity.type}
-                    description={activity.description}
-                />
-            </View>
         );
     };
 
@@ -68,7 +68,7 @@ export default function accueil() {
     return (
         <ScrollView contentContainerStyle={styles.mainContainer}>
             <View style={styles.titleContainer}>
-                <Text style={[styles.title, { marginBottom: 0 }]}>
+                <Text style={styles.titleNoPadding}>
                     Bonjour {user.first_name} ! 👋
                 </Text>
             </View>
@@ -91,7 +91,7 @@ export default function accueil() {
             {/* Registered Activities container */}
 
             <View style={styles.container}>
-                <Text style={styles.title}>Atelier inscrits</Text>
+                <Text style={styles.titleNoPadding}>Atelier inscrits</Text>
 
                 {registeredActivities.length > 0 ? (
                     <RenderCarousel
@@ -105,7 +105,7 @@ export default function accueil() {
 
             {/* All Activities container */}
             <View style={styles.container}>
-                <Text style={styles.title}>Ateliers disponibles</Text>
+                <Text style={styles.titleNoPadding}>Ateliers disponibles</Text>
 
                 {allActivities.length > 0 ? (
                     <RenderCarousel data={allActivities} renderItem={renderCards} />

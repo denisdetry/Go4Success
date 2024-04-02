@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import Colors from "@/constants/Colors";
 import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
 
@@ -17,6 +17,11 @@ export default StyleSheet.create({
     title: {
         fontSize: 28,
         fontWeight: "500",
+        paddingBottom: 10,
+    },
+    titleNoPadding: {
+        fontSize: 28,
+        fontWeight: "500",
     },
     text: {
         fontSize: 16,
@@ -26,7 +31,16 @@ export default StyleSheet.create({
     containerCard: {
         flex: 1,
         width: "100%",
-        maxWidth: isMobile ? 360 : isTabletMini ? 360 : isTablet ? 710 : 1435, // isDesktop for the last one
+        maxWidth:
+            Platform.OS === "web"
+                ? isMobile
+                    ? 360
+                    : isTabletMini
+                      ? 360
+                      : isTablet
+                        ? 710
+                        : 1435
+                : 1435, // isDesktop for the last one
         paddingBottom: 20,
     },
     container: {
@@ -38,8 +52,9 @@ export default StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         alignContent: "flex-start",
-        paddingVertical: 30,
-        paddingHorizontal: 20,
+        padding: 50,
+        paddingVertical: Platform.OS === "web" ? 30 : 20,
+        paddingHorizontal: Platform.OS === "web" ? 20 : 50,
         margin: 20,
     },
 

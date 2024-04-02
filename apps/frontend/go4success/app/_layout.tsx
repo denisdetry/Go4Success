@@ -10,7 +10,7 @@ export default function Layout() {
         <AuthProvider>
             <AttendsAndActivitiesProvider>
                 <Slot />
-                <Toast config={toastConfig} />
+                <Toast visibilityTime={2000} config={toastConfig} />
             </AttendsAndActivitiesProvider>
         </AuthProvider>
     );

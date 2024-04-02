@@ -22,8 +22,10 @@ function customDrawerContent(props: any) {
                 onPress={() => router.push("/profile")}
             >
                 <Image
-                    source={require("@/assets/images/adaptive-icon.png")}
+                    source={require("@/assets/images/profile-picture.jpg")}
                     style={{
+                        borderRadius: 50,
+                        borderWidth: 0.5,
                         width: 100,
                         height: 100,
                         resizeMode: "contain",
@@ -52,12 +54,15 @@ export default function Layout() {
                         backgroundColor: Colors.primaryColor,
                     },
                     headerTintColor: "#fff",
+                    headerTitleStyle: {
+                        display: "none",
+                    },
                     headerRight: () => (
                         <>
                             <View
                                 style={{
                                     flexDirection: "row",
-                                    gap: 15,
+                                    gap: 5,
                                     marginRight: 20,
                                     alignItems: "center",
                                 }}
@@ -96,8 +101,10 @@ export default function Layout() {
                                     }}
                                 >
                                     <Image
-                                        source={require("@/assets/images/adaptive-icon.png")}
+                                        source={require("@/assets/images/profile-picture.jpg")}
                                         style={{
+                                            borderRadius: 50,
+                                            marginLeft: 10,
                                             width: 50,
                                             height: 50,
                                             resizeMode: "contain",

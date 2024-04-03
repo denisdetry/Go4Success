@@ -4,11 +4,13 @@ import { FlatList } from "react-native-gesture-handler";
 import axios from "axios";
 import styles from "@/styles/global";
 import Card from "@/components/Card";
+
 import { Message } from "@/types/Message";
 import RenderCarousel from "@/components/RenderCarousel";
 import { ActivityOrAttend } from "@/types/ActivityOrAttend";
 import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
 import { useAuth } from "@/context/auth";
+import { useTranslation } from "react-i18next";
 
 // Set the default values for axios
 axios.defaults.withCredentials = true;
@@ -16,6 +18,7 @@ axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 export default function accueil() {
+    const { t } = useTranslation();
     const [allMessages, setAllMessages] = useState([]);
     const { allActivities, registeredActivities } = useAttendsAndActivities();
     const { user } = useAuth();
@@ -67,13 +70,16 @@ export default function accueil() {
                 }}
             >
                 <Text style={[styles.title, { marginBottom: 0 }]}>
-                    Bonjour {user.first_name} ! 👋
+                    {t("translation.hello")} {user.first_name} ! 👋
+                </Text>
+                <Text style={[styles.title, { marginBottom: 0 }]}>
+                    {t("translation.welcome")}
                 </Text>
             </View>
 
             {/* Message container */}
             <View style={styles.container}>
-                <Text style={styles.title}>Mes messages</Text>
+                <Text style={styles.title}>{t("translation.message")}</Text>
 
                 {allMessages.length > 0 ? (
                     <FlatList
@@ -82,14 +88,14 @@ export default function accueil() {
                         renderItem={renderMessages}
                     />
                 ) : (
-                    <Text style={styles.text}> Vous n'avez pas de messages</Text>
+                    <Text style={styles.text}> {t("translation.noMessage")}</Text>
                 )}
             </View>
 
             {/* Registered Activities container */}
 
             <View style={styles.container}>
-                <Text style={styles.title}>Atelier inscrits</Text>
+                <Text style={styles.title}>{t("translation.workshopAttend")}</Text>
 
                 {registeredActivities.length > 0 ? (
                     <RenderCarousel
@@ -97,24 +103,24 @@ export default function accueil() {
                         renderItem={renderCards}
                     />
                 ) : (
-                    <Text style={styles.text}>Vous n'êtes inscrit à aucun atelier</Text>
+                    <Text style={styles.text}>{t("translation.noWorkshopAttend")}</Text>
                 )}
             </View>
 
             {/* All Activities container */}
             <View style={styles.container}>
-                <Text style={styles.title}>Ateliers disponibles</Text>
+                <Text style={styles.title}>{t("translation.workshopAll")}</Text>
 
                 {allActivities.length > 0 ? (
                     <RenderCarousel data={allActivities} renderItem={renderCards} />
                 ) : (
-                    <Text style={styles.text}>Aucun atelier disponible</Text>
+                    <Text style={styles.text}>{t("translation.noWorkshopAll")}</Text>
                 )}
             </View>
 
             {/* Calendar container */}
             <View style={styles.container}>
-                <Text style={styles.title}>Mon calendrier</Text>
+                <Text style={styles.title}>{t("translation.calendar")}</Text>
                 <Text style={styles.text}>Le calendrier est en construction...</Text>
             </View>
         </ScrollView>

@@ -95,3 +95,9 @@ class AttendSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attend
         fields = ('activity', 'student')
+
+
+class SiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Site
+        fields = ['id', 'name']

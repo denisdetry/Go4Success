@@ -27,8 +27,8 @@ export default function login() {
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            username: "artak",
-            password: "azerty123",
+            username: "allmaxou",
+            password: "azerty",
         },
     });
 

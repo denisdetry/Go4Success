@@ -96,4 +96,27 @@ export default StyleSheet.create({
         fontWeight: "bold",
         marginBottom: 10,
     },
+    containerDatePicker: {
+        flex: 1,
+        backgroundColor: "#F5FCFF",
+    },
+    picker: {
+        height: 50,
+        width: "100%",
+        backgroundColor: "#fafafa",
+        borderColor: "gray",
+        borderWidth: 1,
+        borderRadius: 4,
+        marginBottom: 10,
+    },
+    inputLittle: {
+        height: 50,
+        width: "100%",
+        backgroundColor: "#fafafa",
+        borderColor: "gray",
+        borderWidth: 1,
+        borderRadius: 4,
+        marginBottom: 10,
+        padding: 10,
+    },
 });

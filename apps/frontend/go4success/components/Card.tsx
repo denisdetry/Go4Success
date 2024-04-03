@@ -8,7 +8,7 @@ import {
     View,
 } from "react-native";
 import Colors from "../constants/Colors";
-import Button from "./Button";
+import ButtonComponent from "./Button";
 import axios from "axios";
 import { useAuth } from "@/context/auth";
 import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
@@ -207,12 +207,12 @@ const Card: React.FC<CardProps> = ({
                         </View>
 
                         <View style={styles.buttonContainer}>
-                            <Button
+                            <ButtonComponent
                                 text="S'inscrire"
                                 onPress={handleRegister}
                                 buttonType={"primary"}
                             />
-                            <Button
+                            <ButtonComponent
                                 text="Fermer"
                                 onPress={() => setModalVisible(!modalVisible)}
                                 buttonType={"close"}

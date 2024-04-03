@@ -20,27 +20,29 @@ import dayjs from "dayjs";
 import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
 import { ItemType } from "react-native-dropdown-picker";
-import { Workshop, useWorkshops } from "@/hooks/useWorkshops";
+import { Activity, useActivities } from "@/hooks/useActivities";
+import { useTranslation } from "react-i18next";
 
 interface Attend {
-    activity: Workshop;
+    activity: Activity;
     student_id: string;
 }
 
-interface FilterWorkshopProps {
-    readonly filterType: "workshop" | "attend";
+interface FilterActivityProps {
+    readonly filterType: "activity" | "attend";
 }
 
-type WorkshopOrAttend = Workshop | Attend;
+type ActivityOrAttend = Activity | Attend;
 
-const FilterWorkshop = ({ filterType }: FilterWorkshopProps) => {
+const FilterActivity = ({ filterType }: FilterActivityProps) => {
+    const { t } = useTranslation();
     const [siteOpen, setSiteOpen] = React.useState(false);
     const [roomOpen, setRoomOpen] = React.useState(false);
     const [searchName, setSearchName] = useState("");
     const [selectedRoom, setSelectedRoom] = useState<SelectItem>();
     const [selectedSite, setSelectedSite] = useState<SelectItem>();
-    const [registeredActivities, setRegisteredActivities] = useState<Workshop[]>([]);
-    const [allActivities, setAllActivities] = useState<Workshop[]>([]);
+    const [registeredActivities, setRegisteredActivities] = useState<Activity[]>([]);
+    const [allActivities, setAllActivities] = useState<Activity[]>([]);
     const [hasLoaded, setHasLoaded] = useState(false);
 
     const [range, setRange] = React.useState<{
@@ -51,8 +53,11 @@ const FilterWorkshop = ({ filterType }: FilterWorkshopProps) => {
     const { isPending: isPendingSite, sites, error: siteError } = useSites();
     const allSites = [{ label: "All", value: "" }, ...sites];
 
-    const { rooms, error: roomError } = useRooms(selectedSite?.value, sites);
-
+    const {
+        isPending: isPendingRoom,
+        rooms,
+        error: roomError,
+    } = useRooms(selectedSite?.value, sites);
     const allRooms = [{ label: "All", value: "" }, ...rooms];
 
     const onChange = useCallback(
@@ -76,7 +81,7 @@ const FilterWorkshop = ({ filterType }: FilterWorkshopProps) => {
         }
     };
 
-    const { data: registeredActivitiesData } = useWorkshops(
+    const { data: registeredActivitiesData } = useActivities(
         "attends",
         searchName,
         selectedRoom?.value,
@@ -85,7 +90,7 @@ const FilterWorkshop = ({ filterType }: FilterWorkshopProps) => {
         convertDateToISO(range.endDate),
     );
 
-    const { data: allActivitiesData } = useWorkshops(
+    const { data: allActivitiesData } = useActivities(
         "activity",
         searchName,
         selectedRoom?.value,
@@ -94,28 +99,28 @@ const FilterWorkshop = ({ filterType }: FilterWorkshopProps) => {
         convertDateToISO(range.endDate),
     );
 
-    const renderCards = ({ item }: { item: WorkshopOrAttend }) => {
-        let workshop = "activity" in item ? item.activity : item;
-        const siteName = sites.find((site) => site.value === workshop.room.site)?.label;
+    const renderCards = ({ item }: { item: ActivityOrAttend }) => {
+        let activity = "activity" in item ? item.activity : item;
+        const siteName = sites.find((site) => site.value === activity.room.site)?.label;
 
         return Platform.OS === "web" ? (
             <Card
-                id={workshop.id}
-                title={workshop.name}
-                location={workshop.room.name + " - " + siteName}
-                date={workshop.date_start}
-                type={workshop.type}
-                description={workshop.description}
+                id={activity.id}
+                title={activity.name}
+                location={activity.room.name + " - " + siteName}
+                date={activity.date_start}
+                type={activity.type}
+                description={activity.description}
             />
         ) : (
             <View style={stylesGlobal.containerCard}>
                 <Card
-                    id={workshop.id}
-                    title={workshop.name}
-                    location={workshop.room.name}
-                    date={workshop.date_start}
-                    type={workshop.type}
-                    description={workshop.description}
+                    id={activity.id}
+                    title={activity.name}
+                    location={activity.room.name}
+                    date={activity.date_start}
+                    type={activity.type}
+                    description={activity.description}
                 />
             </View>
         );
@@ -140,6 +145,10 @@ const FilterWorkshop = ({ filterType }: FilterWorkshopProps) => {
     }
 
     if (isPendingSite) {
+        return <ActivityIndicator />;
+    }
+
+    if (isPendingRoom) {
         return <ActivityIndicator />;
     }
 
@@ -171,7 +180,7 @@ const FilterWorkshop = ({ filterType }: FilterWorkshopProps) => {
     return (
         <ScrollView>
             <ButtonComponent
-                text="Open Filter"
+                text={t("translationButton.OpenFilter")}
                 onPress={toggleModal}
                 buttonType={"filter"}
             />
@@ -187,13 +196,13 @@ const FilterWorkshop = ({ filterType }: FilterWorkshopProps) => {
                             style={stylesGlobal.inputLittle}
                             value={searchName}
                             onChangeText={(text: string) => setSearchName(text)}
-                            placeholder="Search title Workshop"
+                            placeholder={t("translationButton.SearchTitleWorkshop")}
                         />
 
                         <SelectSearch
                             zIndex={100}
                             items={allSites}
-                            placeholder={"Select a site"}
+                            placeholder={t("translationButton.SelectSite")}
                             searchable={true}
                             onSelectItem={(item) => {
                                 setSelectedSite(item as Required<ItemType<string>>);
@@ -208,7 +217,7 @@ const FilterWorkshop = ({ filterType }: FilterWorkshopProps) => {
                         <SelectSearch
                             zIndex={99}
                             items={allRooms}
-                            placeholder={"Select one room"}
+                            placeholder={t("translationButton.SelectRoom")}
                             searchable={true}
                             onSelectItem={(item) => {
                                 setSelectedRoom(item as Required<ItemType<string>>);
@@ -234,7 +243,7 @@ const FilterWorkshop = ({ filterType }: FilterWorkshopProps) => {
                                 />
                             </View>
                             <ButtonComponent
-                                text="Clear dates"
+                                text={t("translationButton.ClearDates")}
                                 onPress={handleClearDates}
                                 buttonType={"clear"}
                             />
@@ -247,12 +256,12 @@ const FilterWorkshop = ({ filterType }: FilterWorkshopProps) => {
                             }}
                         >
                             <ButtonComponent
-                                text="Clear Filter"
+                                text={t("translationButton.ClearFilter")}
                                 onPress={handleClearFilter}
                                 buttonType={"close"}
                             />
                             <ButtonComponent
-                                text="Save Filter"
+                                text={t("translationButton.SaveFilter")}
                                 onPress={handleFilterClose}
                                 buttonType={"secondary"}
                             />
@@ -273,11 +282,11 @@ const FilterWorkshop = ({ filterType }: FilterWorkshopProps) => {
                         showsHorizontalScrollIndicator={false}
                     />
                 ) : (
-                    <Text style={styles.noDataText}>
-                        Vous n'êtes inscrit à aucun atelier.
+                    <Text style={stylesGlobal.text}>
+                        {t("translation.noWorkshopAttend")}
                     </Text>
                 ))}
-            {filterType === "workshop" &&
+            {filterType === "activity" &&
                 (allActivities !== undefined && allActivities.length > 0 ? (
                     <FlatList
                         contentContainerStyle={stylesGlobal.containerCard}
@@ -288,7 +297,9 @@ const FilterWorkshop = ({ filterType }: FilterWorkshopProps) => {
                         showsHorizontalScrollIndicator={false}
                     />
                 ) : (
-                    <Text style={styles.noDataText}>Aucun atelier disponible.</Text>
+                    <Text style={stylesGlobal.text}>
+                        {t("translation.noWorkshopAll")}
+                    </Text>
                 ))}
         </ScrollView>
     );
@@ -322,4 +333,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default FilterWorkshop;
+export default FilterActivity;

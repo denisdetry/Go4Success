@@ -15,5 +15,15 @@
         "profil": "Mon profil",
         "calendar": "Mon calendrier",
         "disconnect": "Se déconnecter"
+    },
+    "translationButton": {
+        "OpenFilter": "Ouvrir filtre",
+        "CloseFilter": "Fermer filtre",
+        "SaveFilter": "Enregistrer un filtre",
+        "ClearFilter": "Effacer les filtres",
+        "SelectSite": "Sélectionner un site",
+        "SelectRoom": "Sélectionner une salle",
+        "ClearDates": "Effacer les dates",
+        "SearchTitleWorkshop": "Rechercher un atelier"
     }
 }

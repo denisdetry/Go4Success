@@ -1,10 +1,9 @@
 import { ScrollView, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import axios from "axios";
 import styles from "@/styles/global";
-import FilterWorkshop from "@/components/FilterWorkshop";
-
+import FilterWorkshop from "@/components/FilterActivity";
 //import { Message } from "@/types/Message";
 import { useAuth } from "@/context/auth";
 import { useTranslation } from "react-i18next";
@@ -65,19 +64,8 @@ export default function accueil() {
             </View>
 
             {/* Registered Activities container */}
-
             <View style={styles.container}>
                 <Text style={styles.title}>{t("translation.workshopAttend")}</Text>
-
-                {registeredActivities.length > 0 ? (
-                    <RenderCarousel
-                        data={registeredActivities}
-                        renderItem={renderCards}
-                    />
-                ) : (
-                    <Text style={styles.text}>{t("translation.noWorkshopAttend")}</Text>
-                )}
-                <Text style={styles.title}>Atelier inscrits</Text>
                 <ScrollView contentContainerStyle={styles.containerCard}>
                     <FilterWorkshop filterType={"attend"}></FilterWorkshop>
                 </ScrollView>
@@ -85,16 +73,9 @@ export default function accueil() {
 
             {/* All activities container */}
             <View style={styles.container}>
-                <Text style={styles.title}>{t("translation.workshopAll")}</Text>
-
-                {allActivities.length > 0 ? (
-                    <RenderCarousel data={allActivities} renderItem={renderCards} />
-                ) : (
-                    <Text style={styles.text}>{t("translation.noWorkshopAll")}</Text>
-                )}
                 <Text style={styles.title}>Ateliers disponibles</Text>
                 <ScrollView contentContainerStyle={styles.containerCard}>
-                    <FilterWorkshop filterType={"workshop"}></FilterWorkshop>
+                    <FilterWorkshop filterType={"activity"}></FilterWorkshop>
                 </ScrollView>
             </View>
 

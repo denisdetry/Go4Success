@@ -12,7 +12,6 @@ import Colors from "../constants/Colors";
 import ButtonComponent from "./Button";
 import axios from "axios";
 import { useAuth } from "@/context/auth";
-import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
 import Toast from "react-native-root-toast";
 
 // Set the default values for axios
@@ -132,7 +131,6 @@ const Card: React.FC<CardProps> = ({
     const [modalVisible, setModalVisible] = useState(false);
 
     const { user } = useAuth();
-    const { refreshAttendsAndActivities } = useAttendsAndActivities();
 
     const handleRegister = () => {
         axios
@@ -148,7 +146,6 @@ const Card: React.FC<CardProps> = ({
                         duration: Toast.durations.LONG,
                     });
                 }
-                refreshAttendsAndActivities();
                 setModalVisible(!modalVisible);
                 console.log(res);
             })

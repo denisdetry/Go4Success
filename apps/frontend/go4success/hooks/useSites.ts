@@ -17,7 +17,7 @@ export function useSites(siteId?: string) {
         queryKey: ["allSites"],
         queryFn: async () => {
             const response = await axios.get<Site[]>(
-                `${API_BASE_URL}/workshops/sites/`,
+                `${API_BASE_URL}/activities/sites/`,
                 {
                     params: { id: siteId },
                 },

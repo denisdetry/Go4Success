@@ -3,7 +3,7 @@ import { API_BASE_URL } from "../constants/ConfigApp";
 import axios from "axios";
 import { Room } from "./useRooms";
 
-export interface Workshop {
+export interface Activity {
     id: string;
     name: string;
     room: Room;
@@ -12,7 +12,7 @@ export interface Workshop {
     description: string;
 }
 
-export function useWorkshops(
+export function useActivities(
     endpoint: string,
     searchName: string,
     selectedRoom: string | undefined,
@@ -20,9 +20,9 @@ export function useWorkshops(
     startDateISO: string | null,
     endDateISO: string | null,
 ) {
-    return useQuery<Workshop[]>({
+    return useQuery<Activity[]>({
         queryKey: [
-            "workshops",
+            "activities",
             endpoint,
             searchName,
             selectedRoom,
@@ -31,15 +31,18 @@ export function useWorkshops(
             endDateISO,
         ],
         queryFn: async () => {
-            const response = await axios.get(`${API_BASE_URL}/workshops/${endpoint}/`, {
-                params: {
-                    name: searchName,
-                    room: selectedRoom,
-                    site: selectedSite,
-                    date_start: startDateISO,
-                    date_end: endDateISO,
+            const response = await axios.get(
+                `${API_BASE_URL}/activities/${endpoint}/`,
+                {
+                    params: {
+                        name: searchName,
+                        room: selectedRoom,
+                        site: selectedSite,
+                        date_start: startDateISO,
+                        date_end: endDateISO,
+                    },
                 },
-            });
+            );
             return response.data;
         },
         refetchOnMount: true,

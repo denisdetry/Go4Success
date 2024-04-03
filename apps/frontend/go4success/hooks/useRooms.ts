@@ -10,11 +10,15 @@ export type Room = {
 };
 
 export function useRooms(siteId: string | undefined, sites: SelectItem[]) {
-    const { data: rooms, error } = useQuery<SelectItem[]>({
+    const {
+        isPending,
+        data: rooms,
+        error,
+    } = useQuery<SelectItem[]>({
         queryKey: ["rooms", siteId],
         queryFn: async () => {
             const response = await axios.get(
-                `${API_BASE_URL}/workshops/rooms/` + (siteId ? `site/${siteId}/` : ""),
+                `${API_BASE_URL}/activities/rooms/` + (siteId ? `site/${siteId}/` : ""),
             );
             return response.data.map((room: Room) => ({
                 label:
@@ -27,5 +31,5 @@ export function useRooms(siteId: string | undefined, sites: SelectItem[]) {
         enabled: sites.length > 0,
     });
 
-    return { rooms: rooms ?? [], error };
+    return { isPending, rooms: rooms ?? [], error };
 }

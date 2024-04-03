@@ -120,17 +120,6 @@ export default function accueil() {
                 )}
             </View>
 
-            {/* All Activities container */}
-            <View style={styles.container}>
-                <Text style={styles.titleNoPadding}>Ateliers disponibles</Text>
-
-                {allActivities.length > 0 ? (
-                    <RenderCarousel data={allActivities} renderItem={renderCards} />
-                ) : (
-                    <Text style={styles.text}>Aucun atelier disponible</Text>
-                )}
-            </View>
-
             {/* Calendar container */}
             <View style={styles.container}>
                 <Text style={styles.title}>Mon calendrier</Text>

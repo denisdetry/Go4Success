@@ -10,9 +10,6 @@ export default function profile() {
 
     return (
         <ScrollView contentContainerStyle={styles.mainContainer}>
-            <View style={styles.titleContainer}>
-                <Text style={styles.title}>Mon profil</Text>
-            </View>
             <View style={[styles.container]}>
                 <Text style={[styles.title, { textAlign: "center" }]}>Mon profil</Text>
                 <View

@@ -1,14 +1,10 @@
-import { Platform, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import React, { useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import axios from "axios";
 import styles from "@/styles/global";
-import Card from "@/components/Card";
-
-import { Message } from "@/types/Message";
-import RenderCarousel from "@/components/RenderCarousel";
-import { ActivityOrAttend } from "@/types/ActivityOrAttend";
-import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
+import FilterWorkshop from "@/components/FilterActivity";
+//import { Message } from "@/types/Message";
 import { useAuth } from "@/context/auth";
 import { useTranslation } from "react-i18next";
 
@@ -17,43 +13,18 @@ axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
+interface Message {
+    id: string;
+    content: string;
+    date: string;
+    from_user: string;
+    to_user: string;
+}
+
 export default function accueil() {
     const { t } = useTranslation();
     const [allMessages, setAllMessages] = useState([]);
-    const { allActivities, registeredActivities } = useAttendsAndActivities();
     const { user } = useAuth();
-
-    const renderCards = ({ item }: { item: ActivityOrAttend }) => {
-        let activity = item;
-
-        if ("activity" in item) {
-            activity = item.activity;
-        } else {
-            activity = item;
-        }
-
-        return Platform.OS === "web" ? (
-            <Card
-                id={activity.id}
-                title={activity.name}
-                location={activity.room}
-                date={activity.date_start}
-                type={activity.type}
-                description={activity.description}
-            />
-        ) : (
-            <View style={styles.containerCard}>
-                <Card
-                    id={activity.id}
-                    title={activity.name}
-                    location={activity.room}
-                    date={activity.date_start}
-                    type={activity.type}
-                    description={activity.description}
-                />
-            </View>
-        );
-    };
 
     const renderMessages = ({ item }: { item: Message }) => {
         return <Text> {item.content}</Text>;
@@ -93,29 +64,19 @@ export default function accueil() {
             </View>
 
             {/* Registered Activities container */}
-
             <View style={styles.container}>
                 <Text style={styles.title}>{t("translation.workshopAttend")}</Text>
-
-                {registeredActivities.length > 0 ? (
-                    <RenderCarousel
-                        data={registeredActivities}
-                        renderItem={renderCards}
-                    />
-                ) : (
-                    <Text style={styles.text}>{t("translation.noWorkshopAttend")}</Text>
-                )}
+                <ScrollView contentContainerStyle={styles.containerCard}>
+                    <FilterWorkshop filterType={"attend"}></FilterWorkshop>
+                </ScrollView>
             </View>
 
-            {/* All Activities container */}
+            {/* All activities container */}
             <View style={styles.container}>
-                <Text style={styles.title}>{t("translation.workshopAll")}</Text>
-
-                {allActivities.length > 0 ? (
-                    <RenderCarousel data={allActivities} renderItem={renderCards} />
-                ) : (
-                    <Text style={styles.text}>{t("translation.noWorkshopAll")}</Text>
-                )}
+                <Text style={styles.title}>Ateliers disponibles</Text>
+                <ScrollView contentContainerStyle={styles.containerCard}>
+                    <FilterWorkshop filterType={"activity"}></FilterWorkshop>
+                </ScrollView>
             </View>
 
             {/* Calendar container */}

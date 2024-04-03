@@ -15,5 +15,15 @@
         "profil": "My profil",
         "calendar": "My calendar",
         "disconnect": "Disconnecting"
+    },
+    "translationButton": {
+        "OpenFilter": "Open Filter",
+        "CloseFilter": "Close Filter",
+        "SaveFilter": "Save filter",
+        "ClearFilter": "Clear filter",
+        "SelectSite": "Select a site",
+        "SelectRoom": "Select a room",
+        "ClearDates": "Clear dates",
+        "SearchTitleWorkshop": "Search title Workshop"
     }
 }

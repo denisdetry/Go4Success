@@ -1,0 +1,19 @@
+{
+    "translation": {
+        "hello": "Hello ",
+        "welcome": "Welcome to Go4Sucess",
+        "message": "My messages",
+        "noMessage": "You have no messages",
+        "workshopAttend": "Registered workshops",
+        "noWorkshopAttend": "You are not registered for any workshop",
+        "workshopAll": "Available workshops",
+        "noWorkshopAll": "No workshops available",
+        "calendar": "My calendar"
+    },
+    "translationMenu": {
+        "home": "Home",
+        "profil": "My profil",
+        "calendar": "My calendar",
+        "disconnect": "Disconnecting"
+    }
+}

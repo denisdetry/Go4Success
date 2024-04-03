@@ -60,6 +60,7 @@ export default function register() {
             username: "",
             lastname: "",
             firstname: "",
+            noma: "",
             password: "",
             passwordRetype: "",
         },

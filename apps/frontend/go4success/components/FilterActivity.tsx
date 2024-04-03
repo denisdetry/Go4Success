@@ -100,7 +100,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     );
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
-        let activity = "activity" in item ? item.activity : item;
+        const activity = "activity" in item ? item.activity : item;
         const siteName = sites.find((site) => site.value === activity.room.site)?.label;
 
         return Platform.OS === "web" ? (
@@ -137,18 +137,22 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     };
 
     if (siteError) {
-        return <View> Error: {siteError.message} </View>;
+        return (
+            <View>
+                <Text> Error: {siteError.message} </Text>
+            </View>
+        );
     }
 
     if (roomError) {
-        return <View> Error: {roomError.message} </View>;
+        return (
+            <View>
+                <Text> Error: {roomError.message} </Text>
+            </View>
+        );
     }
 
-    if (isPendingSite) {
-        return <ActivityIndicator />;
-    }
-
-    if (isPendingRoom) {
+    if (isPendingSite || isPendingRoom) {
         return <ActivityIndicator />;
     }
 

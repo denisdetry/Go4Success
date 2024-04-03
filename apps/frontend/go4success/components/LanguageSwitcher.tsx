@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTranslation } from "react-i18next";
+import images from "@/assets";
 
-const LanguageSwitcher = () => {
+function LanguageSwitcher() {
     const { i18n } = useTranslation();
-
     const switchLanguage = (lng: string | undefined) => {
         void i18n.changeLanguage(lng);
     };
@@ -15,25 +15,19 @@ const LanguageSwitcher = () => {
                 style={styles.button}
                 onPress={() => switchLanguage("en")}
             >
-                <Image
-                    source={require("../assets/images/flags/flag_en.png")}
-                    style={styles.flag}
-                />
+                <Image source={images.enFlag} style={styles.flag} />
                 <Text style={styles.buttonText}>En </Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => switchLanguage("fr")}
             >
-                <Image
-                    source={require("../assets/images/flags/flag_fr.png")}
-                    style={styles.flag}
-                />
+                <Image source={images.frFlag} style={styles.flag} />
                 <Text style={styles.buttonText}>Fr</Text>
             </TouchableOpacity>
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {

@@ -127,12 +127,26 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         });
                 },
 
-                isRegistered: isRegistered,
-                setIsRegistered: setIsRegistered,
-                isSignedIn: isSignedIn,
-                setIsSignedIn: setIsSignedIn,
-                isSignedOut: isSignedOut,
-                setIsSignedOut: setIsSignedOut,
+                showLoginToast: () => {
+                    if (isSignedIn) {
+                        Toast.show({
+                            type: "success",
+                            text1: "Félicitation ! 🎉",
+                            text2: "Connexion réussie ! Bienvenue sur Go4Success",
+                        });
+                        setIsSignedIn(false);
+                    }
+                },
+                showRegisterToast: () => {
+                    if (isRegistered) {
+                        Toast.show({
+                            type: "success",
+                            text1: "Félicitations ! 🎉",
+                            text2: "Inscription reussie ! Bienvenue sur Go4Success",
+                        });
+                        setIsRegistered(false);
+                    }
+                },
             }}
         >
             {children}

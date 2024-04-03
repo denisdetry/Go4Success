@@ -1,4 +1,4 @@
-import { Image, ScrollView, Text, View } from "react-native";
+import { Image, Platform, ScrollView, Text, View } from "react-native";
 import React from "react";
 import styles from "@/styles/global";
 import { useAuth } from "@/context/auth";
@@ -14,8 +14,8 @@ export default function profile() {
                 <Text style={[styles.title, { textAlign: "center" }]}>Mon profil</Text>
                 <View
                     style={{
-                        flexDirection: "row",
-                        alignItems: "flex-start",
+                        flexDirection: Platform.OS === "web" ? "row" : "column",
+                        alignItems: "center",
                         justifyContent: "space-evenly",
                         width: "80%",
                         paddingTop: 40,

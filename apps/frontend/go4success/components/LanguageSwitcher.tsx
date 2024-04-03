@@ -6,7 +6,7 @@ const LanguageSwitcher = () => {
     const { i18n } = useTranslation();
 
     const switchLanguage = (lng: string | undefined) => {
-        i18n.changeLanguage(lng);
+        void i18n.changeLanguage(lng);
     };
 
     return (

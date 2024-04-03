@@ -107,7 +107,8 @@ class Activity(models.Model):
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, max_length=63, blank=True, null=True)
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, max_length=63, blank=True, null=True)
 
     def __str__(self):
         return "(%s) %s" % (self.id, self.name)
@@ -125,11 +126,12 @@ class Attend(models.Model):
 
 
 class Teacher(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, primary_key=True)
     is_tutor = models.BooleanField()
     is_professor = models.BooleanField()
-
     # check if the user is either tutor or professor
+
     def clean(self):
         if self.is_tutor and self.is_professor:
             raise ValidationError(
@@ -163,7 +165,8 @@ class Announcement(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     publication_date = models.DateTimeField()
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, max_length=63, blank=True, null=True)
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, max_length=63, blank=True, null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
 
     def __str__(self):

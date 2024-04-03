@@ -16,12 +16,17 @@ class UserRegisterView(APIView):
 
     def post(self, request):
         clean_data = custom_validation(request.data)
+        if isinstance(clean_data, Response):
+            return Response(clean_data.data, status=clean_data.status_code)
         user_serializer = UserRegistrationSerializer(data=clean_data)
         if user_serializer.is_valid(raise_exception=True):
             user = user_serializer.create(clean_data)
             if user:
                 login(request, user)
-                return Response(user_serializer.data, status=status.HTTP_201_CREATED)
+                return Response(
+                    {"id": request.user.id, "username": user.username, "email": user.email,
+                     "first_name": user.first_name, "last_name": user.last_name, "is_active": user.is_active},
+                    status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -37,7 +42,9 @@ class LoginView(APIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.check_user(data)
             login(request, user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({"id": user.id, "username": serializer.data['username'], "email": user.email,
+                             "first_name": user.first_name, "last_name": user.last_name, "is_active": user.is_active},
+                            status=status.HTTP_200_OK)
 
 
 class LogoutView(APIView):
@@ -55,7 +62,7 @@ class CurrentUserView(APIView):
 
     def get(self, request):
         serializer = UserSerializer(request.user)
-        return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ActivityViewSet(viewsets.ModelViewSet):
@@ -66,8 +73,12 @@ class ActivityViewSet(viewsets.ModelViewSet):
 
 class AttendViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
-    queryset = Attend.objects.all()
     serializer_class = AttendSerializer
+
+    # garder uniquement les activités de l'utilisateur connecté
+    def get_queryset(self):
+        user_id = self.request.user.id
+        return Attend.objects.filter(student_id=user_id)
 
 
 class RegisterToActivityView(viewsets.ModelViewSet):

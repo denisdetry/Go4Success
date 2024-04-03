@@ -1,7 +1,7 @@
 import React from "react";
 import Drawer from "expo-router/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/context/auth";
 import Colors from "@/constants/Colors";
 import {
@@ -48,7 +48,9 @@ export default function Layout() {
                     drawerActiveBackgroundColor: Colors.primaryColor,
                     drawerActiveTintColor: "#fff",
                     drawerLabelStyle: { marginLeft: -20 },
-                    headerStyle: { backgroundColor: Colors.primaryColor },
+                    headerStyle: {
+                        backgroundColor: Colors.primaryColor,
+                    },
                     headerTintColor: "#fff",
                     headerRight: () => (
                         <>

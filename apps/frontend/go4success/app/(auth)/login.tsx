@@ -1,4 +1,4 @@
-import { Text, TextInput, View } from "react-native";
+import { ScrollView, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import styles from "@/styles/global";
 import Button from "@/components/Button";
@@ -8,8 +8,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "expo-router";
-import { ScrollView } from "react-native-gesture-handler";
 
 const schema = yup.object().shape({
     username: yup.string().required("Entrez votre nom d'utilisateur"),
@@ -26,13 +24,13 @@ export default function login() {
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            username: "",
-            password: "",
+            username: "artak",
+            password: "azerty123",
         },
     });
 
     const onSubmit = (data: any) => {
-        signIn(data);
+        signIn(data.username, data.password);
     };
 
     return (

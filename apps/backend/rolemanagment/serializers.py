@@ -7,10 +7,17 @@ from rest_framework.exceptions import ValidationError
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name']
+        fields = ['id', 'first_name', 'last_name',
+                  'is_superuser']
 
 
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
-        fields = ['user_id', 'is_tutor', 'is_professor']
+        fields = ['is_tutor', 'is_professor']
+
+
+class EditRoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Teacher
+        fields = ['user', 'is_professor', 'is_tutor']

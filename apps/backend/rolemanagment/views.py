@@ -6,41 +6,49 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from api.models import Teacher, User
-from .serializers import TeacherSerializer, UserSerializer
+from .serializers import UserSerializer, EditRoleSerializer
 
 
-class TeacherView(viewsets.ModelViewSet):
+class UserView(viewsets.ModelViewSet, APIView):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
-    queryset = Teacher.objects.all()
-
-    serializer_class = TeacherSerializer
-
-
-class UserView(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
-    queryset = User.objects.all()
+    permission_classes = (permissions.AllowAny,)
 
     serializer_class = UserSerializer
 
+    queryset = User.objects.all()
 
-@api_view(['GET', 'POST'])
-def role(request):
-    if request.method == 'GET':
-        data = Teacher.objects.all()
-        serializer = TeacherSerializer(data, many=True)
+    def get(self, request):
+        data = User.objects.all()
+        serializer = UserSerializer(data, many=True)
         return Response(serializer.data)
 
-    elif request.method == 'POST':
-        serializer = TeacherSerializer(data=request.data)
+
+class EditRoleView(viewsets.ModelViewSet, APIView):
+
+    permission_classes = (permissions.AllowAny,)
+
+    serializer_class = EditRoleSerializer
+
+    queryset = Teacher.objects.all()
+
+    def get(self, request):
+        data = Teacher.objects.all()
+        serializer = EditRoleSerializer(data, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = EditRoleSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, pk):
+        instance = self.get_object(pk=pk)
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)

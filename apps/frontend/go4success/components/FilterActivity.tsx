@@ -23,7 +23,7 @@ import RenderCarousel from "@/components/RenderCarousel";
 
 interface Attend {
     activity: Activity;
-    student_id: string;
+    studentId: string;
 }
 
 interface FilterActivityProps {
@@ -39,17 +39,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const [searchName, setSearchName] = useState("");
     const [selectedRoom, setSelectedRoom] = useState<SelectItem>();
     const [selectedSite, setSelectedSite] = useState<SelectItem>();
-    const [registeredActivities, setRegisteredActivities] = useState<Activity[]>([]);
-    const [allActivities, setAllActivities] = useState<Activity[]>([]);
-
-    // const {
-    //     allActivities,
-    //     registeredActivities,
-    //     setRegisteredActivities,
-    //     setAllActivities,
-    // } = useAttendsAndActivities();
-
-    const [hasLoaded, setHasLoaded] = useState(false);
 
     const [range, setRange] = React.useState<{
         startDate: DateType;
@@ -86,7 +75,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         }
     };
 
-    const { data: registeredActivitiesData } = useActivities(
+    const { data: registeredActivities } = useActivities(
         "attends",
         searchName,
         selectedRoom?.value,
@@ -95,7 +84,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         convertDateToISO(range.endDate),
     );
 
-    const { data: allActivitiesData } = useActivities(
+    const { data: allActivities } = useActivities(
         "activity",
         searchName,
         selectedRoom?.value,
@@ -144,24 +133,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
     if (isPendingRoom) {
         return <ActivityIndicator />;
-    }
-
-    const handleFilterClose = () => {
-        if (registeredActivitiesData) {
-            setRegisteredActivities(registeredActivitiesData);
-        }
-        if (allActivitiesData) {
-            setAllActivities(allActivitiesData);
-        }
-
-        if (hasLoaded) {
-            toggleModal();
-        }
-    };
-
-    if (!hasLoaded) {
-        handleFilterClose();
-        setHasLoaded(true);
     }
 
     const handleClearFilter = () => {
@@ -260,7 +231,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                             />
                             <ButtonComponent
                                 text={t("translationButton.SaveFilter")}
-                                onPress={handleFilterClose}
+                                onPress={toggleModal}
                                 buttonType={"secondary"}
                             />
                         </View>

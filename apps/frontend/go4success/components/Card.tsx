@@ -11,10 +11,10 @@ import Colors from "../constants/Colors";
 import ButtonComponent from "./Button";
 import axios from "axios";
 import { useAuth } from "@/context/auth";
-import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
 import Toast from "react-native-toast-message";
 import { isMobile } from "@/constants/screensWidth";
 import axiosConfig from "@/constants/axiosConfig";
+import { queryClient } from "@/app/_layout";
 
 axiosConfig();
 
@@ -130,8 +130,6 @@ const Card: React.FC<CardProps> = ({
     const [modalVisible, setModalVisible] = useState(false);
 
     const { user } = useAuth();
-    const { refreshAttendsAndActivities } = useAttendsAndActivities();
-
     const handleRegister = () => {
         axios
             .post("http://localhost:8000/api/register_activity/", {
@@ -144,7 +142,9 @@ const Card: React.FC<CardProps> = ({
                     text1: "Félicitation ! 🎉",
                     text2: "Vous êtes parfaitement inscrit à l'atelier : " + title,
                 });
-                refreshAttendsAndActivities();
+                void queryClient.invalidateQueries({
+                    queryKey: ["activities", "attends"],
+                });
                 setModalVisible(!modalVisible);
                 console.log(res);
             })

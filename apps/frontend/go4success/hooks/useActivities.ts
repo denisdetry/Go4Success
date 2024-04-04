@@ -20,21 +20,8 @@ export function useActivities(
     startDateISO: string | null,
     endDateISO: string | null,
 ) {
-    // const [allActivities, setAllActivities] = useState<Activity[]>([]);
-    // const [allRegisteredActivities, setAllRegisteredActivities] = useState<Activity[]>(
-    //     [],
-    // );
-
     return useQuery<Activity[]>({
-        queryKey: [
-            "activities",
-            endpoint,
-            searchName,
-            selectedRoom,
-            selectedSite,
-            startDateISO,
-            endDateISO,
-        ],
+        queryKey: ["activities", endpoint, selectedRoom, selectedSite],
         queryFn: async () => {
             const response = await axios.get(
                 `${API_BASE_URL}/activities/${endpoint}/`,
@@ -53,49 +40,5 @@ export function useActivities(
 
             return response.data;
         },
-        refetchOnMount: true,
-        refetchOnReconnect: true,
-        refetchOnWindowFocus: false,
     });
-
-    // const { data, error, isPending } = useQuery<Activity[]>({
-    //     queryKey: [
-    //         "activities",
-    //         endpoint,
-    //         searchName,
-    //         selectedRoom,
-    //         selectedSite,
-    //         startDateISO,
-    //         endDateISO,
-    //     ],
-    //     queryFn: async () => {
-    //         const response = await axios.get(
-    //             `${API_BASE_URL}/activities/${endpoint}/`,
-    //             {
-    //                 params: {
-    //                     name: searchName,
-    //                     room: selectedRoom,
-    //                     site: selectedSite,
-    //                     // eslint-disable-next-line camelcase
-    //                     date_start: startDateISO,
-    //                     // eslint-disable-next-line camelcase
-    //                     date_end: endDateISO,
-    //                 },
-    //             },
-    //         );
-    //         // return response.data;
-    //         if (endpoint === "activity") {
-    //             setAllActivities(response.data);
-    //         }
-    //         if (endpoint === "attends") {
-    //             setAllRegisteredActivities(response.data);
-    //         }
-    //         return response.data;
-    //     },
-    //     refetchOnMount: true,
-    //     refetchOnReconnect: true,
-    //     refetchOnWindowFocus: false,
-    // });
-    //
-    // return { allActivities, allRegisteredActivities, data, isPending, error };
 }

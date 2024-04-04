@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import styles from "@/styles/global";
 import FilterWorkshop from "@/components/FilterActivity";
-//import { Message } from "@/types/Message";
 import { useAuth } from "@/context/auth";
 import { useTranslation } from "react-i18next";
 import axiosConfig from "@/constants/axiosConfig";
@@ -18,7 +17,7 @@ interface Message {
     to_user: string;
 }
 
-export default function accueil() {
+export default function index() {
     const { t } = useTranslation();
     const [allMessages, setAllMessages] = useState([]);
     const { user, showLoginToast, showRegisterToast } = useAuth();

@@ -1,16 +1,12 @@
+from database.models import User
 from django.contrib.auth import login, logout
 from rest_framework import status, permissions
 from rest_framework import viewsets
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Activity, Attend, User, Room, Site
-from .serializers import UserRegistrationSerializer, UserSerializer, ActivitySerializer, \
-    AttendSerializer, RegisterToActivityserializer, UserLoginSerializer, UpdateUserSerializer
-from .serializers import ActivitySerializer, AttendSerializer, SiteSerializer, UserRegistrationSerializer, \
-    UserLoginSerializer, UserSerializer, \
-    RegisterToActivityserializer, RoomSerializer
+from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSerializer, UpdateUserSerializer
 from .validations import custom_validation, validate_username, validate_password
 
 
@@ -68,45 +64,3 @@ class UpdateProfileView(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = UpdateUserSerializer
-
-
-class ActivityViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.AllowAny,)
-    queryset = Activity.objects.all()
-    serializer_class = ActivitySerializer
-
-
-class AttendViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsAuthenticated,)
-    serializer_class = AttendSerializer
-
-    # garder uniquement les activités de l'utilisateur connecté
-    def get_queryset(self):
-        user_id = self.request.user.id
-        return Attend.objects.filter(student_id=user_id)
-
-
-class RegisterToActivityView(viewsets.ModelViewSet):
-    permission_classes = (permissions.AllowAny,)
-    authentication_classes = (TokenAuthentication,)
-    queryset = Attend.objects.all()
-    serializer_class = RegisterToActivityserializer
-
-
-class RoomViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.AllowAny,)
-    queryset = Room.objects.all()
-    serializer_class = RoomSerializer
-
-    def get_queryset(self):
-        qs = Room.objects.all()
-        site = self.request.query_params.get('site')
-        if site and site.isdigit():
-            qs = qs.filter(site_id=int(site))
-        return qs
-
-
-class SiteViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.AllowAny,)
-    queryset = Site.objects.all()
-    serializer_class = SiteSerializer

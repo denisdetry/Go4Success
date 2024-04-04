@@ -1,7 +1,7 @@
 import { ScrollView, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import styles from "@/styles/global";
-import Button from "@/components/Button";
+import Button from "@/components/ButtonComponent";
 import { useAuth } from "@/context/auth";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -27,7 +27,7 @@ export default function login() {
         resolver: yupResolver(schema),
         defaultValues: {
             username: "artak",
-            password: "azerty123",
+            password: "Azerty123_",
         },
     });
 

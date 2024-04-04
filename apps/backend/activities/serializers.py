@@ -1,7 +1,5 @@
-from api.models import Activity, Site, Room
+from database.models import Activity, Attend, Site, Room, Course
 from rest_framework import serializers
-
-from api.models import Activity, Attend, Course, Site, Room
 
 
 class RoomSerializer(serializers.ModelSerializer):
@@ -28,7 +26,6 @@ class ActivitySerializer(serializers.ModelSerializer):
                   'date_end', 'room', 'course')
 
     # Méthode pour personnaliser la représentation du champ activity_room
-
     def get_room(self, obj):
         if obj.room:
             return f"{obj.room.name} - {obj.room.site.name}"
@@ -54,7 +51,7 @@ class SiteSerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 
-class RoomSerializer(serializers.ModelSerializer):
+class RegisterToActivitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Room
-        fields = ('id', 'name', 'site')
+        model = Attend
+        fields = ('activity', 'student')

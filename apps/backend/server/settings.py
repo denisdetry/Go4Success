@@ -42,9 +42,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "api",
-    "activities",
     "rest_framework",
+    "authentification",
+    "database",
+    "activities",
     "corsheaders",
 ]
 
@@ -135,7 +136,7 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "api.User"
+AUTH_USER_MODEL = "database.User"
 
 CORS_ORIGINS_ALLOW_ALL = False
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8081"]

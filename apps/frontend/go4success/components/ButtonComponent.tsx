@@ -1,8 +1,8 @@
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import Colors from "../constants/Colors";
 
-type ButtonComponentrops = {
+type ButtonComponentProps = {
     readonly text: string;
     readonly onPress: () => void;
     readonly buttonType:
@@ -15,7 +15,7 @@ type ButtonComponentrops = {
         | "filter";
 };
 
-const ButtonComponent: React.FC<ButtonComponentrops> = ({
+const ButtonComponent: React.FC<ButtonComponentProps> = ({
     text,
     onPress,
     buttonType,

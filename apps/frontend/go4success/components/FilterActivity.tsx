@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Modal, StyleSheet, Text, TextInput, View } from "react-native";
 import Card from "./Card";
-import ButtonComponent from "./Button";
+import ButtonComponent from "./ButtonComponent";
 import Colors from "../constants/Colors";
 import stylesGlobal from "../styles/global";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";

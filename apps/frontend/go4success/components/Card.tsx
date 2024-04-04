@@ -8,12 +8,13 @@ import {
     View,
 } from "react-native";
 import Colors from "../constants/Colors";
-import ButtonComponent from "./Button";
+import ButtonComponent from "./ButtonComponent";
 import axios from "axios";
 import { useAuth } from "@/context/auth";
 import Toast from "react-native-toast-message";
 import { isMobile } from "@/constants/screensWidth";
 import axiosConfig from "@/constants/axiosConfig";
+import { API_BASE_URL } from "@/constants/ConfigApp";
 import { queryClient } from "@/app/_layout";
 
 axiosConfig();
@@ -128,11 +129,10 @@ const Card: React.FC<CardProps> = ({
     description,
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
-
     const { user } = useAuth();
     const handleRegister = () => {
         axios
-            .post("http://localhost:8000/api/register_activity/", {
+            .post(`${API_BASE_URL}/activities/register_activity/`, {
                 activity: id,
                 student: user.id,
             })

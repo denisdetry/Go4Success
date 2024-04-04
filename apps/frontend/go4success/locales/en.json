@@ -1,29 +1,29 @@
 {
-    "translation": {
-        "hello": "Hello ",
-        "welcome": "Welcome to Go4Sucess",
-        "message": "My messages",
-        "noMessage": "You have no messages",
-        "workshopAttend": "Registered workshops",
-        "noWorkshopAttend": "You are not registered for any workshop",
-        "workshopAll": "Available workshops",
-        "noWorkshopAll": "No workshops available",
-        "calendar": "My calendar"
-    },
-    "translationMenu": {
-        "home": "Home",
-        "profil": "My profile",
-        "calendar": "My calendar",
-        "disconnect": "Disconnecting"
-    },
-    "translationButton": {
-        "OpenFilter": "Open Filter",
-        "CloseFilter": "Close Filter",
-        "SaveFilter": "Save filter",
-        "ClearFilter": "Clear filter",
-        "SelectSite": "Select a site",
-        "SelectRoom": "Select a room",
-        "ClearDates": "Clear dates",
-        "SearchTitleWorkshop": "Search title Workshop"
-    }
+  "translation": {
+    "hello": "Hello ",
+    "welcome": "Welcome to Go4Sucess",
+    "message": "My messages",
+    "noMessage": "You have no messages",
+    "workshopAttend": "Registered workshops",
+    "noWorkshopAttend": "You are not registered for any workshop",
+    "workshopAll": "Available workshops",
+    "noWorkshopAll": "No workshops available",
+    "calendar": "My calendar"
+  },
+  "translationMenu": {
+    "home": "Home",
+    "profil": "My profile",
+    "calendar": "My calendar",
+    "disconnect": "Log out"
+  },
+  "translationButton": {
+    "OpenFilter": "Open Filter",
+    "CloseFilter": "Close Filter",
+    "SaveFilter": "Save filter",
+    "ClearFilter": "Clear filter",
+    "SelectSite": "Select a site",
+    "SelectRoom": "Select a room",
+    "ClearDates": "Clear dates",
+    "SearchTitleWorkshop": "Search title Workshop"
+  }
 }

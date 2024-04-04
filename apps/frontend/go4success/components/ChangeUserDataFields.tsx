@@ -7,7 +7,8 @@ import axios from "axios";
 import { useAuth } from "@/context/auth";
 import Toast from "react-native-toast-message";
 import axiosConfig from "@/constants/axiosConfig";
-import UserProfileModal from "@/components/UserProfileModal";
+import UserProfileModal from "@/components/modals/UserProfileModal";
+import { API_BASE_URL } from "@/constants/ConfigApp";
 
 axiosConfig();
 
@@ -36,7 +37,7 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
         data[dataKey] = newData;
 
         axios
-            .patch("http://localhost:8000/api/user_profile/" + user.id + "/", data)
+            .patch(`${API_BASE_URL}/auth/user_profile/` + user.id + "/", data)
             .then(() => {
                 Toast.show({
                     type: "success",
@@ -47,6 +48,7 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
                 switchEdit();
             })
             .catch((err) => {
+                console.log(err);
                 const error = err.response.data[dataKey] || "Une erreur est survenue";
                 Toast.show({
                     type: "error",

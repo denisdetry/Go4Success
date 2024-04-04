@@ -1,6 +1,6 @@
 // import Button from "@/components/Button";
 import { ScrollView, Text, TextInput, View } from "react-native";
-import Button from "@/components/Button";
+import Button from "@/components/ButtonComponent";
 import React, { useState } from "react";
 import styles from "@/styles/global";
 import { useAuth } from "@/context/auth";

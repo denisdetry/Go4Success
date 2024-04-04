@@ -3,7 +3,9 @@ import React from "react";
 import styles from "@/styles/global";
 import { useAuth } from "@/context/auth";
 import ChangeUserDataFields from "@/components/ChangeUserDataFields";
-import Button from "@/components/Button";
+import Button from "@/components/ButtonComponent";
+
+import profilePicture from "@/assets/images/profile-picture.jpg";
 
 export default function profile() {
     const { user } = useAuth();
@@ -23,7 +25,7 @@ export default function profile() {
                 >
                     <View>
                         <Image
-                            source={require("@/assets/images/profile-picture.jpg")}
+                            source={profilePicture}
                             style={{
                                 borderRadius: 200,
                                 borderWidth: 0.5,

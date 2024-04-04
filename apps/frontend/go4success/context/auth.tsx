@@ -5,6 +5,7 @@ import Toast from "react-native-toast-message";
 import { UserRegister } from "@/types/UserRegister";
 import { UserLogin } from "@/types/UserLogin";
 import axiosConfig from "@/constants/axiosConfig";
+import { API_BASE_URL } from "@/constants/ConfigApp";
 
 axiosConfig();
 
@@ -24,7 +25,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
     const refreshUser = () => {
         axios
-            .get("http://localhost:8000/api/current_user/")
+            .get(`${API_BASE_URL}/auth/current_user/`)
             .then((res) => {
                 setUser(res.data);
             })
@@ -55,7 +56,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                 signUp: (userData: UserRegister) => {
                     {
                         axios
-                            .post("http://localhost:8000/api/register/", {
+                            .post(`${API_BASE_URL}/auth/register/`, {
                                 username: userData.username,
                                 email: userData.email,
                                 // eslint-disable-next-line camelcase
@@ -88,7 +89,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                 },
                 signIn: (userData: UserLogin) => {
                     axios
-                        .post("http://localhost:8000/api/login/", {
+                        .post(`${API_BASE_URL}/auth/login/`, {
                             username: userData.username,
                             password: userData.password,
                         })
@@ -117,7 +118,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
                 signOut: () => {
                     axios
-                        .post("http://localhost:8000/api/logout/")
+                        .post(`${API_BASE_URL}/auth/logout/`)
                         .then(() => {
                             setUser("");
                             setIsSignedOut(true);

@@ -1,7 +1,7 @@
 import { Modal, Text, View } from "react-native";
 import Colors from "@/constants/Colors";
 import styles from "@/styles/global";
-import Button from "@/components/Button";
+import Button from "@/components/ButtonComponent";
 import React from "react";
 
 const UserProfileModal = ({

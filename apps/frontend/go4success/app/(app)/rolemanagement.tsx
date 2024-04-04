@@ -1,123 +1,101 @@
 import React, { useState ,useEffect} from 'react';
-import { View, Text, FlatList, Picker, TouchableOpacity} from 'react-native';
+import { View, Text, FlatList, Picker, TouchableOpacity, ScrollView,  TextInput} from 'react-native';
 import axios from 'axios';
-import { useRole } from "@/context/rolemanagement";
+import { useAuth } from "@/context/auth";
+import styles from "@/styles/global";
 
 export default function RoleManagement() {
 
-
-  
-  const [selectedValues, setSelectedValues] = useState({});
-  const [backdata,setData] = useState(null);
-  const [item,setItem] = useState();
-
-  //const {manageRole} = useRole();
-
-  const items = [];
+  const {getUserInfo,getUserRole} = useAuth();
+  const [userInfo, setUserInfo] = useState();
+  const [userRole, setUserRole] = useState();
 
 
+    useEffect(() => {
+    const fetchUserData = async () => {
+      const userInfoData = await getUserInfo();
+      const userRoleData = await getUserRole();
+      setUserInfo(userInfoData);
+      setUserRole(userRoleData);
+    };
 
-
-
-  
-
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('http://127.0.0.1:8000/api/rolemanagement/');
-      setData(response.data);
-    } catch (error) {
-      console.error('Erreur lors de la récupération des données:', error);
-      // Gérer les erreurs
-    }
-  };
-
-
-
-
-
-  const addItem = (newItem) =>{
-
-    const newItems = items.concat(newItem);
-    setItem(newItems);
-
-  };
-
-
-
-  const data = [
-    { id: 1, nom: 'Jean Dupond', valeur: 'administrateur' },
-    { id: 2, nom: 'Tintin', valeur: 'étudiant' },
-    { id: 3, nom: 'Beta', valeur: 'tuteur' },
-    // Ajoutez autant d'éléments que nécessaire
-  ];
-
-
-
-  const handleValueChange = (itemValue, itemId) => {
-    setSelectedValues({
-      ...selectedValues,
-      [itemId]: itemValue
-    });
-    console.log(`L'état de l'élément ${itemId} est :`, itemValue);
-  };
-
-
-  const sendDataToBackend = () => {
-    axios.post('http://127.0.0.1:8000/api/rolemanagement/', selectedValues)
-      .then(response => {
-        console.log('Réponse du serveur:', response.data);
-        // Gérer la réponse si nécessaire
-      })
-      .catch(error => {
-        console.error('Erreur lors de l\'envoi des données au backend:', error);
-        // Gérer les erreurs
-      });
-  };
+    fetchUserData();
+    }, []); 
 
 
   
-  const renderItem = ({ item }) => (
-    <View style={{ flexDirection: 'row', padding: 10 }}>
-      <Text style={{ flex: 1 }}>{item.nom}</Text>
-      <View style={{ flex: 1 }}>
-        <Picker
-          selectedValue={item.valeur}
-          onValueChange={(itemValue, itemIndex) =>
-           
-          handleValueChange(itemValue, item.id)
-           
-           
-          }>
-          <Picker.Item label="Étudiant" value="étudiant" />
-          <Picker.Item label="Tuteur" value="tuteur" />
-          <Picker.Item label="Professeur" value="professeur" />
-          <Picker.Item label="Administrateur" value="administrateur" />
-
-        </Picker>
-
-        <TouchableOpacity onPress={sendDataToBackend} style={{ backgroundColor: 'blue', padding: 10 }}>
-            <Text style={{ color: 'white', textAlign: 'center' }}>sauvegarder </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+  console.log(userInfo);
+  //let info = makeRole(userInfo, userRole);
 
 
 
-  return (
-    <View>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
-      />
-
-    </View>
-  );
 };
+
+
+
+
+function makeRole(userInfo,userRole){
+
+      let listOfRole = [];
+      let jsonToPush = {};
+      
+
+      for(let i=0;i < userInfo.length; i++){
+
+        for(let j=0; j < userRole.length;j++){
+   
+          if(userInfo[i].id == userRole[j].id){
+
+            if(userRole[j].is_tutor == false){
+
+                jsonToPush = {
+
+                  id:userInfo[i].id,
+                  lastname:userInfo[i].last_name,
+                  firstname:userInfo[i].first_name,
+                  role:"professor"
+
+                }
+            
+            }
+
+            else {
+
+                jsonToPush = {
+
+                  id:userInfo[i].id,
+                  lastname:userInfo[i].last_name,
+                  firstname:userInfo[i].first_name,
+                  role:"tutor"
+
+                }
+
+
+            }
+                   
+
+        }
+        else{
+          jsonToPush = {
+
+            id:userInfo[i].id,
+            lastname:userInfo[i].last_name,
+            firstname:userInfo[i].first_name,
+            role:"student"
+
+          }
+        }
+
+        
+
+      }
+
+      listOfRole.push(jsonToPush);
+    
+    
+    }
+  
+  
+    return listOfRole;
+  
+  }

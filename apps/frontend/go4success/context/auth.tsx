@@ -40,6 +40,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         }
     }, [user, rootSegment]);
 
+
     return (
         <AuthContext.Provider
             value={{
@@ -120,6 +121,33 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             console.log(err);
                         });
                 },
+            
+                getUserInfo: () => {
+                    
+                    axios
+                        .get("http://localhost:8000/api/rolemanagement/")    
+                        .then((res) => {
+                            console.log(res);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                        
+                },
+
+                getUserRole: () =>{
+                        axios
+                        .get("http://localhost:8000/api/editRole/")    
+                        .then((res) => {
+                            console.log(res);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                        
+                }
+
+
             }}
         >
             {children}

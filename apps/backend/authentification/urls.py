@@ -3,14 +3,11 @@ from django.urls import path, include
 from rest_framework import routers
 
 from . import views
+from .views import UpdateProfileView
 
 router = routers.DefaultRouter()
 
-router.register(r'register_activity',
-                views.RegisterToActivityView, "register_activity")
-router.register(r'room', views.RoomViewSet, "room")
-router.register(r'site', views.SiteViewSet, "site")
-
+router.register(r'user_profile', UpdateProfileView, "user_profile")
 
 urlpatterns = [
     path('register/', views.UserRegisterView.as_view(), name='register'),

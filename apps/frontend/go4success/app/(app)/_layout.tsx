@@ -9,36 +9,49 @@ import {
     DrawerItem,
     DrawerItemList,
 } from "@react-navigation/drawer";
-import { Image, TouchableOpacity, View } from "react-native";
+
+import { Image, Platform, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
+
+import profilePicture from "@/assets/images/profile-picture.jpg";
 
 function customDrawerContent(props: any) {
     const router = useRouter();
+    const { t } = useTranslation();
     const { signOut } = useAuth();
+
     return (
-        <DrawerContentScrollView {...props} scrollEnabled={false}>
-            <TouchableOpacity
-                style={{ padding: 20 }}
-                onPress={() => router.push("/profile")}
-            >
-                <Image
-                    source={require("@/assets/images/adaptive-icon.png")}
-                    style={{
-                        width: 100,
-                        height: 100,
-                        resizeMode: "contain",
-                        alignSelf: "center",
-                    }}
-                />
-            </TouchableOpacity>
-            <DrawerItemList {...props} />
-            <DrawerItem label={"Se déconnecter"} onPress={signOut} />
-        </DrawerContentScrollView>
+        <>
+            <DrawerContentScrollView {...props} scrollEnabled={false}>
+                <TouchableOpacity
+                    style={{ padding: 20 }}
+                    onPress={() => router.push("/profile")}
+                >
+                    <Image
+                        source={profilePicture}
+                        style={{
+                            borderRadius: 100,
+                            borderWidth: 0.5,
+                            width: 100,
+                            height: 100,
+                            resizeMode: "contain",
+                            alignSelf: "center",
+                        }}
+                    />
+                </TouchableOpacity>
+                <DrawerItemList {...props} />
+                <DrawerItem label={t("translationMenu.disconnect")} onPress={signOut} />
+            </DrawerContentScrollView>
+            {Platform.OS === "web" && <LanguageSwitcher />}
+        </>
     );
 }
 
 export default function Layout() {
     const router = useRouter();
+    const { t } = useTranslation();
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <Drawer
@@ -52,16 +65,27 @@ export default function Layout() {
                         backgroundColor: Colors.primaryColor,
                     },
                     headerTintColor: "#fff",
+                    headerTitleStyle: {
+                        display: "none",
+                    },
                     headerRight: () => (
                         <>
                             <View
                                 style={{
                                     flexDirection: "row",
-                                    gap: 15,
+                                    gap: 5,
                                     marginRight: 20,
                                     alignItems: "center",
                                 }}
                             >
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        router.push("/");
+                                    }}
+                                >
+                                    <Ionicons name="home" size={24} color="#fff" />
+                                </TouchableOpacity>
+
                                 <TouchableOpacity
                                     onPress={() => {
                                         console.log("Open notifications");
@@ -76,7 +100,6 @@ export default function Layout() {
 
                                 <TouchableOpacity
                                     onPress={() => {
-                                        console.log("Open Calendar");
                                         router.push("/calendar");
                                     }}
                                 >
@@ -85,13 +108,14 @@ export default function Layout() {
 
                                 <TouchableOpacity
                                     onPress={() => {
-                                        console.log("Open profile");
                                         router.push("/profile");
                                     }}
                                 >
                                     <Image
-                                        source={require("@/assets/images/adaptive-icon.png")}
+                                        source={profilePicture}
                                         style={{
+                                            borderRadius: 50,
+                                            marginLeft: 10,
                                             width: 50,
                                             height: 50,
                                             resizeMode: "contain",
@@ -107,7 +131,7 @@ export default function Layout() {
                 <Drawer.Screen
                     name="index"
                     options={{
-                        drawerLabel: "Accueil",
+                        drawerLabel: t("translationMenu.home"),
                         headerTitle: "Go4success",
                         drawerIcon: ({ size, color }) => (
                             <Ionicons name="home-outline" size={size} color={color} />
@@ -118,8 +142,8 @@ export default function Layout() {
                 <Drawer.Screen
                     name="profile"
                     options={{
-                        drawerLabel: "Mon profil",
-                        headerTitle: "Mon profil",
+                        drawerLabel: t("translationMenu.profil"),
+                        headerTitle: t("translationMenu.profil"),
                         drawerIcon: ({ size, color }) => (
                             <FontAwesome name="user-circle" size={size} color={color} />
                         ),
@@ -129,8 +153,8 @@ export default function Layout() {
                 <Drawer.Screen
                     name="calendar"
                     options={{
-                        drawerLabel: "Mon calendrier",
-                        headerTitle: "Mon calendrier",
+                        drawerLabel: t("translationMenu.calendar"),
+                        headerTitle: t("translationMenu.calendar"),
                         drawerIcon: ({ size, color }) => (
                             <Ionicons name="calendar" size={size} color={color} />
                         ),

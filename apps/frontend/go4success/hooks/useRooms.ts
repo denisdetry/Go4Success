@@ -18,15 +18,14 @@ export function useRooms(siteId: string | undefined, sites: SelectItem[]) {
         queryKey: ["rooms", siteId],
         queryFn: async () => {
             const response = await axios.get(
-                `${API_BASE_URL}/workshops/rooms/` + (siteId ? `site/${siteId}/` : ""),
+                `${API_BASE_URL}/activities/rooms/` + (siteId ? `site/${siteId}/` : ""),
             );
-            console.log("siteId", siteId);
             return response.data.map((room: Room) => ({
-                key: room.id,
-                value:
+                label:
                     room.name +
                     " - " +
-                    sites.find((site) => site.key === room.site)?.value,
+                    sites.find((site) => site.value === room.site)?.label,
+                value: room.id,
             }));
         },
         enabled: sites.length > 0,

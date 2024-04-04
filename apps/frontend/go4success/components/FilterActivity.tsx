@@ -1,39 +1,34 @@
 import React, { useCallback, useState } from "react";
-import {
-    ActivityIndicator,
-    Modal,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
-} from "react-native";
-import Card from "../components/Card";
-import ButtonComponent from "../components/Button";
+import { Modal, StyleSheet, Text, TextInput, View } from "react-native";
+import Card from "./Card";
+import ButtonComponent from "./ButtonComponent";
 import Colors from "../constants/Colors";
-import { FlatList } from "react-native-gesture-handler";
 import stylesGlobal from "../styles/global";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
-import SelectSearch, { SelectItem } from "../components/SelectSearch";
+import SelectSearch, { SelectItem } from "./SelectSearch";
 import dayjs from "dayjs";
 import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
 import { ItemType } from "react-native-dropdown-picker";
-import { useWorkshops, Workshop } from "@/hooks/useWorkshops";
+import { Activity, useActivities } from "@/hooks/useActivities";
+import { useTranslation } from "react-i18next";
+import RenderCarousel from "@/components/RenderCarousel";
 
 interface Attend {
-    activity: Workshop;
-    student_id: string;
+    activity: Activity;
+    studentId: string;
 }
 
 interface FilterActivityProps {
     readonly filterType: "activity" | "attend";
 }
 
-type ActivityOrAttend = Workshop | Attend;
+type ActivityOrAttend = Activity | Attend;
 
 const FilterActivity = ({ filterType }: FilterActivityProps) => {
+    const { t } = useTranslation();
+    const [siteOpen, setSiteOpen] = React.useState(false);
+    const [roomOpen, setRoomOpen] = React.useState(false);
     const [searchName, setSearchName] = useState("");
     const [selectedRoom, setSelectedRoom] = useState<SelectItem>();
     const [selectedSite, setSelectedSite] = useState<SelectItem>();
@@ -43,16 +38,11 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         endDate: DateType;
     }>({ startDate: undefined, endDate: undefined });
 
-    const { isPending: isPendingSite, sites, error: siteError } = useSites();
-    const allSites = [{ key: "", value: "All" }, ...sites];
+    const { sites, error: siteError } = useSites();
+    const allSites = [{ label: "All", value: "" }, ...sites];
 
-    const {
-        isPending: isPendingRoom,
-        rooms,
-        error: roomError,
-    } = useRooms(selectedSite?.value, sites);
-
-    const allRooms = [{ key: "", value: "All" }, ...rooms];
+    const { rooms, error: roomError } = useRooms(selectedSite?.value, sites);
+    const allRooms = [{ label: "All", value: "" }, ...rooms];
 
     const onChange = useCallback(
         (range: { startDate: DateType; endDate: DateType }) => {
@@ -60,7 +50,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         },
         [],
     );
-
     const convertDateToISO = (date: DateType): string | null => {
         if (date instanceof Date) {
             return date.toISOString().split("T")[0];
@@ -75,58 +64,37 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         }
     };
 
-    const startDateISO = convertDateToISO(range.startDate);
-    const endDateISO = convertDateToISO(range.endDate);
-
-    const {
-        isPending: isPendingAttend,
-        data: registeredActivities,
-        error: attendError,
-    } = useWorkshops(
+    const { data: registeredActivities } = useActivities(
         "attends",
         searchName,
         selectedRoom?.value,
         selectedSite?.value,
-        startDateISO,
-        endDateISO,
+        convertDateToISO(range.startDate),
+        convertDateToISO(range.endDate),
     );
 
-    const {
-        isPending: isPendingActivity,
-        data: allActivities,
-        error: activityError,
-    } = useWorkshops(
+    const { data: allActivities } = useActivities(
         "activity",
         searchName,
         selectedRoom?.value,
         selectedSite?.value,
-        startDateISO,
-        endDateISO,
+        convertDateToISO(range.startDate),
+        convertDateToISO(range.endDate),
     );
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         const activity = "activity" in item ? item.activity : item;
+        const siteName = sites.find((site) => site.value === activity.room.site)?.label;
 
-        return Platform.OS === "web" ? (
+        return (
             <Card
                 id={activity.id}
                 title={activity.name}
-                location={activity.room.name}
+                location={activity.room.name + " - " + siteName}
                 date={activity.date_start}
                 type={activity.type}
                 description={activity.description}
             />
-        ) : (
-            <View style={stylesGlobal.containerCard}>
-                <Card
-                    id={activity.id}
-                    title={activity.name}
-                    location={activity.room.name}
-                    date={activity.date_start}
-                    type={activity.type}
-                    description={activity.description}
-                />
-            </View>
         );
     };
 
@@ -141,24 +109,39 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     };
 
     if (siteError) {
-        return <View> Error: {siteError.message} </View>;
+        return (
+            <View>
+                <Text> Error: {siteError.message} </Text>
+            </View>
+        );
     }
 
     if (roomError) {
-        return <View> Error: {roomError.message} </View>;
+        return (
+            <View>
+                <Text> Error: {roomError.message} </Text>
+            </View>
+        );
     }
 
-    if (isPendingSite || isPendingRoom) {
-        return <ActivityIndicator />;
-    }
+    const handleClearFilter = () => {
+        setSearchName("");
+        setSelectedRoom(undefined);
+        setSelectedSite(undefined);
+        setRange({ startDate: null, endDate: null });
+    };
 
     return (
-        <ScrollView>
-            <ButtonComponent
-                text="Open Filter"
-                onPress={toggleModal}
-                buttonType={"filter"}
-            />
+        <>
+            <View style={{ width: "100%", justifyContent: "flex-start" }}>
+                <ButtonComponent
+                    text={t("translationButton.OpenFilter")}
+                    onPress={toggleModal}
+                    buttonType={"filter"}
+                />
+            </View>
+
+            {/* Modal view */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -171,83 +154,104 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                             style={stylesGlobal.inputLittle}
                             value={searchName}
                             onChangeText={(text: string) => setSearchName(text)}
-                            placeholder="Search title activity"
+                            placeholder={t("translationButton.SearchTitleWorkshop")}
                         />
 
                         <SelectSearch
+                            zIndex={100}
                             items={allSites}
-                            toSave={"key"}
-                            placeholder={"Select a site"}
-                            setSelected={(item) => {
+                            placeholder={t("translationButton.SelectSite")}
+                            searchable={true}
+                            onSelectItem={(item) => {
                                 setSelectedSite(item as Required<ItemType<string>>);
                             }}
+                            open={siteOpen}
+                            setOpen={setSiteOpen}
+                            value={selectedSite?.value ?? null}
                         />
+
+                        <View style={{ height: 10 }} />
 
                         <SelectSearch
+                            zIndex={99}
                             items={allRooms}
-                            toSave={"key"}
-                            placeholder={"Select a site"}
-                            setSelected={(item) => {
+                            placeholder={t("translationButton.SelectRoom")}
+                            searchable={true}
+                            onSelectItem={(item) => {
                                 setSelectedRoom(item as Required<ItemType<string>>);
                             }}
+                            open={roomOpen}
+                            setOpen={setRoomOpen}
+                            value={selectedRoom?.value ?? null}
                         />
 
-                        <View style={stylesGlobal.containerDatePicker}>
-                            <DateTimePicker
-                                mode="range"
-                                locale="fr"
-                                startDate={range.startDate}
-                                endDate={range.endDate}
-                                onChange={onChange}
-                                selectedItemColor={Colors.primaryColor}
-                                headerContainerStyle={{ backgroundColor: "white" }}
-                                headerTextStyle={{ color: Colors.thirdColor }}
+                        <View
+                            style={{ flexDirection: "column", alignItems: "flex-end" }}
+                        >
+                            <View style={stylesGlobal.containerDatePicker}>
+                                <DateTimePicker
+                                    mode="range"
+                                    locale="fr"
+                                    startDate={range.startDate}
+                                    endDate={range.endDate}
+                                    onChange={onChange}
+                                    selectedItemColor={Colors.primaryColor}
+                                    headerContainerStyle={{ backgroundColor: "white" }}
+                                    headerTextStyle={{ color: Colors.thirdColor }}
+                                />
+                            </View>
+                            <ButtonComponent
+                                text={t("translationButton.ClearDates")}
+                                onPress={handleClearDates}
+                                buttonType={"clear"}
+                            />
+                        </View>
+
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <ButtonComponent
+                                text={t("translationButton.ClearFilter")}
+                                onPress={handleClearFilter}
+                                buttonType={"close"}
                             />
                             <ButtonComponent
-                                text="Clear dates"
-                                onPress={handleClearDates}
+                                text={t("translationButton.SaveFilter")}
+                                onPress={toggleModal}
                                 buttonType={"secondary"}
                             />
                         </View>
-                        <ButtonComponent
-                            text="Close Filter"
-                            onPress={toggleModal}
-                            buttonType={"close"}
-                        />
                     </View>
                 </View>
             </Modal>
 
+            {/* Cards views for registered activity or filtered */}
             {filterType === "attend" &&
                 (registeredActivities !== undefined &&
                 registeredActivities.length > 0 ? (
-                    <FlatList
-                        contentContainerStyle={stylesGlobal.containerCard}
+                    <RenderCarousel
                         data={registeredActivities}
                         renderItem={renderCards}
-                        horizontal
-                        pagingEnabled
-                        showsHorizontalScrollIndicator={false}
                     />
                 ) : (
-                    <Text style={styles.noDataText}>
-                        Vous n'êtes inscrit à aucun atelier.
+                    <Text style={stylesGlobal.text}>
+                        {t("translation.noWorkshopAttend")}
                     </Text>
                 ))}
+
+            {/* Cards views for all activity or filtered */}
             {filterType === "activity" &&
                 (allActivities !== undefined && allActivities.length > 0 ? (
-                    <FlatList
-                        contentContainerStyle={stylesGlobal.containerCard}
-                        data={allActivities}
-                        renderItem={renderCards}
-                        horizontal
-                        pagingEnabled
-                        showsHorizontalScrollIndicator={false}
-                    />
+                    <RenderCarousel data={allActivities} renderItem={renderCards} />
                 ) : (
-                    <Text style={styles.noDataText}>Aucun atelier disponible.</Text>
+                    <Text style={stylesGlobal.text}>
+                        {t("translation.noWorkshopAll")}
+                    </Text>
                 ))}
-        </ScrollView>
+        </>
     );
 };
 

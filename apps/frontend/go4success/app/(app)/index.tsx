@@ -1,16 +1,13 @@
 import { ScrollView, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
-import axios from "axios";
 import styles from "@/styles/global";
-import FilterActivity from "@/components/FilterActivity";
-//import { Message } from "@/types/Message";
+import FilterWorkshop from "@/components/FilterActivity";
 import { useAuth } from "@/context/auth";
+import { useTranslation } from "react-i18next";
+import axiosConfig from "@/constants/axiosConfig";
 
-// Set the default values for axios
-axios.defaults.withCredentials = true;
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-axios.defaults.xsrfCookieName = "csrftoken";
+axiosConfig();
 
 interface Message {
     id: string;
@@ -20,32 +17,41 @@ interface Message {
     to_user: string;
 }
 
-export default function accueil() {
+export default function index() {
+    const { t } = useTranslation();
     const [allMessages, setAllMessages] = useState([]);
-    const { user } = useAuth();
+    const { user, showLoginToast, showRegisterToast } = useAuth();
+
+    showLoginToast();
+    showRegisterToast();
 
     const renderMessages = ({ item }: { item: Message }) => {
         return <Text> {item.content}</Text>;
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.mainContainer}>
-            <View
-                style={{
-                    width: "90%",
-                    alignContent: "flex-start",
-                    margin: 20,
-                    padding: 10,
-                }}
-            >
-                <Text style={[styles.title, { marginBottom: 0 }]}>
-                    Bonjour {user.first_name} ! 👋
-                </Text>
+        <ScrollView
+            scrollEnabled={true}
+            nestedScrollEnabled={true}
+            contentContainerStyle={styles.mainContainer}
+        >
+            <View style={styles.titleContainer}>
+                {user.first_name ? (
+                    <Text style={styles.titleNoPadding}>
+                        {t("translation.hello")}
+                        {user.first_name} ! 👋
+                    </Text>
+                ) : (
+                    <Text style={styles.titleNoPadding}>
+                        {t("translation.hello")}
+                        {user.username} ! 👋
+                    </Text>
+                )}
             </View>
 
             {/* Message container */}
             <View style={styles.container}>
-                <Text style={styles.title}>Mes messages</Text>
+                <Text style={styles.title}>{t("translation.message")}</Text>
 
                 {allMessages.length > 0 ? (
                     <FlatList
@@ -54,30 +60,27 @@ export default function accueil() {
                         renderItem={renderMessages}
                     />
                 ) : (
-                    <Text style={styles.text}> Vous n'avez pas de messages</Text>
+                    <Text style={styles.text}> {t("translation.noMessage")}</Text>
                 )}
             </View>
 
             {/* Registered Activities container */}
-
             <View style={styles.container}>
-                <Text style={styles.title}>Atelier inscrits</Text>
-                <ScrollView contentContainerStyle={styles.containerCard}>
-                    <FilterActivity filterType={"attend"}></FilterActivity>
-                </ScrollView>
+                <Text style={styles.titleNoPadding}>
+                    {t("translation.workshopAttend")}
+                </Text>
+                <FilterWorkshop filterType={"attend"}></FilterWorkshop>
             </View>
 
-            {/* All activities container */}
+            {/* All Activities container */}
             <View style={styles.container}>
-                <Text style={styles.title}>Ateliers disponibles</Text>
-                <ScrollView contentContainerStyle={styles.containerCard}>
-                    <FilterActivity filterType={"activity"}></FilterActivity>
-                </ScrollView>
+                <Text style={styles.titleNoPadding}>Ateliers disponibles</Text>
+                <FilterWorkshop filterType={"activity"}></FilterWorkshop>
             </View>
 
             {/* Calendar container */}
             <View style={styles.container}>
-                <Text style={styles.title}>Mon calendrier</Text>
+                <Text style={styles.title}>{t("translation.calendar")}</Text>
                 <Text style={styles.text}>Le calendrier est en construction...</Text>
             </View>
         </ScrollView>

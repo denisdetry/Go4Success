@@ -1,6 +1,6 @@
 // import Button from "@/components/Button";
 import { ScrollView, Text, TextInput, View } from "react-native";
-import Button from "@/components/Button";
+import Button from "@/components/ButtonComponent";
 import React, { useState } from "react";
 import styles from "@/styles/global";
 import { useAuth } from "@/context/auth";
@@ -9,6 +9,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+
+import { UserRegister } from "@/types/UserRegister";
 
 const schema = yup.object().shape({
     email: yup
@@ -26,7 +28,6 @@ const schema = yup.object().shape({
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
             "Doit contenir 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial (ex: !@#$%^&*_)",
         ),
-
     passwordRetype: yup
         .string()
         .required("Veuillez confirmer votre mot de passe")
@@ -35,13 +36,15 @@ const schema = yup.object().shape({
             "Doit contenir 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial (ex: !@#$%^&*_)",
         )
         .equals([yup.ref("password")], "Les mots de passe doivent correspondre"),
-    lastname: yup.string().required("Veuillez entrer un nom de famille"),
-    firstname: yup.string().required("Veuillez entrer un prénom"),
+    lastName: yup.string().required("Veuillez entrer un nom de famille"),
+    firstName: yup.string().required("Veuillez entrer un prénom"),
     noma: yup
-        .number()
-        .typeError("Le noma est composé de chiffres uniquement")
-        .required("Veuillez entrer votre noma (exemple : 20200584)")
-        .min(8, "Le noma doit contenir 8 chiffres (Exemple: 20200574)"),
+        .string()
+        .matches(/^[0-9]{8}$/, {
+            message: "Le noma doit contenir exactement 8 chiffres.",
+            excludeEmptyString: true,
+        })
+        .required("Veuillez entrer votre noma (exemple : 20200584)"),
 });
 
 export default function register() {
@@ -58,22 +61,16 @@ export default function register() {
         defaultValues: {
             email: "",
             username: "",
-            lastname: "",
-            firstname: "",
+            lastName: "",
+            firstName: "",
+            noma: "",
             password: "",
             passwordRetype: "",
         },
     });
 
-    const onSubmit = (data: any) => {
-        signUp(
-            data.username,
-            data.email,
-            data.lastname,
-            data.firstname,
-            data.noma,
-            data.password,
-        );
+    const onSubmit = (userData: UserRegister) => {
+        signUp(userData);
     };
 
     return (
@@ -141,13 +138,13 @@ export default function register() {
                                 />
                             </View>
                         )}
-                        name="lastname"
+                        name="lastName"
                         defaultValue=""
                     />
 
                     {/*Error message for lastname field*/}
-                    {errors.lastname && (
-                        <Text style={styles.errorMsg}>{errors.lastname.message}</Text>
+                    {errors.lastName && (
+                        <Text style={styles.errorMsg}>{errors.lastName.message}</Text>
                     )}
 
                     {/* firstname field*/}
@@ -164,12 +161,12 @@ export default function register() {
                                 />
                             </View>
                         )}
-                        name="firstname"
+                        name="firstName"
                         defaultValue=""
                     />
                     {/*Error message for firstname field*/}
-                    {errors.firstname && (
-                        <Text style={styles.errorMsg}>{errors.firstname.message}</Text>
+                    {errors.firstName && (
+                        <Text style={styles.errorMsg}>{errors.firstName.message}</Text>
                     )}
 
                     {/*Noma field*/}
@@ -254,7 +251,7 @@ export default function register() {
                     {/*Error message for password retype field*/}
                     {errors.passwordRetype && (
                         <Text style={styles.errorMsg}>
-                            {errors.passwordRetype.message}
+                            {errors.passwordRetype?.message?.toString()}
                         </Text>
                     )}
 

@@ -1,0 +1,29 @@
+{
+    "translation": {
+        "hello": "Bonjour ",
+        "welcome": "Bienvenue sur Go4Sucess",
+        "message": "Mes messages",
+        "noMessage": "Vous n'avez pas de messages",
+        "workshopAttend": "Atelier inscrits",
+        "noWorkshopAttend": "Vous n'êtes inscrit à aucun atelier",
+        "workshopAll": "Atelier disponibles",
+        "noWorkshopAll": "Aucun atelier disponible",
+        "calendar": "Mon calendrier"
+    },
+    "translationMenu": {
+        "home": "Accueil",
+        "profil": "Mon profil",
+        "calendar": "Mon calendrier",
+        "disconnect": "Se déconnecter"
+    },
+    "translationButton": {
+        "OpenFilter": "Ouvrir filtre",
+        "CloseFilter": "Fermer filtre",
+        "SaveFilter": "Enregistrer un filtre",
+        "ClearFilter": "Effacer les filtres",
+        "SelectSite": "Sélectionner un site",
+        "SelectRoom": "Sélectionner une salle",
+        "ClearDates": "Effacer les dates",
+        "SearchTitleWorkshop": "Rechercher un atelier"
+    }
+}

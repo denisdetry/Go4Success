@@ -18,7 +18,7 @@ export function useAuth() {
 export function AuthProvider({ children }: React.PropsWithChildren) {
     const rootSegment = useSegments()[0];
     const router = useRouter();
-    const [user, setUser] = React.useState<string | undefined>("");
+    const [user, setUser] = React.useState<string | undefined>("a");
 
     React.useEffect(() => {
         axios
@@ -35,7 +35,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
         if (!user && rootSegment !== "(auth)") {
             router.replace("/(auth)/login");
-        } else if (user && rootSegment !== "(app)") {
+        } else if (user && rootSegment === "(auth)") {
             router.replace("/");
         }
     }, [user, rootSegment]);

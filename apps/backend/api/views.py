@@ -5,9 +5,10 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Activity, Attend
-from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSerializer, ActivitySerializer, \
-    AttendSerializer, RegisterToActivityserializer
+from .models import Attend, Room, Site, Activity
+from .serializers import ActivitySerializer, AttendSerializer, SiteSerializer, UserRegistrationSerializer, \
+    UserLoginSerializer, UserSerializer, \
+    RegisterToActivityserializer, RoomSerializer
 from .validations import custom_validation, validate_username, validate_password
 
 
@@ -86,3 +87,22 @@ class RegisterToActivityView(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     queryset = Attend.objects.all()
     serializer_class = RegisterToActivityserializer
+
+
+class RoomViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+
+    def get_queryset(self):
+        qs = Room.objects.all()
+        site = self.request.query_params.get('site')
+        if site and site.isdigit():
+            qs = qs.filter(site_id=int(site))
+        return qs
+
+
+class SiteViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Site.objects.all()
+    serializer_class = SiteSerializer

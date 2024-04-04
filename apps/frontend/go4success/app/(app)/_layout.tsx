@@ -11,34 +11,41 @@ import {
 } from "@react-navigation/drawer";
 import { Image, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 function customDrawerContent(props: any) {
     const router = useRouter();
+    const { t } = useTranslation();
     const { signOut } = useAuth();
     return (
-        <DrawerContentScrollView {...props} scrollEnabled={false}>
-            <TouchableOpacity
-                style={{ padding: 20 }}
-                onPress={() => router.push("/profile")}
-            >
-                <Image
-                    source={require("@/assets/images/adaptive-icon.png")}
-                    style={{
-                        width: 100,
-                        height: 100,
-                        resizeMode: "contain",
-                        alignSelf: "center",
-                    }}
-                />
-            </TouchableOpacity>
-            <DrawerItemList {...props} />
-            <DrawerItem label={"Se déconnecter"} onPress={signOut} />
-        </DrawerContentScrollView>
+        <>
+            <DrawerContentScrollView {...props} scrollEnabled={false}>
+                <TouchableOpacity
+                    style={{ padding: 20 }}
+                    onPress={() => router.push("/profile")}
+                >
+                    <Image
+                        source={require("@/assets/images/adaptive-icon.png")}
+                        style={{
+                            width: 100,
+                            height: 100,
+                            resizeMode: "contain",
+                            alignSelf: "center",
+                        }}
+                    />
+                </TouchableOpacity>
+                <DrawerItemList {...props} />
+                <DrawerItem label={t("translationMenu.disconnect")} onPress={signOut} />
+            </DrawerContentScrollView>
+            <LanguageSwitcher />
+        </>
     );
 }
 
 export default function Layout() {
     const router = useRouter();
+    const { t } = useTranslation();
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <Drawer
@@ -107,7 +114,7 @@ export default function Layout() {
                 <Drawer.Screen
                     name="index"
                     options={{
-                        drawerLabel: "Accueil",
+                        drawerLabel: t("translationMenu.home"),
                         headerTitle: "Go4success",
                         drawerIcon: ({ size, color }) => (
                             <Ionicons name="home-outline" size={size} color={color} />
@@ -118,8 +125,8 @@ export default function Layout() {
                 <Drawer.Screen
                     name="profile"
                     options={{
-                        drawerLabel: "Mon profil",
-                        headerTitle: "Mon profil",
+                        drawerLabel: t("translationMenu.profil"),
+                        headerTitle: t("translationMenu.profil"),
                         drawerIcon: ({ size, color }) => (
                             <FontAwesome name="user-circle" size={size} color={color} />
                         ),
@@ -129,8 +136,8 @@ export default function Layout() {
                 <Drawer.Screen
                     name="calendar"
                     options={{
-                        drawerLabel: "Mon calendrier",
-                        headerTitle: "Mon calendrier",
+                        drawerLabel: t("translationMenu.calendar"),
+                        headerTitle: t("translationMenu.calendar"),
                         drawerIcon: ({ size, color }) => (
                             <Ionicons name="calendar" size={size} color={color} />
                         ),

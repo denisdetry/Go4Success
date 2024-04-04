@@ -120,18 +120,22 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     };
 
     if (siteError) {
-        return <View> Error: {siteError.message} </View>;
+        return (
+            <View>
+                <Text> Error: {siteError.message} </Text>
+            </View>
+        );
     }
 
     if (roomError) {
-        return <View> Error: {roomError.message} </View>;
+        return (
+            <View>
+                <Text> Error: {roomError.message} </Text>
+            </View>
+        );
     }
 
-    if (isPendingSite) {
-        return <ActivityIndicator />;
-    }
-
-    if (isPendingRoom) {
+    if (isPendingSite || isPendingRoom) {
         return <ActivityIndicator />;
     }
 

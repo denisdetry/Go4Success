@@ -9,37 +9,43 @@ import {
     DrawerItem,
     DrawerItemList,
 } from "@react-navigation/drawer";
-import { Image, TouchableOpacity, View } from "react-native";
+
+import { Image, Platform, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
-import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
+
+import adaptativeIcon from "@/assets/images/adaptive-icon.png";
 
 function customDrawerContent(props: any) {
     const router = useRouter();
     const { t } = useTranslation();
     const { signOut } = useAuth();
+
     return (
-        <DrawerContentScrollView {...props} scrollEnabled={false}>
-            <TouchableOpacity
-                style={{ padding: 20 }}
-                onPress={() => router.push("/profile")}
-            >
-                <Image
-                    source={require("@/assets/images/profile-picture.jpg")}
-                    style={{
-                        borderRadius: 100,
-                        borderWidth: 0.5,
-                        width: 100,
-                        height: 100,
-                        resizeMode: "contain",
-                        alignSelf: "center",
-                    }}
-                />
-            </TouchableOpacity>
-            <DrawerItemList {...props} />
-            <DrawerItem label={t("translationMenu.disconnect")} onPress={signOut} />
-            <LanguageSwitcher />
-        </DrawerContentScrollView>
+        <>
+            <DrawerContentScrollView {...props} scrollEnabled={false}>
+                <TouchableOpacity
+                    style={{ padding: 20 }}
+                    onPress={() => router.push("/profile")}
+                >
+                    <Image
+                        source={adaptativeIcon}
+                        style={{
+                            borderRadius: 100,
+                            borderWidth: 0.5,
+                            width: 100,
+                            height: 100,
+                            resizeMode: "contain",
+                            alignSelf: "center",
+                        }}
+                    />
+                </TouchableOpacity>
+                <DrawerItemList {...props} />
+                <DrawerItem label={t("translationMenu.disconnect")} onPress={signOut} />
+            </DrawerContentScrollView>
+            {Platform.OS === "web" && <LanguageSwitcher />}
+        </>
     );
 }
 
@@ -106,7 +112,7 @@ export default function Layout() {
                                     }}
                                 >
                                     <Image
-                                        source={require("@/assets/images/profile-picture.jpg")}
+                                        source={adaptativeIcon}
                                         style={{
                                             borderRadius: 50,
                                             marginLeft: 10,

@@ -6,9 +6,9 @@ import Toast from "react-native-toast-message";
 import { toastConfig } from "@/components/ToastConfig";
 import "../locales/i18n";
 
-export default function Layout() {
-    const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
+export default function Layout() {
     return (
         <QueryClientProvider client={queryClient}>
             <AuthProvider>

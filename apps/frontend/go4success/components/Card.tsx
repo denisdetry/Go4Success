@@ -143,7 +143,7 @@ const Card: React.FC<CardProps> = ({
                     text2: "Vous êtes parfaitement inscrit à l'atelier : " + title,
                 });
                 void queryClient.invalidateQueries({
-                    queryKey: ["activities", "attends"],
+                    queryKey: ["activities"],
                 });
                 setModalVisible(!modalVisible);
                 console.log(res);

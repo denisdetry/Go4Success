@@ -19,7 +19,7 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('current_user/', views.CurrentUserView.as_view(), name='users'),
-    path('rolemanagement/', UserView.as_view({'get': 'list'})),
+    path('rolemanagement/<int:pk>', UserView.as_view({'get': 'list'})),
     path('editrole/<int:pk>/', EditRoleView.as_view({'get': 'list'})),
     path("", include(router.urls))
 ]

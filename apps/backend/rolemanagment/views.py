@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from api.models import Teacher, User
 from .serializers import UserSerializer, EditRoleSerializer
+from rest_framework.generics import DestroyAPIView
 
 
 class UserView(viewsets.ModelViewSet, APIView):
@@ -23,6 +24,14 @@ class UserView(viewsets.ModelViewSet, APIView):
         data = User.objects.all()
         serializer = UserSerializer(data, many=True)
         return Response(serializer.data)
+
+    def patch(self, request, pk):
+        instance = self.get_object(pk=pk)
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class EditRoleView(viewsets.ModelViewSet, APIView):
@@ -52,3 +61,11 @@ class EditRoleView(viewsets.ModelViewSet, APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, pk):
+        try:
+            teacher = Teacher.objects.get(pk=pk)
+            teacher.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Teacher.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)

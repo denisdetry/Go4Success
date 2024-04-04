@@ -1,12 +1,5 @@
 import React, { useCallback, useState } from "react";
-import {
-    ActivityIndicator,
-    Modal,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
-} from "react-native";
+import { Modal, StyleSheet, Text, TextInput, View } from "react-native";
 import Card from "./Card";
 import ButtonComponent from "./Button";
 import Colors from "../constants/Colors";
@@ -45,14 +38,10 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         endDate: DateType;
     }>({ startDate: undefined, endDate: undefined });
 
-    const { isPending: isPendingSite, sites, error: siteError } = useSites();
+    const { sites, error: siteError } = useSites();
     const allSites = [{ label: "All", value: "" }, ...sites];
 
-    const {
-        isPending: isPendingRoom,
-        rooms,
-        error: roomError,
-    } = useRooms(selectedSite?.value, sites);
+    const { rooms, error: roomError } = useRooms(selectedSite?.value, sites);
     const allRooms = [{ label: "All", value: "" }, ...rooms];
 
     const onChange = useCallback(
@@ -133,10 +122,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 <Text> Error: {roomError.message} </Text>
             </View>
         );
-    }
-
-    if (isPendingSite || isPendingRoom) {
-        return <ActivityIndicator />;
     }
 
     const handleClearFilter = () => {

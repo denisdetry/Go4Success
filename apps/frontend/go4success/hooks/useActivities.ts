@@ -21,7 +21,15 @@ export function useActivities(
     endDateISO: string | null,
 ) {
     return useQuery<Activity[]>({
-        queryKey: ["activities", endpoint, selectedRoom, selectedSite],
+        queryKey: [
+            "activities",
+            endpoint,
+            searchName,
+            selectedRoom,
+            selectedSite,
+            startDateISO,
+            endDateISO,
+        ],
         queryFn: async () => {
             const response = await axios.get(
                 `${API_BASE_URL}/activities/${endpoint}/`,

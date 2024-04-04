@@ -15,7 +15,7 @@ import { useRouter } from "expo-router";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 
-import adaptativeIcon from "@/assets/images/adaptive-icon.png";
+import profilePicture from "@/assets/images/profile-picture.jpg";
 
 function customDrawerContent(props: any) {
     const router = useRouter();
@@ -30,8 +30,10 @@ function customDrawerContent(props: any) {
                     onPress={() => router.push("/profile")}
                 >
                     <Image
-                        source={adaptativeIcon}
+                        source={profilePicture}
                         style={{
+                            borderRadius: 100,
+                            borderWidth: 0.5,
                             width: 100,
                             height: 100,
                             resizeMode: "contain",
@@ -63,16 +65,27 @@ export default function Layout() {
                         backgroundColor: Colors.primaryColor,
                     },
                     headerTintColor: "#fff",
+                    headerTitleStyle: {
+                        display: "none",
+                    },
                     headerRight: () => (
                         <>
                             <View
                                 style={{
                                     flexDirection: "row",
-                                    gap: 15,
+                                    gap: 5,
                                     marginRight: 20,
                                     alignItems: "center",
                                 }}
                             >
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        router.push("/");
+                                    }}
+                                >
+                                    <Ionicons name="home" size={24} color="#fff" />
+                                </TouchableOpacity>
+
                                 <TouchableOpacity
                                     onPress={() => {
                                         console.log("Open notifications");
@@ -87,7 +100,6 @@ export default function Layout() {
 
                                 <TouchableOpacity
                                     onPress={() => {
-                                        console.log("Open Calendar");
                                         router.push("/calendar");
                                     }}
                                 >
@@ -96,13 +108,14 @@ export default function Layout() {
 
                                 <TouchableOpacity
                                     onPress={() => {
-                                        console.log("Open profile");
                                         router.push("/profile");
                                     }}
                                 >
                                     <Image
-                                        source={adaptativeIcon}
+                                        source={profilePicture}
                                         style={{
+                                            borderRadius: 50,
+                                            marginLeft: 10,
                                             width: 50,
                                             height: 50,
                                             resizeMode: "contain",

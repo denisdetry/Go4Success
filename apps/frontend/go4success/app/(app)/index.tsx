@@ -1,17 +1,13 @@
 import { ScrollView, Text, View } from "react-native";
 import React, { useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
-import axios from "axios";
 import styles from "@/styles/global";
 import FilterWorkshop from "@/components/FilterActivity";
-//import { Message } from "@/types/Message";
 import { useAuth } from "@/context/auth";
 import { useTranslation } from "react-i18next";
+import axiosConfig from "@/constants/axiosConfig";
 
-// Set the default values for axios
-axios.defaults.withCredentials = true;
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-axios.defaults.xsrfCookieName = "csrftoken";
+axiosConfig();
 
 interface Message {
     id: string;
@@ -21,31 +17,36 @@ interface Message {
     to_user: string;
 }
 
-export default function accueil() {
+export default function index() {
     const { t } = useTranslation();
     const [allMessages, setAllMessages] = useState([]);
-    const { user } = useAuth();
+    const { user, showLoginToast, showRegisterToast } = useAuth();
+
+    showLoginToast();
+    showRegisterToast();
 
     const renderMessages = ({ item }: { item: Message }) => {
         return <Text> {item.content}</Text>;
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.mainContainer}>
-            <View
-                style={{
-                    width: "90%",
-                    alignContent: "flex-start",
-                    margin: 20,
-                    padding: 10,
-                }}
-            >
-                <Text style={[styles.title, { marginBottom: 0 }]}>
-                    {t("translation.hello")} {user.first_name} ! 👋
-                </Text>
-                <Text style={[styles.title, { marginBottom: 0 }]}>
-                    {t("translation.welcome")}
-                </Text>
+        <ScrollView
+            scrollEnabled={true}
+            nestedScrollEnabled={true}
+            contentContainerStyle={styles.mainContainer}
+        >
+            <View style={styles.titleContainer}>
+                {user.first_name ? (
+                    <Text style={styles.titleNoPadding}>
+                        {t("translation.hello")}
+                        {user.first_name} ! 👋
+                    </Text>
+                ) : (
+                    <Text style={styles.titleNoPadding}>
+                        {t("translation.hello")}
+                        {user.username} ! 👋
+                    </Text>
+                )}
             </View>
 
             {/* Message container */}
@@ -65,18 +66,16 @@ export default function accueil() {
 
             {/* Registered Activities container */}
             <View style={styles.container}>
-                <Text style={styles.title}>{t("translation.workshopAttend")}</Text>
-                <ScrollView contentContainerStyle={styles.containerCard}>
-                    <FilterWorkshop filterType={"attend"}></FilterWorkshop>
-                </ScrollView>
+                <Text style={styles.titleNoPadding}>
+                    {t("translation.workshopAttend")}
+                </Text>
+                <FilterWorkshop filterType={"attend"}></FilterWorkshop>
             </View>
 
-            {/* All activities container */}
+            {/* All Activities container */}
             <View style={styles.container}>
-                <Text style={styles.title}>Ateliers disponibles</Text>
-                <ScrollView contentContainerStyle={styles.containerCard}>
-                    <FilterWorkshop filterType={"activity"}></FilterWorkshop>
-                </ScrollView>
+                <Text style={styles.titleNoPadding}>Ateliers disponibles</Text>
+                <FilterWorkshop filterType={"activity"}></FilterWorkshop>
             </View>
 
             {/* Calendar container */}

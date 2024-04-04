@@ -18,8 +18,8 @@ def custom_validation(data):
     if not password or len(password) < 8:
         return Response('choisir un autre mot de passe, minimum 8 caractères', status=status.HTTP_400_BAD_REQUEST)
     ##
-    if not username:
-        return Response('choisir un autre nom d’utilisateur', status=status.HTTP_400_BAD_REQUEST)
+    if not username or UserModel.objects.filter(username=username).exists():
+        return Response('choisir un autre nom d’utilisateur, celui-ci existe déjà', status=status.HTTP_400_BAD_REQUEST)
 
     if UserModel.objects.filter(noma=noma).exists():
         return Response('choisir un autre noma, celui-ci est déjà utilisé',

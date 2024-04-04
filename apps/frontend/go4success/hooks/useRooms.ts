@@ -20,12 +20,13 @@ export function useRooms(siteId: string | undefined, sites: SelectItem[]) {
             const response = await axios.get(
                 `${API_BASE_URL}/workshops/rooms/` + (siteId ? `site/${siteId}/` : ""),
             );
+            console.log("siteId", siteId);
             return response.data.map((room: Room) => ({
-                label:
+                key: room.id,
+                value:
                     room.name +
                     " - " +
-                    sites.find((site) => site.value === room.site)?.label,
-                value: room.id,
+                    sites.find((site) => site.key === room.site)?.value,
             }));
         },
         enabled: sites.length > 0,

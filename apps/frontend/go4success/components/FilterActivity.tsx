@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from "react";
 import {
-    Text,
-    ScrollView,
-    TextInput,
-    StyleSheet,
-    Modal,
-    View,
-    Platform,
     ActivityIndicator,
+    Modal,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
 } from "react-native";
 import Card from "../components/Card";
 import ButtonComponent from "../components/Button";
@@ -20,7 +20,7 @@ import dayjs from "dayjs";
 import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
 import { ItemType } from "react-native-dropdown-picker";
-import { Workshop, useWorkshops } from "@/hooks/useWorkshops";
+import { useWorkshops, Workshop } from "@/hooks/useWorkshops";
 
 interface Attend {
     activity: Workshop;
@@ -34,8 +34,6 @@ interface FilterActivityProps {
 type ActivityOrAttend = Workshop | Attend;
 
 const FilterActivity = ({ filterType }: FilterActivityProps) => {
-    const [siteOpen, setSiteOpen] = React.useState(false);
-    const [roomOpen, setRoomOpen] = React.useState(false);
     const [searchName, setSearchName] = useState("");
     const [selectedRoom, setSelectedRoom] = useState<SelectItem>();
     const [selectedSite, setSelectedSite] = useState<SelectItem>();
@@ -46,7 +44,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     }>({ startDate: undefined, endDate: undefined });
 
     const { isPending: isPendingSite, sites, error: siteError } = useSites();
-    const allSites = [{ label: "All", value: "" }, ...sites];
+    const allSites = [{ key: "", value: "All" }, ...sites];
 
     const {
         isPending: isPendingRoom,
@@ -54,7 +52,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         error: roomError,
     } = useRooms(selectedSite?.value, sites);
 
-    const allRooms = [{ label: "All", value: "" }, ...rooms];
+    const allRooms = [{ key: "", value: "All" }, ...rooms];
 
     const onChange = useCallback(
         (range: { startDate: DateType; endDate: DateType }) => {
@@ -107,7 +105,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     );
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
-        let activity = "activity" in item ? item.activity : item;
+        const activity = "activity" in item ? item.activity : item;
 
         return Platform.OS === "web" ? (
             <Card
@@ -177,27 +175,21 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                         />
 
                         <SelectSearch
-                            zIndex={100}
                             items={allSites}
+                            toSave={"key"}
                             placeholder={"Select a site"}
-                            searchable={true}
-                            onSelectItem={(item) => {
+                            setSelected={(item) => {
                                 setSelectedSite(item as Required<ItemType<string>>);
                             }}
-                            open={siteOpen}
-                            setOpen={setSiteOpen}
                         />
 
                         <SelectSearch
-                            zIndex={99}
                             items={allRooms}
-                            placeholder={"Select one room"}
-                            searchable={true}
-                            onSelectItem={(item) => {
+                            toSave={"key"}
+                            placeholder={"Select a site"}
+                            setSelected={(item) => {
                                 setSelectedRoom(item as Required<ItemType<string>>);
                             }}
-                            open={roomOpen}
-                            setOpen={setRoomOpen}
                         />
 
                         <View style={stylesGlobal.containerDatePicker}>

@@ -1,37 +1,27 @@
-import DropDownPicker, { ItemType } from "react-native-dropdown-picker";
-import React, { Dispatch, SetStateAction } from "react";
+import { SelectList } from "@/lib/react-native-dropdown-select-list";
+import React from "react";
 
 export type SelectItem = {
-    label: string;
+    key: string;
     value: string;
 };
 
 export type SelectSearchProps = {
-    readonly zIndex: number;
-    readonly items: SelectItem[];
     readonly placeholder: string;
-    readonly searchable: boolean;
-    readonly onSelectItem: (item: ItemType<string>) => void;
-    readonly open: boolean;
-    readonly setOpen: Dispatch<SetStateAction<boolean>>;
+    readonly items: SelectItem[];
+    readonly toSave?: "key" | "value" | undefined;
+    readonly search?: boolean;
+    readonly setSelected: (item: SelectItem) => void;
 };
 
 function SelectSearch(props: SelectSearchProps) {
-    const [value, setValue] = React.useState(null);
-
-    DropDownPicker.setLanguage("FR");
-
     return (
-        <DropDownPicker
-            zIndex={props.zIndex}
-            open={props.open}
-            value={value}
-            items={props.items}
+        <SelectList
+            setSelected={props.setSelected}
+            data={props.items}
+            save={props.toSave}
+            search={props.search}
             placeholder={props.placeholder}
-            searchable={props.searchable}
-            setOpen={props.setOpen}
-            setValue={setValue}
-            onSelectItem={props.onSelectItem}
         />
     );
 }

@@ -20,8 +20,8 @@ export function useSites() {
                 `${API_BASE_URL}/workshops/sites/`,
             );
             return response.data.map((site) => ({
-                label: site.name,
-                value: site.id,
+                key: site.id,
+                value: site.name,
             }));
         },
     });

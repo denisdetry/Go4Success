@@ -1,7 +1,8 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTranslation } from "react-i18next";
-import images from "@/assets";
+import enFlag from "@/assets/images/flags/flag_en.png";
+import frFlag from "@/assets/images/flags/flag_fr.png";
 
 function LanguageSwitcher() {
     const { i18n } = useTranslation();
@@ -15,14 +16,14 @@ function LanguageSwitcher() {
                 style={styles.button}
                 onPress={() => switchLanguage("en")}
             >
-                <Image source={images.enFlag} style={styles.flag} />
+                <Image source={enFlag} style={styles.flag} />
                 <Text style={styles.buttonText}>En </Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => switchLanguage("fr")}
             >
-                <Image source={images.frFlag} style={styles.flag} />
+                <Image source={frFlag} style={styles.flag} />
                 <Text style={styles.buttonText}>Fr</Text>
             </TouchableOpacity>
         </View>

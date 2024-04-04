@@ -15,6 +15,8 @@ import { useRouter } from "expo-router";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 
+import adaptativeIcon from "@/assets/images/adaptive-icon.png";
+
 function customDrawerContent(props: any) {
     const router = useRouter();
     const { t } = useTranslation();
@@ -28,7 +30,7 @@ function customDrawerContent(props: any) {
                     onPress={() => router.push("/profile")}
                 >
                     <Image
-                        source={require("@/assets/images/adaptive-icon.png")}
+                        source={adaptativeIcon}
                         style={{
                             width: 100,
                             height: 100,
@@ -99,7 +101,7 @@ export default function Layout() {
                                     }}
                                 >
                                     <Image
-                                        source={require("@/assets/images/adaptive-icon.png")}
+                                        source={adaptativeIcon}
                                         style={{
                                             width: 50,
                                             height: 50,

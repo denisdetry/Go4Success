@@ -1,18 +1,15 @@
 import React, { useCallback, useState } from "react";
 import {
-    Text,
-    ScrollView,
-    TextInput,
-    StyleSheet,
-    Modal,
-    View,
-    Platform,
     ActivityIndicator,
+    Modal,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
 } from "react-native";
 import Card from "./Card";
 import ButtonComponent from "./Button";
 import Colors from "../constants/Colors";
-import { FlatList } from "react-native-gesture-handler";
 import stylesGlobal from "../styles/global";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 import SelectSearch, { SelectItem } from "./SelectSearch";
@@ -22,6 +19,7 @@ import { useRooms } from "@/hooks/useRooms";
 import { ItemType } from "react-native-dropdown-picker";
 import { Activity, useActivities } from "@/hooks/useActivities";
 import { useTranslation } from "react-i18next";
+import RenderCarousel from "@/components/RenderCarousel";
 
 interface Attend {
     activity: Activity;
@@ -43,6 +41,14 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const [selectedSite, setSelectedSite] = useState<SelectItem>();
     const [registeredActivities, setRegisteredActivities] = useState<Activity[]>([]);
     const [allActivities, setAllActivities] = useState<Activity[]>([]);
+
+    // const {
+    //     allActivities,
+    //     registeredActivities,
+    //     setRegisteredActivities,
+    //     setAllActivities,
+    // } = useAttendsAndActivities();
+
     const [hasLoaded, setHasLoaded] = useState(false);
 
     const [range, setRange] = React.useState<{
@@ -66,7 +72,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         },
         [],
     );
-
     const convertDateToISO = (date: DateType): string | null => {
         if (date instanceof Date) {
             return date.toISOString().split("T")[0];
@@ -100,10 +105,10 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     );
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
-        let activity = "activity" in item ? item.activity : item;
+        const activity = "activity" in item ? item.activity : item;
         const siteName = sites.find((site) => site.value === activity.room.site)?.label;
 
-        return Platform.OS === "web" ? (
+        return (
             <Card
                 id={activity.id}
                 title={activity.name}
@@ -112,17 +117,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 type={activity.type}
                 description={activity.description}
             />
-        ) : (
-            <View style={stylesGlobal.containerCard}>
-                <Card
-                    id={activity.id}
-                    title={activity.name}
-                    location={activity.room.name}
-                    date={activity.date_start}
-                    type={activity.type}
-                    description={activity.description}
-                />
-            </View>
         );
     };
 
@@ -178,12 +172,16 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     };
 
     return (
-        <ScrollView>
-            <ButtonComponent
-                text={t("translationButton.OpenFilter")}
-                onPress={toggleModal}
-                buttonType={"filter"}
-            />
+        <>
+            <View style={{ width: "100%", justifyContent: "flex-start" }}>
+                <ButtonComponent
+                    text={t("translationButton.OpenFilter")}
+                    onPress={toggleModal}
+                    buttonType={"filter"}
+                />
+            </View>
+
+            {/* Modal view */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -270,38 +268,30 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 </View>
             </Modal>
 
+            {/* Cards views for registered activity or filtered */}
             {filterType === "attend" &&
                 (registeredActivities !== undefined &&
                 registeredActivities.length > 0 ? (
-                    <FlatList
-                        contentContainerStyle={stylesGlobal.containerCard}
+                    <RenderCarousel
                         data={registeredActivities}
                         renderItem={renderCards}
-                        horizontal
-                        pagingEnabled
-                        showsHorizontalScrollIndicator={false}
                     />
                 ) : (
                     <Text style={stylesGlobal.text}>
                         {t("translation.noWorkshopAttend")}
                     </Text>
                 ))}
+
+            {/* Cards views for all activity or filtered */}
             {filterType === "activity" &&
                 (allActivities !== undefined && allActivities.length > 0 ? (
-                    <FlatList
-                        contentContainerStyle={stylesGlobal.containerCard}
-                        data={allActivities}
-                        renderItem={renderCards}
-                        horizontal
-                        pagingEnabled
-                        showsHorizontalScrollIndicator={false}
-                    />
+                    <RenderCarousel data={allActivities} renderItem={renderCards} />
                 ) : (
                     <Text style={stylesGlobal.text}>
                         {t("translation.noWorkshopAll")}
                     </Text>
                 ))}
-        </ScrollView>
+        </>
     );
 };
 

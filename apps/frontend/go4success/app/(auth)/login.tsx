@@ -9,7 +9,6 @@ import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { UserLogin } from "@/types/UserLogin";
-import Toast from "react-native-toast-message";
 
 const schema = yup.object().shape({
     username: yup.string().required("Entrez votre nom d'utilisateur"),
@@ -19,7 +18,7 @@ const schema = yup.object().shape({
 export default function login() {
     const { signIn } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
-    const { isSignedOut, setIsSignedOut } = useAuth();
+    const { showLogoutToast } = useAuth();
     const {
         control,
         handleSubmit,
@@ -27,19 +26,12 @@ export default function login() {
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            username: "allmaxou",
-            password: "azerty",
+            username: "artak",
+            password: "azerty123",
         },
     });
 
-    if (isSignedOut) {
-        Toast.show({
-            type: "success",
-            text1: "Félicitation ! 🎉",
-            text2: "Déconnexion réussie ! A bientôt",
-        });
-        setIsSignedOut(false);
-    }
+    showLogoutToast();
 
     const onSubmit = (userData: UserLogin) => {
         signIn(userData);

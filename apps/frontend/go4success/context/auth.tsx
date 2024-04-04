@@ -147,6 +147,16 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         setIsRegistered(false);
                     }
                 },
+                showLogoutToast: () => {
+                    if (isSignedOut) {
+                        Toast.show({
+                            type: "success",
+                            text1: "Déconnexion réussie",
+                            text2: "A bientôt sur Go4Success !",
+                        });
+                        setIsSignedOut(false);
+                    }
+                },
             }}
         >
             {children}

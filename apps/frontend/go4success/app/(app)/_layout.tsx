@@ -11,8 +11,8 @@ import {
 } from "@react-navigation/drawer";
 import { Image, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 function customDrawerContent(props: any) {
     const router = useRouter();
@@ -38,6 +38,7 @@ function customDrawerContent(props: any) {
             </TouchableOpacity>
             <DrawerItemList {...props} />
             <DrawerItem label={t("translationMenu.disconnect")} onPress={signOut} />
+            <LanguageSwitcher />
         </DrawerContentScrollView>
     );
 }
@@ -66,7 +67,7 @@ export default function Layout() {
                             <View
                                 style={{
                                     flexDirection: "row",
-                                    gap: 15,
+                                    gap: 5,
                                     marginRight: 20,
                                     alignItems: "center",
                                 }}

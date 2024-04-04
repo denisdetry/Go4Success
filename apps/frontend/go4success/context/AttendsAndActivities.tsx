@@ -50,6 +50,8 @@ export function AttendsAndActivitiesProvider({ children }: React.PropsWithChildr
             value={{
                 registeredActivities: attends,
                 allActivities: activities,
+                setRegisteredActivities: setAttends,
+                setAllActivities: setActivities,
                 refreshAttendsAndActivities: refreshAttendsAndActivities,
             }}
         >

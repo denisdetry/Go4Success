@@ -14,11 +14,9 @@ import { useAuth } from "@/context/auth";
 import { useAttendsAndActivities } from "@/context/AttendsAndActivities";
 import Toast from "react-native-toast-message";
 import { isMobile } from "@/constants/screensWidth";
+import axiosConfig from "@/constants/axiosConfig";
 
-// Set the default values for axios
-axios.defaults.withCredentials = true;
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-axios.defaults.xsrfCookieName = "csrftoken";
+axiosConfig();
 
 interface CardProps {
     readonly id: string;

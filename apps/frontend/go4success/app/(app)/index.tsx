@@ -21,32 +21,10 @@ interface Message {
 export default function accueil() {
     const { t } = useTranslation();
     const [allMessages, setAllMessages] = useState([]);
-    const { allActivities, registeredActivities } = useAttendsAndActivities();
     const { user, showLoginToast, showRegisterToast } = useAuth();
 
     showLoginToast();
     showRegisterToast();
-
-    const renderCards = ({ item }: { item: ActivityOrAttend }) => {
-        let activity = item;
-
-        if ("activity" in item) {
-            activity = item.activity;
-        } else {
-            activity = item;
-        }
-
-        return (
-            <Card
-                id={activity.id}
-                title={activity.name}
-                location={activity.room}
-                date={activity.date_start}
-                type={activity.type}
-                description={activity.description}
-            />
-        );
-    };
 
     const renderMessages = ({ item }: { item: Message }) => {
         return <Text> {item.content}</Text>;
@@ -61,11 +39,13 @@ export default function accueil() {
             <View style={styles.titleContainer}>
                 {user.first_name ? (
                     <Text style={styles.titleNoPadding}>
-                        {t("translation.hello")} {user.first_name} ! 👋
+                        {t("translation.hello")}
+                        {user.first_name} ! 👋
                     </Text>
                 ) : (
                     <Text style={styles.titleNoPadding}>
-                        {t("translation.hello")} {user.username} ! 👋
+                        {t("translation.hello")}
+                        {user.username} ! 👋
                     </Text>
                 )}
             </View>
@@ -87,31 +67,16 @@ export default function accueil() {
 
             {/* Registered Activities container */}
             <View style={styles.container}>
-                <Text style={styles.titleNoPadding}>{t("translation.workshopAttend")}</Text>
-                <ScrollView contentContainerStyle={styles.containerCard}>
-                    <FilterWorkshop filterType={"attend"}></FilterWorkshop>
-                </ScrollView>
-                {registeredActivities.length > 0 ? (
-                    <RenderCarousel
-                        data={registeredActivities}
-                        renderItem={renderCards}
-                    />
-                ) : (
-                    <Text style={styles.text}>Vous n'êtes inscrit à aucun atelier</Text>
-                )}
+                <Text style={styles.titleNoPadding}>
+                    {t("translation.workshopAttend")}
+                </Text>
+                <FilterWorkshop filterType={"attend"}></FilterWorkshop>
             </View>
 
             {/* All Activities container */}
             <View style={styles.container}>
                 <Text style={styles.titleNoPadding}>Ateliers disponibles</Text>
-                <ScrollView contentContainerStyle={styles.containerCard}>
-                    <FilterWorkshop filterType={"activity"}></FilterWorkshop>
-                </ScrollView>
-                {allActivities.length > 0 ? (
-                    <RenderCarousel data={allActivities} renderItem={renderCards} />
-                ) : (
-                    <Text style={styles.text}>Aucun atelier disponible</Text>
-                )}
+                <FilterWorkshop filterType={"activity"}></FilterWorkshop>
             </View>
 
             {/* Calendar container */}

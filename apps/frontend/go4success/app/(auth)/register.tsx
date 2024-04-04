@@ -10,6 +10,8 @@ import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+import { UserRegister } from "@/types/UserRegister";
+
 const schema = yup.object().shape({
     email: yup
         .string()

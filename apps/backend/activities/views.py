@@ -1,28 +1,12 @@
-from api.models import Activity, Site, Room
-from .serializers import SiteSerializer, ActivitySerializer, RoomSerializer
-from rest_framework.response import Response
-from rest_framework.decorators import action
-from rest_framework import viewsets, status
-from rest_framework import viewsets, permissions
+from database.models import Activity, Attend, Room, Site
 from django.db.models import Q
+from rest_framework import viewsets, permissions
+from rest_framework.authentication import TokenAuthentication
 
-from api.models import Activity, Attend, Room, Site
+from rest_framework.response import Response
+
 from .serializers import SiteSerializer, ActivitySerializer, \
-    AttendSerializer, RoomSerializer
-
-
-# Ancienne version #################################
-# class RoomViewSet(viewsets.ModelViewSet):
-#    permission_classes = (permissions.AllowAny,)
-#    queryset = Room.objects.all()
-#    serializer_class = RoomSerializer
-#
-#    def get_queryset(self):
-#        qs = Room.objects.all()
-#        site = self.request.query_params.get('site')
-#        if site and site.isdigit():
-#            qs = qs.filter(site_id=int(site))
-#        return qs
+    AttendSerializer, RoomSerializer, RegisterToActivitySerializer
 
 
 class RoomViewSet(viewsets.ReadOnlyModelViewSet):
@@ -88,3 +72,11 @@ def filter_queryset(self, qs, param=""):
                 Q(**{f"{param}date_end__date__lte": date_start})
             )
     return qs
+
+
+class RegisterToActivityView(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+
+    queryset = Attend.objects.all()
+    serializer_class = RegisterToActivitySerializer

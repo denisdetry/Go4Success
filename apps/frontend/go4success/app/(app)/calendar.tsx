@@ -1,11 +1,11 @@
-import { View, Text } from "react-native";
+import { ScrollView, Text } from "react-native";
 import React from "react";
 import styles from "@/styles/global";
 
 export default function calendar() {
     return (
-        <View style={[styles.mainContainer, { justifyContent: "center" }]}>
+        <ScrollView contentContainerStyle={styles.mainContainer}>
             <Text style={styles.title}>Mon calendrier</Text>
-        </View>
+        </ScrollView>
     );
 }

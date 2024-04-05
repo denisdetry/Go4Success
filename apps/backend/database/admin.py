@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from .models import User, Site, Room, Course, Activity, Attend, Teacher, Give, Announcement, \
-    Registered, Message, See
+from .models import User, Teacher, Give, Announcement, \
+    Registered, Message, See, Site, Room, Activity, Attend, Course
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -16,10 +16,6 @@ class RoomAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'site')
 
 
-class CourseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'code', 'name')
-
-
 class ActivityAdmin(admin.ModelAdmin):
     list_display = ('id', 'type', 'name', 'description',
                     'date_start', 'date_end', 'room', 'course')
@@ -27,6 +23,10 @@ class ActivityAdmin(admin.ModelAdmin):
 
 class AttendAdmin(admin.ModelAdmin):
     list_display = ('activity', 'student')
+
+
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ('id', 'code', 'name')
 
 
 class TeacherAdmin(admin.ModelAdmin):
@@ -56,14 +56,14 @@ class SeeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(Site, SiteAdmin)
-admin.site.register(Room, RoomAdmin)
-admin.site.register(Course, CourseAdmin)
-admin.site.register(Activity, ActivityAdmin)
-admin.site.register(Attend, AttendAdmin)
 admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(Give, GiveAdmin)
 admin.site.register(Announcement, AnnouncementAdmin)
 admin.site.register(Registered, RegisteredAdmin)
 admin.site.register(Message, MessageAdmin)
 admin.site.register(See, SeeAdmin)
+admin.site.register(Site, SiteAdmin)
+admin.site.register(Room, RoomAdmin)
+admin.site.register(Activity, ActivityAdmin)
+admin.site.register(Attend, AttendAdmin)
+admin.site.register(Course, CourseAdmin)

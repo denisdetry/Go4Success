@@ -5,7 +5,7 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
-from api.models import Teacher, User
+from database.models import Teacher, User
 from .serializers import UserSerializer, EditRoleSerializer
 from rest_framework.generics import DestroyAPIView
 

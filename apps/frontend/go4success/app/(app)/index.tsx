@@ -22,10 +22,12 @@ export default function index() {
     const [allMessages, setAllMessages] = useState([]);
     const { user, showLoginToast, showRegisterToast } = useAuth();
 
+
     useEffect(() => {
         showLoginToast();
         showRegisterToast();
     }, []);
+
 
     const renderMessages = ({ item }: { item: Message }) => {
         return <Text> {item.content}</Text>;

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
+
 import { useAuth } from "@/context/auth";
 import { isMobile } from "@/constants/screensWidth";
 import axiosConfig from "@/constants/axiosConfig";
@@ -16,6 +17,7 @@ import { useMutation } from "@tanstack/react-query";
 import { API_BASE_URL } from "@/constants/ConfigApp";
 import axios from "axios";
 import Toast from "react-native-toast-message";
+
 import { queryClient } from "@/app/_layout";
 
 axiosConfig();
@@ -151,6 +153,7 @@ const Card: React.FC<CardProps> = ({
             });
             void queryClient.invalidateQueries({
                 queryKey: ["activities"],
+
             });
             setModalVisible(!modalVisible);
         },

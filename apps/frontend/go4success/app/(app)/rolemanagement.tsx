@@ -3,15 +3,30 @@ import { View, Text, FlatList, Picker, TouchableOpacity, ScrollView,  TextInput 
 import axios from 'axios';
 import { useAuth } from "@/context/auth";
 import styles from "@/styles/global";
+import axiosConfig from "@/constants/axiosConfig";
+
+
+
+
+axios.defaults.withCredentials = true;
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
+
 
 export default function RoleManagement() {
-
+  axiosConfig();
   const [userRole, setUserRole] = useState([]);
   const [selectedValue, setSelectedValue] = useState("");
   
   const [userInfo, setUserInfo] = useState([]);
 
-
+    interface User {
+      selectedRole: string;
+      id: number;
+      first_name: string;
+      last_name: string;
+      role: string;
+    }
 
 
     useEffect(() => {
@@ -64,35 +79,26 @@ export default function RoleManagement() {
     }
 
     
-    function editRolepatch(id: any,is_tutor: any,is_professor: any){
-      axios
-        .patch("http://localhost:8000/api/editRole/${id}", {
-            id:id,
-            is_tutor:is_tutor,
-            is_professor:is_professor
+      function editRolepatch(id, is_tutor, is_professor){
+        axios
+          .patch(`http://localhost:8000/api/editRole/${id}`, { // Correction ici
+              is_tutor: is_tutor,
+              is_professor: is_professor
+          })
+          .then((res) => {
+              console.log(res);
+          })
+          .catch((err) => console.error(err));
+      }
 
-        })
-        .then((res) => {
-            console.log(res);
-            
-        })
-    }
-
-    
-    function editRoledelete(id: any){
-      axios
-        .delete("http://localhost:8000/api/editRole/${id}", {
-          
-
-
-        })
-        .then((res) => {
-            console.log(res);
-            
-        })
-    }
-
-
+      function editRoledelete(id){
+        axios
+          .delete(`http://localhost:8000/api/editRole/${id}`) // Correction ici
+          .then((res) => {
+              console.log(res);
+          })
+          .catch((err) => console.error(err));
+      }
 
     function rolemanagementpatch(id: any,super_user:any){
       axios
@@ -107,23 +113,44 @@ export default function RoleManagement() {
         })
     }
 
- const usersInfoRole = [
-  {'id':1, 'first_name':'Longfils', 'last_name':'Gerry', 'role':'student'},
-  {'id':2, 'first_name':'Kozlowski', 'last_name':'Cyryl', 'role':'superuser'},
-  {'id':3, 'first_name':'André', 'last_name':'Maxime', 'role':'professor'},
-  {'id':4, 'first_name':'Devolder', 'last_name':'Martin', 'role':'tutor'},
-];
+    function removeSuperUser(id,role:string){
+      if(role == 'superuser'){
+        rolemanagementpatch(id,false)
+      }
+    }
+  const usersInfoRole = generateUsersInfoRole(userInfo, userRole);
+  console.log(usersInfoRole);
+
+
 
 const MyListComponent = () => {
 
+      const handlePress = (userId) => {
+        const user = users.find(u => u.id === userId);
+        if (!user) {
+          console.error('Utilisateur non trouvé');
+          return;
+        }
 
-  const handlePress = () => {
+        if(user.selectedRole == 'student'){
+           removeSuperUser(user.id,user.role);
+           editRoledelete(user.id)
+        }
+        else if(user.selectedRole == 'professor'){
+            removeSuperUser(user.id,user.role);
+            editRolepatch(user.id,false,true)
 
- 
 
+        }
+        else if(user.selectedRole == 'tutor'){
+          removeSuperUser(user.id,user.role);
+          editRolepatch(user.id,true,false)
+        }
+        else {
+          rolemanagementpatch(user.id,true)
+        }
 
-
-  };
+      };
 
 
   // Ajout d'un état pour suivre la valeur sélectionnée de chaque liste déroulante
@@ -131,6 +158,8 @@ const MyListComponent = () => {
   const [users, setUsers] = useState(
     usersInfoRole.map(user => ({ ...user, selectedRole: user.role }))
   );
+
+
 
   const handleValueChange = (itemValue, itemId) => {
     // Mettre à jour l'état avec la nouvelle valeur sélectionnée pour l'utilisateur spécifié
@@ -163,9 +192,9 @@ const MyListComponent = () => {
           </Picker>
           
           
-          <TouchableOpacity onPress= {handlePress} style={{ backgroundColor: '#841584', padding: 10, borderRadius: 5 }}>
-            <Text style={{ color: '#fff', textAlign: 'center' }}>Save</Text>
-          </TouchableOpacity>
+        <TouchableOpacity onPress={() => handlePress(item.id)} style={{ backgroundColor: '#841584', padding: 10, borderRadius: 5 }}>
+          <Text style={{ color: '#fff', textAlign: 'center' }}>Save</Text>
+        </TouchableOpacity>
           
         </View>
       )}
@@ -187,77 +216,25 @@ const MyListComponent = () => {
 
 };
 
-/** 
 
-function makeRole(userInfo,userRole){
+const generateUsersInfoRole = (userInfo, userRole) => {
+  // Cartographie des ID d'utilisateur à leurs rôles en utilisant les informations de `userRole`
+  const roleMap = userRole.reduce((acc, curr) => {
+    // Déterminer le rôle de l'utilisateur basé sur `is_professor` et `is_tutor`
+    const role = curr.is_professor ? 'professor' : curr.is_tutor ? 'tutor' : 'student';
+    acc[curr.user] = role;
+    return acc;
+  }, {});
 
-      let listOfRole = [];
-      let jsonToPush = {};
-      
+  // Générer le tableau final en parcourant `userInfo`
+  const usersInfoRole = userInfo.map(user => ({
+    id: user.id,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    // Attribuer le rôle depuis `roleMap` ou 'student' par défaut si non trouvé
+    role: roleMap[user.id] || 'student',
+  }));
 
-      for(let i=0;i < userInfo.length; i++){
-
-        for(let j=0; j < userRole.length;j++){
-   
-          if(userInfo[i].id == userRole[j].id){
-
-            if(userRole[j].is_tutor == false){
-
-                jsonToPush = {
-
-                  id:userInfo[i].id,
-                  lastname:userInfo[i].last_name,
-                  firstname:userInfo[i].first_name,
-                  role:"professor"
-
-                }
-            
-            }
-
-            else {
-
-                jsonToPush = {
-
-                  id:userInfo[i].id,
-                  lastname:userInfo[i].last_name,
-                  firstname:userInfo[i].first_name,
-                  role:"tutor"
-
-                }
-
-
-            }
-                   
-
-        }
-        else{
-          jsonToPush = {
-
-            id:userInfo[i].id,
-            lastname:userInfo[i].last_name,
-            firstname:userInfo[i].first_name,
-            role:"student"
-
-          }
-        }
-
-        
-
-      }
-
-      listOfRole.push(jsonToPush);
-    
-    
-    }
-  
-  
-    return listOfRole;
-  
-  }
-
-  */
-
-
-
-
+  return usersInfoRole;
+};
   

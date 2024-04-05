@@ -1,38 +1,115 @@
 import React, { useState ,useEffect} from 'react';
-import { View, Text, FlatList, Picker, TouchableOpacity, ScrollView,  TextInput} from 'react-native';
+import { View, Text, FlatList, Picker, TouchableOpacity, ScrollView,  TextInput } from 'react-native';
 import axios from 'axios';
 import { useAuth } from "@/context/auth";
 import styles from "@/styles/global";
 
 export default function RoleManagement() {
 
-  const {getUserInfo,getUserRole} = useAuth();
-  const [userInfo, setUserInfo] = useState();
-  const [userRole, setUserRole] = useState();
+  const [userRole, setUserRole] = useState([]);
+  const [selectedValue, setSelectedValue] = useState("");
+  
+  const [userInfo, setUserInfo] = useState([]);
 
 
     useEffect(() => {
-    const fetchUserData = async () => {
-      const userInfoData = await getUserInfo();
-      const userRoleData = await getUserRole();
-      setUserInfo(userInfoData);
-      setUserRole(userRoleData);
-    };
 
-    fetchUserData();
-    }, []); 
+    axios
+    .get("http://localhost:8000/api/rolemanagement/")    
+    .then((res) => {
+        setUserInfo(res.data);
+        
+    })
+    .catch((err) => {
+        throw err;
+    });
 
 
-  
-  console.log(userInfo);
-  //let info = makeRole(userInfo, userRole);
+
+    axios
+      .get("http://localhost:8000/api/editRole/")    
+      .then((res) => {
+          setUserRole(res.data);
+
+      })
+      .catch((err) => {
+          throw err;
+      });
+
+
+
+    },[]); 
+
+
+        console.log(userInfo);
+        console.log(userRole);
+
+
+
+ const usersInfoRole = [
+  {'id':1, 'first_name':'Longfils', 'last_name':'Gerry', 'role':'student'},
+  {'id':2, 'first_name':'Kozlowski', 'last_name':'Cyryl', 'role':'superuser'},
+  {'id':3, 'first_name':'André', 'last_name':'Maxime', 'role':'professor'},
+  {'id':4, 'first_name':'Devolder', 'last_name':'Martin', 'role':'tutor'},
+];
+
+const MyListComponent = () => {
+  // Ajout d'un état pour suivre la valeur sélectionnée de chaque liste déroulante
+  // Initialiser chaque élément avec son rôle actuel
+  const [users, setUsers] = useState(
+    usersInfoRole.map(user => ({ ...user, selectedRole: user.role }))
+  );
+
+  const handleValueChange = (itemValue, itemId) => {
+    // Mettre à jour l'état avec la nouvelle valeur sélectionnée pour l'utilisateur spécifié
+    const updatedUsers = users.map(user => {
+      if (user.id === itemId) {
+        return { ...user, selectedRole: itemValue };
+      }
+      return user;
+    });
+    setUsers(updatedUsers);
+  };
+
+  return (
+    <FlatList
+      data={users}
+      keyExtractor={item => item.id.toString()}
+      renderItem={({ item }) => (
+        <View>
+          <Text>
+            {item.id} {item.first_name} {item.last_name} {item.role}
+          </Text>
+          <Picker
+            selectedValue={item.selectedRole}
+            style={{ height: 50, width: 150 }}
+            onValueChange={(itemValue, itemIndex) => handleValueChange(itemValue, item.id)}>
+            <Picker.Item label="student" value="student" />
+            <Picker.Item label="super user" value="superuser" />
+            <Picker.Item label="professor" value="professor" />
+            <Picker.Item label="tutor" value="tutor" />
+          </Picker>
+        </View>
+      )}
+    />
+  );
+};
+
+
+
+
+  return (
+    <View>
+      <MyListComponent />
+    </View>
+  );
+
 
 
 
 };
 
-
-
+/** 
 
 function makeRole(userInfo,userRole){
 
@@ -99,3 +176,10 @@ function makeRole(userInfo,userRole){
     return listOfRole;
   
   }
+
+  */
+
+
+
+
+  

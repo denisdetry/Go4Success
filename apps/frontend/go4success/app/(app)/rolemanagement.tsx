@@ -12,6 +12,8 @@ export default function RoleManagement() {
   const [userInfo, setUserInfo] = useState([]);
 
 
+
+
     useEffect(() => {
 
     axios
@@ -43,8 +45,67 @@ export default function RoleManagement() {
 
         console.log(userInfo);
         console.log(userRole);
+    
+
+    
+    
+    function editRolePost(id: any,is_tutor: any,is_professor: any){
+      axios
+        .post("http://localhost:8000/api/editRole/", {
+            id:id,
+            is_tutor:is_tutor,
+            is_professor:is_professor
+
+        })
+        .then((res) => {
+            console.log(res);
+            
+      })
+    }
+
+    
+    function editRolepatch(id: any,is_tutor: any,is_professor: any){
+      axios
+        .patch("http://localhost:8000/api/editRole/${id}", {
+            id:id,
+            is_tutor:is_tutor,
+            is_professor:is_professor
+
+        })
+        .then((res) => {
+            console.log(res);
+            
+        })
+    }
+
+    
+    function editRoledelete(id: any){
+      axios
+        .delete("http://localhost:8000/api/editRole/${id}", {
+          
 
 
+        })
+        .then((res) => {
+            console.log(res);
+            
+        })
+    }
+
+
+
+    function rolemanagementpatch(id: any,super_user:any){
+      axios
+        .patch("http://localhost:8000/api/rolemanagement/${id}", {
+          super_user:super_user
+
+
+        })
+        .then((res) => {
+            console.log(res);
+            
+        })
+    }
 
  const usersInfoRole = [
   {'id':1, 'first_name':'Longfils', 'last_name':'Gerry', 'role':'student'},
@@ -54,6 +115,17 @@ export default function RoleManagement() {
 ];
 
 const MyListComponent = () => {
+
+
+  const handlePress = () => {
+
+ 
+
+
+
+  };
+
+
   // Ajout d'un état pour suivre la valeur sélectionnée de chaque liste déroulante
   // Initialiser chaque élément avec son rôle actuel
   const [users, setUsers] = useState(
@@ -89,6 +161,12 @@ const MyListComponent = () => {
             <Picker.Item label="professor" value="professor" />
             <Picker.Item label="tutor" value="tutor" />
           </Picker>
+          
+          
+          <TouchableOpacity onPress= {handlePress} style={{ backgroundColor: '#841584', padding: 10, borderRadius: 5 }}>
+            <Text style={{ color: '#fff', textAlign: 'center' }}>Save</Text>
+          </TouchableOpacity>
+          
         </View>
       )}
     />

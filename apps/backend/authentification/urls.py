@@ -5,18 +5,8 @@ from rest_framework import routers
 from . import views
 from .views import UpdateProfileView
 
-from rolemanagment.views import UserView, EditRoleView
-
 router = routers.DefaultRouter()
 
-router.register(r'register_activity',
-                views.RegisterToActivityView, "register_activity")
-router.register(r'activity', views.ActivityViewSet, "activity")
-router.register(r'attends', views.AttendViewSet, "attends")
-router.register(r'rolemanagement', UserView, "rolemanagment")
-router.register(r'editRole', EditRoleView, "editroleview")
-router.register(r'room', views.RoomViewSet, "room")
-router.register(r'site', views.SiteViewSet, "site")
 
 router.register(r'user_profile', UpdateProfileView, "user_profile")
 
@@ -25,8 +15,6 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('current_user/', views.CurrentUserView.as_view(), name='users'),
-    path('rolemanagement/<int:pk>', UserView.as_view({'get': 'list'})),
-    path('editrole/<int:pk>/', EditRoleView.as_view({'get': 'list'})),
     path("", include(router.urls))
 ]
 

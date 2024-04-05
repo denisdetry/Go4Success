@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate
-from api.models import Teacher, User
+from database.models import Teacher, User
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 

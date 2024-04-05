@@ -3,6 +3,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from . import views
+from .views import UpdateProfileView
 
 from rolemanagment.views import UserView, EditRoleView
 
@@ -17,6 +18,7 @@ router.register(r'editRole', EditRoleView, "editroleview")
 router.register(r'room', views.RoomViewSet, "room")
 router.register(r'site', views.SiteViewSet, "site")
 
+router.register(r'user_profile', UpdateProfileView, "user_profile")
 
 urlpatterns = [
     path('register/', views.UserRegisterView.as_view(), name='register'),

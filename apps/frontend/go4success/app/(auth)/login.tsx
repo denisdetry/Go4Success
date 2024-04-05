@@ -1,13 +1,14 @@
 import { ScrollView, Text, TextInput, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/global";
-import Button from "@/components/Button";
+import Button from "@/components/ButtonComponent";
 import { useAuth } from "@/context/auth";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { UserLogin } from "@/types/UserLogin";
 
 const schema = yup.object().shape({
     username: yup.string().required("Entrez votre nom d'utilisateur"),
@@ -17,6 +18,7 @@ const schema = yup.object().shape({
 export default function login() {
     const { signIn } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
+    const { showLogoutToast } = useAuth();
     const {
         control,
         handleSubmit,
@@ -24,19 +26,22 @@ export default function login() {
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            username: "allmaxou",
-            password: "azerty",
+            username: "artak",
+            password: "Azerty123_",
         },
     });
 
-    const onSubmit = (data: any) => {
-        signIn(data.username, data.password);
+    useEffect(() => {
+        showLogoutToast();
+    }, []);
+
+
+    const onSubmit = (userData: UserLogin) => {
+        signIn(userData);
     };
 
     return (
-        <ScrollView
-            contentContainerStyle={[styles.mainContainer, { justifyContent: "center" }]}
-        >
+        <ScrollView contentContainerStyle={styles.mainContainer}>
             <View style={[styles.container, { shadowRadius: 0, backgroundColor: "" }]}>
                 <Text style={styles.title}>Connexion</Text>
                 <View style={styles.form}>

@@ -1,30 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import RNPickerSelect from "react-native-picker-select";
 import Colors from "../constants/Colors";
 
-const LanguagePicker = () => {
+export default function LanguagePicker() {
     const { i18n } = useTranslation();
-    const [selectedLanguage, setSelectedLanguage] = useState(
-        localStorage.getItem("language") ?? "fr",
-    );
-
-    const switchLanguage = (lng: string | undefined) => {
-        i18n.changeLanguage(lng);
-        localStorage.setItem("language", lng ?? "fr");
-        setSelectedLanguage(lng ?? "fr");
-    };
-
-    useEffect(() => {
-        const storedLanguage = localStorage.getItem("language");
-        if (storedLanguage) {
-            switchLanguage(storedLanguage);
-        }
-    }, []);
 
     return (
         <RNPickerSelect
-            onValueChange={(value) => switchLanguage(value)}
+            onValueChange={(value) => i18n.changeLanguage(value)}
             items={[
                 { label: "EN", value: "en" },
                 { label: "FR", value: "fr" },
@@ -68,10 +52,7 @@ const LanguagePicker = () => {
                 },
             }}
             placeholder={{}}
-            value={selectedLanguage}
             fixAndroidTouchableBug={true}
         />
     );
-};
-
-export default LanguagePicker;
+}

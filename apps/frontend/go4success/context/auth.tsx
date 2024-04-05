@@ -1,13 +1,14 @@
 import * as React from "react";
 import { useRouter, useSegments } from "expo-router";
 import axios from "axios";
-import Toast from "react-native-root-toast";
-import { Platform } from "react-native";
+import Toast from "react-native-toast-message";
+import { UserRegister } from "@/types/UserRegister";
+import { UserLogin } from "@/types/UserLogin";
+import axiosConfig from "@/constants/axiosConfig";
+import { API_BASE_URL } from "@/constants/ConfigApp";
+import { User } from "@/types/User";
 
-// Set the default values for axios
-axios.defaults.withCredentials = true;
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-axios.defaults.xsrfCookieName = "csrftoken";
+axiosConfig();
 
 const AuthContext = React.createContext<any>(null);
 
@@ -18,19 +19,26 @@ export function useAuth() {
 export function AuthProvider({ children }: React.PropsWithChildren) {
     const rootSegment = useSegments()[0];
     const router = useRouter();
-    const [user, setUser] = React.useState<string | undefined>("a");
-    
+    const [user, setUser] = React.useState<User | string | undefined>("");
+    const [isRegistered, setIsRegistered] = React.useState<boolean>(false);
+    const [isSignedIn, setIsSignedIn] = React.useState<boolean>(false);
+    const [isSignedOut, setIsSignedOut] = React.useState<boolean>(false);
 
-    React.useEffect(() => {
+    const refreshUser = () => {
         axios
-            .get("http://localhost:8000/api/current_user/")
+            .get(`${API_BASE_URL}/auth/current_user/`)
             .then((res) => {
                 setUser(res.data);
             })
             .catch((err) => {
                 console.log(err);
             });
+    };
+
+    React.useEffect(() => {
+        refreshUser();
     }, []);
+
     React.useEffect(() => {
         if (user === undefined) return;
 
@@ -46,86 +54,82 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         <AuthContext.Provider
             value={{
                 user: user,
-                signUp: (
-                    username: string,
-                    email: string,
-                    lastname: string,
-                    firstname: string,
-                    noma: number,
-                    password: string,
-                ) => {
+                refreshUser: refreshUser,
+                signUp: (userData: UserRegister) => {
                     {
                         axios
-                            .post("http://localhost:8000/api/register/", {
-                                username: username,
-                                email: email,
-                                last_name: lastname,
-                                first_name: firstname,
-                                noma: noma,
-                                password: password,
+                            .post(`${API_BASE_URL}/auth/register/`, {
+                                username: userData.username,
+                                email: userData.email,
+                                // eslint-disable-next-line camelcase
+                                last_name: userData.lastName,
+                                // eslint-disable-next-line camelcase
+                                first_name: userData.firstName,
+                                noma: userData.noma,
+                                password: userData.password,
                             })
                             .then((res) => {
-                                console.log(res.data);
                                 setUser(res.data);
+                                setIsRegistered(true);
                             })
                             .catch((err) => {
-                                console.log(err);
-                                if (err.response.status === 400) {
-                                    if (Platform.OS === "web") {
-                                        alert(err.response.data);
-                                    } else {
-                                        Toast.show(err.response.data, {
-                                            duration: Toast.durations.LONG,
-                                        });
-                                    }
+                                try {
+                                    Toast.show({
+                                        type: "error",
+                                        text1: "Erreur",
+                                        text2: err.response.data,
+                                    });
+                                } catch (e) {
+                                    Toast.show({
+                                        type: "error",
+                                        text1: "Erreur",
+                                        text2: "Veuillez réessayer plus tard. Le serveur ne répond pas.",
+                                    });
                                 }
                             });
                     }
                 },
-                signIn: (username: string, password: string) => {
+
+                signIn: (userData: UserLogin) => {
                     axios
-                        .post("http://localhost:8000/api/login/", {
-                            username: username,
-                            password: password,
+                        .post(`${API_BASE_URL}/auth/login/`, {
+                            username: userData.username,
+                            password: userData.password,
                         })
                         .then((res) => {
-                            console.log(res);
                             setUser(res.data);
+                            setIsSignedIn(true);
                         })
                         .catch((err) => {
-                            console.log(err);
-                            if (err.response.status === 400) {
-                                if (Platform.OS === "web") {
-                                    alert(
-                                        "Nom d'utilisateur ou mot de passe incorrect",
-                                    );
-                                } else {
-                                    Toast.show(
-                                        "Nom d'utilisateur ou mot de passe incorrect",
-                                        {
-                                            duration: Toast.durations.LONG,
-                                        },
-                                    );
+                            try {
+                                if (err.response.status === 400) {
+                                    Toast.show({
+                                        type: "error",
+                                        text1: "Erreur",
+                                        text2: "Nom d'utilisateur ou mot de passe incorrect",
+                                    });
                                 }
+                            } catch (e) {
+                                Toast.show({
+                                    type: "error",
+                                    text1: "Erreur",
+                                    text2: "Veuillez réessayer plus tard. Le serveur ne répond pas.",
+                                });
                             }
                         });
                 },
 
                 signOut: () => {
                     axios
-                        .post("http://localhost:8000/api/logout/")
-                        .then((res) => {
-                            console.log(res);
+                        .post(`${API_BASE_URL}/auth/logout/`)
+                        .then(() => {
                             setUser("");
+                            setIsSignedOut(true);
                         })
                         .catch((err) => {
                             console.log(err);
                         });
                 },
-
-
-       
-                
             }}
         >
             {children}

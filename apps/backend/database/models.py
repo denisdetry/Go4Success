@@ -35,11 +35,13 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=255, unique=True)
-    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=255, unique=True,
+                                error_messages={"unique": "Ce nom d'utilisateur est déjà utilisé."})
+    email = models.EmailField(unique=True, error_messages={"unique": "Cette adresse mail est déjà utilisée."})
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    noma = models.CharField(max_length=63, blank=True, null=True)
+    noma = models.CharField(max_length=63, blank=True, null=True, unique=True,
+                            error_messages={"unique": "Ce noma est déjà utilisé."})
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -67,6 +69,18 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.first_name
 
 
+class Course(models.Model):
+    id = models.AutoField(primary_key=True)
+    code = models.CharField(max_length=63)
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return "%s - %s" % (self.code, self.name)
+
+    class Meta:
+        unique_together = (('code', 'name'),)
+
+
 class Site(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, unique=True)
@@ -85,18 +99,6 @@ class Room(models.Model):
 
     class Meta:
         unique_together = (('name', 'site'),)
-
-
-class Course(models.Model):
-    id = models.AutoField(primary_key=True)
-    code = models.CharField(max_length=63)
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return "%s - %s" % (self.code, self.name)
-
-    class Meta:
-        unique_together = (('code', 'name'),)
 
 
 class Activity(models.Model):

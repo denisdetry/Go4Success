@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
     Modal,
-    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -9,15 +8,19 @@ import {
     View,
 } from "react-native";
 import Colors from "../constants/Colors";
-import ButtonComponent from "./Button";
-import axios from "axios";
-import { useAuth } from "@/context/auth";
-import Toast from "react-native-root-toast";
+import ButtonComponent from "./ButtonComponent";
 
-// Set the default values for axios
-axios.defaults.withCredentials = true;
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-axios.defaults.xsrfCookieName = "csrftoken";
+import { useAuth } from "@/context/auth";
+import { isMobile } from "@/constants/screensWidth";
+import axiosConfig from "@/constants/axiosConfig";
+import { useMutation } from "@tanstack/react-query";
+import { API_BASE_URL } from "@/constants/ConfigApp";
+import axios from "axios";
+import Toast from "react-native-toast-message";
+
+import { queryClient } from "@/app/_layout";
+
+axiosConfig();
 
 interface CardProps {
     readonly id: string;
@@ -129,59 +132,54 @@ const Card: React.FC<CardProps> = ({
     description,
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
-
     const { user } = useAuth();
 
-    const handleRegister = () => {
-        axios
-            .post("http://localhost:8000/api/register_activity/", {
-                activity: id,
-                student: user.id,
-            })
-            .then((res) => {
-                if (Platform.OS === "web") {
-                    alert("Registered");
-                } else {
-                    Toast.show("Registered", {
-                        duration: Toast.durations.LONG,
-                    });
-                }
-                setModalVisible(!modalVisible);
-                console.log(res);
-            })
-            .catch((err) => {
-                if (err.response.status === 400) {
-                    if (Platform.OS === "web") {
-                        alert("Vous êtes déjà inscrit à cette activité");
-                    } else {
-                        Toast.show("Vous êtes déjà inscrit à cette activité", {
-                            duration: Toast.durations.LONG,
-                        });
-                    }
-                } else if (err.response.status === 403) {
-                    if (Platform.OS === "web") {
-                        alert(
-                            "Vous n'êtes pas autorisé à vous inscrire à cette activité",
-                        );
-                    } else {
-                        Toast.show(
-                            "Vous n'êtes pas autorisé à vous inscrire à cette activité",
-                            {
-                                duration: Toast.durations.LONG,
-                            },
-                        );
-                    }
-                }
-                setModalVisible(!modalVisible);
-                console.log(err);
+    const handelRegister = useMutation({
+        mutationFn: async () => {
+            const response = await axios.post(
+                `${API_BASE_URL}/activities/register_activity/`,
+                {
+                    activity: id,
+                    student: user.id,
+                },
+            );
+            return response.data;
+        },
+        onSuccess: () => {
+            Toast.show({
+                type: "success",
+                text1: "Félicitation ! 🎉",
+                text2: "Vous êtes parfaitement inscrit à l'atelier : " + title,
             });
-    };
+            void queryClient.invalidateQueries({
+                queryKey: ["activities"],
 
+            });
+            setModalVisible(!modalVisible);
+        },
+        onError: (error: any) => {
+            if (error.response.status === 400) {
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Vous êtes déjà inscrit à cet atelier",
+                });
+            } else {
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Une erreur s'est produite lors de l'inscription",
+                });
+            }
+
+            setModalVisible(!modalVisible);
+        },
+    });
     return (
         <View style={styles.centeredView}>
             {/* Modal content */}
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => {
@@ -211,7 +209,7 @@ const Card: React.FC<CardProps> = ({
                         <View style={styles.buttonContainer}>
                             <ButtonComponent
                                 text="S'inscrire"
-                                onPress={handleRegister}
+                                onPress={() => handelRegister.mutate()}
                                 buttonType={"primary"}
                             />
                             <ButtonComponent
@@ -271,7 +269,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 15,
         height: 180,
-        maxWidth: 350,
+        width: isMobile ? 280 : 350,
     },
     bottomRow: {
         flex: 1,
@@ -288,6 +286,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginTop: 22,
+        backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     modalView: {
         backgroundColor: Colors.workshopLightColor,
@@ -313,14 +312,14 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     title: {
-        fontSize: 18,
+        fontSize: isMobile ? 16 : 18,
         fontWeight: "bold",
         color: "white",
     },
     text: {
         alignSelf: "flex-end",
         alignItems: "stretch",
-        fontSize: 16,
+        fontSize: isMobile ? 13 : 16,
         color: "white",
     },
 });

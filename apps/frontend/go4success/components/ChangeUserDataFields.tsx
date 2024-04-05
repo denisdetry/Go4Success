@@ -5,12 +5,11 @@ import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import axios from "axios";
 import { useAuth } from "@/context/auth";
-import Toast from "react-native-toast-message";
-import axiosConfig from "@/constants/axiosConfig";
 import UserProfileModal from "@/components/modals/UserProfileModal";
 import { API_BASE_URL } from "@/constants/ConfigApp";
+import { useMutation } from "@tanstack/react-query";
+import Toast from "react-native-toast-message";
 
-axiosConfig();
 
 interface ChangeUserDataFieldsProps {
     readonly data: any;
@@ -32,38 +31,44 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
         setEditable(!editable);
     };
 
-    const fetchData = () => {
-        const data: { [index: string]: any } = {};
-        data[dataKey] = newData;
+    const fetchData = useMutation({
+        mutationFn: async () => {
+            const data: { [index: string]: any } = {};
+            data[dataKey] = newData;
+            const response = await axios.patch(
+                `${API_BASE_URL}/auth/user_profile/` + user.id + "/",
+                data,
+            );
 
-        axios
-            .patch(`${API_BASE_URL}/auth/user_profile/` + user.id + "/", data)
-            .then(() => {
-                Toast.show({
-                    type: "success",
-                    text1: "Félicitation ! 🎉",
-                    text2: "Votre " + label.toLowerCase() + " a été mise à jour",
-                });
-                refreshUser();
-                switchEdit();
-            })
-            .catch((err) => {
-                console.log(err);
-                const error = err.response.data[dataKey] || "Une erreur est survenue";
-                Toast.show({
-                    type: "error",
-                    text1: "Erreur",
-                    text2: error,
-                });
+            return response.data;
+        },
+        onSuccess: () => {
+            Toast.show({
+                type: "success",
+                text1: "Félicitation ! 🎉",
+                text2: "Votre " + label.toLowerCase() + " a été mise à jour",
             });
-    };
+            refreshUser();
+            switchEdit();
+        },
+        onError: (error: any) => {
+            console.log(error);
+            const errorMessages =
+                error.response.data[dataKey] || "Une erreur est survenue";
+            Toast.show({
+                type: "error",
+                text1: "Erreur",
+                text2: errorMessages,
+            });
+        },
+    });
 
     const handleCancel = () => {
         setIsModalVisible(false);
     };
 
     const handleConfirm = () => {
-        fetchData();
+        fetchData.mutate();
         setIsModalVisible(false);
     };
 

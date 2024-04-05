@@ -9,12 +9,15 @@ import {
 } from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
-import axios from "axios";
+
 import { useAuth } from "@/context/auth";
-import Toast from "react-native-toast-message";
 import { isMobile } from "@/constants/screensWidth";
 import axiosConfig from "@/constants/axiosConfig";
+import { useMutation } from "@tanstack/react-query";
 import { API_BASE_URL } from "@/constants/ConfigApp";
+import axios from "axios";
+import Toast from "react-native-toast-message";
+
 import { queryClient } from "@/app/_layout";
 
 axiosConfig();
@@ -130,49 +133,48 @@ const Card: React.FC<CardProps> = ({
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
-    const handleRegister = () => {
-        axios
-            .post(`${API_BASE_URL}/activities/register_activity/`, {
-                activity: id,
-                student: user.id,
-            })
-            .then((res) => {
-                Toast.show({
-                    type: "success",
-                    text1: "Félicitation ! 🎉",
-                    text2: "Vous êtes parfaitement inscrit à l'atelier : " + title,
-                });
-                void queryClient.invalidateQueries({
-                    queryKey: ["activities"],
-                });
-                setModalVisible(!modalVisible);
-                console.log(res);
-            })
-            .catch((err) => {
-                if (err.response.status === 400 && user.id) {
-                    Toast.show({
-                        type: "error",
-                        text1: "Erreur",
-                        text2: "Vous êtes déjà inscrit à cet atelier",
-                    });
-                } else if (err.response.status === 403 && user.id) {
-                    Toast.show({
-                        type: "error",
-                        text1: "Erreur",
-                        text2: "Vous n'êtes pas autorisé à vous inscrire à cet atelier",
-                    });
-                } else {
-                    Toast.show({
-                        type: "error",
-                        text1: "Erreur",
-                        text2: "Veuillez réessayer plus tard. Le serveur ne répond pas.",
-                    });
-                }
-                setModalVisible(!modalVisible);
-                console.log(err);
-            });
-    };
 
+    const handelRegister = useMutation({
+        mutationFn: async () => {
+            const response = await axios.post(
+                `${API_BASE_URL}/activities/register_activity/`,
+                {
+                    activity: id,
+                    student: user.id,
+                },
+            );
+            return response.data;
+        },
+        onSuccess: () => {
+            Toast.show({
+                type: "success",
+                text1: "Félicitation ! 🎉",
+                text2: "Vous êtes parfaitement inscrit à l'atelier : " + title,
+            });
+            void queryClient.invalidateQueries({
+                queryKey: ["activities"],
+
+            });
+            setModalVisible(!modalVisible);
+        },
+        onError: (error: any) => {
+            if (error.response.status === 400) {
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Vous êtes déjà inscrit à cet atelier",
+                });
+            } else {
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Une erreur s'est produite lors de l'inscription",
+                });
+            }
+
+            setModalVisible(!modalVisible);
+        },
+    });
     return (
         <View style={styles.centeredView}>
             {/* Modal content */}
@@ -207,7 +209,7 @@ const Card: React.FC<CardProps> = ({
                         <View style={styles.buttonContainer}>
                             <ButtonComponent
                                 text="S'inscrire"
-                                onPress={handleRegister}
+                                onPress={() => handelRegister.mutate()}
                                 buttonType={"primary"}
                             />
                             <ButtonComponent

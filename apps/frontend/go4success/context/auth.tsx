@@ -6,6 +6,7 @@ import { UserRegister } from "@/types/UserRegister";
 import { UserLogin } from "@/types/UserLogin";
 import axiosConfig from "@/constants/axiosConfig";
 import { API_BASE_URL } from "@/constants/ConfigApp";
+import { User } from "@/types/User";
 
 axiosConfig();
 
@@ -18,7 +19,7 @@ export function useAuth() {
 export function AuthProvider({ children }: React.PropsWithChildren) {
     const rootSegment = useSegments()[0];
     const router = useRouter();
-    const [user, setUser] = React.useState<string | undefined>("");
+    const [user, setUser] = React.useState<User | string | undefined>("");
     const [isRegistered, setIsRegistered] = React.useState<boolean>(false);
     const [isSignedIn, setIsSignedIn] = React.useState<boolean>(false);
     const [isSignedOut, setIsSignedOut] = React.useState<boolean>(false);
@@ -87,6 +88,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             });
                     }
                 },
+
                 signIn: (userData: UserLogin) => {
                     axios
                         .post(`${API_BASE_URL}/auth/login/`, {

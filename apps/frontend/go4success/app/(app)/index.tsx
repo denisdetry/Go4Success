@@ -1,5 +1,5 @@
 import { ScrollView, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import styles from "@/styles/global";
 import FilterWorkshop from "@/components/FilterActivity";
@@ -22,8 +22,10 @@ export default function index() {
     const [allMessages, setAllMessages] = useState([]);
     const { user, showLoginToast, showRegisterToast } = useAuth();
 
-    showLoginToast();
-    showRegisterToast();
+    useEffect(() => {
+        showLoginToast();
+        showRegisterToast();
+    }, []);
 
     const renderMessages = ({ item }: { item: Message }) => {
         return <Text> {item.content}</Text>;

@@ -1,5 +1,5 @@
 import { ScrollView, Text, TextInput, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/global";
 import Button from "@/components/ButtonComponent";
 import { useAuth } from "@/context/auth";
@@ -31,7 +31,9 @@ export default function login() {
         },
     });
 
-    showLogoutToast();
+    useEffect(() => {
+        showLogoutToast();
+    }, []);
 
     const onSubmit = (userData: UserLogin) => {
         signIn(userData);

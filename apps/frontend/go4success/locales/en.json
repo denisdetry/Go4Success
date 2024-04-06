@@ -78,7 +78,9 @@
     "successPasswordChange": "Your password has been successfully changed",
     "defaultErrorMessage": "Something went wrong !",
     "error": "Error",
-    "areYouSure": "Are you sure to change your"
+    "areYouSure": "Are you sure to change your",
+    "changeUserInfoSuccessPart1": "Your ",
+    "changeUserInfoSuccessPart2": " has been successfully changed"
   },
   "translateToast": {
     "SuccessText1": "Congratulation ! \uD83C\uDF89",

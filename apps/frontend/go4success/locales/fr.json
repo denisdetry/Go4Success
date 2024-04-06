@@ -78,7 +78,9 @@
     "successPasswordChange": "Votre mot de passe a été mis à jour avec succès",
     "defaultErrorMessage": "Une erreur est survenue",
     "error": "Erreur",
-    "areYouSure": "Êtes-vous sûr de vouloir changer de"
+    "areYouSure": "Êtes-vous sûr de vouloir changer de",
+    "changeUserInfoSuccessPart1": "Votre ",
+    "changeUserInfoSuccessPart2": " a été mis à jour avec succès"
   },
   "translateToast": {
     "SuccessText1": "Félicitation ! \uD83C\uDF89",

@@ -9,6 +9,7 @@ import UserProfileModal from "@/components/modals/UserProfileModal";
 import { API_BASE_URL } from "@/constants/ConfigApp";
 import { useMutation } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
+import { useTranslation } from "react-i18next";
 
 interface ChangeUserDataFieldsProps {
     readonly data: any;
@@ -26,6 +27,7 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
     const [newData, setNewData] = useState(data);
     const { user, refreshUser } = useAuth();
 
+    const { t } = useTranslation();
     const switchEdit = () => {
         setEditable(!editable);
     };
@@ -45,7 +47,10 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
             Toast.show({
                 type: "success",
                 text1: "Félicitation ! 🎉",
-                text2: "Votre " + label.toLowerCase() + " a été mise à jour",
+                text2:
+                    t("translationProfile.changeUserInfoSuccessPart1") +
+                    label.toLowerCase() +
+                    t("translationProfile.changeUserInfoSuccessPart2"),
             });
             refreshUser();
             switchEdit();

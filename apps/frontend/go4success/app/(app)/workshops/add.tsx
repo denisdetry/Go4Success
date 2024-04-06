@@ -6,6 +6,7 @@ import React from "react";
 import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
 import InputAutocomplete from "@/components/InputAutocomplete";
+import MultipleSelectSearch from "@/components/MultipleSelectSearch";
 
 export default function Add() {
     const generateHourQuarterList = () => {
@@ -104,7 +105,7 @@ export default function Add() {
                     defaultValue={""}
                 />
 
-                {/* <Controller
+                <Controller
                     control={control}
                     render={({ field: { onChange } }) => (
                         <MultipleSelectSearch
@@ -116,7 +117,7 @@ export default function Add() {
                     )}
                     name={"room"}
                     defaultValue={""}
-                />*/}
+                />
 
                 <Controller
                     control={control}

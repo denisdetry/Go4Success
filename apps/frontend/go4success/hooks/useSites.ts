@@ -23,8 +23,8 @@ export function useSites(siteId?: string) {
                 },
             );
             return response.data.map((site) => ({
-                label: site.name,
-                value: site.id,
+                key: site.id,
+                value: site.name,
             }));
         },
     });

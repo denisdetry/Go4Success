@@ -145,7 +145,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         Toast.show({
                             type: "success",
                             text1: "Félicitations ! 🎉",
-                            text2: "Inscription reussie ! Bienvenue sur Go4Success",
+                            text2: "Inscription réussie ! Bienvenue sur Go4Success",
                         });
                         setIsRegistered(false);
                     }

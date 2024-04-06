@@ -84,13 +84,12 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         const activity = "activity" in item ? item.activity : item;
-        const siteName = sites.find((site) => site.value === activity.room.site)?.label;
 
         return (
             <Card
                 id={activity.id}
                 title={activity.name}
-                location={activity.room.name + " - " + siteName}
+                location={activity.room.name + " - " + activity.room.site.name}
                 date={activity.date_start}
                 type={activity.type}
                 description={activity.description}

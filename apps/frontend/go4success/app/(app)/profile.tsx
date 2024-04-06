@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
                 ? "column"
                 : "row",
         alignItems: "flex-start",
+        alignContent: "center",
         justifyContent: "space-evenly",
         width: "100%",
         paddingTop: 40,
@@ -119,6 +120,7 @@ const styles = StyleSheet.create({
     },
 
     userProfileFields: {
+        alignSelf: Platform.OS === "web" ? "auto" : "center",
         gap: 10,
     },
 });

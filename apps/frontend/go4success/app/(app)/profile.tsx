@@ -1,39 +1,42 @@
-import { Image, Platform, ScrollView, Text, View } from "react-native";
+import { Image, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import styles from "@/styles/global";
+import stylesGlobal from "@/styles/global";
 import { useAuth } from "@/context/auth";
-import ChangeUserDataFields from "@/components/ChangeUserDataFields";
+import ChangeUserDataFields from "@/components/userProfile/ChangeUserDataFields";
 import Button from "@/components/ButtonComponent";
 
 import profilePicture from "@/assets/images/profile-picture.jpg";
+import { ChangeUserPasswordFields } from "@/components/userProfile/ChangeUserPasswordFields";
+import { Divider } from "@rneui/themed";
+import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
 
+const UserProfileFieldsTitle = ({ title }: { readonly title: string }) => {
+    return (
+        <>
+            <Text style={[stylesGlobal.title, { textAlign: "center" }]}>{title}</Text>
+            <Divider />
+        </>
+    );
+};
 export default function profile() {
     const { user } = useAuth();
 
     return (
-        <ScrollView contentContainerStyle={styles.mainContainer}>
-            <View style={[styles.container]}>
-                <Text style={[styles.title, { textAlign: "center" }]}>Mon profil</Text>
-                <View
-                    style={{
-                        flexDirection: Platform.OS === "web" ? "row" : "column",
-                        alignItems: "center",
-                        justifyContent: "space-evenly",
-                        width: "80%",
-                        paddingTop: 40,
-                    }}
+        <ScrollView contentContainerStyle={stylesGlobal.mainContainer}>
+            <View style={stylesGlobal.container}>
+                <Text
+                    style={[stylesGlobal.title, { fontSize: 30, textAlign: "center" }]}
                 >
-                    <View>
+                    Mon profil
+                </Text>
+
+                <View style={styles.userProfileContainer}>
+                    {/* User profile picture */}
+                    <View style={styles.userProfileFields}>
+                        <UserProfileFieldsTitle title={"Photo de profil"} />
                         <Image
                             source={profilePicture}
-                            style={{
-                                borderRadius: 200,
-                                borderWidth: 0.5,
-                                width: 200,
-                                height: 200,
-                                resizeMode: "contain",
-                                alignSelf: "center",
-                            }}
+                            style={styles.userProfilePicture}
                         />
                         <Button
                             text={"Changer votre photo de profil"}
@@ -43,7 +46,8 @@ export default function profile() {
                     </View>
 
                     {/* Change User data fields */}
-                    <View style={{ gap: 10 }}>
+                    <View style={styles.userProfileFields}>
+                        <UserProfileFieldsTitle title={"Informations personnelles"} />
                         <ChangeUserDataFields
                             label={"Nom d'utilisateur"}
                             dataKey={"username"}
@@ -70,9 +74,41 @@ export default function profile() {
                             data={user.noma}
                         />
                     </View>
+
                     {/* Change user password fields */}
+                    <View style={styles.userProfileFields}>
+                        <UserProfileFieldsTitle title={"Mot de passe"} />
+                        <ChangeUserPasswordFields />
+                    </View>
                 </View>
             </View>
         </ScrollView>
     );
 }
+
+const styles = StyleSheet.create({
+    userProfileContainer: {
+        flexDirection:
+            Platform.OS !== "web" || isMobile || isTablet || isTabletMini
+                ? "column"
+                : "row",
+        alignItems: "flex-start",
+        justifyContent: "space-evenly",
+        width: "80%",
+        paddingTop: 40,
+        gap: 40,
+        flexWrap: "wrap",
+    },
+    userProfilePicture: {
+        borderRadius: 200,
+        borderWidth: 0.5,
+        width: 200,
+        height: 200,
+        resizeMode: "contain",
+        alignSelf: "center",
+    },
+
+    userProfileFields: {
+        gap: 10,
+    },
+});

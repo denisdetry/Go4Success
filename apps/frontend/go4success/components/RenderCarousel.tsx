@@ -18,8 +18,8 @@ const RenderCarousel: React.FC<CarouselProps> = ({ data, renderItem }) => {
                 contentContainerStyle={{ gap: 10 }}
                 data={data}
                 renderItem={renderItem}
-                horizontal
-                pagingEnabled
+                horizontal={true}
+                pagingEnabled={true}
                 showsHorizontalScrollIndicator={false}
             />
         </View>
@@ -29,6 +29,7 @@ const RenderCarousel: React.FC<CarouselProps> = ({ data, renderItem }) => {
             height={width / 1.9}
             renderItem={renderItem}
             data={data}
+            loop={false}
             autoPlay={true}
             autoPlayInterval={3000}
             panGestureHandlerProps={{

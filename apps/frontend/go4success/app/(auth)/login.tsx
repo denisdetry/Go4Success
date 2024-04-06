@@ -54,7 +54,7 @@ export default function login() {
                                     placeholder={"Nom d'utilisateur"}
                                     onChangeText={onChange}
                                     value={value}
-                                ></TextInput>
+                                />
                             </View>
                         )}
                         name="username"

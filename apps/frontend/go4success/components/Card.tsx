@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
     Modal,
+    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -10,7 +11,7 @@ import {
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
 import { useAuth } from "@/context/auth";
-import { isMobile } from "@/constants/screensWidth";
+import { isMobile, width } from "@/constants/screensWidth";
 import axiosConfig from "@/constants/axiosConfig";
 import { useMutation } from "@tanstack/react-query";
 import { API_BASE_URL } from "@/constants/ConfigApp";
@@ -25,6 +26,7 @@ interface CardProps {
     readonly title: string;
     readonly location: string;
     readonly date: string;
+    readonly hour: string;
     readonly type: string;
     readonly description: string;
 }
@@ -126,6 +128,7 @@ const Card: React.FC<CardProps> = ({
     title,
     location,
     date,
+    hour,
     type,
     description,
 }) => {
@@ -197,6 +200,7 @@ const Card: React.FC<CardProps> = ({
 
                         <View style={styleFunctions.getModalDataStyle(type)}>
                             <Text style={styles.modalText}>Date : {date}</Text>
+                            <Text style={styles.modalText}>Hour : {hour}</Text>
                             <Text style={styles.modalText}>Place : {location}</Text>
                             <Text style={styles.modalText}>Type : {type}</Text>
                             <View style={styles.separator} />
@@ -226,8 +230,14 @@ const Card: React.FC<CardProps> = ({
             >
                 <Text style={styles.title}>{title}</Text>
                 <View style={styles.bottomRow}>
-                    <Text style={styles.text}>{location}</Text>
-                    <Text style={styles.text}>{date}</Text>
+                    <View style={styles.bottomRowLocation}>
+                        <Text style={styles.text}>{location}</Text>
+                    </View>
+
+                    <View style={styles.bottomRowDate}>
+                        <Text style={styles.text}>{date}</Text>
+                        <Text style={styles.text}>{hour}</Text>
+                    </View>
                 </View>
             </TouchableOpacity>
         </View>
@@ -264,15 +274,28 @@ const styles = StyleSheet.create({
     },
     card: {
         borderRadius: 10,
-        padding: 15,
+        padding: 12,
         height: 180,
-        width: isMobile ? 280 : 350,
+        width: Platform.OS === "web" ? (isMobile ? 280 : 350) : width - 80,
     },
     bottomRow: {
         flex: 1,
+        width: "100%",
         flexDirection: "row",
-        gap: 30,
+        justifyContent: "space-between",
     },
+
+    bottomRowLocation: {
+        width: "50%",
+        flexDirection: "row",
+    },
+
+    bottomRowDate: {
+        width: "50%",
+        justifyContent: "flex-end",
+        flexDirection: "column",
+    },
+
     centeredView: {
         marginTop: 22,
         justifyContent: "center",

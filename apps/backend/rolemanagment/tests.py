@@ -44,7 +44,7 @@ class RoleManagementTest(APITestCase):
         self.view_patch = EditRoleView.as_view({'patch': 'partial_update'})
         self.view_delete = EditRoleView.as_view({'delete': 'destroy'})
         request = self.factory.get('/rolemanagement')
-        force_authenticate(request, user=self.user)
+        force_authenticate(request, user=self.superUser)
 
     def test_create_connection(self):
 
@@ -56,7 +56,7 @@ class RoleManagementTest(APITestCase):
         }
 
         request = self.factory.get('/api/rolemanagement')
-        force_authenticate(request, user=self.user)
+        force_authenticate(request, user=self.superUser)
         response = self.view(request)
         self.assertEqual(dict(response.data[0]), correct_answer)
 
@@ -113,11 +113,12 @@ class RoleManagementTest(APITestCase):
 
         request_post = self.factory.post(
             '/rolemanagement/editRole/', {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
+        force_authenticate(request_post, user=self.superUser)
 
         request_patch = self.factory.patch(
             f'/rolemanagement/editRole/{user_id}', {'user': 1, 'is_professor': True, 'is_tutor': False}, format='json')
 
-        force_authenticate(request_post, user=self.superUser)
+        force_authenticate(request_patch, user=self.superUser)
 
         self.view_edit(request_post)
         response = self.view_patch(request_patch, pk=user_id)
@@ -129,11 +130,12 @@ class RoleManagementTest(APITestCase):
 
         request_post = self.factory.post(
             '/rolemanagement/editRole/', {'user': 1, 'is_professor': True, 'is_tutor': False}, format='json')
+        force_authenticate(request_post, user=self.superUser)
 
         request_patch = self.factory.patch(
             f'/rolemanagement/editRole/{user_id}', {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
 
-        force_authenticate(request_post, user=self.superUser)
+        force_authenticate(request_patch, user=self.superUser)
 
         self.view_edit(request_post)
         response = self.view_patch(request_patch, pk=user_id)
@@ -146,11 +148,12 @@ class RoleManagementTest(APITestCase):
 
         request = self.factory.post(
             '/rolemanagement/editRole/', {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
+        force_authenticate(request, user=self.superUser)
 
         request_patch = self.factory.patch(
             f'/rolemanagement/editRole/{user_id}', {'user': 1, 'is_professor': True, 'is_tutor': True}, format='json')
 
-        force_authenticate(request, user=self.superUser)
+        force_authenticate(request_patch, user=self.superUser)
         with self.assertRaises(ValidationError) as context:
             self.view_edit(request)
             response = self.view_patch(request_patch, pk=user_id)
@@ -163,11 +166,12 @@ class RoleManagementTest(APITestCase):
 
         request = self.factory.post(
             '/rolemanagement/editRole/', {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
+        force_authenticate(request, user=self.superUser)
 
         request_patch = self.factory.patch(
             f'/rolemanagement/editRole/{user_id}', {'user': 1, 'is_professor': False, 'is_tutor': False}, format='json')
+        force_authenticate(request_patch, user=self.superUser)
 
-        force_authenticate(request, user=self.superUser)
         with self.assertRaises(ValidationError) as context:
             self.view_edit(request)
             response = self.view_patch(request_patch, pk=user_id)
@@ -179,11 +183,13 @@ class RoleManagementTest(APITestCase):
         user_id = 1
         request = self.factory.post(
             '/rolemanagement/editRole/', {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
+        force_authenticate(request, user=self.superUser)
 
         self.view_edit(request)
 
         request_delete = self.factory.delete(
             f'/rolemanagement/editRole/{user_id}')
+        force_authenticate(request_delete, user=self.superUser)
 
         response = self.view_delete(request_delete, pk=user_id)
 
@@ -195,6 +201,7 @@ class RoleManagementTest(APITestCase):
 
         request_delete = self.factory.delete(
             f'/rolemanagement/editRole/{user_id}')
+        force_authenticate(request_delete, user=self.superUser)
 
         response = self.view_delete(request_delete, pk=user_id)
 

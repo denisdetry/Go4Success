@@ -8,7 +8,8 @@
     "noWorkshopAttend": "You are not registered for any workshop",
     "workshopAll": "Available workshops",
     "noWorkshopAll": "No workshops available",
-    "calendar": "My calendar"
+    "calendar": "My calendar",
+    "calendarWorking": "The calendar is under construction..."
   },
   "translationMenu": {
     "home": "Home",
@@ -25,5 +26,75 @@
     "SelectRoom": "Select a room",
     "ClearDates": "Clear dates",
     "SearchTitleWorkshop": "Search title Workshop"
+  },
+  "translateLogin": {
+    "title": "Sign in",
+    "username": "Username",
+    "password": "Password",
+    "loginButton": "Login",
+    "yupUsernameRequired": "Please enter a username",
+    "yupPasswordRequired": "Please enter a password"
+  },
+  "translateRegister": {
+    "title": "Sign up",
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "email": "Email",
+    "lastName": "Lastname",
+    "firstName": "Firstname",
+    "noma": "Noma",
+    "registerButton": "Sign up",
+    "yupUsernameRequired": "Please enter a username",
+    "yupUsernameMin": "The username must contain at least 3 characters",
+    "yupEmailRequired": "Please enter an email address",
+    "yupEmailInvalid": "Please enter a valid email address",
+    "yupPasswordRequired": "Please enter a password",
+    "yupPasswordConstraint": "Must contain 8 characters, one uppercase, one lowercase, one digit and one special character (ex: !@#$% &*_)",
+    "yupConfirmPasswordRequired": "Please confirm your password",
+    "yupPasswordEquals": "Passwords must match",
+    "yupLastNameRequired": "Please enter a lastname",
+    "yupFirstNameRequired": "Please enter a firstname",
+    "yupNomaRequired": "Please enter your noma (example: 20200584)",
+    "yupNomaConstraint": "The noma must contain exactly 8 digits."
+  },
+  "translationProfile": {
+    "title": "My profile",
+    "profilePictureTitle": "Profile picture",
+    "changeProfilePictureButton": "Change profile picture",
+    "userInfoTitle": "Personal information",
+    "passwordTitle": "Password",
+    "oldPassword": "Old password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "username": "Username",
+    "email": "Email",
+    "lastName": "Lastname",
+    "firstName": "Firstname",
+    "noma": "Noma",
+    "cancelPasswordChangeButton": "Cancel",
+    "confirmPasswordChangeButton": "Confirm",
+    "modifyPasswordChangeButton": "Modify your password",
+    "successPasswordChange": "Your password has been successfully changed",
+    "defaultErrorMessage": "Something went wrong !",
+    "error": "Error",
+    "areYouSure": "Are you sure to change your"
+  },
+  "translateToast": {
+    "SuccessText1": "Congratulation ! \uD83C\uDF89",
+    "ErrorText1": "Oups ! \uD83D\uDE1E",
+    "ServerErrorText2": "Please try again later. The server is not responding.",
+    "LoginSuccessText2": "Successful login! Welcome to Go4Success",
+    "LoginInfoErrorText2": "Incorrect username or password. Please try again.",
+    "RegisterSuccessText2": "Successful registration! Welcome to Go4Success",
+    "LogoutSuccessText1": "Successful logout",
+    "LogoutSuccessText2": "See you soon on Go4Success! \uD83D\uDE0A",
+    "RegisterActivitySuccessText2": "You are perfectly registered for the workshop:",
+    "RegisterActivityErrorText2": "An error occurred when registering for the workshop",
+    "AlreadyRegisteredActivityText2": "You are already registered for this workshop"
+  },
+  "translateRegisterActivity": {
+    "registerButton": "Sign up",
+    "closeButton": "Close"
   }
 }

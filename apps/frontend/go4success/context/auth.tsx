@@ -7,6 +7,7 @@ import { UserLogin } from "@/types/UserLogin";
 import axiosConfig from "@/constants/axiosConfig";
 import { API_BASE_URL } from "@/constants/ConfigApp";
 import { User } from "@/types/User";
+import { useTranslation } from "react-i18next";
 
 axiosConfig();
 
@@ -17,6 +18,7 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: React.PropsWithChildren) {
+    const { t } = useTranslation();
     const rootSegment = useSegments()[0];
     const router = useRouter();
     const [user, setUser] = React.useState<User | string | undefined>("");
@@ -75,14 +77,14 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 try {
                                     Toast.show({
                                         type: "error",
-                                        text1: "Erreur",
+                                        text1: t("translateToast.ErrorText1"),
                                         text2: err.response.data,
                                     });
                                 } catch (e) {
                                     Toast.show({
                                         type: "error",
-                                        text1: "Erreur",
-                                        text2: "Veuillez réessayer plus tard. Le serveur ne répond pas.",
+                                        text1: t("translateToast.ErrorText1"),
+                                        text2: t("translateToast.ServerErrorText2"),
                                     });
                                 }
                             });
@@ -104,15 +106,15 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 if (err.response.status === 400) {
                                     Toast.show({
                                         type: "error",
-                                        text1: "Erreur",
-                                        text2: "Nom d'utilisateur ou mot de passe incorrect",
+                                        text1: t("translateToast.ErrorText1"),
+                                        text2: t("translateToast.LoginInfoErrorText2"),
                                     });
                                 }
                             } catch (e) {
                                 Toast.show({
                                     type: "error",
-                                    text1: "Erreur",
-                                    text2: "Veuillez réessayer plus tard. Le serveur ne répond pas.",
+                                    text1: t("translateToast.ErrorText1"),
+                                    text2: t("translateToast.ServerErrorText2"),
                                 });
                             }
                         });
@@ -134,8 +136,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     if (isSignedIn) {
                         Toast.show({
                             type: "success",
-                            text1: "Félicitation ! 🎉",
-                            text2: "Connexion réussie ! Bienvenue sur Go4Success",
+                            text1: t("translateToast.SuccessText1"),
+                            text2: t("translateToast.LoginSuccessText2"),
                         });
                         setIsSignedIn(false);
                     }
@@ -144,8 +146,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     if (isRegistered) {
                         Toast.show({
                             type: "success",
-                            text1: "Félicitations ! 🎉",
-                            text2: "Inscription reussie ! Bienvenue sur Go4Success",
+                            text1: t("translateToast.SuccessText1"),
+                            text2: t("translateToast.RegisterSuccessText2"),
                         });
                         setIsRegistered(false);
                     }
@@ -154,8 +156,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     if (isSignedOut) {
                         Toast.show({
                             type: "success",
-                            text1: "Déconnexion réussie",
-                            text2: "A bientôt sur Go4Success !",
+                            text1: t("translateToast.LogoutSuccessText1"),
+                            text2: t("translateToast.LogoutSuccessText2"),
                         });
                         setIsSignedOut(false);
                     }

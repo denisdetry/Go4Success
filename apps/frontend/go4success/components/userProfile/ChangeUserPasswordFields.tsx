@@ -10,8 +10,10 @@ import { API_BASE_URL } from "@/constants/ConfigApp";
 import Toast from "react-native-toast-message";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
+import { useTranslation } from "react-i18next";
 
 export const ChangeUserPasswordFields = () => {
+    const { t } = useTranslation();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editable, setEditable] = useState(false);
     const { user, signIn } = useAuth();
@@ -54,14 +56,14 @@ export const ChangeUserPasswordFields = () => {
             Toast.show({
                 type: "success",
                 text1: "Félicitation ! 🎉",
-                text2: "Votre mot de passe a été mis à jour",
+                text2: t("translationProfile.successPasswordChange"),
             });
             signIn({ username: user.username, password: newPassword });
             clearFields();
         },
 
         onError(error: any) {
-            let errorMessages = "Une erreur est survenue";
+            let errorMessages = t("translationProfile.defaultErrorMessage");
 
             const { response } = error;
             if (response && response.data) {
@@ -77,8 +79,8 @@ export const ChangeUserPasswordFields = () => {
 
             Toast.show({
                 type: "error",
-                text1: "Erreur",
-                text2: errorMessages,
+                text1: t("translationProfile.error"),
+                text2: errorMessages || t("translationProfile.defaultErrorMessage"),
             });
         },
     });
@@ -140,11 +142,11 @@ export const ChangeUserPasswordFields = () => {
                 isVisible={isModalVisible}
                 onCancel={handleCancel}
                 onConfirm={handleConfirm}
-                dataLabelName={"Mot de passe"}
+                dataLabelName={t("translationProfile.passwordTitle").toLowerCase()}
             />
 
             {passwordFields(
-                "Ancien mot de passe",
+                t("translationProfile.oldPassword"),
                 oldPassword,
                 setOldPassword,
                 oldPasswordShow,
@@ -152,7 +154,7 @@ export const ChangeUserPasswordFields = () => {
             )}
 
             {passwordFields(
-                "Nouveau mot de passe",
+                t("translationProfile.newPassword"),
                 newPassword,
                 setNewPassword,
                 newPasswordShow,
@@ -160,7 +162,7 @@ export const ChangeUserPasswordFields = () => {
             )}
 
             {passwordFields(
-                "Confirmer nouveau mot de passe",
+                t("translationProfile.confirmPassword"),
                 newPasswordConfirmation,
                 setNewPasswordConfirmation,
                 newPasswordConfirmationShow,
@@ -176,7 +178,7 @@ export const ChangeUserPasswordFields = () => {
                         }}
                     >
                         <ButtonComponent
-                            text={"Annuler"}
+                            text={t("translationProfile.cancelPasswordChangeButton")}
                             onPress={() => {
                                 switchEdit();
                                 clearFields();
@@ -184,7 +186,7 @@ export const ChangeUserPasswordFields = () => {
                             buttonType={"danger"}
                         />
                         <ButtonComponent
-                            text={"Confirmer"}
+                            text={t("translationProfile.confirmPasswordChangeButton")}
                             onPress={() => {
                                 setIsModalVisible(true);
                             }}
@@ -194,7 +196,7 @@ export const ChangeUserPasswordFields = () => {
                 </>
             ) : (
                 <ButtonComponent
-                    text={"Modifier le mot de passe"}
+                    text={t("translationProfile.modifyPasswordChangeButton")}
                     onPress={() => {
                         switchEdit();
                     }}

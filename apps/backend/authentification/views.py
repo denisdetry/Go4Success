@@ -69,7 +69,6 @@ class UpdateProfileView(viewsets.ModelViewSet):
 
 class ChangePasswordView(generics.UpdateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
-    # authentication_classes = (SessionAuthentication,)
     queryset = User.objects.all()
     serializer_class = ChangePasswordSerializer
     lookup_field = 'id'

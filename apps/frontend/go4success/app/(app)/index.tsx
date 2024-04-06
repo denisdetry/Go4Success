@@ -83,7 +83,7 @@ export default function index() {
             {/* Calendar container */}
             <View style={styles.container}>
                 <Text style={styles.title}>{t("translation.calendar")}</Text>
-                <Text style={styles.text}>Le calendrier est en construction...</Text>
+                <Text style={styles.text}>{t("translation.calendarWorking")}</Text>
             </View>
         </ScrollView>
     );

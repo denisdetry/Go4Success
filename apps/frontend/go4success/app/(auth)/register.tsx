@@ -11,43 +11,45 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { UserRegister } from "@/types/UserRegister";
-
-const schema = yup.object().shape({
-    email: yup
-        .string()
-        .email("Veuillez entrer une adresse email valide")
-        .required("Veuillez entrer une adresse email"),
-    username: yup
-        .string()
-        .required("Veuillez entrer un nom d'utilisateur")
-        .min(3, "Le nom d'utilisateur doit contenir au moins 3 caractères"),
-    password: yup
-        .string()
-        .required("Veuillez entrer un mot de passe")
-        .matches(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
-            "Doit contenir 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial (ex: !@#$%^&*_)",
-        ),
-    passwordRetype: yup
-        .string()
-        .required("Veuillez confirmer votre mot de passe")
-        .matches(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
-            "Doit contenir 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial (ex: !@#$%^&*_)",
-        )
-        .equals([yup.ref("password")], "Les mots de passe doivent correspondre"),
-    lastName: yup.string().required("Veuillez entrer un nom de famille"),
-    firstName: yup.string().required("Veuillez entrer un prénom"),
-    noma: yup
-        .string()
-        .matches(/^[0-9]{8}$/, {
-            message: "Le noma doit contenir exactement 8 chiffres.",
-            excludeEmptyString: true,
-        })
-        .required("Veuillez entrer votre noma (exemple : 20200584)"),
-});
+import { useTranslation } from "react-i18next";
 
 export default function register() {
+    const { t } = useTranslation();
+    const schema = yup.object().shape({
+        email: yup
+            .string()
+            .email(t("translateRegister.yupEmailInvalid"))
+            .required(t("translateRegister.yupEmailRequired")),
+        username: yup
+            .string()
+            .required(t("translateRegister.yupUsernameRequired"))
+            .min(3, t("translateRegister.yupUsernameMin")),
+        password: yup
+            .string()
+            .required(t("translateRegister.yupPasswordRequired"))
+            .matches(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
+                t("translateRegister.yupPasswordConstraint"),
+            ),
+        passwordRetype: yup
+            .string()
+            .required(t("translateRegister.yupConfirmPasswordRequired"))
+            .matches(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
+                t("translateRegister.yupPasswordConstraint"),
+            )
+            .equals([yup.ref("password")], t("translateRegister.yupPasswordEquals")),
+        lastName: yup.string().required(t("translateRegister.yupLastNameRequired")),
+        firstName: yup.string().required(t("translateRegister.yupFirstNameRequired")),
+        noma: yup
+            .string()
+            .matches(/^[0-9]{8}$/, {
+                message: t("translateRegister.yupNomaConstraint"),
+                excludeEmptyString: true,
+            })
+            .required(t("translateRegister.yupNomaRequired")),
+    });
+
     const { signUp } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordRetype, setShowPasswordRetype] = useState(false);
@@ -78,7 +80,7 @@ export default function register() {
             contentContainerStyle={[styles.mainContainer, { justifyContent: "center" }]}
         >
             <View style={[styles.container, { shadowRadius: 0, backgroundColor: "" }]}>
-                <Text style={styles.title}>Inscription</Text>
+                <Text style={styles.title}>{t("translateRegister.title")}</Text>
                 {/*Email field*/}
                 <View style={styles.form}>
                     <Controller
@@ -88,7 +90,7 @@ export default function register() {
                             <View style={styles.inputField}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Adresse mail"
+                                    placeholder={t("translateRegister.email")}
                                     onChangeText={onChange}
                                     value={value}
                                 />
@@ -109,7 +111,7 @@ export default function register() {
                             <View style={styles.inputField}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Nom d'utilisateur"
+                                    placeholder={t("translateRegister.username")}
                                     onChangeText={onChange}
                                     value={value}
                                 />
@@ -132,7 +134,7 @@ export default function register() {
                             <View style={styles.inputField}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Nom de Famille"
+                                    placeholder={t("translateRegister.lastName")}
                                     onChangeText={onChange}
                                     value={value}
                                 />
@@ -155,7 +157,7 @@ export default function register() {
                             <View style={styles.inputField}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Prénom"
+                                    placeholder={t("translateRegister.firstName")}
                                     onChangeText={onChange}
                                     value={value}
                                 />
@@ -177,7 +179,7 @@ export default function register() {
                             <View style={styles.inputField}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Noma"
+                                    placeholder={t("translateRegister.noma")}
                                     onChangeText={onChange}
                                     value={value}
                                 />
@@ -200,7 +202,7 @@ export default function register() {
                             <View style={styles.inputField}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Mot de passe"
+                                    placeholder={t("translateRegister.password")}
                                     onChangeText={onChange}
                                     value={value}
                                     secureTextEntry={!showPassword}
@@ -229,7 +231,7 @@ export default function register() {
                             <View style={styles.inputField}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Retaper le mot de passe"
+                                    placeholder={t("translateRegister.confirmPassword")}
                                     onChangeText={onChange}
                                     value={value}
                                     secureTextEntry={!showPasswordRetype}
@@ -257,7 +259,7 @@ export default function register() {
 
                     {/*Submit button*/}
                     <Button
-                        text="S'inscrire"
+                        text={t("translateRegister.registerButton")}
                         onPress={handleSubmit(onSubmit)}
                         buttonType={"primary"}
                     />

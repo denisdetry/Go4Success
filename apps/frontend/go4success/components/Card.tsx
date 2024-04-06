@@ -18,6 +18,7 @@ import { API_BASE_URL } from "@/constants/ConfigApp";
 import axios from "axios";
 import Toast from "react-native-toast-message";
 import { queryClient } from "@/app/_layout";
+import { useTranslation } from "react-i18next";
 
 axiosConfig();
 
@@ -134,6 +135,7 @@ const Card: React.FC<CardProps> = ({
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
+    const { t } = useTranslation();
 
     const handelRegister = useMutation({
         mutationFn: async () => {
@@ -149,8 +151,8 @@ const Card: React.FC<CardProps> = ({
         onSuccess: () => {
             Toast.show({
                 type: "success",
-                text1: "Félicitation ! 🎉",
-                text2: "Vous êtes parfaitement inscrit à l'atelier : " + title,
+                text1: t("translateToast.SuccessText1"),
+                text2: t("translateToast.RegisterActivitySuccessText2") + title,
             });
             void queryClient.invalidateQueries({
                 queryKey: ["activities"],
@@ -161,14 +163,14 @@ const Card: React.FC<CardProps> = ({
             if (error.response.status === 400) {
                 Toast.show({
                     type: "error",
-                    text1: "Erreur",
-                    text2: "Vous êtes déjà inscrit à cet atelier",
+                    text1: t("translateToast.ErrorText1"),
+                    text2: t("translateToast.AlreadyRegisteredActivityText2"),
                 });
             } else {
                 Toast.show({
                     type: "error",
-                    text1: "Erreur",
-                    text2: "Une erreur s'est produite lors de l'inscription",
+                    text1: t("translateToast.ErrorText1"),
+                    text2: t("translateToast.RegisterActivityErrorText2"),
                 });
             }
 
@@ -209,12 +211,12 @@ const Card: React.FC<CardProps> = ({
 
                         <View style={styles.buttonContainer}>
                             <ButtonComponent
-                                text="S'inscrire"
+                                text={t("translateRegisterActivity.registerButton")}
                                 onPress={() => handelRegister.mutate()}
                                 buttonType={"primary"}
                             />
                             <ButtonComponent
-                                text="Fermer"
+                                text={t("translateRegisterActivity.closeButton")}
                                 onPress={() => setModalVisible(!modalVisible)}
                                 buttonType={"close"}
                             />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Picker, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Picker, Text, TouchableOpacity, View,StyleSheet } from "react-native";
 import axios from "axios";
 import axiosConfig from "@/constants/axiosConfig";
 import { API_BASE_URL } from "@/constants/ConfigApp";
@@ -166,41 +166,39 @@ export default function RoleManagement() {
 
         return (
             <FlatList
-                data={users}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <View>
-                        <Text>
-                            {item.id} {item.first_name} {item.last_name} {item.role}
-                        </Text>
-                        <Picker
-                            selectedValue={item.selectedRole}
-                            style={{ height: 50, width: 150 }}
-                            onValueChange={(itemValue, itemIndex) =>
-                                handleValueChange(itemValue, item.id)
-                            }
-                        >
-                            <Picker.Item label="student" value="student" />
-                            <Picker.Item label="super user" value="superuser" />
-                            <Picker.Item label="professor" value="professor" />
-                            <Picker.Item label="tutor" value="tutor" />
-                        </Picker>
+            data={users}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+                <View style={styles.listItem} >
+                <View style={styles.userInfo}>
+                    <Text>
+                    ID : {item.id} Prénom : {item.first_name}  Nom : {item.last_name}
+                    </Text>
+                </View>
+                <Picker
+                    selectedValue={item.selectedRole}
+                    style={styles.rolePicker}
+                    onValueChange={(itemValue) =>
+                    handleValueChange(itemValue, item.id)
+                    }
+                >
+                    <Picker.Item label="student" value="student" />
+                    <Picker.Item label="super user" value="superuser" />
+                    <Picker.Item label="professor" value="professor" />
+                    <Picker.Item label="tutor" value="tutor" />
+                </Picker>
+                <TouchableOpacity
+                    onPress={() => handlePress(item.id)}
+                    style={styles.saveButton}
+                >
+                    <Text style={{ color: "#fff", textAlign: "center" }}>
+                    Save
+                    </Text>
+                </TouchableOpacity>
+                </View>
+  )}
+/>
 
-                        <TouchableOpacity
-                            onPress={() => handlePress(item.id)}
-                            style={{
-                                backgroundColor: "#841584",
-                                padding: 10,
-                                borderRadius: 5,
-                            }}
-                        >
-                            <Text style={{ color: "#fff", textAlign: "center" }}>
-                                Save
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
-            />
         );
     };
 
@@ -232,3 +230,63 @@ const generateUsersInfoRole = (userInfo, userRole) => {
         role: roleMap[user.id] || "student",
     }));
 };
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    shadowColor: '#000',
+    shadowOffset: { height: 2, width: 0 },
+    padding: 20,
+    maxWidth: 400,
+    alignSelf: 'center',
+  },
+
+  listItem: {
+    flexDirection: 'row', // align children in a row
+    justifyContent: 'space-between', // space between name and button
+    alignItems: 'center', // center items vertically
+    paddingVertical: 10, // space above and below each item
+    backgroundColor: '#FFFFFF', // assuming a white background
+    borderRadius: 5, // rounded corners for each item
+    marginBottom: 5, // space between each list item
+    // other properties like shadow can be added here if needed
+  },
+  userInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  userDot: {
+    height: 10,
+    width: 10,
+    backgroundColor: '#000',
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  userName: {
+    // Add any specific styles for user name text if necessary
+  },
+  rolePicker: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 5,
+    marginTop: 10, // or other depending on layout
+  },
+  saveButton: {
+    backgroundColor: '#841584',
+    padding: 10,
+    borderRadius: 5,
+    color: '#fff',
+  },
+  errorIcon: {
+    color: '#ff0000',
+    marginLeft: 5,
+  },
+  successIcon: {
+    color: '#00ff00',
+    marginLeft: 5,
+  },
+});

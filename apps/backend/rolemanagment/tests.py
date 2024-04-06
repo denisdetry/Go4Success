@@ -1,6 +1,6 @@
 from django.test import TestCase
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
-from api.models import Teacher, User
+from database.models import Teacher, User
 from .serializers import *
 from rest_framework import *
 from .views import *

@@ -10,7 +10,7 @@ axios.defaults.xsrfCookieName = "csrftoken";
 
 export default function RoleManagement() {
     axiosConfig();
-    const [userRole, setUserRole] = useState([]);
+    const [userRole, setUserRole] = useState<UserRole[]>([]);
     const [selectedValue, setSelectedValue] = useState("");
 
     const [userInfo, setUserInfo] = useState([]);
@@ -22,6 +22,15 @@ export default function RoleManagement() {
         last_name: string;
         role: string;
     }
+
+
+    interface UserRole {
+    user: number;
+    is_professor: boolean;
+    is_tutor: boolean;
+    }
+
+
 
     useEffect(() => {
         axios
@@ -43,13 +52,11 @@ export default function RoleManagement() {
             });
     }, []);
 
-    console.log(userInfo);
-    console.log(userRole);
 
     function editRolePost(id: any, is_tutor: any, is_professor: any) {
         axios
             .post(`${API_BASE_URL}/rolemanagement/editRole/`, {
-                id: id,
+                user: id,
                 is_tutor: is_tutor,
                 is_professor: is_professor,
             })
@@ -60,7 +67,8 @@ export default function RoleManagement() {
 
     function editRolepatch(id, is_tutor, is_professor) {
         axios
-            .patch(`${API_BASE_URL}/rolemanagement/editRole/${id}`, {
+            .patch(`${API_BASE_URL}/rolemanagement/editRole/${id}/`, {
+                user:id,
                 is_tutor: is_tutor,
                 is_professor: is_professor,
             })
@@ -72,7 +80,7 @@ export default function RoleManagement() {
 
     function editRoledelete(id) {
         axios
-            .delete(`${API_BASE_URL}/rolemanagement/editRole/${id}`) // Correction ici
+            .delete(`${API_BASE_URL}/rolemanagement/editRole/${id}/`) // Correction ici
             .then((res) => {
                 console.log(res);
             })
@@ -81,20 +89,19 @@ export default function RoleManagement() {
 
     function rolemanagementpatch(id: any, super_user: any) {
         axios
-            .patch(`${API_BASE_URL}/rolemanagement/rolemanagement/${id}`, {
-                super_user: super_user,
+            .patch(`${API_BASE_URL}/rolemanagement/rolemanagement/${id}/`, {
+
+                is_superuser: super_user,
             })
             .then((res) => {
                 console.log(res);
             });
     }
 
-    function removeSuperUser(id, role: string) {
-        if (role === "superuser") {
-            rolemanagementpatch(id, false);
-        }
-    }
 
+
+
+    console.log(userRole);
     const usersInfoRole = generateUsersInfoRole(userInfo, userRole);
     console.log(usersInfoRole);
 
@@ -107,15 +114,35 @@ export default function RoleManagement() {
             }
 
             if (user.selectedRole === "student") {
-                removeSuperUser(user.id, user.role);
+                rolemanagementpatch(userId,false);
                 editRoledelete(user.id);
             } else if (user.selectedRole === "professor") {
-                removeSuperUser(user.id, user.role);
-                editRolepatch(user.id, false, true);
+                if(!userRole.some(element => element.user === userId)){
+                    editRolePost(userId,false,true);
+                    rolemanagementpatch(userId,false)
+
+                }
+                else{
+                    rolemanagementpatch(userId,false);
+                    editRolepatch(user.id, false, true);
+                }
+
             } else if (user.selectedRole === "tutor") {
-                removeSuperUser(user.id, user.role);
-                editRolepatch(user.id, true, false);
+
+                if(!userRole.some(element => element.user === userId)){
+                    editRolePost(userId,false,true);
+                    rolemanagementpatch(userId,false)
+                }
+                else{
+                    rolemanagementpatch(userId,false);                    
+                    editRolepatch(user.id, true, false);
+                }
+
+
+
+
             } else {
+                console.log("ok je passe ici");
                 rolemanagementpatch(user.id, true);
             }
         };
@@ -185,9 +212,8 @@ export default function RoleManagement() {
 }
 
 const generateUsersInfoRole = (userInfo, userRole) => {
-    // Cartographie des ID d'utilisateur à leurs rôles en utilisant les informations de `userRole`
+
     const roleMap = userRole.reduce((acc, curr) => {
-        // Déterminer le rôle de l'utilisateur basé sur `is_professor` et `is_tutor`
         const role = curr.is_professor
             ? "professor"
             : curr.is_tutor

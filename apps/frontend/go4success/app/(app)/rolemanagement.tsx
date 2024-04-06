@@ -61,7 +61,6 @@ export default function RoleManagement() {
     function editRolepatch(id, is_tutor, is_professor) {
         axios
             .patch(`${API_BASE_URL}/rolemanagement/editRole/${id}`, {
-                // Correction ici
                 is_tutor: is_tutor,
                 is_professor: is_professor,
             })

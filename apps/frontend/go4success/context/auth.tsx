@@ -11,6 +11,7 @@ import { queryClient } from "@/app/_layout";
 import { ActivityIndicator } from "react-native";
 import styles from "@/styles/global";
 import Colors from "@/constants/Colors";
+import { fetchBackend } from "@/utils/fetch";
 
 const AuthContext = React.createContext<any>(null);
 
@@ -138,8 +139,15 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         });
                 },
 
-                signOut: () => {
-                    axios
+                signOut: async () => {
+                    await fetchBackend("POST", "auth/logout/").then(
+                        () =>
+                            void queryClient.invalidateQueries({
+                                queryKey: ["current_user"],
+                            }),
+                    );
+
+                    /*axios
                         .post(`${API_BASE_URL}/auth/logout/`)
                         .then(() => {
                             void queryClient.invalidateQueries({
@@ -153,7 +161,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         })
                         .catch((err) => {
                             console.log(err.response.data);
-                        });
+                        });*/
                 },
             }}
         >

@@ -26,6 +26,7 @@ export async function fetchBackend<T extends any>(
     try {
         const response = await fetch(`${API_BASE_URL}/` + url, {
             method: type,
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
                 "X-CSRFToken": csrftoken,

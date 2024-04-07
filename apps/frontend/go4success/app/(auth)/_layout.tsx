@@ -2,7 +2,7 @@ import { Tabs } from "expo-router";
 import { FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useTranslation } from "react-i18next";
-import { AuthProvider } from "@/context/auth";
+import { AuthProvider } from "@/context/Auth";
 
 export default function Layout() {
     const { t } = useTranslation();

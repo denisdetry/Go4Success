@@ -1,4 +1,4 @@
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/context/Auth";
 import { useState } from "react";
 import UserProfileModal from "@/components/modals/UserProfileModal";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";

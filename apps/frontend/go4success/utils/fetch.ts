@@ -1,16 +1,5 @@
 import { API_BASE_URL } from "@/constants/ConfigApp";
-
-function getCSRFToken() {
-    const csrfCookie = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("csrftoken="));
-
-    if (csrfCookie) {
-        return csrfCookie.split("=")[1];
-    } else {
-        return "";
-    }
-}
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function constructPath(params: string[]): string {
     return params.join("/") + "/";
@@ -21,15 +10,13 @@ export async function fetchBackend<T extends any>(
     url: string,
     data?: any,
 ) {
-    const csrftoken = getCSRFToken();
-
     try {
         const response = await fetch(`${API_BASE_URL}/` + url, {
             method: type,
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": csrftoken,
+                "X-CSRFToken": await AsyncStorage.getItem("csrf_token"),
             },
             ...(data && { body: JSON.stringify(data) }),
         });

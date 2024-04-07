@@ -12,6 +12,7 @@ import { ActivityIndicator } from "react-native";
 import styles from "@/styles/global";
 import Colors from "@/constants/Colors";
 import { fetchBackend } from "@/utils/fetch";
+import { useCsrfToken } from "@/hooks/useCsrfToken";
 
 const AuthContext = React.createContext<any>(null);
 
@@ -22,6 +23,8 @@ export function useAuth() {
 export function AuthProvider({ children }: React.PropsWithChildren) {
     const { t } = useTranslation();
     const rootSegment = useSegments()[0];
+
+    useCsrfToken();
 
     const {
         isPending,

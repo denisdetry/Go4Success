@@ -4,7 +4,7 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import axios from "axios";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/context/Auth";
 import UserProfileModal from "@/components/modals/UserProfileModal";
 import { API_BASE_URL } from "@/constants/ConfigApp";
 import { useMutation } from "@tanstack/react-query";

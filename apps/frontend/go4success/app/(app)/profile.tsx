@@ -1,7 +1,7 @@
 import { Image, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import stylesGlobal from "@/styles/global";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/context/Auth";
 import ChangeUserDataFields from "@/components/userProfile/ChangeUserDataFields";
 import Button from "@/components/ButtonComponent";
 

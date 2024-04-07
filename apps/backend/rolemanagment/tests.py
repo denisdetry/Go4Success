@@ -207,6 +207,16 @@ class RoleManagementTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_only_super_user_on_rolemanagement(self):
+        request = self.factory.get('/rolemanagement/rolemanagement/')
+        response = self.view(request)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_only_super_user_on_editrole(self):
+        request = self.factory.get('/rolemanagement/editRole/')
+        response = self.view(request)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
 
 class SuperUserCreationDeletion(APITestCase):
     def setUp(self):

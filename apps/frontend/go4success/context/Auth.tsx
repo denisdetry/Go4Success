@@ -106,8 +106,53 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     }
                 },
 
-                signIn: (userData: UserLogin) => {
-                    axios
+                signIn: async (userData: UserLogin) => {
+                    const { data, error } = await fetchBackend("POST", "auth/login/", {
+                        username: userData.username,
+                        password: userData.password,
+                    });
+
+                    console.log("Data");
+                    console.log(data);
+                    console.log("Error");
+                    console.log(error);
+
+                    if (error) {
+                        if (typeof error !== "string") {
+                            try {
+                                if (error.status === 400) {
+                                    Toast.show({
+                                        type: "error",
+                                        text1: t("translateToast.ErrorText1"),
+                                        text2: t("translateToast.LoginInfoErrorText2"),
+                                    });
+                                }
+                            } catch (e) {
+                                Toast.show({
+                                    type: "error",
+                                    text1: t("translateToast.ErrorText1"),
+                                    text2: t("translateToast.ServerErrorText2"),
+                                });
+                            }
+                        } else {
+                            Toast.show({
+                                type: "error",
+                                text1: t("translateToast.ErrorText1"),
+                                text2: t("translateToast.ServerErrorText2"),
+                            });
+                        }
+                    } else {
+                        void queryClient.invalidateQueries({
+                            queryKey: ["current_user"],
+                        });
+                        Toast.show({
+                            type: "success",
+                            text1: t("translateToast.SuccessText1"),
+                            text2: t("translateToast.LoginSuccessText2"),
+                        });
+                    }
+
+                    /*axios
                         .post(`${API_BASE_URL}/auth/login/`, {
                             username: userData.username,
                             password: userData.password,
@@ -139,11 +184,11 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                     text2: t("translateToast.ServerErrorText2"),
                                 });
                             }
-                        });
+                        });*/
                 },
 
                 signOut: async () => {
-                    await fetchBackend("POST", "auth/logout/").then(
+                    const test = await fetchBackend("POST", "auth/logout/").then(
                         () =>
                             void queryClient.invalidateQueries({
                                 queryKey: ["current_user"],

@@ -22,11 +22,12 @@ export async function fetchBackend<T extends any>(
         });
 
         if (response.ok) {
-            return (await response.json()) as Promise<T>;
+            return { data: await response.json() };
         } else {
-            return { error: "Something went wrong once!" };
+            return { error: response };
         }
     } catch (error) {
-        return { error: "Something went wrong twice!" };
+        console.log(error);
+        return { error: "Something went wrong!" };
     }
 }

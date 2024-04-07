@@ -230,6 +230,9 @@ const generateUsersInfoRole = (userInfo, userRole) => {
         role: roleMap[user.id] || "student",
     }));
 };
+
+
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f0f0f0',
@@ -276,7 +279,7 @@ const styles = StyleSheet.create({
     marginTop: 10, // or other depending on layout
   },
   saveButton: {
-    backgroundColor: '#841584',
+    backgroundColor: '#387ce6',
     padding: 10,
     borderRadius: 5,
     color: '#fff',
@@ -290,3 +293,4 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
 });
+

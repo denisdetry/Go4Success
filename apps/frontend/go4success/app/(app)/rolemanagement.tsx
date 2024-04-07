@@ -214,9 +214,11 @@ const generateUsersInfoRole = (userInfo, userRole) => {
     const roleMap = userRole.reduce((acc, curr) => {
         const role = curr.is_professor
             ? "professor"
-            : curr.is_tutor
+            : curr.is_tutor     
               ? "tutor"
-              : "student";
+            :curr.is_superuser
+              ? "superuser"
+              : "student"
         acc[curr.user] = role;
         return acc;
     }, {});
@@ -230,40 +232,37 @@ const generateUsersInfoRole = (userInfo, userRole) => {
         role: roleMap[user.id] || "student",
     }));
 };
-
-
-
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#f0f0f0",
     borderRadius: 10,
     shadowOpacity: 0.2,
     shadowRadius: 5,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { height: 2, width: 0 },
     padding: 20,
     maxWidth: 400,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
 
   listItem: {
-    flexDirection: 'row', // align children in a row
-    justifyContent: 'space-between', // space between name and button
-    alignItems: 'center', // center items vertically
+    flexDirection: "row", // align children in a row
+    justifyContent: "space-between", // space between name and button
+    alignItems: "center", // center items vertically
     paddingVertical: 10, // space above and below each item
-    backgroundColor: '#FFFFFF', // assuming a white background
+    backgroundColor: "#FFFFFF", // assuming a white background
     borderRadius: 5, // rounded corners for each item
     marginBottom: 5, // space between each list item
     // other properties like shadow can be added here if needed
   },
   userInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   userDot: {
     height: 10,
     width: 10,
-    backgroundColor: '#000',
+    backgroundColor: "#000",
     borderRadius: 5,
     marginRight: 10,
   },
@@ -271,26 +270,25 @@ const styles = StyleSheet.create({
     // Add any specific styles for user name text if necessary
   },
   rolePicker: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 5,
     padding: 5,
     marginTop: 10, // or other depending on layout
   },
   saveButton: {
-    backgroundColor: '#387ce6',
+    backgroundColor: "#387ce6",
     padding: 10,
     borderRadius: 5,
-    color: '#fff',
+    color: "#fff",
   },
   errorIcon: {
-    color: '#ff0000',
+    color: "#ff0000",
     marginLeft: 5,
   },
   successIcon: {
-    color: '#00ff00',
+    color: "#00ff00",
     marginLeft: 5,
   },
 });
-

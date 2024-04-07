@@ -8,8 +8,9 @@ import { API_BASE_URL } from "@/constants/ConfigApp";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/app/_layout";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator } from "react-native";
 import styles from "@/styles/global";
+import Colors from "@/constants/Colors";
 
 const AuthContext = React.createContext<any>(null);
 
@@ -38,9 +39,11 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
     if (isPending) {
         return (
-            <View style={styles.mainContainer}>
-                <ActivityIndicator size={"large"} />;
-            </View>
+            <ActivityIndicator
+                style={styles.mainContainer}
+                size={"large"}
+                color={Colors.primaryColor}
+            />
         );
     }
 

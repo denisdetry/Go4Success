@@ -9,7 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import { useTranslation } from "react-i18next";
 import { queryClient } from "@/app/_layout";
-import { fetchBackend } from "@/utils/fetch";
+import { fetchBackend } from "@/utils/fetchBackend";
 
 interface ChangeUserDataFieldsProps {
     readonly data: any;

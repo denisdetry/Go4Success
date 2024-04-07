@@ -10,7 +10,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useTranslation } from "react-i18next";
 import { queryClient } from "@/app/_layout";
-import { fetchBackend } from "@/utils/fetch";
+import { fetchBackend } from "@/utils/fetchBackend";
 
 export const ChangeUserPasswordFields = () => {
     const { t } = useTranslation();

@@ -11,8 +11,8 @@ import { queryClient } from "@/app/_layout";
 import { ActivityIndicator } from "react-native";
 import styles from "@/styles/global";
 import Colors from "@/constants/Colors";
-import { fetchBackend } from "@/utils/fetch";
 import { useCsrfToken } from "@/hooks/useCsrfToken";
+import { fetchBackend } from "@/utils/fetch";
 
 const AuthContext = React.createContext<any>(null);
 
@@ -65,20 +65,12 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         <AuthContext.Provider
             value={{
                 user: user?.data,
-                signUp: (userData: UserRegister) => {
+                signUp: async (userData: UserRegister) => {
                     {
-                        axios
-                            .post(`${API_BASE_URL}/auth/register/`, {
-                                username: userData.username,
-                                email: userData.email,
-                                // eslint-disable-next-line camelcase
-                                last_name: userData.lastName,
-                                // eslint-disable-next-line camelcase
-                                first_name: userData.firstName,
-                                noma: userData.noma,
-                                password: userData.password,
-                            })
-                            .then(() => {
+                        await fetchBackend(
+                            "POST",
+                            "auth/register/",
+                            () => {
                                 void queryClient.invalidateQueries({
                                     queryKey: ["current_user"],
                                 });
@@ -87,8 +79,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                     text1: t("translateToast.SuccessText1"),
                                     text2: t("translateToast.RegisterSuccessText2"),
                                 });
-                            })
-                            .catch((err) => {
+                            },
+                            (err) => {
                                 try {
                                     Toast.show({
                                         type: "error",
@@ -102,62 +94,63 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                         text2: t("translateToast.ServerErrorText2"),
                                     });
                                 }
-                            });
+                            },
+                            {
+                                username: userData.username,
+                                email: userData.email,
+                                // eslint-disable-next-line camelcase
+                                last_name: userData.lastName,
+                                // eslint-disable-next-line camelcase
+                                first_name: userData.firstName,
+                                noma: userData.noma,
+                                password: userData.password,
+                            },
+                        );
+
+                        // axios
+                        //     .post(`${API_BASE_URL}/auth/register/`, {
+                        //         username: userData.username,
+                        //         email: userData.email,
+                        //         // eslint-disable-next-line camelcase
+                        //         last_name: userData.lastName,
+                        //         // eslint-disable-next-line camelcase
+                        //         first_name: userData.firstName,
+                        //         noma: userData.noma,
+                        //         password: userData.password,
+                        //     })
+                        //     .then(() => {
+                        //         void queryClient.invalidateQueries({
+                        //             queryKey: ["current_user"],
+                        //         });
+                        //         Toast.show({
+                        //             type: "success",
+                        //             text1: t("translateToast.SuccessText1"),
+                        //             text2: t("translateToast.RegisterSuccessText2"),
+                        //         });
+                        //     })
+                        //     .catch((err) => {
+                        //         try {
+                        //             Toast.show({
+                        //                 type: "error",
+                        //                 text1: t("translateToast.ErrorText1"),
+                        //                 text2: err.response.data,
+                        //             });
+                        //         } catch (e) {
+                        //             Toast.show({
+                        //                 type: "error",
+                        //                 text1: t("translateToast.ErrorText1"),
+                        //                 text2: t("translateToast.ServerErrorText2"),
+                        //             });
+                        //         }
+                        //     });
                     }
                 },
 
                 signIn: async (userData: UserLogin) => {
-                    const { data, error } = await fetchBackend("POST", "auth/login/", {
-                        username: userData.username,
-                        password: userData.password,
-                    });
-
-                    console.log("Data");
-                    console.log(data);
-                    console.log("Error");
-                    console.log(error);
-
-                    if (error) {
-                        if (typeof error !== "string") {
-                            try {
-                                if (error.status === 400) {
-                                    Toast.show({
-                                        type: "error",
-                                        text1: t("translateToast.ErrorText1"),
-                                        text2: t("translateToast.LoginInfoErrorText2"),
-                                    });
-                                }
-                            } catch (e) {
-                                Toast.show({
-                                    type: "error",
-                                    text1: t("translateToast.ErrorText1"),
-                                    text2: t("translateToast.ServerErrorText2"),
-                                });
-                            }
-                        } else {
-                            Toast.show({
-                                type: "error",
-                                text1: t("translateToast.ErrorText1"),
-                                text2: t("translateToast.ServerErrorText2"),
-                            });
-                        }
-                    } else {
-                        void queryClient.invalidateQueries({
-                            queryKey: ["current_user"],
-                        });
-                        Toast.show({
-                            type: "success",
-                            text1: t("translateToast.SuccessText1"),
-                            text2: t("translateToast.LoginSuccessText2"),
-                        });
-                    }
-
-                    /*axios
-                        .post(`${API_BASE_URL}/auth/login/`, {
-                            username: userData.username,
-                            password: userData.password,
-                        })
-                        .then(() => {
+                    await fetchBackend(
+                        "POST",
+                        "auth/login/",
+                        () => {
                             void queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
                             });
@@ -166,11 +159,10 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 text1: t("translateToast.SuccessText1"),
                                 text2: t("translateToast.LoginSuccessText2"),
                             });
-                        })
-                        .catch((err) => {
-                            console.log(err.response.data);
+                        },
+                        (err) => {
                             try {
-                                if (err.response.status === 400) {
+                                if (err.status === 400) {
                                     Toast.show({
                                         type: "error",
                                         text1: t("translateToast.ErrorText1"),
@@ -184,20 +176,50 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                     text2: t("translateToast.ServerErrorText2"),
                                 });
                             }
-                        });*/
+                        },
+                        { username: userData.username, password: userData.password },
+                    );
+
+                    // axios
+                    //     .post(`${API_BASE_URL}/auth/login/`, {
+                    //         username: userData.username,
+                    //         password: userData.password,
+                    //     })
+                    //     .then(() => {
+                    //         void queryClient.invalidateQueries({
+                    //             queryKey: ["current_user"],
+                    //         });
+                    //         Toast.show({
+                    //             type: "success",
+                    //             text1: t("translateToast.SuccessText1"),
+                    //             text2: t("translateToast.LoginSuccessText2"),
+                    //         });
+                    //     })
+                    //     .catch((err) => {
+                    //         console.log(err.response.data);
+                    //         try {
+                    //             if (err.response.status === 400) {
+                    //                 Toast.show({
+                    //                     type: "error",
+                    //                     text1: t("translateToast.ErrorText1"),
+                    //                     text2: t("translateToast.LoginInfoErrorText2"),
+                    //                 });
+                    //             }
+                    //         } catch (e) {
+                    //             Toast.show({
+                    //                 type: "error",
+                    //                 text1: t("translateToast.ErrorText1"),
+                    //                 text2: t("translateToast.ServerErrorText2"),
+                    //             });
+                    //         }
+                    //     });
                 },
 
                 signOut: async () => {
-                    const test = await fetchBackend("POST", "auth/logout/").then(
-                        () =>
-                            void queryClient.invalidateQueries({
-                                queryKey: ["current_user"],
-                            }),
-                    );
-
-                    /*axios
-                        .post(`${API_BASE_URL}/auth/logout/`)
-                        .then(() => {
+                    await fetchBackend(
+                        "POST",
+                        "auth/logout/",
+                        () => {
                             void queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
                             });
@@ -206,10 +228,11 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 text1: t("translateToast.LogoutSuccessText1"),
                                 text2: t("translateToast.LogoutSuccessText2"),
                             });
-                        })
-                        .catch((err) => {
-                            console.log(err.response.data);
-                        });*/
+                        },
+                        (err) => {
+                            console.log(err);
+                        },
+                    );
                 },
             }}
         >

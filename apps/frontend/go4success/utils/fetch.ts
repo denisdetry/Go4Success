@@ -1,13 +1,11 @@
 import { API_BASE_URL } from "@/constants/ConfigApp";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function constructPath(params: string[]): string {
-    return params.join("/") + "/";
-}
-
-export async function fetchBackend<T extends any>(
+export async function fetchBackend(
     type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE",
     url: string,
+    successFunction?: ({ ...props }) => void,
+    errorFunction?: ({ ...props }) => void,
     data?: any,
 ) {
     try {
@@ -22,12 +20,15 @@ export async function fetchBackend<T extends any>(
         });
 
         if (response.ok) {
-            return { data: await response.json() };
+            if (successFunction) {
+                successFunction(response);
+            }
         } else {
-            return { error: response };
+            if (errorFunction) {
+                errorFunction(response);
+            }
         }
     } catch (error) {
-        console.log(error);
-        return { error: "Something went wrong!" };
+        return { error: "Something went wrong twice!" };
     }
 }

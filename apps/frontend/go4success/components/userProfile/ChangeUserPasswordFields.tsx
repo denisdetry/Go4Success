@@ -5,13 +5,12 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "@/styles/global";
 import ButtonComponent from "@/components/ButtonComponent";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { API_BASE_URL } from "@/constants/ConfigApp";
 import Toast from "react-native-toast-message";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useTranslation } from "react-i18next";
 import { queryClient } from "@/app/_layout";
+import { fetchBackend } from "@/utils/fetch";
 
 export const ChangeUserPasswordFields = () => {
     const { t } = useTranslation();
@@ -41,8 +40,21 @@ export const ChangeUserPasswordFields = () => {
     // fetch data
     const fetchData = useMutation({
         mutationFn: async () => {
-            const response = await axios.put(
-                `${API_BASE_URL}/auth/change_password/` + user.id + "/",
+            // const response = await axios.put(
+            //     `${API_BASE_URL}/auth/change_password/` + user.id + "/",
+            //     {
+            //         // eslint-disable-next-line camelcase
+            //         old_password: oldPassword,
+            //         password: newPassword,
+            //         password2: newPasswordConfirmation,
+            //     },
+            // );
+            // return response.data;
+            await fetchBackend(
+                "PUT",
+                "auth/change_password/" + user.id + "/",
+                () => {},
+                () => {},
                 {
                     // eslint-disable-next-line camelcase
                     old_password: oldPassword,
@@ -50,7 +62,6 @@ export const ChangeUserPasswordFields = () => {
                     password2: newPasswordConfirmation,
                 },
             );
-            return response.data;
         },
 
         onSuccess: () => {

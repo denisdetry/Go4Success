@@ -84,7 +84,7 @@
   },
   "translateToast": {
     "SuccessText1": "Congratulation ! \uD83C\uDF89",
-    "ErrorText1": "Oups ! \uD83D\uDE1E",
+    "ErrorText1": "Oups... \uD83D\uDE1E",
     "ServerErrorText2": "Please try again later. The server is not responding.",
     "LoginSuccessText2": "Successful login! Welcome to Go4Success",
     "LoginInfoErrorText2": "Incorrect username or password. Please try again.",

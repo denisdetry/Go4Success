@@ -91,6 +91,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
             activity.date_start.split(" - ")[1] +
             " - " +
             activity.date_end.split(" - ")[1];
+
         return (
             <Card
                 id={activity.id}

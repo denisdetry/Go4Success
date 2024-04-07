@@ -11,6 +11,7 @@ import { Divider } from "@rneui/themed";
 import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
 import { useTranslation } from "react-i18next";
 
+// axiosConfig();
 const UserProfileFieldsTitle = ({ title }: { readonly title: string }) => {
     return (
         <>

@@ -12,7 +12,6 @@ import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
 import { useAuth } from "@/context/auth";
 import { isMobile, width } from "@/constants/screensWidth";
-import axiosConfig from "@/constants/axiosConfig";
 import { useMutation } from "@tanstack/react-query";
 import { API_BASE_URL } from "@/constants/ConfigApp";
 import axios from "axios";
@@ -20,7 +19,7 @@ import Toast from "react-native-toast-message";
 import { queryClient } from "@/app/_layout";
 import { useTranslation } from "react-i18next";
 
-axiosConfig();
+// axiosConfig();
 
 interface CardProps {
     readonly id: string;

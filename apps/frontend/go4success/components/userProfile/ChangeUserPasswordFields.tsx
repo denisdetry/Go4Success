@@ -11,6 +11,7 @@ import Toast from "react-native-toast-message";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useTranslation } from "react-i18next";
+import { queryClient } from "@/app/_layout";
 
 export const ChangeUserPasswordFields = () => {
     const { t } = useTranslation();
@@ -58,6 +59,7 @@ export const ChangeUserPasswordFields = () => {
                 text1: "Félicitation ! 🎉",
                 text2: t("translationProfile.successPasswordChange"),
             });
+            void queryClient.invalidateQueries({ queryKey: ["current_user"] });
             signIn({ username: user.username, password: newPassword });
             clearFields();
         },
@@ -100,41 +102,44 @@ export const ChangeUserPasswordFields = () => {
         onChangeText: (text: string) => void,
         passwordShow: any,
         setPasswordShow: any,
-    ) => (
-        <>
-            <Text style={styles.text}>{label}</Text>
-            <View
-                style={[
-                    styles.inputField,
-                    {
-                        backgroundColor: !editable
-                            ? Colors.lightBackgroundColor
-                            : "white",
-                    },
-                ]}
-            >
-                <TextInput
-                    style={styles.input}
-                    value={value}
-                    onChangeText={onChangeText}
-                    clearButtonMode={"while-editing"}
-                    editable={editable}
-                    secureTextEntry={!passwordShow}
-                />
+    ) => {
+        return (
+            <>
+                <Text style={styles.text}>{label}</Text>
+                <View
+                    style={[
+                        styles.inputField,
+                        {
+                            backgroundColor: !editable
+                                ? Colors.lightBackgroundColor
+                                : "white",
+                        },
+                    ]}
+                >
+                    <TextInput
+                        style={styles.input}
+                        value={value}
+                        placeholder={editable ? "" : "*".repeat(8)}
+                        onChangeText={onChangeText}
+                        clearButtonMode={"while-editing"}
+                        editable={editable}
+                        secureTextEntry={!passwordShow}
+                    />
 
-                {editable && (
-                    <TouchableOpacity>
-                        <MaterialCommunityIcons
-                            name={passwordShow ? "eye-off" : "eye"}
-                            size={24}
-                            color={Colors.primaryColor}
-                            onPress={() => setPasswordShow(!passwordShow)}
-                        />
-                    </TouchableOpacity>
-                )}
-            </View>
-        </>
-    );
+                    {editable && (
+                        <TouchableOpacity>
+                            <MaterialCommunityIcons
+                                name={passwordShow ? "eye-off" : "eye"}
+                                size={24}
+                                color={Colors.primaryColor}
+                                onPress={() => setPasswordShow(!passwordShow)}
+                            />
+                        </TouchableOpacity>
+                    )}
+                </View>
+            </>
+        );
+    };
 
     return (
         <>

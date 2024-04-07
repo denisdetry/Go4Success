@@ -1,13 +1,10 @@
 import { ScrollView, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import styles from "@/styles/global";
-import FilterWorkshop from "@/components/FilterActivity";
 import { useAuth } from "@/context/auth";
 import { useTranslation } from "react-i18next";
-import axiosConfig from "@/constants/axiosConfig";
-
-axiosConfig();
+import FilterActivity from "@/components/FilterActivity";
 
 interface Message {
     id: string;
@@ -20,12 +17,7 @@ interface Message {
 export default function index() {
     const { t } = useTranslation();
     const [allMessages, setAllMessages] = useState([]);
-    const { user, showLoginToast, showRegisterToast } = useAuth();
-
-    useEffect(() => {
-        showLoginToast();
-        showRegisterToast();
-    }, []);
+    const { user } = useAuth();
 
     const renderMessages = ({ item }: { item: Message }) => {
         return <Text> {item.content}</Text>;
@@ -71,13 +63,13 @@ export default function index() {
                 <Text style={styles.titleNoPadding}>
                     {t("translation.workshopAttend")}
                 </Text>
-                <FilterWorkshop filterType={"attend"}></FilterWorkshop>
+                <FilterActivity filterType={"attend"}></FilterActivity>
             </View>
 
             {/* All Activities container */}
             <View style={styles.container}>
                 <Text style={styles.titleNoPadding}>Ateliers disponibles</Text>
-                <FilterWorkshop filterType={"activity"}></FilterWorkshop>
+                <FilterActivity filterType={"activity"}></FilterActivity>
             </View>
 
             {/* Calendar container */}

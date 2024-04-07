@@ -1,5 +1,5 @@
 import { ScrollView, Text, TextInput, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "@/styles/global";
 import Button from "@/components/ButtonComponent";
 import { useAuth } from "@/context/auth";
@@ -21,7 +21,6 @@ export default function login() {
 
     const { signIn } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
-    const { showLogoutToast } = useAuth();
     const {
         control,
         handleSubmit,
@@ -33,10 +32,6 @@ export default function login() {
             password: "Azerty123_",
         },
     });
-
-    useEffect(() => {
-        showLogoutToast();
-    }, []);
 
     const onSubmit = (userData: UserLogin) => {
         signIn(userData);
@@ -53,6 +48,7 @@ export default function login() {
                         render={({ field: { onChange, value } }) => (
                             <View style={styles.inputField}>
                                 <TextInput
+                                    autoCapitalize={"none"}
                                     style={styles.input}
                                     placeholder={t("translateLogin.username")}
                                     onChangeText={onChange}

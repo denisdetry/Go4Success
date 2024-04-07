@@ -1,15 +1,15 @@
 import * as React from "react";
-import { useRouter, useSegments } from "expo-router";
+import { Redirect, useSegments } from "expo-router";
 import axios from "axios";
 import Toast from "react-native-toast-message";
 import { UserRegister } from "@/types/UserRegister";
 import { UserLogin } from "@/types/UserLogin";
-import axiosConfig from "@/constants/axiosConfig";
 import { API_BASE_URL } from "@/constants/ConfigApp";
-import { User } from "@/types/User";
 import { useTranslation } from "react-i18next";
-
-axiosConfig();
+import { useQuery } from "@tanstack/react-query";
+import { queryClient } from "@/app/_layout";
+import { ActivityIndicator, View } from "react-native";
+import styles from "@/styles/global";
 
 const AuthContext = React.createContext<any>(null);
 
@@ -20,42 +20,44 @@ export function useAuth() {
 export function AuthProvider({ children }: React.PropsWithChildren) {
     const { t } = useTranslation();
     const rootSegment = useSegments()[0];
-    const router = useRouter();
-    const [user, setUser] = React.useState<User | string | undefined>("");
-    const [isRegistered, setIsRegistered] = React.useState<boolean>(false);
-    const [isSignedIn, setIsSignedIn] = React.useState<boolean>(false);
-    const [isSignedOut, setIsSignedOut] = React.useState<boolean>(false);
 
-    const refreshUser = () => {
-        axios
-            .get(`${API_BASE_URL}/auth/current_user/`)
-            .then((res) => {
-                setUser(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
+    const {
+        isPending,
+        data: user,
+        error,
+    } = useQuery({
+        queryKey: ["current_user"],
+        queryFn: async () => {
+            try {
+                return await axios.get(`${API_BASE_URL}/auth/current_user/`);
+            } catch (error) {
+                return null;
+            }
+        },
+    });
 
-    React.useEffect(() => {
-        refreshUser();
-    }, []);
+    if (isPending) {
+        return (
+            <View style={styles.mainContainer}>
+                <ActivityIndicator size={"large"} />;
+            </View>
+        );
+    }
 
-    React.useEffect(() => {
-        if (user === undefined) return;
+    if (error) {
+        return <Redirect href={"/(auth)/login"} />;
+    }
 
-        if (!user && rootSegment !== "(auth)") {
-            router.replace("/(auth)/login");
-        } else if (user && rootSegment === "(auth)") {
-            router.replace("/");
-        }
-    }, [user, rootSegment]);
+    if (!user && rootSegment !== "(auth)") {
+        return <Redirect href={"/(auth)/login"} />;
+    } else if (user && rootSegment === "(auth)") {
+        return <Redirect href={"/"} />;
+    }
 
     return (
         <AuthContext.Provider
             value={{
-                user: user,
-                refreshUser: refreshUser,
+                user: user?.data,
                 signUp: (userData: UserRegister) => {
                     {
                         axios
@@ -69,9 +71,15 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 noma: userData.noma,
                                 password: userData.password,
                             })
-                            .then((res) => {
-                                setUser(res.data);
-                                setIsRegistered(true);
+                            .then(() => {
+                                void queryClient.invalidateQueries({
+                                    queryKey: ["current_user"],
+                                });
+                                Toast.show({
+                                    type: "success",
+                                    text1: t("translateToast.SuccessText1"),
+                                    text2: t("translateToast.RegisterSuccessText2"),
+                                });
                             })
                             .catch((err) => {
                                 try {
@@ -97,11 +105,18 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             username: userData.username,
                             password: userData.password,
                         })
-                        .then((res) => {
-                            setUser(res.data);
-                            setIsSignedIn(true);
+                        .then(() => {
+                            void queryClient.invalidateQueries({
+                                queryKey: ["current_user"],
+                            });
+                            Toast.show({
+                                type: "success",
+                                text1: t("translateToast.SuccessText1"),
+                                text2: t("translateToast.LoginSuccessText2"),
+                            });
                         })
                         .catch((err) => {
+                            console.log(err.response.data);
                             try {
                                 if (err.response.status === 400) {
                                     Toast.show({
@@ -124,43 +139,18 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     axios
                         .post(`${API_BASE_URL}/auth/logout/`)
                         .then(() => {
-                            setUser("");
-                            setIsSignedOut(true);
+                            void queryClient.invalidateQueries({
+                                queryKey: ["current_user"],
+                            });
+                            Toast.show({
+                                type: "success",
+                                text1: t("translateToast.LogoutSuccessText1"),
+                                text2: t("translateToast.LogoutSuccessText2"),
+                            });
                         })
                         .catch((err) => {
-                            console.log(err);
+                            console.log(err.response.data);
                         });
-                },
-
-                showLoginToast: () => {
-                    if (isSignedIn) {
-                        Toast.show({
-                            type: "success",
-                            text1: t("translateToast.SuccessText1"),
-                            text2: t("translateToast.LoginSuccessText2"),
-                        });
-                        setIsSignedIn(false);
-                    }
-                },
-                showRegisterToast: () => {
-                    if (isRegistered) {
-                        Toast.show({
-                            type: "success",
-                            text1: t("translateToast.SuccessText1"),
-                            text2: t("translateToast.RegisterSuccessText2"),
-                        });
-                        setIsRegistered(false);
-                    }
-                },
-                showLogoutToast: () => {
-                    if (isSignedOut) {
-                        Toast.show({
-                            type: "success",
-                            text1: t("translateToast.LogoutSuccessText1"),
-                            text2: t("translateToast.LogoutSuccessText2"),
-                        });
-                        setIsSignedOut(false);
-                    }
                 },
             }}
         >

@@ -4,10 +4,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export async function fetchBackend(
     type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE",
     url: string,
-    successFunction?: ({ ...props }) => void,
-    errorFunction?: ({ ...props }) => void,
     data?: any,
-) {
+): Promise<any> {
     try {
         const response = await fetch(`${API_BASE_URL}/` + url, {
             method: type,
@@ -20,15 +18,11 @@ export async function fetchBackend(
         });
 
         if (response.ok) {
-            if (successFunction) {
-                successFunction(response);
-            }
+            return { data: await response.json() };
         } else {
-            if (errorFunction) {
-                errorFunction(response);
-            }
+            return { error: response };
         }
     } catch (error) {
-        return { error: "Something went wrong twice!" };
+        return { error: "Something went wrong!" };
     }
 }

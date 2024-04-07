@@ -12,7 +12,7 @@ import { ActivityIndicator } from "react-native";
 import styles from "@/styles/global";
 import Colors from "@/constants/Colors";
 import { useCsrfToken } from "@/hooks/useCsrfToken";
-import { fetchBackend } from "@/utils/fetch";
+import { fetchBackend } from "@/utils/fetchBackend";
 
 const AuthContext = React.createContext<any>(null);
 
@@ -67,34 +67,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                 user: user?.data,
                 signUp: async (userData: UserRegister) => {
                     {
-                        await fetchBackend(
+                        const { data, error } = await fetchBackend(
                             "POST",
                             "auth/register/",
-                            () => {
-                                void queryClient.invalidateQueries({
-                                    queryKey: ["current_user"],
-                                });
-                                Toast.show({
-                                    type: "success",
-                                    text1: t("translateToast.SuccessText1"),
-                                    text2: t("translateToast.RegisterSuccessText2"),
-                                });
-                            },
-                            (err) => {
-                                try {
-                                    Toast.show({
-                                        type: "error",
-                                        text1: t("translateToast.ErrorText1"),
-                                        text2: err.response.data,
-                                    });
-                                } catch (e) {
-                                    Toast.show({
-                                        type: "error",
-                                        text1: t("translateToast.ErrorText1"),
-                                        text2: t("translateToast.ServerErrorText2"),
-                                    });
-                                }
-                            },
                             {
                                 username: userData.username,
                                 email: userData.email,
@@ -107,132 +82,89 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             },
                         );
 
-                        // axios
-                        //     .post(`${API_BASE_URL}/auth/register/`, {
-                        //         username: userData.username,
-                        //         email: userData.email,
-                        //         // eslint-disable-next-line camelcase
-                        //         last_name: userData.lastName,
-                        //         // eslint-disable-next-line camelcase
-                        //         first_name: userData.firstName,
-                        //         noma: userData.noma,
-                        //         password: userData.password,
-                        //     })
-                        //     .then(() => {
-                        //         void queryClient.invalidateQueries({
-                        //             queryKey: ["current_user"],
-                        //         });
-                        //         Toast.show({
-                        //             type: "success",
-                        //             text1: t("translateToast.SuccessText1"),
-                        //             text2: t("translateToast.RegisterSuccessText2"),
-                        //         });
-                        //     })
-                        //     .catch((err) => {
-                        //         try {
-                        //             Toast.show({
-                        //                 type: "error",
-                        //                 text1: t("translateToast.ErrorText1"),
-                        //                 text2: err.response.data,
-                        //             });
-                        //         } catch (e) {
-                        //             Toast.show({
-                        //                 type: "error",
-                        //                 text1: t("translateToast.ErrorText1"),
-                        //                 text2: t("translateToast.ServerErrorText2"),
-                        //             });
-                        //         }
-                        //     });
-                    }
-                },
+                        console.log(error);
+                        console.log();
 
-                signIn: async (userData: UserLogin) => {
-                    await fetchBackend(
-                        "POST",
-                        "auth/login/",
-                        () => {
-                            void queryClient.invalidateQueries({
-                                queryKey: ["current_user"],
-                            });
-                            Toast.show({
-                                type: "success",
-                                text1: t("translateToast.SuccessText1"),
-                                text2: t("translateToast.LoginSuccessText2"),
-                            });
-                        },
-                        (err) => {
-                            try {
-                                if (err.status === 400) {
-                                    Toast.show({
-                                        type: "error",
-                                        text1: t("translateToast.ErrorText1"),
-                                        text2: t("translateToast.LoginInfoErrorText2"),
-                                    });
-                                }
-                            } catch (e) {
+                        if (error) {
+                            if (error.status === 400) {
+                                Toast.show({
+                                    type: "error",
+                                    text1: t("translateToast.ErrorText1"),
+                                    text2: await error.json(),
+                                });
+                            } else {
                                 Toast.show({
                                     type: "error",
                                     text1: t("translateToast.ErrorText1"),
                                     text2: t("translateToast.ServerErrorText2"),
                                 });
                             }
-                        },
-                        { username: userData.username, password: userData.password },
-                    );
+                        }
 
-                    // axios
-                    //     .post(`${API_BASE_URL}/auth/login/`, {
-                    //         username: userData.username,
-                    //         password: userData.password,
-                    //     })
-                    //     .then(() => {
-                    //         void queryClient.invalidateQueries({
-                    //             queryKey: ["current_user"],
-                    //         });
-                    //         Toast.show({
-                    //             type: "success",
-                    //             text1: t("translateToast.SuccessText1"),
-                    //             text2: t("translateToast.LoginSuccessText2"),
-                    //         });
-                    //     })
-                    //     .catch((err) => {
-                    //         console.log(err.response.data);
-                    //         try {
-                    //             if (err.response.status === 400) {
-                    //                 Toast.show({
-                    //                     type: "error",
-                    //                     text1: t("translateToast.ErrorText1"),
-                    //                     text2: t("translateToast.LoginInfoErrorText2"),
-                    //                 });
-                    //             }
-                    //         } catch (e) {
-                    //             Toast.show({
-                    //                 type: "error",
-                    //                 text1: t("translateToast.ErrorText1"),
-                    //                 text2: t("translateToast.ServerErrorText2"),
-                    //             });
-                    //         }
-                    //     });
-                },
-
-                signOut: async () => {
-                    await fetchBackend(
-                        "POST",
-                        "auth/logout/",
-                        () => {
+                        if (data) {
                             void queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
                             });
+
                             Toast.show({
                                 type: "success",
-                                text1: t("translateToast.LogoutSuccessText1"),
-                                text2: t("translateToast.LogoutSuccessText2"),
+                                text1: t("translateToast.SuccessText1"),
+                                text2: t("translateToast.RegisterSuccessText2"),
                             });
-                        },
-                        (err) => {
-                            console.log(err);
-                        },
-                    );
+                        }
+                    }
+                },
+
+                signIn: async (userData: UserLogin) => {
+                    const { data, error } = await fetchBackend("POST", "auth/login/", {
+                        username: userData.username,
+                        password: userData.password,
+                    });
+
+                    if (error) {
+                        if (error.status === 400) {
+                            Toast.show({
+                                type: "error",
+                                text1: t("translateToast.ErrorText1"),
+                                text2: t("translateToast.LoginInfoErrorText2"),
+                            });
+                        } else {
+                            Toast.show({
+                                type: "error",
+                                text1: t("translateToast.ErrorText1"),
+                                text2: t("translateToast.ServerErrorText2"),
+                            });
+                        }
+                    }
+
+                    if (data) {
+                        void queryClient.invalidateQueries({
+                            queryKey: ["current_user"],
+                        });
+                        Toast.show({
+                            type: "success",
+                            text1: t("translateToast.SuccessText1"),
+                            text2: t("translateToast.LoginSuccessText2"),
+                        });
+                    }
+                },
+
+                signOut: async () => {
+                    const { data, error } = await fetchBackend("POST", "auth/logout/");
+                    if (error) {
+                        console.log(error);
+                    }
+
+                    if (data) {
+                        void queryClient.invalidateQueries({
+                            queryKey: ["current_user"],
+                        });
+                        Toast.show({
+                            type: "success",
+                            text1: t("translateToast.LogoutSuccessText1"),
+                            text2: t("translateToast.LogoutSuccessText2"),
+                        });
+                    }
                 },
             }}
         >

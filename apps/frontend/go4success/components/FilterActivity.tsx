@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Modal, StyleSheet, Text, TextInput, View } from "react-native";
+import { Modal, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import Card from "./Card";
 import ButtonComponent from "./ButtonComponent";
 import Colors from "../constants/Colors";
@@ -86,12 +86,19 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         const activity = "activity" in item ? item.activity : item;
         const siteName = sites.find((site) => site.value === activity.room.site)?.label;
 
+        const activityDate = activity.date_start.split(" - ")[0];
+        const activityHour =
+            activity.date_start.split(" - ")[1] +
+            " - " +
+            activity.date_end.split(" - ")[1];
+
         return (
             <Card
                 id={activity.id}
                 title={activity.name}
                 location={activity.room.name + " - " + siteName}
-                date={activity.date_start}
+                date={activityDate}
+                hour={activityHour}
                 type={activity.type}
                 description={activity.description}
             />
@@ -143,12 +150,12 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
             {/* Modal view */}
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={toggleModal}
             >
-                <View style={styles.centeredView}>
+                <ScrollView contentContainerStyle={styles.centeredView}>
                     <View style={styles.modalView}>
                         <TextInput
                             style={stylesGlobal.inputLittle}
@@ -186,7 +193,11 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                         />
 
                         <View
-                            style={{ flexDirection: "column", alignItems: "flex-end" }}
+                            style={{
+                                flex: 1,
+                                flexDirection: "column",
+                                alignItems: "flex-end",
+                            }}
                         >
                             <View style={stylesGlobal.containerDatePicker}>
                                 <DateTimePicker
@@ -225,7 +236,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                             />
                         </View>
                     </View>
-                </View>
+                </ScrollView>
             </Modal>
 
             {/* Cards views for registered activity or filtered */}
@@ -261,10 +272,12 @@ const styles = StyleSheet.create({
         color: "gray",
     },
     centeredView: {
+        // height: "100%",
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
         marginTop: 22,
+        backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     modalView: {
         margin: 20,

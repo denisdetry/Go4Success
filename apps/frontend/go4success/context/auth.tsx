@@ -1,14 +1,16 @@
 import * as React from "react";
-import { useRouter, useSegments } from "expo-router";
+import { Redirect, useSegments } from "expo-router";
 import axios from "axios";
 import Toast from "react-native-toast-message";
 import { UserRegister } from "@/types/UserRegister";
 import { UserLogin } from "@/types/UserLogin";
-import axiosConfig from "@/constants/axiosConfig";
 import { API_BASE_URL } from "@/constants/ConfigApp";
-import { User } from "@/types/User";
-
-axiosConfig();
+import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { queryClient } from "@/app/_layout";
+import { ActivityIndicator } from "react-native";
+import styles from "@/styles/global";
+import Colors from "@/constants/Colors";
 
 const AuthContext = React.createContext<any>(null);
 
@@ -17,43 +19,48 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: React.PropsWithChildren) {
+    const { t } = useTranslation();
     const rootSegment = useSegments()[0];
-    const router = useRouter();
-    const [user, setUser] = React.useState<User | string | undefined>("");
-    const [isRegistered, setIsRegistered] = React.useState<boolean>(false);
-    const [isSignedIn, setIsSignedIn] = React.useState<boolean>(false);
-    const [isSignedOut, setIsSignedOut] = React.useState<boolean>(false);
 
-    const refreshUser = () => {
-        axios
-            .get(`${API_BASE_URL}/auth/current_user/`)
-            .then((res) => {
-                setUser(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
+    const {
+        isPending,
+        data: user,
+        error,
+    } = useQuery({
+        queryKey: ["current_user"],
+        queryFn: async () => {
+            try {
+                return await axios.get(`${API_BASE_URL}/auth/current_user/`);
+            } catch (error) {
+                return null;
+            }
+        },
+    });
 
-    React.useEffect(() => {
-        refreshUser();
-    }, []);
+    if (isPending) {
+        return (
+            <ActivityIndicator
+                style={styles.mainContainer}
+                size={"large"}
+                color={Colors.primaryColor}
+            />
+        );
+    }
 
-    React.useEffect(() => {
-        if (user === undefined) return;
+    if (error) {
+        return <Redirect href={"/(auth)/login"} />;
+    }
 
-        if (!user && rootSegment !== "(auth)") {
-            router.replace("/(auth)/login");
-        } else if (user && rootSegment === "(auth)") {
-            router.replace("/");
-        }
-    }, [user, rootSegment]);
+    if (!user && rootSegment !== "(auth)") {
+        return <Redirect href={"/(auth)/login"} />;
+    } else if (user && rootSegment === "(auth)") {
+        return <Redirect href={"/"} />;
+    }
 
     return (
         <AuthContext.Provider
             value={{
-                user: user,
-                refreshUser: refreshUser,
+                user: user?.data,
                 signUp: (userData: UserRegister) => {
                     {
                         axios
@@ -67,22 +74,28 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 noma: userData.noma,
                                 password: userData.password,
                             })
-                            .then((res) => {
-                                setUser(res.data);
-                                setIsRegistered(true);
+                            .then(() => {
+                                void queryClient.invalidateQueries({
+                                    queryKey: ["current_user"],
+                                });
+                                Toast.show({
+                                    type: "success",
+                                    text1: t("translateToast.SuccessText1"),
+                                    text2: t("translateToast.RegisterSuccessText2"),
+                                });
                             })
                             .catch((err) => {
                                 try {
                                     Toast.show({
                                         type: "error",
-                                        text1: "Erreur",
+                                        text1: t("translateToast.ErrorText1"),
                                         text2: err.response.data,
                                     });
                                 } catch (e) {
                                     Toast.show({
                                         type: "error",
-                                        text1: "Erreur",
-                                        text2: "Veuillez réessayer plus tard. Le serveur ne répond pas.",
+                                        text1: t("translateToast.ErrorText1"),
+                                        text2: t("translateToast.ServerErrorText2"),
                                     });
                                 }
                             });
@@ -95,24 +108,31 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             username: userData.username,
                             password: userData.password,
                         })
-                        .then((res) => {
-                            setUser(res.data);
-                            setIsSignedIn(true);
+                        .then(() => {
+                            void queryClient.invalidateQueries({
+                                queryKey: ["current_user"],
+                            });
+                            Toast.show({
+                                type: "success",
+                                text1: t("translateToast.SuccessText1"),
+                                text2: t("translateToast.LoginSuccessText2"),
+                            });
                         })
                         .catch((err) => {
+                            console.log(err.response.data);
                             try {
                                 if (err.response.status === 400) {
                                     Toast.show({
                                         type: "error",
-                                        text1: "Erreur",
-                                        text2: "Nom d'utilisateur ou mot de passe incorrect",
+                                        text1: t("translateToast.ErrorText1"),
+                                        text2: t("translateToast.LoginInfoErrorText2"),
                                     });
                                 }
                             } catch (e) {
                                 Toast.show({
                                     type: "error",
-                                    text1: "Erreur",
-                                    text2: "Veuillez réessayer plus tard. Le serveur ne répond pas.",
+                                    text1: t("translateToast.ErrorText1"),
+                                    text2: t("translateToast.ServerErrorText2"),
                                 });
                             }
                         });
@@ -122,43 +142,18 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     axios
                         .post(`${API_BASE_URL}/auth/logout/`)
                         .then(() => {
-                            setUser("");
-                            setIsSignedOut(true);
+                            void queryClient.invalidateQueries({
+                                queryKey: ["current_user"],
+                            });
+                            Toast.show({
+                                type: "success",
+                                text1: t("translateToast.LogoutSuccessText1"),
+                                text2: t("translateToast.LogoutSuccessText2"),
+                            });
                         })
                         .catch((err) => {
-                            console.log(err);
+                            console.log(err.response.data);
                         });
-                },
-
-                showLoginToast: () => {
-                    if (isSignedIn) {
-                        Toast.show({
-                            type: "success",
-                            text1: "Félicitation ! 🎉",
-                            text2: "Connexion réussie ! Bienvenue sur Go4Success",
-                        });
-                        setIsSignedIn(false);
-                    }
-                },
-                showRegisterToast: () => {
-                    if (isRegistered) {
-                        Toast.show({
-                            type: "success",
-                            text1: "Félicitations ! 🎉",
-                            text2: "Inscription reussie ! Bienvenue sur Go4Success",
-                        });
-                        setIsRegistered(false);
-                    }
-                },
-                showLogoutToast: () => {
-                    if (isSignedOut) {
-                        Toast.show({
-                            type: "success",
-                            text1: "Déconnexion réussie",
-                            text2: "A bientôt sur Go4Success !",
-                        });
-                        setIsSignedOut(false);
-                    }
                 },
             }}
         >

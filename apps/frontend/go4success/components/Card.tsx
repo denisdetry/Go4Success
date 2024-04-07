@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
     Modal,
+    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -9,24 +10,23 @@ import {
 } from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
-
 import { useAuth } from "@/context/auth";
-import { isMobile } from "@/constants/screensWidth";
-import axiosConfig from "@/constants/axiosConfig";
+import { isMobile, width } from "@/constants/screensWidth";
 import { useMutation } from "@tanstack/react-query";
 import { API_BASE_URL } from "@/constants/ConfigApp";
 import axios from "axios";
 import Toast from "react-native-toast-message";
-
 import { queryClient } from "@/app/_layout";
+import { useTranslation } from "react-i18next";
 
-axiosConfig();
+// axiosConfig();
 
 interface CardProps {
     readonly id: string;
     readonly title: string;
     readonly location: string;
     readonly date: string;
+    readonly hour: string;
     readonly type: string;
     readonly description: string;
 }
@@ -128,11 +128,13 @@ const Card: React.FC<CardProps> = ({
     title,
     location,
     date,
+    hour,
     type,
     description,
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
+    const { t } = useTranslation();
 
     const handelRegister = useMutation({
         mutationFn: async () => {
@@ -148,12 +150,11 @@ const Card: React.FC<CardProps> = ({
         onSuccess: () => {
             Toast.show({
                 type: "success",
-                text1: "Félicitation ! 🎉",
-                text2: "Vous êtes parfaitement inscrit à l'atelier : " + title,
+                text1: t("translateToast.SuccessText1"),
+                text2: t("translateToast.RegisterActivitySuccessText2") + title,
             });
             void queryClient.invalidateQueries({
                 queryKey: ["activities"],
-
             });
             setModalVisible(!modalVisible);
         },
@@ -161,14 +162,14 @@ const Card: React.FC<CardProps> = ({
             if (error.response.status === 400) {
                 Toast.show({
                     type: "error",
-                    text1: "Erreur",
-                    text2: "Vous êtes déjà inscrit à cet atelier",
+                    text1: t("translateToast.ErrorText1"),
+                    text2: t("translateToast.AlreadyRegisteredActivityText2"),
                 });
             } else {
                 Toast.show({
                     type: "error",
-                    text1: "Erreur",
-                    text2: "Une erreur s'est produite lors de l'inscription",
+                    text1: t("translateToast.ErrorText1"),
+                    text2: t("translateToast.RegisterActivityErrorText2"),
                 });
             }
 
@@ -200,6 +201,7 @@ const Card: React.FC<CardProps> = ({
 
                         <View style={styleFunctions.getModalDataStyle(type)}>
                             <Text style={styles.modalText}>Date : {date}</Text>
+                            <Text style={styles.modalText}>Hour : {hour}</Text>
                             <Text style={styles.modalText}>Place : {location}</Text>
                             <Text style={styles.modalText}>Type : {type}</Text>
                             <View style={styles.separator} />
@@ -208,12 +210,12 @@ const Card: React.FC<CardProps> = ({
 
                         <View style={styles.buttonContainer}>
                             <ButtonComponent
-                                text="S'inscrire"
+                                text={t("translateRegisterActivity.registerButton")}
                                 onPress={() => handelRegister.mutate()}
                                 buttonType={"primary"}
                             />
                             <ButtonComponent
-                                text="Fermer"
+                                text={t("translateRegisterActivity.closeButton")}
                                 onPress={() => setModalVisible(!modalVisible)}
                                 buttonType={"close"}
                             />
@@ -229,8 +231,14 @@ const Card: React.FC<CardProps> = ({
             >
                 <Text style={styles.title}>{title}</Text>
                 <View style={styles.bottomRow}>
-                    <Text style={styles.text}>{location}</Text>
-                    <Text style={styles.text}>{date}</Text>
+                    <View style={styles.bottomRowLocation}>
+                        <Text style={styles.text}>{location}</Text>
+                    </View>
+
+                    <View style={styles.bottomRowDate}>
+                        <Text style={styles.text}>{date}</Text>
+                        <Text style={styles.text}>{hour}</Text>
+                    </View>
                 </View>
             </TouchableOpacity>
         </View>
@@ -267,15 +275,28 @@ const styles = StyleSheet.create({
     },
     card: {
         borderRadius: 10,
-        padding: 15,
+        padding: 12,
         height: 180,
-        width: isMobile ? 280 : 350,
+        width: Platform.OS === "web" ? (isMobile ? 280 : 350) : width - 80,
     },
     bottomRow: {
         flex: 1,
+        width: "100%",
         flexDirection: "row",
-        gap: 30,
+        justifyContent: "space-between",
     },
+
+    bottomRowLocation: {
+        width: "50%",
+        flexDirection: "row",
+    },
+
+    bottomRowDate: {
+        width: "50%",
+        justifyContent: "flex-end",
+        flexDirection: "column",
+    },
+
     centeredView: {
         marginTop: 22,
         justifyContent: "center",

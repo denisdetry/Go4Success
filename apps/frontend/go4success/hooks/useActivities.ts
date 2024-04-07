@@ -8,6 +8,7 @@ export interface Activity {
     name: string;
     room: Room;
     date_start: string;
+    date_end: string;
     type: string;
     description: string;
 }

@@ -6,7 +6,7 @@ function constructPath(params: string[]): string {
 }
 
 export async function fetchBackend<T extends any>(
-    type: "POST" | "GET" | "PUT" | "DELETE",
+    type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE",
     url: string,
     data?: any,
 ) {

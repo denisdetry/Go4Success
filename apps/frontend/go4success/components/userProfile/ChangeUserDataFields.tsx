@@ -3,14 +3,13 @@ import styles from "@/styles/global";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
-import axios from "axios";
 import { useAuth } from "@/context/Auth";
 import UserProfileModal from "@/components/modals/UserProfileModal";
-import { API_BASE_URL } from "@/constants/ConfigApp";
 import { useMutation } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import { useTranslation } from "react-i18next";
 import { queryClient } from "@/app/_layout";
+import { fetchBackend } from "@/utils/fetch";
 
 interface ChangeUserDataFieldsProps {
     readonly data: any;
@@ -37,12 +36,13 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
         mutationFn: async () => {
             const data: { [index: string]: any } = {};
             data[dataKey] = newData;
-            const response = await axios.patch(
-                `${API_BASE_URL}/auth/user_profile/` + user.id + "/",
-                data,
-            );
+            await fetchBackend("PATCH", "auth/user_profile/" + user.id + "/", data);
+            // const response = await axios.patch(
+            //     `${API_BASE_URL}/auth/user_profile/` + user.id + "/",
+            //     data,
+            // );
 
-            return response.data;
+            // return response.data;
         },
         onSuccess: () => {
             Toast.show({

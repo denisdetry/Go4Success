@@ -18,10 +18,10 @@ interface ChangeUserDataFieldsProps {
 }
 
 const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
-    data,
-    label,
-    dataKey,
-}) => {
+                                                                       data,
+                                                                       label,
+                                                                       dataKey,
+                                                                   }) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editable, setEditable] = useState(false);
     const [newData, setNewData] = useState(data);
@@ -36,7 +36,7 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
         mutationFn: async () => {
             const data: { [index: string]: any } = {};
             data[dataKey] = newData;
-            await fetchBackend("PATCH", "auth/user_profile/" + user.id + "/", data);
+            await fetchBackend({ type: "PATCH", url: "auth/user_profile/" + user.id + "/", data: { data } });
         },
         onSuccess: () => {
             Toast.show({

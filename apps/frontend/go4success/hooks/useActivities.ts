@@ -20,7 +20,7 @@ export function useActivities(
     startDateISO: string | null,
     endDateISO: string | null,
 ) {
-    console.log("Called useActivities");
+    // console.log("Called useActivities");
 
     const { isPending, data, error } = useQuery<Activity[]>({
         queryKey: [
@@ -33,16 +33,18 @@ export function useActivities(
             endDateISO,
         ],
         queryFn: async () => {
-            const { data } = await fetchBackend("GET", `activities/${endpoint}/`, {
-                name: searchName,
-                room: selectedRoom,
-                site: selectedSite,
-                // eslint-disable-next-line camelcase
-                start_date: startDateISO,
-                // eslint-disable-next-line camelcase
-                end_date: endDateISO,
+            const { data } = await fetchBackend({
+                type: "GET", url: `activities/${endpoint}/`, params: {
+                    name: searchName,
+                    room: selectedRoom,
+                    site: selectedSite,
+                    // eslint-disable-next-line camelcase
+                    start_date: startDateISO,
+                    // eslint-disable-next-line camelcase
+                    end_date: endDateISO,
+                },
             });
-            console.log("resp:", data);
+            // console.log("resp:", data);
             return data;
         },
     });

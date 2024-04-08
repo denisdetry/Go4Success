@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-    Modal,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { Modal, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
 import { useAuth } from "@/context/Auth";
@@ -123,26 +115,29 @@ const styleFunctions = {
 };
 
 const Card: React.FC<CardProps> = ({
-    id,
-    title,
-    location,
-    date,
-    hour,
-    type,
-    description,
-}) => {
+                                       id,
+                                       title,
+                                       location,
+                                       date,
+                                       hour,
+                                       type,
+                                       description,
+                                   }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
     const { t } = useTranslation();
 
     const handelRegister = useMutation({
         mutationFn: async () => {
-            await fetchBackend("POST", "activities/register_activity/", undefined, {
-                activity: id,
-                student: user.id,
+            await fetchBackend({
+                type: "POST", url: "activities/register_activity/", data: {
+                    activity: id,
+                    student: user.id,
+                },
             });
         },
         onSuccess: () => {
+            console.log("success");
             Toast.show({
                 type: "success",
                 text1: t("translateToast.SuccessText1"),
@@ -154,6 +149,7 @@ const Card: React.FC<CardProps> = ({
             setModalVisible(!modalVisible);
         },
         onError: (error: any) => {
+            console.log("error");
             if (error.response.status === 400) {
                 Toast.show({
                     type: "error",

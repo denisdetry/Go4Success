@@ -1,17 +1,20 @@
 import { API_BASE_URL } from "@/constants/ConfigApp";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export async function fetchBackend(
-    type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE",
-    url: string,
-    params?: any,
-    data?: any,
+export async function fetchBackend(options: {
+                                       readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE",
+                                       url: string,
+                                       readonly params?: any,
+                                       readonly data?: any
+                                   },
 ): Promise<any> {
-    console.log("Data:", data);
+    const { type, params, data } = options;
+    let { url } = options;
+    // console.log("Data:", data);
 
-    console.log("Params:", params);
+    // console.log("Params:", params);
 
-    if (params) {
+    if (params && type === "GET") {
         url += "?";
         Object.keys(params).forEach((key, index) => {
             if (params[key] !== undefined) {
@@ -23,7 +26,7 @@ export async function fetchBackend(
         });
     }
 
-    console.log("URL:", url);
+    // console.log("URL:", url);
 
     try {
         const response = await fetch(`${API_BASE_URL}/` + url, {
@@ -36,12 +39,12 @@ export async function fetchBackend(
             ...(data && { body: JSON.stringify(data) }),
         });
 
-        console.log("response:", response);
+        // console.log("response:", response);
 
         if (response.ok) {
             const responseData = await response.json();
-
-            console.log("responseData:", responseData);
+            
+            // console.log("responseData:", responseData);
 
             if (responseData !== undefined) {
                 return { data: responseData };

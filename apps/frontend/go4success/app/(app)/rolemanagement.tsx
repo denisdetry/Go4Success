@@ -223,14 +223,14 @@ const generateUsersInfoRole = (userInfo, userRole) => {
         return acc;
     }, {});
 
-    // Générer le tableau final en parcourant `userInfo`
     return userInfo.map((user) => ({
         id: user.id,
         first_name: user.first_name,
         last_name: user.last_name,
-        // Attribuer le rôle depuis `roleMap` ou 'student' par défaut si non trouvé
-        role: roleMap[user.id] || "student",
+        
+        role: roleMap[user.id] || (user.is_superuser ? "superuser" : "student"),
     }));
+
 };
 const styles = StyleSheet.create({
   container: {

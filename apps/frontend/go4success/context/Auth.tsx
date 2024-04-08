@@ -70,6 +70,16 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         await fetchBackend(
                             "POST",
                             "auth/register/",
+                            {
+                                username: userData.username,
+                                email: userData.email,
+                                // eslint-disable-next-line camelcase
+                                last_name: userData.lastName,
+                                // eslint-disable-next-line camelcase
+                                first_name: userData.firstName,
+                                noma: userData.noma,
+                                password: userData.password,
+                            },
                             () => {
                                 void queryClient.invalidateQueries({
                                     queryKey: ["current_user"],
@@ -96,16 +106,6 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                     });
                                 }
                             },
-                            {
-                                username: userData.username,
-                                email: userData.email,
-                                // eslint-disable-next-line camelcase
-                                last_name: userData.lastName,
-                                // eslint-disable-next-line camelcase
-                                first_name: userData.firstName,
-                                noma: userData.noma,
-                                password: userData.password,
-                            },
                         );
                     }
                 },
@@ -114,6 +114,10 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     await fetchBackend(
                         "POST",
                         "auth/login/",
+                        {
+                            username: userData.username,
+                            password: userData.password,
+                        },
                         () => {
                             void queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
@@ -139,10 +143,6 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 });
                             }
                         },
-                        {
-                            username: userData.username,
-                            password: userData.password,
-                        },
                     );
                 },
 
@@ -150,6 +150,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     await fetchBackend(
                         "POST",
                         "auth/logout/",
+                        {},
                         () => {
                             void queryClient.invalidateQueries({
                                 queryKey: ["current_user"],

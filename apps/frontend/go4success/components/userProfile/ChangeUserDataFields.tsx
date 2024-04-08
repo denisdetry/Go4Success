@@ -36,13 +36,7 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
         mutationFn: async () => {
             const data: { [index: string]: any } = {};
             data[dataKey] = newData;
-            await fetchBackend(
-                "PATCH",
-                "auth/user_profile/" + user.id + "/",
-                () => {},
-                () => {},
-                data,
-            );
+            await fetchBackend("PATCH", "auth/user_profile/" + user.id + "/", data);
         },
         onSuccess: () => {
             Toast.show({

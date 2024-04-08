@@ -137,18 +137,10 @@ const Card: React.FC<CardProps> = ({
 
     const handelRegister = useMutation({
         mutationFn: async () => {
-            await fetchBackend(
-                "POST",
-                "activities/register_activity/",
-                () => {
-                    return {
-                        activity: id,
-                        student: user.id,
-                    };
-                },
-                () => {},
-                { activity: id, student: user.id },
-            );
+            await fetchBackend("POST", "activities/register_activity/", {
+                activity: id,
+                student: user.id,
+            });
         },
         onSuccess: () => {
             Toast.show({

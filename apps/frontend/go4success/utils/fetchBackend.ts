@@ -1,13 +1,13 @@
 import { API_BASE_URL } from "@/constants/ConfigApp";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { fetchError } from "@/utils/fetchError";
 
 export async function fetchBackend(options: {
-                                       readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE",
-                                       url: string,
-                                       readonly params?: any,
-                                       readonly data?: any
-                                   },
-): Promise<any> {
+    readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE";
+    url: string;
+    readonly params?: any;
+    readonly data?: any;
+}): Promise<any> {
     const { type, params, data } = options;
     let { url } = options;
 
@@ -23,29 +23,25 @@ export async function fetchBackend(options: {
         });
     }
 
-    try {
-        const response = await fetch(`${API_BASE_URL}/` + url, {
-            method: type,
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": await AsyncStorage.getItem("csrf_token"),
-            },
-            ...(data && { body: JSON.stringify(data) }),
-        });
+    const response = await fetch(`${API_BASE_URL}/` + url, {
+        method: type,
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": await AsyncStorage.getItem("csrf_token"),
+        },
+        ...(data && { body: JSON.stringify(data) }),
+    });
 
-        if (response.ok) {
-            const responseData = await response.json();
+    if (response.ok) {
+        const responseData = await response.json();
 
-            if (responseData !== undefined) {
-                return { data: responseData };
-            } else {
-                return { data: "success" };
-            }
+        if (responseData !== undefined) {
+            return { data: responseData };
         } else {
-            return { error: response };
+            return { data: "success" };
         }
-    } catch (error) {
-        return { error: "Something went wrong!" };
+    } else {
+        throw new fetchError("An error has occurred", response);
     }
 }

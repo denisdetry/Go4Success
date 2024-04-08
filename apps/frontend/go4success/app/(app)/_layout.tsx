@@ -2,14 +2,9 @@ import React from "react";
 import Drawer from "expo-router/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { useAuth } from "@/context/auth";
+import { AuthProvider, useAuth } from "@/context/Auth";
 import Colors from "@/constants/Colors";
-import {
-    DrawerContentScrollView,
-    DrawerItem,
-    DrawerItemList,
-} from "@react-navigation/drawer";
-
+import { DrawerContentScrollView, DrawerItem, DrawerItemList } from "@react-navigation/drawer";
 import { Image, Platform, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -150,16 +145,16 @@ export default function Layout() {
                     }}
                 />
 
-                <Drawer.Screen
-                    name="calendar"
-                    options={{
-                        drawerLabel: t("translationMenu.calendar"),
-                        headerTitle: t("translationMenu.calendar"),
-                        drawerIcon: ({ size, color }) => (
-                            <Ionicons name="calendar" size={size} color={color} />
-                        ),
-                    }}
-                />
+                    <Drawer.Screen
+                        name="calendar"
+                        options={{
+                            drawerLabel: t("translationMenu.calendar"),
+                            headerTitle: t("translationMenu.calendar"),
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons name="calendar" size={size} color={color} />
+                            ),
+                        }}
+                    />
                 <Drawer.Screen
                     name="workshops"
                     options={{
@@ -171,6 +166,7 @@ export default function Layout() {
                     }}
                 />
             </Drawer>
+            </AuthProvider>
         </GestureHandlerRootView>
     );
 }

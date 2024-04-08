@@ -3,6 +3,7 @@ import Colors from "@/constants/Colors";
 import styles from "@/styles/global";
 import Button from "@/components/ButtonComponent";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const UserProfileModal = ({
     isVisible,
@@ -15,6 +16,7 @@ const UserProfileModal = ({
     readonly onConfirm: any;
     readonly dataLabelName: string;
 }) => {
+    const { t } = useTranslation();
     return (
         <Modal
             animationType="fade"
@@ -38,7 +40,7 @@ const UserProfileModal = ({
                     }}
                 >
                     <Text style={styles.text}>
-                        Êtes vous sûr de vouloir changer votre {dataLabelName}
+                        {t("translationProfile.areYouSure")} {dataLabelName} ?
                     </Text>
                     <View
                         style={{

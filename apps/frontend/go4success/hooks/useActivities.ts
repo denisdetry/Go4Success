@@ -1,13 +1,13 @@
 import { Room } from "./useRooms";
 import { useQuery } from "@tanstack/react-query";
-import { API_BASE_URL } from "@/constants/ConfigApp";
-import axios from "axios";
+import { fetchBackend } from "@/utils/fetchBackend";
 
 export interface Activity {
     id: string;
     name: string;
     room: Room;
     date_start: string;
+    date_end: string;
     type: string;
     description: string;
 }
@@ -20,7 +20,9 @@ export function useActivities(
     startDateISO: string | null,
     endDateISO: string | null,
 ) {
-    return useQuery<Activity[]>({
+    // console.log("Called useActivities");
+
+    const { isPending, data, error } = useQuery<Activity[]>({
         queryKey: [
             "activities",
             endpoint,
@@ -31,22 +33,20 @@ export function useActivities(
             endDateISO,
         ],
         queryFn: async () => {
-            const response = await axios.get(
-                `${API_BASE_URL}/activities/${endpoint}/`,
-                {
-                    params: {
-                        name: searchName,
-                        room: selectedRoom,
-                        site: selectedSite,
-                        // eslint-disable-next-line camelcase
-                        date_start: startDateISO,
-                        // eslint-disable-next-line camelcase
-                        date_end: endDateISO,
-                    },
+            const { data } = await fetchBackend({
+                type: "GET", url: `activities/${endpoint}/`, params: {
+                    name: searchName,
+                    room: selectedRoom,
+                    site: selectedSite,
+                    // eslint-disable-next-line camelcase
+                    start_date: startDateISO,
+                    // eslint-disable-next-line camelcase
+                    end_date: endDateISO,
                 },
-            );
-
-            return response.data;
+            });
+            // console.log("resp:", data);
+            return data;
         },
     });
+    return { isPending, data: data ?? [], error };
 }

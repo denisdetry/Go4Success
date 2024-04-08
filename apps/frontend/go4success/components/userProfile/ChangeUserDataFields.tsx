@@ -3,13 +3,12 @@ import styles from "@/styles/global";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
-import axios from "axios";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/context/Auth";
 import UserProfileModal from "@/components/modals/UserProfileModal";
-import { API_BASE_URL } from "@/constants/ConfigApp";
-import { useMutation } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import { fetchBackend } from "@/utils/fetchBackend";
 import Toast from "react-native-toast-message";
-
+import { queryClient } from "@/app/_layout";
 
 interface ChangeUserDataFieldsProps {
     readonly data: any;
@@ -18,57 +17,85 @@ interface ChangeUserDataFieldsProps {
 }
 
 const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
-    data,
-    label,
-    dataKey,
-}) => {
+                                                                       data,
+                                                                       label,
+                                                                       dataKey,
+                                                                   }) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editable, setEditable] = useState(false);
     const [newData, setNewData] = useState(data);
-    const { user, refreshUser } = useAuth();
+    const { user } = useAuth();
 
+    const { t } = useTranslation();
     const switchEdit = () => {
         setEditable(!editable);
     };
 
-    const fetchData = useMutation({
-        mutationFn: async () => {
-            const data: { [index: string]: any } = {};
-            data[dataKey] = newData;
-            const response = await axios.patch(
-                `${API_BASE_URL}/auth/user_profile/` + user.id + "/",
-                data,
-            );
+    const fetchData = async () => {
+        const data: { [index: string]: any } = {};
+        data[dataKey] = newData;
+        const { data: success, error } = await fetchBackend({
+            type: "PATCH",
+            url: "auth/user_profile/" + user.id + "/",
+            data: data,
+        });
 
-            return response.data;
-        },
-        onSuccess: () => {
+        if (success) {
             Toast.show({
                 type: "success",
                 text1: "Félicitation ! 🎉",
-                text2: "Votre " + label.toLowerCase() + " a été mise à jour",
+                text2:
+                    t("translationProfile.changeUserInfoSuccessPart1") +
+                    label.toLowerCase() +
+                    t("translationProfile.changeUserInfoSuccessPart2"),
             });
-            refreshUser();
+            void queryClient.invalidateQueries({ queryKey: ["current_user"] });
             switchEdit();
-        },
-        onError: (error: any) => {
-            console.log(error);
-            const errorMessages =
-                error.response.data[dataKey] || "Une erreur est survenue";
+        } else if (error) {
+            const errorMessages = (await error.json())[dataKey] || "Une erreur est survenue";
             Toast.show({
                 type: "error",
                 text1: "Erreur",
                 text2: errorMessages,
             });
-        },
-    });
+        }
+    };
+    //     useMutation({
+    //     mutationFn: async () => {
+    //         const data: { [index: string]: any } = {};
+    //         data[dataKey] = newData;
+    //         await fetchBackend({ type: "PATCH", url: "auth/user_profile/" + user.id + "/", data: { data } });
+    //     },
+    //     onSuccess: () => {
+    //         Toast.show({
+    //             type: "success",
+    //             text1: "Félicitation ! 🎉",
+    //             text2:
+    //                 t("translationProfile.changeUserInfoSuccessPart1") +
+    //                 label.toLowerCase() +
+    //                 t("translationProfile.changeUserInfoSuccessPart2"),
+    //         });
+    //         void queryClient.invalidateQueries({ queryKey: ["current_user"] });
+    //         switchEdit();
+    //     },
+    //     onError: (error: any) => {
+    //         console.log(error);
+    //         const errorMessages =
+    //             error.response.data[dataKey] || "Une erreur est survenue";
+    //         Toast.show({
+    //             type: "error",
+    //             text1: "Erreur",
+    //             text2: errorMessages,
+    //         });
+    //     },
+    // });
 
     const handleCancel = () => {
         setIsModalVisible(false);
     };
 
-    const handleConfirm = () => {
-        fetchData.mutate();
+    const handleConfirm = async () => {
+        await fetchData();
         setIsModalVisible(false);
     };
 
@@ -93,7 +120,7 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
             >
                 <TextInput
                     style={styles.input}
-                    value={newData}
+                    value={newData ? newData : undefined}
                     onChangeText={setNewData}
                     editable={editable}
                     clearButtonMode={"while-editing"} // on IOS

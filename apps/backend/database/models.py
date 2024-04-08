@@ -132,8 +132,8 @@ class Teacher(models.Model):
         User, on_delete=models.CASCADE, primary_key=True)
     is_tutor = models.BooleanField()
     is_professor = models.BooleanField()
-
     # check if the user is either tutor or professor
+
     def clean(self):
         if self.is_tutor and self.is_professor:
             raise ValidationError(

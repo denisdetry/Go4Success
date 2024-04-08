@@ -13,11 +13,10 @@ import ButtonComponent from "./ButtonComponent";
 import { useAuth } from "@/context/Auth";
 import { isMobile, width } from "@/constants/screensWidth";
 import { useMutation } from "@tanstack/react-query";
-import { API_BASE_URL } from "@/constants/ConfigApp";
-import axios from "axios";
 import Toast from "react-native-toast-message";
 import { queryClient } from "@/app/_layout";
 import { useTranslation } from "react-i18next";
+import { fetchBackend } from "@/utils/fetchBackend";
 
 // axiosConfig();
 
@@ -138,14 +137,18 @@ const Card: React.FC<CardProps> = ({
 
     const handelRegister = useMutation({
         mutationFn: async () => {
-            const response = await axios.post(
-                `${API_BASE_URL}/activities/register_activity/`,
-                {
-                    activity: id,
-                    student: user.id,
+            await fetchBackend(
+                "POST",
+                "activities/register_activity/",
+                () => {
+                    return {
+                        activity: id,
+                        student: user.id,
+                    };
                 },
+                () => {},
+                { activity: id, student: user.id },
             );
-            return response.data;
         },
         onSuccess: () => {
             Toast.show({

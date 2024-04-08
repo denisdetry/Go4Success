@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/context/Auth";
 import { isMobile, width } from "@/constants/screensWidth";
 import { useMutation } from "@tanstack/react-query";
 import { API_BASE_URL } from "@/constants/ConfigApp";

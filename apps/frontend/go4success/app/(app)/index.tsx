@@ -2,7 +2,7 @@ import { ScrollView, Text, View } from "react-native";
 import React, { useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import styles from "@/styles/global";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/context/Auth";
 import { useTranslation } from "react-i18next";
 import FilterActivity from "@/components/FilterActivity";
 

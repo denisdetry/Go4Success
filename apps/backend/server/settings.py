@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     "authentification",
     "database",
     "activities",
-    "corsheaders",
 ]
 
 MIDDLEWARE = [

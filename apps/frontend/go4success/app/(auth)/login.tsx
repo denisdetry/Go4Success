@@ -2,7 +2,7 @@ import { ScrollView, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import styles from "@/styles/global";
 import Button from "@/components/ButtonComponent";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/context/Auth";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import * as yup from "yup";

@@ -11,7 +11,6 @@ import { Divider } from "@rneui/themed";
 import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
 import { useTranslation } from "react-i18next";
 
-// axiosConfig();
 const UserProfileFieldsTitle = ({ title }: { readonly title: string }) => {
     return (
         <>
@@ -22,10 +21,10 @@ const UserProfileFieldsTitle = ({ title }: { readonly title: string }) => {
         </>
     );
 };
-export default function profile() {
+
+export default function Profile() {
     const { user } = useAuth();
     const { t } = useTranslation();
-
     return (
         <ScrollView contentContainerStyle={stylesGlobal.mainContainer}>
             <View style={stylesGlobal.container}>

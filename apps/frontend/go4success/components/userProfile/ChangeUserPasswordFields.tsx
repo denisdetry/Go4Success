@@ -40,16 +40,6 @@ export const ChangeUserPasswordFields = () => {
     // fetch data
     const fetchData = useMutation({
         mutationFn: async () => {
-            // const response = await axios.put(
-            //     `${API_BASE_URL}/auth/change_password/` + user.id + "/",
-            //     {
-            //         // eslint-disable-next-line camelcase
-            //         old_password: oldPassword,
-            //         password: newPassword,
-            //         password2: newPasswordConfirmation,
-            //     },
-            // );
-            // return response.data;
             await fetchBackend(
                 "PUT",
                 "auth/change_password/" + user.id + "/",

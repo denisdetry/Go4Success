@@ -14,7 +14,7 @@ interface Message {
     to_user: string;
 }
 
-export default function index() {
+export default function Index() {
     const { t } = useTranslation();
     const [allMessages, setAllMessages] = useState([]);
     const { user } = useAuth();

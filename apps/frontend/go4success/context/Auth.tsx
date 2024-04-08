@@ -67,9 +67,35 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                 user: user?.data,
                 signUp: async (userData: UserRegister) => {
                     {
-                        const { data, error } = await fetchBackend(
+                        await fetchBackend(
                             "POST",
                             "auth/register/",
+                            () => {
+                                void queryClient.invalidateQueries({
+                                    queryKey: ["current_user"],
+                                });
+
+                                Toast.show({
+                                    type: "success",
+                                    text1: t("translateToast.SuccessText1"),
+                                    text2: t("translateToast.RegisterSuccessText2"),
+                                });
+                            },
+                            (error) => {
+                                if (error.status === 400) {
+                                    Toast.show({
+                                        type: "error",
+                                        text1: t("translateToast.ErrorText1"),
+                                        text2: error.data.message,
+                                    });
+                                } else {
+                                    Toast.show({
+                                        type: "error",
+                                        text1: t("translateToast.ErrorText1"),
+                                        text2: t("translateToast.ServerErrorText2"),
+                                    });
+                                }
+                            },
                             {
                                 username: userData.username,
                                 email: userData.email,
@@ -81,16 +107,29 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 password: userData.password,
                             },
                         );
+                    }
+                },
 
-                        console.log(error);
-                        console.log();
-
-                        if (error) {
+                signIn: async (userData: UserLogin) => {
+                    await fetchBackend(
+                        "POST",
+                        "auth/login/",
+                        () => {
+                            void queryClient.invalidateQueries({
+                                queryKey: ["current_user"],
+                            });
+                            Toast.show({
+                                type: "success",
+                                text1: t("translateToast.SuccessText1"),
+                                text2: t("translateToast.LoginSuccessText2"),
+                            });
+                        },
+                        (error) => {
                             if (error.status === 400) {
                                 Toast.show({
                                     type: "error",
                                     text1: t("translateToast.ErrorText1"),
-                                    text2: await error.json(),
+                                    text2: t("translateToast.LoginInfoErrorText2"),
                                 });
                             } else {
                                 Toast.show({
@@ -99,72 +138,32 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                     text2: t("translateToast.ServerErrorText2"),
                                 });
                             }
-                        }
-
-                        if (data) {
-                            void queryClient.invalidateQueries({
-                                queryKey: ["current_user"],
-                            });
-
-                            Toast.show({
-                                type: "success",
-                                text1: t("translateToast.SuccessText1"),
-                                text2: t("translateToast.RegisterSuccessText2"),
-                            });
-                        }
-                    }
-                },
-
-                signIn: async (userData: UserLogin) => {
-                    const { data, error } = await fetchBackend("POST", "auth/login/", {
-                        username: userData.username,
-                        password: userData.password,
-                    });
-
-                    if (error) {
-                        if (error.status === 400) {
-                            Toast.show({
-                                type: "error",
-                                text1: t("translateToast.ErrorText1"),
-                                text2: t("translateToast.LoginInfoErrorText2"),
-                            });
-                        } else {
-                            Toast.show({
-                                type: "error",
-                                text1: t("translateToast.ErrorText1"),
-                                text2: t("translateToast.ServerErrorText2"),
-                            });
-                        }
-                    }
-
-                    if (data) {
-                        void queryClient.invalidateQueries({
-                            queryKey: ["current_user"],
-                        });
-                        Toast.show({
-                            type: "success",
-                            text1: t("translateToast.SuccessText1"),
-                            text2: t("translateToast.LoginSuccessText2"),
-                        });
-                    }
+                        },
+                        {
+                            username: userData.username,
+                            password: userData.password,
+                        },
+                    );
                 },
 
                 signOut: async () => {
-                    const { data, error } = await fetchBackend("POST", "auth/logout/");
-                    if (error) {
-                        console.log(error);
-                    }
-
-                    if (data) {
-                        void queryClient.invalidateQueries({
-                            queryKey: ["current_user"],
-                        });
-                        Toast.show({
-                            type: "success",
-                            text1: t("translateToast.LogoutSuccessText1"),
-                            text2: t("translateToast.LogoutSuccessText2"),
-                        });
-                    }
+                    await fetchBackend(
+                        "POST",
+                        "auth/logout/",
+                        () => {
+                            void queryClient.invalidateQueries({
+                                queryKey: ["current_user"],
+                            });
+                            Toast.show({
+                                type: "success",
+                                text1: t("translateToast.LogoutSuccessText1"),
+                                text2: t("translateToast.LogoutSuccessText2"),
+                            });
+                        },
+                        (error) => {
+                            console.log(error);
+                        },
+                    );
                 },
             }}
         >

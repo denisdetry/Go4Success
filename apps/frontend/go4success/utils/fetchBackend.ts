@@ -4,6 +4,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export async function fetchBackend(
     type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE",
     url: string,
+    successFunction: ({ ...props }) => void,
+    errorFunction: ({ ...props }) => void,
     data?: any,
 ): Promise<any> {
     try {
@@ -18,8 +20,10 @@ export async function fetchBackend(
         });
 
         if (response.ok) {
+            successFunction(response);
             return { data: await response.json() };
         } else {
+            errorFunction(response);
             return { error: response };
         }
     } catch (error) {

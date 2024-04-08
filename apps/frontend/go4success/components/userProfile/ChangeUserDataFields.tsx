@@ -43,11 +43,6 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
                 () => {},
                 data,
             );
-            // const response = await axios.patch(
-            //     `${API_BASE_URL}/auth/user_profile/` + user.id + "/",
-            //     data,
-            // );
-            // return response.data;
         },
         onSuccess: () => {
             Toast.show({

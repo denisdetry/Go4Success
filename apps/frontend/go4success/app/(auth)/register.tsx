@@ -13,7 +13,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { UserRegister } from "@/types/UserRegister";
 import { useTranslation } from "react-i18next";
 
-export default function register() {
+export default function Register() {
     const { t } = useTranslation();
     const schema = yup.object().shape({
         email: yup

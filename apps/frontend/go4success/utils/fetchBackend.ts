@@ -18,7 +18,13 @@ export async function fetchBackend(
         });
 
         if (response.ok) {
-            return { data: await response.json() };
+            const responseData = await response.json();
+
+            if (responseData !== undefined) {
+                return { data: responseData };
+            } else {
+                return { data: "success" };
+            }
         } else {
             return { error: response };
         }

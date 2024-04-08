@@ -50,18 +50,12 @@ export const ChangeUserPasswordFields = () => {
             //     },
             // );
             // return response.data;
-            await fetchBackend(
-                "PUT",
-                "auth/change_password/" + user.id + "/",
-                () => {},
-                () => {},
-                {
-                    // eslint-disable-next-line camelcase
-                    old_password: oldPassword,
-                    password: newPassword,
-                    password2: newPasswordConfirmation,
-                },
-            );
+            await fetchBackend("PUT", "auth/change_password/" + user.id + "/", {
+                // eslint-disable-next-line camelcase
+                old_password: oldPassword,
+                password: newPassword,
+                password2: newPasswordConfirmation,
+            });
         },
 
         onSuccess: () => {

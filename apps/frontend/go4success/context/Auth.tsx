@@ -154,7 +154,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     if (error) {
                         console.log(error);
                     }
-
+                    
                     if (data) {
                         void queryClient.invalidateQueries({
                             queryKey: ["current_user"],

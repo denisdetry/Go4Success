@@ -70,6 +70,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         const { data, error } = await fetchBackend(
                             "POST",
                             "auth/register/",
+                            undefined,
                             {
                                 username: userData.username,
                                 email: userData.email,
@@ -81,9 +82,6 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 password: userData.password,
                             },
                         );
-
-                        console.log(error);
-                        console.log();
 
                         if (error) {
                             if (error.status === 400) {
@@ -154,7 +152,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     if (error) {
                         console.log(error);
                     }
-                    
+
                     if (data) {
                         void queryClient.invalidateQueries({
                             queryKey: ["current_user"],

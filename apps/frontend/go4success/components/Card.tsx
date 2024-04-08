@@ -137,7 +137,7 @@ const Card: React.FC<CardProps> = ({
 
     const handelRegister = useMutation({
         mutationFn: async () => {
-            await fetchBackend("POST", "activities/register_activity/", {
+            await fetchBackend("POST", "activities/register_activity/", undefined, {
                 activity: id,
                 student: user.id,
             });

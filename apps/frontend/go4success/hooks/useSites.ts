@@ -15,20 +15,20 @@ export function useSites(siteId?: string) {
     } = useQuery<SelectItem[]>({
         queryKey: ["getSites", siteId ?? ""],
         queryFn: async () => {
-            const { response, error } = await fetchBackend(
+            const { data, error } = await fetchBackend(
                 "GET",
                 "activities/sites/" + (siteId ? `site/${siteId}/` : ""),
             );
 
-            if (typeof response === "object" && "error" in response) {
-                throw new Error(response.error);
+            if (typeof data === "object" && "error" in data) {
+                throw new Error(data.error);
             }
 
             if (error) {
                 throw new Error(error);
             }
-
-            return response.map((site: { name: any; id: any }) => ({
+            
+            return data.map((site: { name: any; id: any }) => ({
                 label: site.name,
                 value: site.id,
             }));

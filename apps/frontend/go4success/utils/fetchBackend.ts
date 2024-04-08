@@ -4,8 +4,27 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export async function fetchBackend(
     type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE",
     url: string,
+    params?: any,
     data?: any,
 ): Promise<any> {
+    console.log("Data:", data);
+
+    console.log("Params:", params);
+
+    if (params) {
+        url += "?";
+        Object.keys(params).forEach((key, index) => {
+            if (params[key] !== undefined) {
+                url += `${key}=${params[key]}`;
+                if (index < Object.keys(params).length - 1) {
+                    url += "&";
+                }
+            }
+        });
+    }
+
+    console.log("URL:", url);
+
     try {
         const response = await fetch(`${API_BASE_URL}/` + url, {
             method: type,
@@ -17,8 +36,12 @@ export async function fetchBackend(
             ...(data && { body: JSON.stringify(data) }),
         });
 
+        console.log("response:", response);
+
         if (response.ok) {
             const responseData = await response.json();
+
+            console.log("responseData:", responseData);
 
             if (responseData !== undefined) {
                 return { data: responseData };

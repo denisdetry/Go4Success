@@ -10,9 +10,6 @@ export async function fetchBackend(options: {
 ): Promise<any> {
     const { type, params, data } = options;
     let { url } = options;
-    // console.log("Data:", data);
-
-    // console.log("Params:", params);
 
     if (params && type === "GET") {
         url += "?";
@@ -26,8 +23,6 @@ export async function fetchBackend(options: {
         });
     }
 
-    // console.log("URL:", url);
-
     try {
         const response = await fetch(`${API_BASE_URL}/` + url, {
             method: type,
@@ -39,12 +34,8 @@ export async function fetchBackend(options: {
             ...(data && { body: JSON.stringify(data) }),
         });
 
-        // console.log("response:", response);
-
         if (response.ok) {
             const responseData = await response.json();
-            
-            // console.log("responseData:", responseData);
 
             if (responseData !== undefined) {
                 return { data: responseData };

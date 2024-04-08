@@ -4,11 +4,10 @@ import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
 import { useAuth } from "@/context/Auth";
 import { isMobile, width } from "@/constants/screensWidth";
-import { useMutation } from "@tanstack/react-query";
-import Toast from "react-native-toast-message";
-import { queryClient } from "@/app/_layout";
 import { useTranslation } from "react-i18next";
 import { fetchBackend } from "@/utils/fetchBackend";
+import Toast from "react-native-toast-message";
+import { queryClient } from "@/app/_layout";
 
 // axiosConfig();
 
@@ -127,17 +126,15 @@ const Card: React.FC<CardProps> = ({
     const { user } = useAuth();
     const { t } = useTranslation();
 
-    const handelRegister = useMutation({
-        mutationFn: async () => {
-            await fetchBackend({
-                type: "POST", url: "activities/register_activity/", data: {
-                    activity: id,
-                    student: user.id,
-                },
-            });
-        },
-        onSuccess: () => {
-            console.log("success");
+    const handelRegister = async () => {
+        const { data: success, error } = await fetchBackend({
+            type: "POST", url: "activities/register_activity/", data: {
+                activity: id,
+                student: user.id,
+            },
+        });
+
+        if (success) {
             Toast.show({
                 type: "success",
                 text1: t("translateToast.SuccessText1"),
@@ -147,10 +144,11 @@ const Card: React.FC<CardProps> = ({
                 queryKey: ["activities"],
             });
             setModalVisible(!modalVisible);
-        },
-        onError: (error: any) => {
-            console.log("error");
-            if (error.response.status === 400) {
+
+        }
+
+        if (error) {
+            if (error.status === 400) {
                 Toast.show({
                     type: "error",
                     text1: t("translateToast.ErrorText1"),
@@ -165,8 +163,52 @@ const Card: React.FC<CardProps> = ({
             }
 
             setModalVisible(!modalVisible);
-        },
-    });
+        }
+
+    };
+
+
+    // useMutation({
+    // mutationFn: async () => {
+    //     const { data, error } = await fetchBackend({
+    //         type: "POST", url: "activities/register_activity/", data: {
+    //             activity: id,
+    //             student: user.id,
+    //         },
+    //     });
+    //     return { data, error };
+    // },
+    // onSuccess: () => {
+    //     console.log("success");
+    //     Toast.show({
+    //         type: "success",
+    //         text1: t("translateToast.SuccessText1"),
+    //         text2: t("translateToast.RegisterActivitySuccessText2") + title,
+    //     });
+    //     void queryClient.invalidateQueries({
+    //         queryKey: ["activities"],
+    //     });
+    //     setModalVisible(!modalVisible);
+    // },
+    // onError: (error: any) => {
+    //     console.log("error");
+    //     if (error.response.status === 400) {
+    //         Toast.show({
+    //             type: "error",
+    //             text1: t("translateToast.ErrorText1"),
+    //             text2: t("translateToast.AlreadyRegisteredActivityText2"),
+    //         });
+    //     } else {
+    //         Toast.show({
+    //             type: "error",
+    //             text1: t("translateToast.ErrorText1"),
+    //             text2: t("translateToast.RegisterActivityErrorText2"),
+    //         });
+    //     }
+    //
+    //     setModalVisible(!modalVisible);
+    // },
+
     return (
         <View style={styles.centeredView}>
             {/* Modal content */}
@@ -202,7 +244,7 @@ const Card: React.FC<CardProps> = ({
                         <View style={styles.buttonContainer}>
                             <ButtonComponent
                                 text={t("translateRegisterActivity.registerButton")}
-                                onPress={() => handelRegister.mutate()}
+                                onPress={handelRegister}
                                 buttonType={"primary"}
                             />
                             <ButtonComponent

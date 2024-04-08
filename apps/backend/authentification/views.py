@@ -1,12 +1,16 @@
 from database.models import User
 from django.contrib.auth import login, logout
-from rest_framework import status, permissions
+from django.http import JsonResponse
+from django.middleware import csrf
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status, permissions, generics
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSerializer, UpdateUserSerializer
+from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSerializer, UpdateUserSerializer, \
+    ChangePasswordSerializer
 from .validations import custom_validation, validate_username, validate_password
 
 
@@ -64,3 +68,18 @@ class UpdateProfileView(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = UpdateUserSerializer
+
+
+class ChangePasswordView(generics.UpdateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = User.objects.all()
+    serializer_class = ChangePasswordSerializer
+    lookup_field = 'id'
+
+
+@csrf_exempt
+def csrf_token(request):
+    if request.method == 'GET':
+        return JsonResponse({'csrfToken': csrf.get_token(request)})
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)

@@ -11,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { UserLogin } from "@/types/UserLogin";
 import { useTranslation } from "react-i18next";
 
-export default function login() {
+export default function Login() {
     const { t } = useTranslation();
 
     const schema = yup.object().shape({

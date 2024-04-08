@@ -1,8 +1,8 @@
+from database.models import Activity, Attend, Room, Site
 from django.db.models import Q
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 
-from database.models import Activity, Attend, Room, Site
 from .serializers import SiteSerializer, ActivitySerializer, \
     AttendSerializer, RoomSerializer, RegisterToActivitySerializer
 
@@ -30,8 +30,11 @@ class ActivityViewSet(viewsets.ModelViewSet):
     serializer_class = ActivitySerializer
 
     def get_queryset(self):
-        qs = Activity.objects.all()
-        return filter_queryset(self, qs)
+        registered_attendances = Attend.objects.filter(student=self.request.user.id)
+        activities_without_registration = Activity.objects.all().exclude(
+            id__in=[attendance.activity.id for attendance in registered_attendances]
+        )
+        return filter_queryset(self, activities_without_registration)
 
 
 class AttendViewSet(viewsets.ModelViewSet):

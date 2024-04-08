@@ -11,6 +11,8 @@ module.exports = {
         eqeqeq: ["error", "always"],
         quotes: ["error", "double", { avoidEscape: true }],
         "no-unused-vars": "off",
+        "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+        "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
         "@typescript-eslint/no-unused-vars": "error",
         "@typescript-eslint/array-type": "error",
         "@typescript-eslint/ban-ts-comment": [
@@ -55,5 +57,5 @@ module.exports = {
     parserOptions: {
         project: "./tsconfig.json",
     },
-    plugins: ["@typescript-eslint", "sonarjs", "react"],
+    plugins: ["@typescript-eslint", "sonarjs", "react", "react-hooks"],
 };

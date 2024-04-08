@@ -43,11 +43,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "corsheaders",
     "authentification",
     "database",
     "activities",
-    "rolemanagment",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -140,6 +139,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "database.User"
 
 CORS_ORIGINS_ALLOW_ALL = False
-CSRF_TRUSTED_ORIGINS = ["http://localhost:8081"]
 CORS_ORIGIN_WHITELIST = ['http://localhost:8081']
 CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = ["http://localhost:8081", "http://127.0.0.1:8081"]

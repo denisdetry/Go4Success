@@ -44,3 +44,34 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         if len(value) != 8 and len(value) != 0:
             raise ValidationError("Le noma doit contenir 8 caractères")
         return value
+
+
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True,
+                                     error_messages={"blank": "Le mot de passe ne peut pas être vide"})
+    password2 = serializers.CharField(write_only=True, required=True,
+                                      error_messages={"blank": "Le mot de passe ne peut pas être vide"})
+    old_password = serializers.CharField(write_only=True, required=True,
+                                         error_messages={"blank": "Le mot de passe ne peut pas être vide"})
+
+    class Meta:
+        model = User
+        fields = ('old_password', 'password', 'password2')
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "Les mots de passe ne correspondent pas"})
+        return attrs
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError({"old_password": "L'ancien mot de passe est incorrect"})
+        return value
+
+    def update(self, instance, validated_data):
+
+        instance.set_password(validated_data['password'])
+        instance.save()
+
+        return instance

@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import axiosConfig from "@/constants/axiosConfig";
 import { API_BASE_URL } from "@/constants/ConfigApp";
+import Toast from "react-native-toast-message";
 
 axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -63,11 +64,22 @@ export default function RoleManagement() {
                 is_professor: is_professor,
             })
             .then((res) => {
-                console.log(res);
-            });
+                Toast.show({
+                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
+                    text1: "Succès",
+                    text2: "Changement enregistré",
+                });
+            })
+            .catch((err) =>
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Une erreur est survenue lors de la requête.",
+                }),
+            );
     }
 
-    function editRolepatch(id, is_tutor, is_professor) {
+    function editRolepatch(id: any, is_tutor: any, is_professor: any) {
         axios
             .patch(`${API_BASE_URL}/rolemanagement/editRole/${id}/`, {
                 user: id,
@@ -75,18 +87,38 @@ export default function RoleManagement() {
                 is_professor: is_professor,
             })
             .then((res) => {
-                console.log(res);
+                Toast.show({
+                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
+                    text1: "Succès",
+                    text2: "Changement enregistré",
+                });
             })
-            .catch((err) => console.error(err));
+            .catch((err) =>
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Une erreur est survenue lors de la requête.",
+                }),
+            );
     }
 
-    function editRoledelete(id) {
+    function editRoledelete(id: any) {
         axios
             .delete(`${API_BASE_URL}/rolemanagement/editRole/${id}/`) // Correction ici
             .then((res) => {
-                console.log(res);
+                Toast.show({
+                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
+                    text1: "Succès",
+                    text2: "Changement enregistré",
+                });
             })
-            .catch((err) => console.error(err));
+            .catch((err) =>
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Une erreur est survenue lors de la requête.",
+                }),
+            );
     }
 
     function rolemanagementpatch(id: any, super_user: any) {
@@ -95,8 +127,19 @@ export default function RoleManagement() {
                 is_superuser: super_user,
             })
             .then((res) => {
-                console.log(res);
-            });
+                Toast.show({
+                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
+                    text1: "Succès",
+                    text2: "Changement enregistré",
+                });
+            })
+            .catch((err) =>
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Une erreur est survenue lors de la requête.",
+                }),
+            );
     }
 
     console.log(userRole);

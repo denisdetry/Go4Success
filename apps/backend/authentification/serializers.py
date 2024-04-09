@@ -42,7 +42,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 
     def validate_noma(self, value):
         if len(value) != 8 and len(value) != 0:
-            raise ValidationError("Le noma doit contenir 8 caractères")
+            raise ValidationError("Le noma doit contenir 8 chiffres")
         return value
 
 

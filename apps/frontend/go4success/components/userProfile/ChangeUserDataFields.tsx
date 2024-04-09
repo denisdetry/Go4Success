@@ -6,9 +6,11 @@ import Colors from "@/constants/Colors";
 import { useAuth } from "@/context/Auth";
 import UserProfileModal from "@/components/modals/UserProfileModal";
 import { useTranslation } from "react-i18next";
+import { useMutation } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
 import Toast from "react-native-toast-message";
 import { queryClient } from "@/app/_layout";
+import { fetchError } from "@/utils/fetchError";
 
 interface ChangeUserDataFieldsProps {
     readonly data: any;
@@ -31,19 +33,16 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
         setEditable(!editable);
     };
 
-    const fetchData = async () => {
-        const data: { [index: string]: any } = {};
-        data[dataKey] = newData;
-        const { data: success, error } = await fetchBackend({
-            type: "PATCH",
-            url: "auth/user_profile/" + user.id + "/",
-            data: data,
-        });
-
-        if (success) {
+    const fetchData = useMutation({
+        mutationFn: async () => {
+            const data: { [index: string]: any } = {};
+            data[dataKey] = newData;
+            await fetchBackend({ type: "PATCH", url: "auth/user_profile/" + user.id + "/", data: data });
+        },
+        onSuccess: () => {
             Toast.show({
                 type: "success",
-                text1: "Félicitation ! 🎉",
+                text1: t("translateToast.SuccessText1"),
                 text2:
                     t("translationProfile.changeUserInfoSuccessPart1") +
                     label.toLowerCase() +
@@ -51,51 +50,25 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
             });
             void queryClient.invalidateQueries({ queryKey: ["current_user"] });
             switchEdit();
-        } else if (error) {
-            const errorMessages = (await error.json())[dataKey] || "Une erreur est survenue";
+        },
+        onError: async (error: fetchError) => {
+            // console.error("Error : ", await error.responseError.json());
+            const errorResponse = await error.responseError.json();
+            const errorMessages = errorResponse[dataKey] || t("translationProfile.defaultErrorMessage");
             Toast.show({
                 type: "error",
-                text1: "Erreur",
+                text1: t("translationProfile.error"),
                 text2: errorMessages,
             });
-        }
-    };
-    //     useMutation({
-    //     mutationFn: async () => {
-    //         const data: { [index: string]: any } = {};
-    //         data[dataKey] = newData;
-    //         await fetchBackend({ type: "PATCH", url: "auth/user_profile/" + user.id + "/", data: { data } });
-    //     },
-    //     onSuccess: () => {
-    //         Toast.show({
-    //             type: "success",
-    //             text1: "Félicitation ! 🎉",
-    //             text2:
-    //                 t("translationProfile.changeUserInfoSuccessPart1") +
-    //                 label.toLowerCase() +
-    //                 t("translationProfile.changeUserInfoSuccessPart2"),
-    //         });
-    //         void queryClient.invalidateQueries({ queryKey: ["current_user"] });
-    //         switchEdit();
-    //     },
-    //     onError: (error: any) => {
-    //         console.log(error);
-    //         const errorMessages =
-    //             error.response.data[dataKey] || "Une erreur est survenue";
-    //         Toast.show({
-    //             type: "error",
-    //             text1: "Erreur",
-    //             text2: errorMessages,
-    //         });
-    //     },
-    // });
+        },
+    });
 
     const handleCancel = () => {
         setIsModalVisible(false);
     };
 
-    const handleConfirm = async () => {
-        await fetchData();
+    const handleConfirm = () => {
+        fetchData.mutate();
         setIsModalVisible(false);
     };
 

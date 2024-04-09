@@ -15,7 +15,8 @@
     "home": "Home",
     "profil": "My profile",
     "calendar": "My calendar",
-    "disconnect": "Log out"
+    "disconnect": "Log out",
+    "rolemanagement": "Role management"
   },
   "translationButton": {
     "OpenFilter": "Open Filter",

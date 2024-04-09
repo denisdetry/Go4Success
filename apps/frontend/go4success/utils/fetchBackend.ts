@@ -1,6 +1,7 @@
 import { API_BASE_URL } from "@/constants/ConfigApp";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchError } from "@/utils/fetchError";
+import { t } from "i18next";
 
 export async function fetchBackend(options: {
     readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE";
@@ -42,6 +43,6 @@ export async function fetchBackend(options: {
             return { data: "success" };
         }
     } else {
-        throw new fetchError("An error has occurred", response);
+        throw new fetchError(t("translationProfile.defaultErrorMessage"), response);
     }
 }

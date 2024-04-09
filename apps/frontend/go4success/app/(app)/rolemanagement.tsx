@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Picker, Text, TouchableOpacity, View,StyleSheet } from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import axiosConfig from "@/constants/axiosConfig";
 import { API_BASE_URL } from "@/constants/ConfigApp";
@@ -25,11 +26,10 @@ export default function RoleManagement() {
 
 
     interface UserRole {
-    user: number;
-    is_professor: boolean;
-    is_tutor: boolean;
+        user: number;
+        is_professor: boolean;
+        is_tutor: boolean;
     }
-
 
 
     useEffect(() => {
@@ -68,7 +68,7 @@ export default function RoleManagement() {
     function editRolepatch(id, is_tutor, is_professor) {
         axios
             .patch(`${API_BASE_URL}/rolemanagement/editRole/${id}/`, {
-                user:id,
+                user: id,
                 is_tutor: is_tutor,
                 is_professor: is_professor,
             })
@@ -99,8 +99,6 @@ export default function RoleManagement() {
     }
 
 
-
-
     console.log(userRole);
     const usersInfoRole = generateUsersInfoRole(userInfo, userRole);
     console.log(usersInfoRole);
@@ -114,31 +112,27 @@ export default function RoleManagement() {
             }
 
             if (user.selectedRole === "student") {
-                rolemanagementpatch(userId,false);
+                rolemanagementpatch(userId, false);
                 editRoledelete(user.id);
             } else if (user.selectedRole === "professor") {
-                if(!userRole.some(element => element.user === userId)){
-                    editRolePost(userId,false,true);
-                    rolemanagementpatch(userId,false)
+                if (!userRole.some(element => element.user === userId)) {
+                    editRolePost(userId, false, true);
+                    rolemanagementpatch(userId, false);
 
-                }
-                else{
-                    rolemanagementpatch(userId,false);
+                } else {
+                    rolemanagementpatch(userId, false);
                     editRolepatch(user.id, false, true);
                 }
 
             } else if (user.selectedRole === "tutor") {
 
-                if(!userRole.some(element => element.user === userId)){
-                    editRolePost(userId,false,true);
-                    rolemanagementpatch(userId,false)
-                }
-                else{
-                    rolemanagementpatch(userId,false);                    
+                if (!userRole.some(element => element.user === userId)) {
+                    editRolePost(userId, false, true);
+                    rolemanagementpatch(userId, false);
+                } else {
+                    rolemanagementpatch(userId, false);
                     editRolepatch(user.id, true, false);
                 }
-
-
 
 
             } else {
@@ -166,38 +160,38 @@ export default function RoleManagement() {
 
         return (
             <FlatList
-            data={users}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-                <View style={styles.listItem} >
-                <View style={styles.userInfo}>
-                    <Text>
-                    ID : {item.id} Prénom : {item.first_name}  Nom : {item.last_name}
-                    </Text>
-                </View>
-                <Picker
-                    selectedValue={item.selectedRole}
-                    style={styles.rolePicker}
-                    onValueChange={(itemValue) =>
-                    handleValueChange(itemValue, item.id)
-                    }
-                >
-                    <Picker.Item label="student" value="student" />
-                    <Picker.Item label="super user" value="superuser" />
-                    <Picker.Item label="professor" value="professor" />
-                    <Picker.Item label="tutor" value="tutor" />
-                </Picker>
-                <TouchableOpacity
-                    onPress={() => handlePress(item.id)}
-                    style={styles.saveButton}
-                >
-                    <Text style={{ color: "#fff", textAlign: "center" }}>
-                    Save
-                    </Text>
-                </TouchableOpacity>
-                </View>
-  )}
-/>
+                data={users}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.listItem}>
+                        <View style={styles.userInfo}>
+                            <Text>
+                                ID : {item.id} Prénom : {item.first_name} Nom : {item.last_name}
+                            </Text>
+                        </View>
+                        <Picker
+                            selectedValue={item.selectedRole}
+                            style={styles.rolePicker}
+                            onValueChange={(itemValue) =>
+                                handleValueChange(itemValue, item.id)
+                            }
+                        >
+                            <Picker.Item label="student" value="student" />
+                            <Picker.Item label="super user" value="superuser" />
+                            <Picker.Item label="professor" value="professor" />
+                            <Picker.Item label="tutor" value="tutor" />
+                        </Picker>
+                        <TouchableOpacity
+                            onPress={() => handlePress(item.id)}
+                            style={styles.saveButton}
+                        >
+                            <Text style={{ color: "#fff", textAlign: "center" }}>
+                                Save
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+            />
 
         );
     };
@@ -214,11 +208,11 @@ const generateUsersInfoRole = (userInfo, userRole) => {
     const roleMap = userRole.reduce((acc, curr) => {
         const role = curr.is_professor
             ? "professor"
-            : curr.is_tutor     
-              ? "tutor"
-            :curr.is_superuser
-              ? "superuser"
-              : "student"
+            : curr.is_tutor
+                ? "tutor"
+                : curr.is_superuser
+                    ? "superuser"
+                    : "student";
         acc[curr.user] = role;
         return acc;
     }, {});
@@ -233,62 +227,62 @@ const generateUsersInfoRole = (userInfo, userRole) => {
     }));
 };
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#f0f0f0",
-    borderRadius: 10,
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    shadowColor: "#000",
-    shadowOffset: { height: 2, width: 0 },
-    padding: 20,
-    maxWidth: 400,
-    alignSelf: "center",
-  },
+    container: {
+        backgroundColor: "#f0f0f0",
+        borderRadius: 10,
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        shadowColor: "#000",
+        shadowOffset: { height: 2, width: 0 },
+        padding: 20,
+        maxWidth: 400,
+        alignSelf: "center",
+    },
 
-  listItem: {
-    flexDirection: "row", // align children in a row
-    justifyContent: "space-between", // space between name and button
-    alignItems: "center", // center items vertically
-    paddingVertical: 10, // space above and below each item
-    backgroundColor: "#FFFFFF", // assuming a white background
-    borderRadius: 5, // rounded corners for each item
-    marginBottom: 5, // space between each list item
-    // other properties like shadow can be added here if needed
-  },
-  userInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  userDot: {
-    height: 10,
-    width: 10,
-    backgroundColor: "#000",
-    borderRadius: 5,
-    marginRight: 10,
-  },
-  userName: {
-    // Add any specific styles for user name text if necessary
-  },
-  rolePicker: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 5,
-    marginTop: 10, // or other depending on layout
-  },
-  saveButton: {
-    backgroundColor: "#387ce6",
-    padding: 10,
-    borderRadius: 5,
-    color: "#fff",
-  },
-  errorIcon: {
-    color: "#ff0000",
-    marginLeft: 5,
-  },
-  successIcon: {
-    color: "#00ff00",
-    marginLeft: 5,
-  },
+    listItem: {
+        flexDirection: "row", // align children in a row
+        justifyContent: "space-between", // space between name and button
+        alignItems: "center", // center items vertically
+        paddingVertical: 10, // space above and below each item
+        backgroundColor: "#FFFFFF", // assuming a white background
+        borderRadius: 5, // rounded corners for each item
+        marginBottom: 5, // space between each list item
+        // other properties like shadow can be added here if needed
+    },
+    userInfo: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    userDot: {
+        height: 10,
+        width: 10,
+        backgroundColor: "#000",
+        borderRadius: 5,
+        marginRight: 10,
+    },
+    userName: {
+        // Add any specific styles for user name text if necessary
+    },
+    rolePicker: {
+        backgroundColor: "#fff",
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 5,
+        padding: 5,
+        marginTop: 10, // or other depending on layout
+    },
+    saveButton: {
+        backgroundColor: "#387ce6",
+        padding: 10,
+        borderRadius: 5,
+        color: "#fff",
+    },
+    errorIcon: {
+        color: "#ff0000",
+        marginLeft: 5,
+    },
+    successIcon: {
+        color: "#00ff00",
+        marginLeft: 5,
+    },
 });

@@ -168,6 +168,17 @@ export default function Layout() {
                             ),
                         }}
                     />
+
+                    <Drawer.Screen
+                        name="rolemanagement"
+                        options={{
+                            drawerLabel: t("translationMenu.rolemanagement"),
+                            headerTitle: t("translationMenu.rolemanagement"),
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons name="people" size={size} color={color} />
+                            ),
+                        }}
+                    />
                 </Drawer>
             </AuthProvider>
         </GestureHandlerRootView>

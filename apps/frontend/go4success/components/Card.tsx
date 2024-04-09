@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-    Modal,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { Modal, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
 import { useAuth } from "@/context/Auth";
@@ -124,58 +116,17 @@ const styleFunctions = {
 };
 
 const Card: React.FC<CardProps> = ({
-    id,
-    title,
-    location,
-    date,
-    hour,
-    type,
-    description,
-}) => {
+                                       id,
+                                       title,
+                                       location,
+                                       date,
+                                       hour,
+                                       type,
+                                       description,
+                                   }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
     const { t } = useTranslation();
-
-    /*const handleRegister = async () => {
-        const { data: success, error } = await fetchBackend({
-            type: "POST", url: "activities/register_activity/", data: {
-                activity: id,
-                student: user.id,
-            },
-        });
-
-        if (success) {
-            Toast.show({
-                type: "success",
-                text1: t("translateToast.SuccessText1"),
-                text2: t("translateToast.RegisterActivitySuccessText2") + title,
-            });
-            void queryClient.invalidateQueries({
-                queryKey: ["activities"],
-            });
-            setModalVisible(!modalVisible);
-
-        }
-
-        if (error) {
-            if (error.status === 400) {
-                Toast.show({
-                    type: "error",
-                    text1: t("translateToast.ErrorText1"),
-                    text2: t("translateToast.AlreadyRegisteredActivityText2"),
-                });
-            } else {
-                Toast.show({
-                    type: "error",
-                    text1: t("translateToast.ErrorText1"),
-                    text2: t("translateToast.RegisterActivityErrorText2"),
-                });
-            }
-
-            setModalVisible(!modalVisible);
-        }
-
-    };*/
 
     const handleRegister = useMutation({
         mutationFn: async () => {
@@ -202,7 +153,6 @@ const Card: React.FC<CardProps> = ({
             setModalVisible(!modalVisible);
         },
         onError: (error: fetchError) => {
-            console.log("error", error.responseError);
             if (error.responseError.status === 400) {
                 Toast.show({
                     type: "error",

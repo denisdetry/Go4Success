@@ -11,6 +11,7 @@ import Colors from "@/constants/Colors";
 import { useTranslation } from "react-i18next";
 import { queryClient } from "@/app/_layout";
 import { fetchBackend } from "@/utils/fetchBackend";
+import { fetchError } from "@/utils/fetchError";
 
 export const ChangeUserPasswordFields = () => {
     const { t } = useTranslation();
@@ -53,7 +54,7 @@ export const ChangeUserPasswordFields = () => {
         onSuccess: () => {
             Toast.show({
                 type: "success",
-                text1: "Félicitation ! 🎉",
+                text1: t("translateToast.SuccessText1"),
                 text2: t("translationProfile.successPasswordChange"),
             });
             void queryClient.invalidateQueries({ queryKey: ["current_user"] });
@@ -61,18 +62,17 @@ export const ChangeUserPasswordFields = () => {
             clearFields();
         },
 
-        onError(error: any) {
+        onError: async (error: fetchError) => {
             let errorMessages = t("translationProfile.defaultErrorMessage");
 
-            const { response } = error;
-            if (response && response.data) {
-                const { data } = response;
-                if (data.old_password) {
-                    errorMessages = data.old_password.old_password;
-                } else if (data.password && data.password[0]) {
-                    errorMessages = data.password[0];
-                } else if (data.password2 && data.password2[0]) {
-                    errorMessages = data.password2[0];
+            const response = await error.responseError.json();
+            if (response) {
+                if (response.old_password) {
+                    errorMessages = response.old_password.old_password;
+                } else if (response.password && response.password[0]) {
+                    errorMessages = response.password[0];
+                } else if (response.password2 && response.password2[0]) {
+                    errorMessages = response.password2[0];
                 }
             }
 

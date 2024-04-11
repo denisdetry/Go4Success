@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Picker, Text, TouchableOpacity, View,StyleSheet } from "react-native";
+import {
+    FlatList,
+    Picker,
+    Text,
+    TouchableOpacity,
+    View,
+    StyleSheet,
+} from "react-native";
 import axios from "axios";
 import axiosConfig from "@/constants/axiosConfig";
 import { API_BASE_URL } from "@/constants/ConfigApp";
+import Toast from "react-native-toast-message";
 
 axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -11,7 +19,6 @@ axios.defaults.xsrfCookieName = "csrftoken";
 export default function RoleManagement() {
     axiosConfig();
     const [userRole, setUserRole] = useState<UserRole[]>([]);
-    const [selectedValue, setSelectedValue] = useState("");
 
     const [userInfo, setUserInfo] = useState([]);
 
@@ -23,14 +30,11 @@ export default function RoleManagement() {
         role: string;
     }
 
-
     interface UserRole {
-    user: number;
-    is_professor: boolean;
-    is_tutor: boolean;
+        user: number;
+        is_professor: boolean;
+        is_tutor: boolean;
     }
-
-
 
     useEffect(() => {
         axios
@@ -52,7 +56,6 @@ export default function RoleManagement() {
             });
     }, []);
 
-
     function editRolePost(id: any, is_tutor: any, is_professor: any) {
         axios
             .post(`${API_BASE_URL}/rolemanagement/editRole/`, {
@@ -61,45 +64,83 @@ export default function RoleManagement() {
                 is_professor: is_professor,
             })
             .then((res) => {
-                console.log(res);
-            });
+                Toast.show({
+                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
+                    text1: "Succès",
+                    text2: "Changement enregistré",
+                });
+            })
+            .catch((err) =>
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Une erreur est survenue lors de la requête.",
+                }),
+            );
     }
 
-    function editRolepatch(id, is_tutor, is_professor) {
+    function editRolepatch(id: any, is_tutor: any, is_professor: any) {
         axios
             .patch(`${API_BASE_URL}/rolemanagement/editRole/${id}/`, {
-                user:id,
+                user: id,
                 is_tutor: is_tutor,
                 is_professor: is_professor,
             })
             .then((res) => {
-                console.log(res);
+                Toast.show({
+                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
+                    text1: "Succès",
+                    text2: "Changement enregistré",
+                });
             })
-            .catch((err) => console.error(err));
+            .catch((err) =>
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Une erreur est survenue lors de la requête.",
+                }),
+            );
     }
 
-    function editRoledelete(id) {
+    function editRoledelete(id: any) {
         axios
             .delete(`${API_BASE_URL}/rolemanagement/editRole/${id}/`) // Correction ici
             .then((res) => {
-                console.log(res);
+                Toast.show({
+                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
+                    text1: "Succès",
+                    text2: "Changement enregistré",
+                });
             })
-            .catch((err) => console.error(err));
+            .catch((err) =>
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Une erreur est survenue lors de la requête.",
+                }),
+            );
     }
 
     function rolemanagementpatch(id: any, super_user: any) {
         axios
             .patch(`${API_BASE_URL}/rolemanagement/rolemanagement/${id}/`, {
-
                 is_superuser: super_user,
             })
             .then((res) => {
-                console.log(res);
-            });
+                Toast.show({
+                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
+                    text1: "Succès",
+                    text2: "Changement enregistré",
+                });
+            })
+            .catch((err) =>
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Une erreur est survenue lors de la requête.",
+                }),
+            );
     }
-
-
-
 
     console.log(userRole);
     const usersInfoRole = generateUsersInfoRole(userInfo, userRole);
@@ -114,33 +155,24 @@ export default function RoleManagement() {
             }
 
             if (user.selectedRole === "student") {
-                rolemanagementpatch(userId,false);
+                rolemanagementpatch(userId, false);
                 editRoledelete(user.id);
             } else if (user.selectedRole === "professor") {
-                if(!userRole.some(element => element.user === userId)){
-                    editRolePost(userId,false,true);
-                    rolemanagementpatch(userId,false)
-
-                }
-                else{
-                    rolemanagementpatch(userId,false);
+                if (!userRole.some((element) => element.user === userId)) {
+                    editRolePost(userId, false, true);
+                    rolemanagementpatch(userId, false);
+                } else {
+                    rolemanagementpatch(userId, false);
                     editRolepatch(user.id, false, true);
                 }
-
             } else if (user.selectedRole === "tutor") {
-
-                if(!userRole.some(element => element.user === userId)){
-                    editRolePost(userId,false,true);
-                    rolemanagementpatch(userId,false)
-                }
-                else{
-                    rolemanagementpatch(userId,false);                    
+                if (!userRole.some((element) => element.user === userId)) {
+                    editRolePost(userId, false, true);
+                    rolemanagementpatch(userId, false);
+                } else {
+                    rolemanagementpatch(userId, false);
                     editRolepatch(user.id, true, false);
                 }
-
-
-
-
             } else {
                 console.log("ok je passe ici");
                 rolemanagementpatch(user.id, true);
@@ -166,39 +198,40 @@ export default function RoleManagement() {
 
         return (
             <FlatList
-            data={users}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-                <View style={styles.listItem} >
-                <View style={styles.userInfo}>
-                    <Text>
-                    ID : {item.id} Prénom : {item.first_name}  Nom : {item.last_name}
-                    </Text>
-                </View>
-                <Picker
-                    selectedValue={item.selectedRole}
-                    style={styles.rolePicker}
-                    onValueChange={(itemValue) =>
-                    handleValueChange(itemValue, item.id)
-                    }
-                >
-                    <Picker.Item label="student" value="student" />
-                    <Picker.Item label="super user" value="superuser" />
-                    <Picker.Item label="professor" value="professor" />
-                    <Picker.Item label="tutor" value="tutor" />
-                </Picker>
-                <TouchableOpacity
-                    onPress={() => handlePress(item.id)}
-                    style={styles.saveButton}
-                >
-                    <Text style={{ color: "#fff", textAlign: "center" }}>
-                    Save
-                    </Text>
-                </TouchableOpacity>
-                </View>
-  )}
-/>
-
+                data={users}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.listItem}>
+                        <View style={styles.userInfo}>
+                            <Text>
+                                ID : {item.id} Prénom : {item.first_name} Nom :{" "}
+                                {item.last_name}
+                            </Text>
+                        </View>
+                        <Picker
+                            selectedValue={item.selectedRole}
+                            style={styles.rolePicker}
+                            onValueChange={(itemValue) =>
+                                handleValueChange(itemValue, item.id)
+                            }
+                        >
+                            <Picker.Item label="student" value="student" />
+                            <Picker.Item label="super user" value="superuser" />
+                            <Picker.Item label="professor" value="professor" />
+                            <Picker.Item label="tutor" value="tutor" />
+                        </Picker>
+                        <TouchableOpacity
+                            onPress={() => handlePress(item.id)}
+                            style={styles.saveButton}
+                            id="saveChange"
+                        >
+                            <Text style={{ color: "#fff", textAlign: "center" }}>
+                                Save
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+            />
         );
     };
 
@@ -210,85 +243,83 @@ export default function RoleManagement() {
 }
 
 const generateUsersInfoRole = (userInfo, userRole) => {
-
     const roleMap = userRole.reduce((acc, curr) => {
         const role = curr.is_professor
             ? "professor"
-            : curr.is_tutor     
-              ? "tutor"
-            :curr.is_superuser
-              ? "superuser"
-              : "student"
+            : curr.is_tutor
+            ? "tutor"
+            : curr.is_superuser
+            ? "superuser"
+            : "student";
         acc[curr.user] = role;
         return acc;
     }, {});
 
-    // Générer le tableau final en parcourant `userInfo`
     return userInfo.map((user) => ({
         id: user.id,
         first_name: user.first_name,
         last_name: user.last_name,
-        // Attribuer le rôle depuis `roleMap` ou 'student' par défaut si non trouvé
-        role: roleMap[user.id] || "student",
+
+        role: roleMap[user.id] || (user.is_superuser ? "superuser" : "student"),
     }));
 };
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#f0f0f0",
-    borderRadius: 10,
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    shadowColor: "#000",
-    shadowOffset: { height: 2, width: 0 },
-    padding: 20,
-    maxWidth: 400,
-    alignSelf: "center",
-  },
+    container: {
+        backgroundColor: "#f0f0f0",
+        borderRadius: 10,
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        shadowColor: "#000",
+        shadowOffset: { height: 2, width: 0 },
+        padding: 20,
+        maxWidth: 400,
+        alignSelf: "center",
+    },
 
-  listItem: {
-    flexDirection: "row", // align children in a row
-    justifyContent: "space-between", // space between name and button
-    alignItems: "center", // center items vertically
-    paddingVertical: 10, // space above and below each item
-    backgroundColor: "#FFFFFF", // assuming a white background
-    borderRadius: 5, // rounded corners for each item
-    marginBottom: 5, // space between each list item
-    // other properties like shadow can be added here if needed
-  },
-  userInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  userDot: {
-    height: 10,
-    width: 10,
-    backgroundColor: "#000",
-    borderRadius: 5,
-    marginRight: 10,
-  },
-  userName: {
-    // Add any specific styles for user name text if necessary
-  },
-  rolePicker: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 5,
-    marginTop: 10, // or other depending on layout
-  },
-  saveButton: {
-    backgroundColor: "#387ce6",
-    padding: 10,
-    borderRadius: 5,
-    color: "#fff",
-  },
-  errorIcon: {
-    color: "#ff0000",
-    marginLeft: 5,
-  },
-  successIcon: {
-    color: "#00ff00",
-    marginLeft: 5,
-  },
+    listItem: {
+        flexDirection: "row", // align children in a row
+        justifyContent: "space-between", // space between name and button
+        alignItems: "center", // center items vertically
+        paddingVertical: 10, // space above and below each item
+        backgroundColor: "#FFFFFF", // assuming a white background
+        borderRadius: 5, // rounded corners for each item
+        marginBottom: 5, // space between each list item
+        // other properties like shadow can be added here if needed
+    },
+    userInfo: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    userDot: {
+        height: 10,
+        width: 10,
+        backgroundColor: "#000",
+        borderRadius: 5,
+        marginRight: 10,
+    },
+    userName: {
+        // Add any specific styles for user name text if necessary
+    },
+    rolePicker: {
+        backgroundColor: "#fff",
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 5,
+        padding: 5,
+        marginTop: 10, // or other depending on layout
+    },
+    saveButton: {
+        backgroundColor: "#387ce6",
+        padding: 10,
+        borderRadius: 5,
+        color: "#fff",
+    },
+    errorIcon: {
+        color: "#ff0000",
+        marginLeft: 5,
+    },
+    successIcon: {
+        color: "#00ff00",
+        marginLeft: 5,
+    },
 });

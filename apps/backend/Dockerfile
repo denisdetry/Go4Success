@@ -7,5 +7,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+COPY manage.py ./app
+
 # Copy the application code
 COPY . .

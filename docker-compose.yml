@@ -9,9 +9,10 @@ services:
                 - NODE_ENV=development
         environment:
             - NODE_ENV=development
+            - FRONTEND_PORT=${FRONTEND_PORT:-8081} 
         tty: true
         ports:
-            - "8081:8081"
+            - "FRONTEND_PORT:8081"
             - "19001:19001"
             - "19002:19002"
         volumes:

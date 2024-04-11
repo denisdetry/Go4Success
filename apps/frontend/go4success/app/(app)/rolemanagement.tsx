@@ -260,6 +260,7 @@ const generateUsersInfoRole = (userInfo, userRole) => {
         role: roleMap[user.id] || (user.is_superuser ? "superuser" : "student"),
     }));
 };
+
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#f0f0f0",

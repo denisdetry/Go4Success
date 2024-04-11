@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-    FlatList,
-    Picker,
-    Text,
-    TouchableOpacity,
-    View,
-    StyleSheet,
-} from "react-native";
+import { FlatList, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import axios from "axios";
 import axiosConfig from "@/constants/axiosConfig";
 import { API_BASE_URL } from "@/constants/ConfigApp";
 import Toast from "react-native-toast-message";
+import { Picker } from "@react-native-picker/picker";
 
 axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -79,7 +73,7 @@ export default function RoleManagement() {
             );
     }
 
-    function editRolepatch(id: any, is_tutor: any, is_professor: any) {
+    function editRolePatch(id: any, is_tutor: any, is_professor: any) {
         axios
             .patch(`${API_BASE_URL}/rolemanagement/editRole/${id}/`, {
                 user: id,
@@ -102,7 +96,7 @@ export default function RoleManagement() {
             );
     }
 
-    function editRoledelete(id: any) {
+    function editRoleDelete(id: any) {
         axios
             .delete(`${API_BASE_URL}/rolemanagement/editRole/${id}/`) // Correction ici
             .then((res) => {

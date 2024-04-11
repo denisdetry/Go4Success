@@ -46,7 +46,7 @@ services:
             - BACKEND_PORT=${BACKEND_PORT:-8000} 
         command: python manage.py runserver 0.0.0.0:${BACKEND_PORT:-8000}
         volumes:
-            - ${BACK_PATH}:/app
+            - ${BACK_PATH}:/code
         ports:
             - "${BACKEND_PORT:-8000}:${BACKEND_PORT:-8000}"
         depends_on:

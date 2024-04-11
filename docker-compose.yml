@@ -41,7 +41,7 @@ services:
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
             - BACKEND_PORT=${BACKEND_PORT:-8000} 
-        command: python manage.py runserver 0.0.0.0:8000
+        command: python manage.py runserver 0.0.0.0:${BACKEND_PORT}
         volumes:
             - ./apps/backend:/app
         ports:

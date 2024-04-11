@@ -45,8 +45,6 @@ services:
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
             - BACKEND_PORT=${BACKEND_PORT:-8000}
         command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:${BACKEND_PORT:-8000}"
-        volumes:
-            - ${BACK_PATH}:/app
         ports:
             - "${BACKEND_PORT:-8000}:${BACKEND_PORT:-8000}"
         depends_on:

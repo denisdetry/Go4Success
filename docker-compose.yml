@@ -32,12 +32,19 @@ services:
         build:
             context: ./apps/backend
             dockerfile: Dockerfile
-        env_file:
-            - .env
+        environment:
+            - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+            - SECRET_KEY=${SECRET_KEY}
+            - DB_HOST=${POSTGRES_DB:-localhost}
+            - POSTGRES_DB=${DB_PORT:-5432}
+            - POSTGRES_DB=${POSTGRES_DB}
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - BACKEND_PORT=${BACKEND_PORT:-8000} 
         command: python manage.py runserver 0.0.0.0:8000
         volumes:
             - ./apps/backend:/app
         ports:
-            - "8000:8000"
+            - "${BACKEND_PORT:-8000}:${BACKEND_PORT}"
         depends_on:
             - db

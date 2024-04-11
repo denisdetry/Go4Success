@@ -12,7 +12,7 @@ services:
             - FRONTEND_PORT=${FRONTEND_PORT:-8081} 
         tty: true
         ports:
-            - "${FRONTEND_PORT:-8081} :8081"
+            - "${FRONTEND_PORT:-8081}:8081"
             - "19001:19001"
             - "19002:19002"
         volumes:

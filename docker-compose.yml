@@ -33,7 +33,7 @@ services:
             context: ./apps/backend
             dockerfile: Dockerfile
         environment:
-            - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+            - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost}
             - SECRET_KEY=${SECRET_KEY}
             - DB_HOST=${POSTGRES_DB:-localhost}
             - POSTGRES_DB=${DB_PORT:-5432}

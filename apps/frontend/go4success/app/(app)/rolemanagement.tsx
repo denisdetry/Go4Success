@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import {
+    Picker,
+    FlatList,
+    Text,
+    TouchableOpacity,
+    View,
+    StyleSheet,
+} from "react-native";
 import axios from "axios";
 import axiosConfig from "@/constants/axiosConfig";
 import { API_BASE_URL } from "@/constants/ConfigApp";
 import Toast from "react-native-toast-message";
-import { Picker } from "@react-native-picker/picker";
 
 axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";

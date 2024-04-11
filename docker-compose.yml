@@ -18,7 +18,7 @@ services:
         volumes:
             - ${FRONT_PATH}:/opt/go4success/app:delegated
             - ${FRONT_PATH}/package.json:/opt/go4success/package.json
-            - ${FRONT_PATH}package-lock.json:/opt/go4success/package-lock.json
+            - ${FRONT_PATH}/package-lock.json:/opt/go4success/package-lock.json
 
     db:
         image: postgres

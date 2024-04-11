@@ -3,7 +3,7 @@ version: "3"
 services:
     go4success:
         build:
-            context: ./apps/frontend
+            context: apps/frontend
             dockerfile: Dockerfile
             args:
                 - NODE_ENV=development
@@ -31,7 +31,7 @@ services:
 
     backend:
         build:
-            context: ./apps/backend
+            context: apps/backend
             dockerfile: Dockerfile
         environment:
             - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost}

@@ -170,10 +170,10 @@ export default function Layout() {
                     />
 
                     <Drawer.Screen
-                        name="rolemanagement"
+                        name="(administration)"
                         options={{
-                            drawerLabel: t("translationMenu.rolemanagement"),
-                            headerTitle: t("translationMenu.rolemanagement"),
+                            drawerLabel: "Administration",
+                            headerTitle: "Administration",
                             drawerIcon: ({ size, color }) => (
                                 <Ionicons name="people" size={size} color={color} />
                             ),

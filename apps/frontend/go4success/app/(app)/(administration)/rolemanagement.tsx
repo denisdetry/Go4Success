@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import axiosConfig from "@/constants/axiosConfig";
 import { API_BASE_URL } from "@/constants/ConfigApp";
+import globalStyle from "@/styles/global";
 
 axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -197,9 +198,11 @@ export default function RoleManagement() {
     };
 
     return (
-        <View>
-            <MyListComponent />
-        </View>
+        <ScrollView contentContainerStyle={globalStyle.mainContainer}>
+            <View style={globalStyle.container}>
+                <MyListComponent />
+            </View>
+        </ScrollView>
     );
 }
 

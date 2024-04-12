@@ -13,7 +13,7 @@ def custom_validation(data):
     noma = data['noma']
     ##
     if not email or UserModel.objects.filter(email=email).exists():
-        return Response('choisir un autre adresse mail, celui-ci existe déjà', status=status.HTTP_400_BAD_REQUEST)
+        return Response('choisir une autre adresse mail, celui-ci existe déjà', status=status.HTTP_400_BAD_REQUEST)
     ##
     if not password or len(password) < 8:
         return Response('choisir un autre mot de passe, minimum 8 caractères', status=status.HTTP_400_BAD_REQUEST)

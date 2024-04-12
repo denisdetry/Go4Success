@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-    FlatList,
-    Picker,
-    Text,
-    TouchableOpacity,
-    View,
-    StyleSheet,
-} from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import axiosConfig from "@/constants/axiosConfig";
 import { API_BASE_URL } from "@/constants/ConfigApp";
-import Toast from "react-native-toast-message";
 
 axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -19,6 +12,7 @@ axios.defaults.xsrfCookieName = "csrftoken";
 export default function RoleManagement() {
     axiosConfig();
     const [userRole, setUserRole] = useState<UserRole[]>([]);
+    const [selectedValue, setSelectedValue] = useState("");
 
     const [userInfo, setUserInfo] = useState([]);
 
@@ -30,11 +24,13 @@ export default function RoleManagement() {
         role: string;
     }
 
+
     interface UserRole {
         user: number;
         is_professor: boolean;
         is_tutor: boolean;
     }
+
 
     useEffect(() => {
         axios
@@ -56,6 +52,7 @@ export default function RoleManagement() {
             });
     }, []);
 
+
     function editRolePost(id: any, is_tutor: any, is_professor: any) {
         axios
             .post(`${API_BASE_URL}/rolemanagement/editRole/`, {
@@ -64,22 +61,11 @@ export default function RoleManagement() {
                 is_professor: is_professor,
             })
             .then((res) => {
-                Toast.show({
-                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
-                    text1: "Succès",
-                    text2: "Changement enregistré",
-                });
-            })
-            .catch((err) =>
-                Toast.show({
-                    type: "error",
-                    text1: "Erreur",
-                    text2: "Une erreur est survenue lors de la requête.",
-                }),
-            );
+                console.log(res);
+            });
     }
 
-    function editRolepatch(id: any, is_tutor: any, is_professor: any) {
+    function editRolepatch(id, is_tutor, is_professor) {
         axios
             .patch(`${API_BASE_URL}/rolemanagement/editRole/${id}/`, {
                 user: id,
@@ -87,60 +73,31 @@ export default function RoleManagement() {
                 is_professor: is_professor,
             })
             .then((res) => {
-                Toast.show({
-                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
-                    text1: "Succès",
-                    text2: "Changement enregistré",
-                });
+                console.log(res);
             })
-            .catch((err) =>
-                Toast.show({
-                    type: "error",
-                    text1: "Erreur",
-                    text2: "Une erreur est survenue lors de la requête.",
-                }),
-            );
+            .catch((err) => console.error(err));
     }
 
-    function editRoledelete(id: any) {
+    function editRoledelete(id) {
         axios
             .delete(`${API_BASE_URL}/rolemanagement/editRole/${id}/`) // Correction ici
             .then((res) => {
-                Toast.show({
-                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
-                    text1: "Succès",
-                    text2: "Changement enregistré",
-                });
+                console.log(res);
             })
-            .catch((err) =>
-                Toast.show({
-                    type: "error",
-                    text1: "Erreur",
-                    text2: "Une erreur est survenue lors de la requête.",
-                }),
-            );
+            .catch((err) => console.error(err));
     }
 
     function rolemanagementpatch(id: any, super_user: any) {
         axios
             .patch(`${API_BASE_URL}/rolemanagement/rolemanagement/${id}/`, {
+
                 is_superuser: super_user,
             })
             .then((res) => {
-                Toast.show({
-                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
-                    text1: "Succès",
-                    text2: "Changement enregistré",
-                });
-            })
-            .catch((err) =>
-                Toast.show({
-                    type: "error",
-                    text1: "Erreur",
-                    text2: "Une erreur est survenue lors de la requête.",
-                }),
-            );
+                console.log(res);
+            });
     }
+
 
     console.log(userRole);
     const usersInfoRole = generateUsersInfoRole(userInfo, userRole);
@@ -158,21 +115,26 @@ export default function RoleManagement() {
                 rolemanagementpatch(userId, false);
                 editRoledelete(user.id);
             } else if (user.selectedRole === "professor") {
-                if (!userRole.some((element) => element.user === userId)) {
+                if (!userRole.some(element => element.user === userId)) {
                     editRolePost(userId, false, true);
                     rolemanagementpatch(userId, false);
+
                 } else {
                     rolemanagementpatch(userId, false);
                     editRolepatch(user.id, false, true);
                 }
+
             } else if (user.selectedRole === "tutor") {
-                if (!userRole.some((element) => element.user === userId)) {
+
+                if (!userRole.some(element => element.user === userId)) {
                     editRolePost(userId, false, true);
                     rolemanagementpatch(userId, false);
                 } else {
                     rolemanagementpatch(userId, false);
                     editRolepatch(user.id, true, false);
                 }
+
+
             } else {
                 console.log("ok je passe ici");
                 rolemanagementpatch(user.id, true);
@@ -204,8 +166,7 @@ export default function RoleManagement() {
                     <View style={styles.listItem}>
                         <View style={styles.userInfo}>
                             <Text>
-                                ID : {item.id} Prénom : {item.first_name} Nom :{" "}
-                                {item.last_name}
+                                ID : {item.id} Prénom : {item.first_name} Nom : {item.last_name}
                             </Text>
                         </View>
                         <Picker
@@ -223,7 +184,6 @@ export default function RoleManagement() {
                         <TouchableOpacity
                             onPress={() => handlePress(item.id)}
                             style={styles.saveButton}
-                            id="saveChange"
                         >
                             <Text style={{ color: "#fff", textAlign: "center" }}>
                                 Save
@@ -232,6 +192,7 @@ export default function RoleManagement() {
                     </View>
                 )}
             />
+
         );
     };
 
@@ -243,24 +204,26 @@ export default function RoleManagement() {
 }
 
 const generateUsersInfoRole = (userInfo, userRole) => {
+
     const roleMap = userRole.reduce((acc, curr) => {
         const role = curr.is_professor
             ? "professor"
             : curr.is_tutor
-            ? "tutor"
-            : curr.is_superuser
-            ? "superuser"
-            : "student";
+                ? "tutor"
+                : curr.is_superuser
+                    ? "superuser"
+                    : "student";
         acc[curr.user] = role;
         return acc;
     }, {});
 
+    // Générer le tableau final en parcourant `userInfo`
     return userInfo.map((user) => ({
         id: user.id,
         first_name: user.first_name,
         last_name: user.last_name,
-
-        role: roleMap[user.id] || (user.is_superuser ? "superuser" : "student"),
+        // Attribuer le rôle depuis `roleMap` ou 'student' par défaut si non trouvé
+        role: roleMap[user.id] || "student",
     }));
 };
 const styles = StyleSheet.create({

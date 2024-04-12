@@ -15,7 +15,8 @@
     "home": "Accueil",
     "profil": "Mon profil",
     "calendar": "Mon calendrier",
-    "disconnect": "Se déconnecter"
+    "disconnect": "Se déconnecter",
+    "rolemanagement": "Gestion des rôles"
   },
   "translationButton": {
     "OpenFilter": "Ouvrir filtre",

@@ -20,7 +20,7 @@
             "user": 1,
             "content_type": 19,
             "object_id": "2",
-            "object_repr": "Fran■ais",
+            "object_repr": "Français",
             "action_flag": 1,
             "change_message": "[{\"added\": {}}]"
         }
@@ -33,7 +33,7 @@
             "user": 1,
             "content_type": 19,
             "object_id": "2",
-            "object_repr": "Franþais",
+            "object_repr": "Français",
             "action_flag": 3,
             "change_message": ""
         }
@@ -124,7 +124,7 @@
             "user": 1,
             "content_type": 12,
             "object_id": "1",
-            "object_repr": "(1) Comment concilier l'Útude et les loisirs et construire un bon planning hebdomadaire ?",
+            "object_repr": "(1) Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
             "action_flag": 1,
             "change_message": "[{\"added\": {}}]"
         }
@@ -163,7 +163,7 @@
             "user": 1,
             "content_type": 12,
             "object_id": "2",
-            "object_repr": "(2) Comment se prÚparer au blocus et aux examens ?",
+            "object_repr": "(2) Comment se préparer au blocus et aux examens ?",
             "action_flag": 1,
             "change_message": "[{\"added\": {}}]"
         }
@@ -228,7 +228,7 @@
             "user": 1,
             "content_type": 14,
             "object_id": "1",
-            "object_repr": "student (FStudent LStudent)  attends (1) Comment concilier l'Útude et les loisirs et construire un bon planning hebdomadaire ?",
+            "object_repr": "student (FStudent LStudent)  attends (1) Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
             "action_flag": 1,
             "change_message": "[{\"added\": {}}]"
         }
@@ -293,7 +293,7 @@
             "user": 1,
             "content_type": 17,
             "object_id": "1",
-            "object_repr": "teatcher gives (2) Comment se prÚparer au blocus et aux examens ?",
+            "object_repr": "teatcher gives (2) Comment se préparer au blocus et aux examens ?",
             "action_flag": 1,
             "change_message": "[{\"added\": {}}]"
         }
@@ -332,7 +332,7 @@
             "user": 1,
             "content_type": 18,
             "object_id": "1",
-            "object_repr": "Feedback for Comment concilier l'Útude et les loisirs et construire un bon planning hebdomadaire ? by superuser",
+            "object_repr": "Feedback for Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ? by superuser",
             "action_flag": 1,
             "change_message": "[{\"added\": {}}]"
         }
@@ -345,7 +345,7 @@
             "user": 1,
             "content_type": 14,
             "object_id": "2",
-            "object_repr": "superuser (FName LName)  attends (1) Comment concilier l'Útude et les loisirs et construire un bon planning hebdomadaire ?",
+            "object_repr": "superuser (FName LName)  attends (1) Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
             "action_flag": 1,
             "change_message": "[{\"added\": {}}]"
         }
@@ -1176,7 +1176,7 @@
         "model": "database.user",
         "pk": 2,
         "fields": {
-            "password": "azerty",
+            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
             "username": "superuser",
             "email": "superuser@gmail.com",
             "first_name": "FName",
@@ -1195,7 +1195,7 @@
         "model": "database.user",
         "pk": 3,
         "fields": {
-            "password": "azerty",
+            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
             "username": "student",
             "email": "student@student.uclouvain.com",
             "first_name": "FStudent",
@@ -1214,7 +1214,7 @@
         "model": "database.user",
         "pk": 4,
         "fields": {
-            "password": "azerty",
+            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
             "username": "teacher",
             "email": "teacher@student.uclouvain.com",
             "first_name": "Fteacher",
@@ -1233,7 +1233,7 @@
         "model": "database.user",
         "pk": 5,
         "fields": {
-            "password": "azerty",
+            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
             "username": "student2",
             "email": "student2@gmail.com",
             "first_name": "Fstudent2",
@@ -1271,7 +1271,7 @@
         "pk": 1,
         "fields": {
             "type": "workshop",
-            "name": "Comment concilier l'Útude et les loisirs et construire un bon planning hebdomadaire ?",
+            "name": "Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
             "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
             "date_start": "2024-04-12T15:02:17Z",
             "date_end": "2024-04-12T18:02:18Z",
@@ -1285,7 +1285,7 @@
         "pk": 2,
         "fields": {
             "type": "workshop",
-            "name": "Comment se prÚparer au blocus et aux examens ?",
+            "name": "Comment se préparer au blocus et aux examens ?",
             "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here',",
             "date_start": "2024-06-01T15:03:16Z",
             "date_end": "2024-06-01T18:03:19Z",

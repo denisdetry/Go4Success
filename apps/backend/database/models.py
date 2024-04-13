@@ -105,12 +105,13 @@ class Room(models.Model):
 class Language(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
+    code = models.CharField(max_length=6)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        unique_together = (('name'),)
+        unique_together = (('name'), ('code'),)
 
 
 class Activity(models.Model):

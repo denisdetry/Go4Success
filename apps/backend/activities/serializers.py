@@ -17,7 +17,7 @@ class CourseSerializer(serializers.ModelSerializer):
 class LanguageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Language
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'code')
 
 
 class ActivitySerializer(serializers.ModelSerializer):

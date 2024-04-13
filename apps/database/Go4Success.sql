@@ -12,6 +12,7 @@ create table COURSE (
 CREATE TABLE LANGUAGE (
     ID INT AUTO_INCREMENT,
     NAME CHAR(50) NOT NULL,
+	CODE CHAR(6) NOT NULL,
     PRIMARY KEY (ID));
 
 -- =================USERS SECTION=======================

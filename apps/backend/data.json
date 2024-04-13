@@ -377,6 +377,32 @@
         }
     },
     {
+        "model": "admin.logentry",
+        "pk": 30,
+        "fields": {
+            "action_time": "2024-04-13T11:16:45.788Z",
+            "user": 1,
+            "content_type": 17,
+            "object_id": "1",
+            "object_repr": "English",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Code\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 31,
+        "fields": {
+            "action_time": "2024-04-13T11:16:49.997Z",
+            "user": 1,
+            "content_type": 17,
+            "object_id": "2",
+            "object_repr": "Franþais",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Code\"]}}]"
+        }
+    },
+    {
         "model": "auth.permission",
         "pk": 1,
         "fields": {
@@ -1469,8 +1495,16 @@
     { "model": "database.room", "pk": 1, "fields": { "name": "I32", "site": 1 } },
     { "model": "database.room", "pk": 2, "fields": { "name": "I21", "site": 2 } },
     { "model": "database.room", "pk": 3, "fields": { "name": "I25", "site": 1 } },
-    { "model": "database.language", "pk": 1, "fields": { "name": "English" } },
-    { "model": "database.language", "pk": 2, "fields": { "name": "Français" } },
+    {
+        "model": "database.language",
+        "pk": 1,
+        "fields": { "name": "English", "code": "EN" }
+    },
+    {
+        "model": "database.language",
+        "pk": 2,
+        "fields": { "name": "Franþais", "code": "FR" }
+    },
     {
         "model": "database.activity",
         "pk": 1,

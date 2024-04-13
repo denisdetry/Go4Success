@@ -20,7 +20,7 @@ class RoomAdmin(admin.ModelAdmin):
 
 
 class LanguageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name')
+    list_display = ('id', 'name', 'code')
 
 
 class ActivityAdmin(admin.ModelAdmin):

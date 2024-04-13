@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from .models import User, Teacher, Give, Announcement, \
     Registered, Message, See, Site, Room, Activity, Attend, Course, \
-    Language, FeedbackActivity
+    Language, FeedbackActivity, Questionnaire, Question, \
+    OpenAnswer, ChoiceAnswer, ChoiceAnswerInstance
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -66,6 +67,27 @@ class FeedbackActivityAdmin(admin.ModelAdmin):
                     "negative_point", "suggestion", "additional_comment", "date_submitted")
 
 
+class QuestionnaireAdmin(admin.ModelAdmin):
+    list_display = ("id", "course", "title", "description",
+                    "points_total", "date_start", "date_end", "language")
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ("id", "questionnaire", "question", "type", "points")
+
+
+class OpenAnswerAdmin(admin.ModelAdmin):
+    list_display = ("id", "question", "student", "answer", "is_correct")
+
+
+class ChoiceAnswerAdmin(admin.ModelAdmin):
+    list_display = ("id", "question", "student")
+
+
+class ChoiceAnswerInstanceAdmin(admin.ModelAdmin):
+    list_display = ("id", "choice_answer", "choice", "is_correct")
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(Give, GiveAdmin)
@@ -80,3 +102,8 @@ admin.site.register(Activity, ActivityAdmin)
 admin.site.register(Attend, AttendAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(FeedbackActivity, FeedbackActivityAdmin)
+admin.site.register(Questionnaire, QuestionnaireAdmin)
+admin.site.register(Question, QuestionAdmin)
+admin.site.register(OpenAnswer, OpenAnswerAdmin)
+admin.site.register(ChoiceAnswer, ChoiceAnswerAdmin)
+admin.site.register(ChoiceAnswerInstance, ChoiceAnswerInstanceAdmin)

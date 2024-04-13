@@ -22,5 +22,5 @@ urlpatterns = [
     path("auth/", include("authentification.urls")),
     path("activities/", include("activities.urls")),
     path("rolemanagement/", include("rolemanagment.urls")),
-    path("createquestion/", include("createfeedbackquestionnaire.urls"))
+    path("postquestionnaire/", include("postQuestionnaire.urls"))
 ]

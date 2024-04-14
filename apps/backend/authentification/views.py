@@ -70,6 +70,13 @@ class UpdateProfileView(viewsets.ModelViewSet):
     serializer_class = UpdateUserSerializer
 
 
+class DeleteUserView(generics.DestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'id'
+
+
 class ChangePasswordView(generics.UpdateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()

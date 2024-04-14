@@ -15,6 +15,7 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('current_user/', views.CurrentUserView.as_view(), name='users'),
     path('change_password/<int:id>/', views.ChangePasswordView.as_view(), name='change_password'),
+    path('delete_user/<int:id>/', views.DeleteUserView.as_view(), name='delete_user'),
     path('csrf_token/', views.csrf_token, name='csrf-token'),
     path("", include(router.urls)),
 ]

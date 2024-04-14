@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
-    FlatList,
     Picker,
+    FlatList,
     Text,
     TouchableOpacity,
     View,
@@ -79,7 +79,7 @@ export default function RoleManagement() {
             );
     }
 
-    function editRolepatch(id: any, is_tutor: any, is_professor: any) {
+    function editRolePatch(id: any, is_tutor: any, is_professor: any) {
         axios
             .patch(`${API_BASE_URL}/rolemanagement/editRole/${id}/`, {
                 user: id,
@@ -102,7 +102,7 @@ export default function RoleManagement() {
             );
     }
 
-    function editRoledelete(id: any) {
+    function editRoleDelete(id: any) {
         axios
             .delete(`${API_BASE_URL}/rolemanagement/editRole/${id}/`) // Correction ici
             .then((res) => {
@@ -121,7 +121,7 @@ export default function RoleManagement() {
             );
     }
 
-    function rolemanagementpatch(id: any, super_user: any) {
+    function rolemanagementPatch(id: any, super_user: any) {
         axios
             .patch(`${API_BASE_URL}/rolemanagement/rolemanagement/${id}/`, {
                 is_superuser: super_user,
@@ -142,9 +142,7 @@ export default function RoleManagement() {
             );
     }
 
-    console.log(userRole);
     const usersInfoRole = generateUsersInfoRole(userInfo, userRole);
-    console.log(usersInfoRole);
 
     const MyListComponent = () => {
         const handlePress = (userId: any) => {
@@ -155,27 +153,26 @@ export default function RoleManagement() {
             }
 
             if (user.selectedRole === "student") {
-                rolemanagementpatch(userId, false);
-                editRoledelete(user.id);
+                rolemanagementPatch(userId, false);
+                editRoleDelete(user.id);
             } else if (user.selectedRole === "professor") {
                 if (!userRole.some((element) => element.user === userId)) {
                     editRolePost(userId, false, true);
-                    rolemanagementpatch(userId, false);
+                    rolemanagementPatch(userId, false);
                 } else {
-                    rolemanagementpatch(userId, false);
-                    editRolepatch(user.id, false, true);
+                    rolemanagementPatch(userId, false);
+                    editRolePatch(user.id, false, true);
                 }
             } else if (user.selectedRole === "tutor") {
                 if (!userRole.some((element) => element.user === userId)) {
                     editRolePost(userId, false, true);
-                    rolemanagementpatch(userId, false);
+                    rolemanagementPatch(userId, false);
                 } else {
-                    rolemanagementpatch(userId, false);
-                    editRolepatch(user.id, true, false);
+                    rolemanagementPatch(userId, false);
+                    editRolePatch(user.id, true, false);
                 }
             } else {
-                console.log("ok je passe ici");
-                rolemanagementpatch(user.id, true);
+                rolemanagementPatch(user.id, true);
             }
         };
 
@@ -263,6 +260,7 @@ const generateUsersInfoRole = (userInfo, userRole) => {
         role: roleMap[user.id] || (user.is_superuser ? "superuser" : "student"),
     }));
 };
+
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#f0f0f0",

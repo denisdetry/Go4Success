@@ -1388,8 +1388,8 @@
         "model": "database.user",
         "pk": 1,
         "fields": {
-            "password": "pbkdf2_sha256$720000$HlYt6byNYAwOrXN9pw7vBV$5Of2GLGecho9FSwi71fgXdNURQ7iTPtzy/0JfsgCJk4=",
-            "username": "allmaxou",
+            "password": "pbkdf2_sha256$720000$nuJ43OoLCsGn7JUAGFZsq6$IV2idGvALA6Y4boZiooWwIJNA8VXa/AAXsUTfwv2oI8=",
+            "username": "uclouvainadmin",
             "email": "max@gmail.com",
             "first_name": "",
             "last_name": "",

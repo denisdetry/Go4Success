@@ -10,6 +10,7 @@ import { ChangeUserPasswordFields } from "@/components/userProfile/ChangeUserPas
 import { Divider } from "@rneui/themed";
 import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
 import { useTranslation } from "react-i18next";
+import { DeleteUserAccount } from "@/components/userProfile/DeleteUserAccount";
 
 const UserProfileFieldsTitle = ({ title }: { readonly title: string }) => {
     return (
@@ -46,7 +47,8 @@ export default function Profile() {
                         />
                         <Button
                             text={t("translationProfile.changeProfilePictureButton")}
-                            onPress={() => {}}
+                            onPress={() => {
+                            }}
                             buttonType={"primary"}
                         />
                     </View>
@@ -89,6 +91,15 @@ export default function Profile() {
                             title={t("translationProfile.passwordTitle")}
                         />
                         <ChangeUserPasswordFields />
+                    </View>
+
+                    {/* Delete user container */}
+                    <View style={styles.userProfileFields}>
+                        <UserProfileFieldsTitle
+                            title={t("translationProfile.deleteUserTitle")}
+                        />
+
+                        <DeleteUserAccount />
                     </View>
                 </View>
             </View>

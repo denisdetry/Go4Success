@@ -25,7 +25,7 @@ class LanguageAdmin(admin.ModelAdmin):
 
 class ActivityAdmin(admin.ModelAdmin):
     list_display = ('id', 'type', 'name', 'description',
-                    'date_start', 'date_end', 'room', 'course')
+                    'date_start', 'date_end', 'room', 'course', 'language')
 
 
 class AttendAdmin(admin.ModelAdmin):

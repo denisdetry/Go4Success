@@ -15,7 +15,8 @@
     "home": "Accueil",
     "profil": "Mon profil",
     "calendar": "Mon calendrier",
-    "disconnect": "Se déconnecter"
+    "disconnect": "Se déconnecter",
+    "rolemanagement": "Gestion des rôles"
   },
   "translationButton": {
     "OpenFilter": "Ouvrir filtre",
@@ -78,9 +79,17 @@
     "successPasswordChange": "Votre mot de passe a été mis à jour avec succès",
     "defaultErrorMessage": "Une erreur est survenue",
     "error": "Erreur",
-    "areYouSure": "Êtes-vous sûr de vouloir changer de",
+    "areYouSure": "Êtes-vous sûr de vouloir",
+    "changeTo": "changer votre",
+    "deleteUserAccount": "supprimer votre compte ? Cette action est irréversible.",
     "changeUserInfoSuccessPart1": "Votre ",
-    "changeUserInfoSuccessPart2": " a été mis à jour avec succès"
+    "changeUserInfoSuccessPart2": " a été mis à jour avec succès",
+    "deleteUserTitle": "Supprimer le compte",
+    "deleteUserButton": "Supprimer le compte",
+    "accountConfirmModal": "compte",
+    "cancelButtonModal": "Annuler",
+    "confirmButtonModal": "Confirmer",
+    "successUserDelete": "Votre compte a été supprimé avec succès"
   },
   "translateToast": {
     "SuccessText1": "Félicitation ! \uD83C\uDF89",

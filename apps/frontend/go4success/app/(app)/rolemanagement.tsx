@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
-    FlatList,
     Picker,
+    FlatList,
     Text,
     TouchableOpacity,
     View,
@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import axios from "axios";
 import axiosConfig from "@/constants/axiosConfig";
+import Toast from "react-native-toast-message";
 
 axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -64,11 +65,22 @@ export default function RoleManagement() {
                 is_professor: is_professor,
             })
             .then((res) => {
-                console.log(res);
-            });
+                Toast.show({
+                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
+                    text1: "Succès",
+                    text2: "Changement enregistré",
+                });
+            })
+            .catch((err) =>
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Une erreur est survenue lors de la requête.",
+                }),
+            );
     }
 
-    function editRolepatch(id, is_tutor, is_professor) {
+    function editRolePatch(id: any, is_tutor: any, is_professor: any) {
         axios
             .patch(`${backend_url}/rolemanagement/editRole/${id}/`, {
                 user: id,
@@ -76,33 +88,62 @@ export default function RoleManagement() {
                 is_professor: is_professor,
             })
             .then((res) => {
-                console.log(res);
+                Toast.show({
+                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
+                    text1: "Succès",
+                    text2: "Changement enregistré",
+                });
             })
-            .catch((err) => console.error(err));
+            .catch((err) =>
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Une erreur est survenue lors de la requête.",
+                }),
+            );
     }
 
-    function editRoledelete(id) {
+    function editRoleDelete(id: any) {
         axios
             .delete(`${backend_url}/rolemanagement/editRole/${id}/`) // Correction ici
             .then((res) => {
-                console.log(res);
+                Toast.show({
+                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
+                    text1: "Succès",
+                    text2: "Changement enregistré",
+                });
             })
-            .catch((err) => console.error(err));
+            .catch((err) =>
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Une erreur est survenue lors de la requête.",
+                }),
+            );
     }
 
-    function rolemanagementpatch(id: any, super_user: any) {
+    function rolemanagementPatch(id: any, super_user: any) {
         axios
             .patch(`${backend_url}/rolemanagement/rolemanagement/${id}/`, {
                 is_superuser: super_user,
             })
             .then((res) => {
-                console.log(res);
-            });
+                Toast.show({
+                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
+                    text1: "Succès",
+                    text2: "Changement enregistré",
+                });
+            })
+            .catch((err) =>
+                Toast.show({
+                    type: "error",
+                    text1: "Erreur",
+                    text2: "Une erreur est survenue lors de la requête.",
+                }),
+            );
     }
 
-    console.log(userRole);
     const usersInfoRole = generateUsersInfoRole(userInfo, userRole);
-    console.log(usersInfoRole);
 
     const MyListComponent = () => {
         const handlePress = (userId: any) => {
@@ -113,27 +154,26 @@ export default function RoleManagement() {
             }
 
             if (user.selectedRole === "student") {
-                rolemanagementpatch(userId, false);
-                editRoledelete(user.id);
+                rolemanagementPatch(userId, false);
+                editRoleDelete(user.id);
             } else if (user.selectedRole === "professor") {
                 if (!userRole.some((element) => element.user === userId)) {
                     editRolePost(userId, false, true);
-                    rolemanagementpatch(userId, false);
+                    rolemanagementPatch(userId, false);
                 } else {
-                    rolemanagementpatch(userId, false);
-                    editRolepatch(user.id, false, true);
+                    rolemanagementPatch(userId, false);
+                    editRolePatch(user.id, false, true);
                 }
             } else if (user.selectedRole === "tutor") {
                 if (!userRole.some((element) => element.user === userId)) {
                     editRolePost(userId, false, true);
-                    rolemanagementpatch(userId, false);
+                    rolemanagementPatch(userId, false);
                 } else {
-                    rolemanagementpatch(userId, false);
-                    editRolepatch(user.id, true, false);
+                    rolemanagementPatch(userId, false);
+                    editRolePatch(user.id, true, false);
                 }
             } else {
-                console.log("ok je passe ici");
-                rolemanagementpatch(user.id, true);
+                rolemanagementPatch(user.id, true);
             }
         };
 
@@ -181,6 +221,7 @@ export default function RoleManagement() {
                         <TouchableOpacity
                             onPress={() => handlePress(item.id)}
                             style={styles.saveButton}
+                            id="saveChange"
                         >
                             <Text style={{ color: "#fff", textAlign: "center" }}>
                                 Save
@@ -212,15 +253,15 @@ const generateUsersInfoRole = (userInfo, userRole) => {
         return acc;
     }, {});
 
-    // Générer le tableau final en parcourant `userInfo`
     return userInfo.map((user) => ({
         id: user.id,
         first_name: user.first_name,
         last_name: user.last_name,
-        // Attribuer le rôle depuis `roleMap` ou 'student' par défaut si non trouvé
-        role: roleMap[user.id] || "student",
+
+        role: roleMap[user.id] || (user.is_superuser ? "superuser" : "student"),
     }));
 };
+
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#f0f0f0",

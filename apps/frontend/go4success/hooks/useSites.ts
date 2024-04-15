@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { SelectItem } from "@/components/SelectSearch";
-import axios from "axios";
+import { fetchBackend } from "@/utils/fetchBackend";
 
 export type Site = {
     id: string;
@@ -15,15 +15,22 @@ export function useSites(siteId?: string) {
         data: sites,
         error,
     } = useQuery<SelectItem[]>({
-        queryKey: ["allSites"],
+        queryKey: ["getSites", siteId ?? ""],
         queryFn: async () => {
-            const response = await axios.get<Site[]>(
-                `${backend_url}/activities/sites/`,
-                {
-                    params: { id: siteId },
-                },
-            );
-            return response.data.map((site) => ({
+            const { data, error } = await fetchBackend({
+                type: "GET",
+                url: "activities/sites/" + (siteId ? `site/${siteId}/` : ""),
+            });
+
+            if (typeof data === "object" && "error" in data) {
+                throw new Error(data.error);
+            }
+
+            if (error) {
+                throw new Error(error);
+            }
+
+            return data.map((site: { name: any; id: any }) => ({
                 label: site.name,
                 value: site.id,
             }));

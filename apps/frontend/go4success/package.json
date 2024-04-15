@@ -14,7 +14,7 @@
         "@hookform/resolvers": "^3.3.4",
         "@react-native-async-storage/async-storage": "^1.23.1",
         "@react-navigation/drawer": "^6.6.9",
-        "@rneui/base": "^4.0.0-rc.8",
+        "@rneui/base": "^4.0.0-rc.7",
         "@rneui/themed": "^4.0.0-rc.8",
         "@tanstack/react-query": "^5.28.14",
         "@types/react": "~18.2.45",

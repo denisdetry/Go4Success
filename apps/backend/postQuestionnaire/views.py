@@ -27,3 +27,19 @@ class QuestionnaireView(viewsets.ModelViewSet, APIView):
         data = Questionnaire.objects.all()
         serializer = QuestionnaireSerializer(data, many=True)
         return Response(serializer.data)
+
+
+class QuestionView(viewsets.ModelViewSet, APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    permission_classes = (permissions.AllowAny,)
+
+    serializer_class = QuestionSerializer
+
+    queryset = Question.objects.all()
+
+    def get(self, request):
+        data = Question.objects.all()
+        serializer = QuestionSerializer(data, many=True)
+        return Response(serializer.data)

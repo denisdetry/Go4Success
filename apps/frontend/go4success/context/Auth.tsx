@@ -162,11 +162,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
                 signOut: async () => {
                     try {
-                        const { data: success, error } = await fetchBackend({ type: "POST", url: "auth/logout/" });
-                        if (error) {
-                            console.log(error);
-                        }
-
+                        const { data: success } = await fetchBackend({ type: "POST", url: "auth/logout/" });
+                        
                         if (success) {
                             void queryClient.invalidateQueries({
                                 queryKey: ["current_user"],

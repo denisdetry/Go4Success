@@ -7,15 +7,12 @@ import { queryClient } from "@/app/_layout";
 import { useAuth } from "@/context/Auth";
 import { useState } from "react";
 import UserProfileModal from "@/components/modals/UserProfileModal";
-import { useRouter } from "expo-router";
 
 
 export const DeleteUserAccount = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const { t } = useTranslation();
     const { user } = useAuth();
-
-    const router = useRouter();
 
     const handleDeleteUser = useMutation({
         mutationFn: async () => {
@@ -30,7 +27,14 @@ export const DeleteUserAccount = () => {
                 text2: t("translationProfile.successUserDelete"),
             });
             void queryClient.invalidateQueries({ queryKey: ["current_user"] });
-            router.push("/");
+        },
+
+        onError: () => {
+            Toast.show({
+                type: "error",
+                text1: t("translateToast.ErrorText1"),
+                text2: t("translationProfile.defaultErrorMessage"),
+            });
         },
 
     });

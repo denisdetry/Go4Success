@@ -108,5 +108,12 @@
     "translateRegisterActivity": {
         "registerButton": "S'inscrire",
         "closeButton": "Fermer"
+    },
+    "translateCard": {
+        "date": "Date",
+        "hour": "Heure",
+        "place": "Lieu",
+        "type": "Type",
+        "language": "Langue"
     }
 }

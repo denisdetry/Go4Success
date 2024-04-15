@@ -205,11 +205,21 @@ const Card: React.FC<CardProps> = ({
                         </View>
 
                         <View style={styleFunctions.getModalDataStyle(type)}>
-                            <Text style={styles.modalText}>Date : {date}</Text>
-                            <Text style={styles.modalText}>Hour : {hour}</Text>
-                            <Text style={styles.modalText}>Place : {location}</Text>
-                            <Text style={styles.modalText}>Type : {type}</Text>
-                            <Text style={styles.modalText}>Language : {language}</Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.date")} : {date}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.hour")} : {hour}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.place")} : {location}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.type")} : {type}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.language")}: {language}
+                            </Text>
                             <View style={styles.separator} />
                             <Text style={styles.modalText}>{description}</Text>
                         </View>

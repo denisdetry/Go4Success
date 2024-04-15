@@ -139,7 +139,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "database.User"
 
 CORS_ORIGINS_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = ['http://localhost:8081', "http://192.168.2.120:8123"]
+CORS_ORIGIN_WHITELIST = os.getenv("CORS_ORIGIN_WHITELIST").split(",") if os.getenv(
+    "CORS_ORIGIN_WHITELIST") else ["http://localhost:3000", "http://localhost:8081"]
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = ["http://localhost:8081",
-                        "http://127.0.0.1:8081", "http://192.168.2.120:8123"]
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS").split(",") if os.getenv(
+    "CSRF_TRUSTED_ORIGINS") else ["http://localhost:8081", "http://localhost:3000"]

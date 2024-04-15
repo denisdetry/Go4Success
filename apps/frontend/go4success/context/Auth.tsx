@@ -12,7 +12,6 @@ import styles from "@/styles/global";
 import Colors from "@/constants/Colors";
 import { useCsrfToken } from "@/hooks/useCsrfToken";
 import { fetchBackend } from "@/utils/fetchBackend";
-import { UserLogin } from "@/types/UserLogin";
 import { fetchError } from "@/utils/fetchError";
 
 const AuthContext = React.createContext<any>(null);

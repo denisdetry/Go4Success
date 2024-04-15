@@ -2,6 +2,7 @@ version: "3"
 
 services:
     go4success:
+        pull_policy: build
         build:
             context: apps/frontend
             dockerfile: Dockerfile
@@ -31,6 +32,7 @@ services:
             - ${DB_PORT:-5432}:5432
 
     backend:
+        pull_policy: build
         build:
             context: apps/backend
             dockerfile: Dockerfile

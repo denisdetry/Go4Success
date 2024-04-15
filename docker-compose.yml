@@ -6,7 +6,7 @@ services:
             context: apps/frontend
             dockerfile: Dockerfile
             args:
-                - DB_API_URL=${DB_API_URL}
+                - BACKEND_API_URL=${BACKEND_API_URL}
         environment:
             - FRONTEND_PORT=${FRONTEND_PORT:-8081}
         tty: true

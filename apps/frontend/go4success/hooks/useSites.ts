@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { SelectItem } from "@/components/SelectSearch";
 import axios from "axios";
-import { API_BASE_URL } from "@/constants/ConfigApp";
 
 export type Site = {
     id: string;
@@ -9,6 +8,8 @@ export type Site = {
 };
 
 export function useSites(siteId?: string) {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
     const {
         isPending,
         data: sites,
@@ -17,7 +18,7 @@ export function useSites(siteId?: string) {
         queryKey: ["allSites"],
         queryFn: async () => {
             const response = await axios.get<Site[]>(
-                `${API_BASE_URL}/activities/sites/`,
+                `${backend_url}/activities/sites/`,
                 {
                     params: { id: siteId },
                 },

@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { API_BASE_URL } from "@/constants/ConfigApp";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 
 export function useCsrfToken() {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
     if (Platform.OS === "web") {
         const csrfCookie = document.cookie
             .split("; ")
@@ -17,7 +19,7 @@ export function useCsrfToken() {
     const { data } = useQuery({
         queryKey: ["csrf_token"],
         queryFn: async () => {
-            const response = await fetch(`${API_BASE_URL}/` + "auth/csrf_token/", {
+            const response = await fetch(`${backend_url}/` + "auth/csrf_token/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

@@ -1,6 +1,5 @@
 import { Room } from "./useRooms";
 import { useQuery } from "@tanstack/react-query";
-import { API_BASE_URL } from "@/constants/ConfigApp";
 import axios from "axios";
 
 export interface Activity {
@@ -21,6 +20,8 @@ export function useActivities(
     startDateISO: string | null,
     endDateISO: string | null,
 ) {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
     return useQuery<Activity[]>({
         queryKey: [
             "activities",
@@ -32,20 +33,17 @@ export function useActivities(
             endDateISO,
         ],
         queryFn: async () => {
-            const response = await axios.get(
-                `${API_BASE_URL}/activities/${endpoint}/`,
-                {
-                    params: {
-                        name: searchName,
-                        room: selectedRoom,
-                        site: selectedSite,
-                        // eslint-disable-next-line camelcase
-                        date_start: startDateISO,
-                        // eslint-disable-next-line camelcase
-                        date_end: endDateISO,
-                    },
+            const response = await axios.get(`${backend_url}/activities/${endpoint}/`, {
+                params: {
+                    name: searchName,
+                    room: selectedRoom,
+                    site: selectedSite,
+                    // eslint-disable-next-line camelcase
+                    date_start: startDateISO,
+                    // eslint-disable-next-line camelcase
+                    date_end: endDateISO,
                 },
-            );
+            });
 
             return response.data;
         },

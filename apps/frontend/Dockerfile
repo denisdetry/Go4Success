@@ -9,5 +9,9 @@ RUN npm install
 
 COPY ./go4success .
 
+ARG DB_API_URL
+
+ENV EXPO_PUBLIC_API_URL=$DB_API_URL
+
 RUN npx expo export --platform web
 CMD [ "npx", "serve", "dist", "--single" ]

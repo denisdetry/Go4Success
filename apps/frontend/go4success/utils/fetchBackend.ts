@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/constants/ConfigApp";
+//import { API_BASE_URL } from "@/constants/ConfigApp";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export async function fetchBackend(
@@ -8,8 +8,10 @@ export async function fetchBackend(
     successFunction?: ({ ...props }) => void,
     errorFunction?: ({ ...props }) => void,
 ): Promise<any> {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
     try {
-        const response = await fetch(`${API_BASE_URL}/` + url, {
+        const response = await fetch(`${backend_url}/` + url, {
             method: type,
             credentials: "include",
             headers: {

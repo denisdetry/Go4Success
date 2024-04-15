@@ -4,7 +4,6 @@ import axios from "axios";
 import Toast from "react-native-toast-message";
 import { UserRegister } from "@/types/UserRegister";
 import { UserLogin } from "@/types/UserLogin";
-import { API_BASE_URL } from "@/constants/ConfigApp";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/app/_layout";
@@ -23,6 +22,7 @@ export function useAuth() {
 export function AuthProvider({ children }: React.PropsWithChildren) {
     const { t } = useTranslation();
     const rootSegment = useSegments()[0];
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
 
     useCsrfToken();
 
@@ -34,7 +34,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         queryKey: ["current_user"],
         queryFn: async () => {
             try {
-                return await axios.get(`${API_BASE_URL}/auth/current_user/`);
+                return await axios.get(`${backend_url}/auth/current_user/`);
             } catch (error) {
                 return null;
             }

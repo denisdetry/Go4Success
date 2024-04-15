@@ -6,10 +6,9 @@ services:
             context: apps/frontend
             dockerfile: Dockerfile
             args:
-                - NODE_ENV=development
+                - DB_API_URL=${DB_API_URL}
         environment:
-            - NODE_ENV=development
-            - FRONTEND_PORT=${FRONTEND_PORT:-8081} 
+            - FRONTEND_PORT=${FRONTEND_PORT:-8081}
         tty: true
         ports:
             - "${FRONTEND_PORT:-8081}:3000"

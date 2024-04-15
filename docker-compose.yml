@@ -45,7 +45,7 @@ services:
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
             - BACKEND_PORT=${BACKEND_PORT:-8000}
-        command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:${BACKEND_PORT:-8000}"
+        command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:${BACKEND_PORT:-8000} && python manage.py loaddata data.json"
         ports:
             - "${BACKEND_PORT:-8000}:${BACKEND_PORT:-8000}"
         depends_on:

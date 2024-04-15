@@ -67,22 +67,20 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                 user: user?.data,
                 signUp: async (userData: UserRegister) => {
                     {
-                        const { data: success, error } = await fetchBackend(
-                            {
-                                type: "POST",
-                                url: "auth/register/",
-                                data: {
-                                    username: userData.username,
-                                    email: userData.email,
-                                    // eslint-disable-next-line camelcase
-                                    last_name: userData.lastName,
-                                    // eslint-disable-next-line camelcase
-                                    first_name: userData.firstName,
-                                    noma: userData.noma,
-                                    password: userData.password,
-                                },
+                        const { data: success, error } = await fetchBackend({
+                            type: "POST",
+                            url: "auth/register/",
+                            data: {
+                                username: userData.username,
+                                email: userData.email,
+                                // eslint-disable-next-line camelcase
+                                last_name: userData.lastName,
+                                // eslint-disable-next-line camelcase
+                                first_name: userData.firstName,
+                                noma: userData.noma,
+                                password: userData.password,
                             },
-                        );
+                        });
 
                         if (error) {
                             if (error.status === 400) {
@@ -116,7 +114,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
                 signIn: async (userData: UserLogin) => {
                     const { data: success, error } = await fetchBackend({
-                        type: "POST", url: "auth/login/", data: {
+                        type: "POST",
+                        url: "auth/login/",
+                        data: {
                             username: userData.username,
                             password: userData.password,
                         },
@@ -151,7 +151,10 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                 },
 
                 signOut: async () => {
-                    const { data: success, error } = await fetchBackend({ type: "POST", url: "auth/logout/" });
+                    const { data: success, error } = await fetchBackend({
+                        type: "POST",
+                        url: "auth/logout/",
+                    });
                     if (error) {
                         console.log(error);
                     }

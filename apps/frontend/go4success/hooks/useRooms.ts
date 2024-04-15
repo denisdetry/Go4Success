@@ -10,7 +10,8 @@ export type Room = {
     site: Site;
 };
 
-export function useRooms(siteId: string | undefined, sites: SelectItem[]) {
+export function useRooms(siteId: string | undefined) {
+    console.log("key", siteId);
     const {
         isPending,
         data: rooms,
@@ -21,20 +22,12 @@ export function useRooms(siteId: string | undefined, sites: SelectItem[]) {
             const response = await axios.get(
                 `${API_BASE_URL}/activities/rooms/` + (siteId ? `site/${siteId}/` : ""),
             );
-            if (siteId === undefined) {
-                return response.data.map((room: Room) => ({
-                    key: room.id,
-                    value: room.name + " - " + room.site,
-                }));
-            }
 
             return response.data.map((room: Room) => ({
                 key: room.id,
                 value: room.name + " - " + room.site.name,
-                //sites.find((site) => site.value === room.site.name)?.value,
             }));
         },
-        enabled: sites.length > 0,
     });
 
     return { isPending, rooms: rooms ?? [], error };

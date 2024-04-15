@@ -71,9 +71,9 @@ export default function Register() {
         },
     });
 
-    const onSubmit = (userData: UserRegister) => {
+    const onSubmit = handleSubmit((userData: UserRegister) => {
         signUp(userData);
-    };
+    });
 
     return (
         <ScrollView
@@ -260,7 +260,7 @@ export default function Register() {
                     {/*Submit button*/}
                     <Button
                         text={t("translateRegister.registerButton")}
-                        onPress={handleSubmit(onSubmit)}
+                        onPress={onSubmit}
                         buttonType={"primary"}
                     />
                 </View>

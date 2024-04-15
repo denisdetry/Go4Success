@@ -4,12 +4,16 @@ import { MultipleSelectList } from "@/lib/react-native-dropdown-select-list/inde
 
 function MultipleSelectSearch(props: SelectSearchProps) {
     return (
-        <MultipleSelectList
-            setSelected={props.setSelected}
-            data={props.items}
-            search={props.search}
-            placeholder={props.placeholder}
-        />
+        console.log("MultipleSelectSearch", props.items),
+        (
+            <MultipleSelectList
+                setSelected={props.setSelected}
+                data={props.items}
+                save={props.toSave}
+                search={props.search}
+                placeholder={props.placeholder}
+            />
+        )
     );
 }
 

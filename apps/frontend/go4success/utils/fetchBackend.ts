@@ -5,22 +5,20 @@ import { fetchError } from "@/utils/fetchError";
 export async function fetchBackend(options: {
     readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE";
     url: string;
-    readonly params?: any;
+    readonly params?: Record<string, string>;
     readonly data?: any;
 }): Promise<any> {
     const { type, params, data } = options;
     let { url } = options;
 
     if (params && type === "GET") {
-        url += "?";
-        Object.keys(params).forEach((key, index) => {
-            if (params[key] !== undefined) {
-                url += `${key}=${params[key]}`;
-                if (index < Object.keys(params).length - 1) {
-                    url += "&";
-                }
-            }
-        });
+        url +=
+            "?" +
+            new URLSearchParams(
+                Object.entries(params).filter(
+                    (x) => x[1] !== undefined && x[1] !== null,
+                ),
+            ).toString();
     }
 
     const response = await fetch(`${API_BASE_URL}/` + url, {

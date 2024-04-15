@@ -41,7 +41,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const { sites, error: siteError } = useSites();
     const allSites = [{ label: "All", value: "" }, ...sites];
 
-    const { rooms, error: roomError } = useRooms(selectedSite?.value, sites);
+    const { rooms, error: roomError } = useRooms(selectedSite?.value);
     const allRooms = [{ label: "All", value: "" }, ...rooms];
 
     const onChange = useCallback(

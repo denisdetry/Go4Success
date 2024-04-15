@@ -42,10 +42,9 @@ const MultipleSelectList: React.FC<MultipleSelectListProps> = ({
     badgeStyles,
     badgeTextStyles,
     checkBoxStyles,
-    save = "key",
+    save = "",
     dropdownShown = false,
 }) => {
-    const oldOption = React.useRef(null);
     const [_firstRender, _setFirstRender] = React.useState<boolean>(true);
     const [dropdown, setDropdown] = React.useState<boolean>(dropdownShown);
     const [selectedval, setSelectedVal] = React.useState<any>([]);
@@ -68,6 +67,8 @@ const MultipleSelectList: React.FC<MultipleSelectListProps> = ({
 
     React.useEffect(() => {
         setFilteredData(data);
+        setSelectedVal([]);
+        setSelected([]);
     }, [data]);
 
     React.useEffect(() => {
@@ -221,11 +222,11 @@ const MultipleSelectList: React.FC<MultipleSelectListProps> = ({
                     }}
                 >
                     <Text style={[{ fontFamily }, inputStyles]}>
-                        {selectedval === ""
+                        {selectedval?.length === 0
                             ? placeholder
                                 ? placeholder
                                 : "Select option"
-                            : selectedval}
+                            : "selectedval"}
                     </Text>
                     {!arrowicon ? (
                         <Image
@@ -425,7 +426,7 @@ const MultipleSelectList: React.FC<MultipleSelectListProps> = ({
                                     style={[styles.option, dropdownItemStyles]}
                                     onPress={() => {
                                         setSelected(undefined);
-                                        setSelectedVal("");
+                                        setSelectedVal([]);
                                         slideup();
                                         setTimeout(() => setFilteredData(data), 800);
                                     }}

@@ -4,7 +4,11 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { AuthProvider, useAuth } from "@/context/Auth";
 import Colors from "@/constants/Colors";
-import { DrawerContentScrollView, DrawerItem, DrawerItemList } from "@react-navigation/drawer";
+import {
+    DrawerContentScrollView,
+    DrawerItem,
+    DrawerItemList,
+} from "@react-navigation/drawer";
 import { Image, Platform, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -49,101 +53,114 @@ export default function Layout() {
     const { t } = useTranslation();
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <Drawer
-                drawerContent={customDrawerContent}
-                screenOptions={{
-                    drawerHideStatusBarOnOpen: true,
-                    drawerActiveBackgroundColor: Colors.primaryColor,
-                    drawerActiveTintColor: "#fff",
-                    drawerLabelStyle: { marginLeft: -20 },
-                    headerStyle: {
-                        backgroundColor: Colors.primaryColor,
-                    },
-                    headerTintColor: "#fff",
-                    headerTitleStyle: {
-                        display: "none",
-                    },
-                    headerRight: () => (
-                        <>
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    gap: 5,
-                                    marginRight: 20,
-                                    alignItems: "center",
-                                }}
-                            >
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        router.push("/");
+            <AuthProvider>
+                <Drawer
+                    drawerContent={customDrawerContent}
+                    screenOptions={{
+                        drawerHideStatusBarOnOpen: true,
+                        drawerActiveBackgroundColor: Colors.primaryColor,
+                        drawerActiveTintColor: "#fff",
+                        drawerLabelStyle: { marginLeft: -20 },
+                        headerStyle: {
+                            backgroundColor: Colors.primaryColor,
+                        },
+                        headerTintColor: "#fff",
+                        headerTitleStyle: {
+                            display: "none",
+                        },
+                        headerRight: () => (
+                            <>
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        gap: 5,
+                                        marginRight: 20,
+                                        alignItems: "center",
                                     }}
                                 >
-                                    <Ionicons name="home" size={24} color="#fff" />
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        console.log("Open notifications");
-                                    }}
-                                >
-                                    <Ionicons
-                                        name="notifications"
-                                        size={24}
-                                        color="#fff"
-                                    />
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        router.push("/calendar");
-                                    }}
-                                >
-                                    <Ionicons name="calendar" size={24} color="#fff" />
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        router.push("/profile");
-                                    }}
-                                >
-                                    <Image
-                                        source={profilePicture}
-                                        style={{
-                                            borderRadius: 50,
-                                            marginLeft: 10,
-                                            width: 50,
-                                            height: 50,
-                                            resizeMode: "contain",
-                                            alignSelf: "center",
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            router.push("/");
                                         }}
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                        </>
-                    ),
-                }}
-            >
-                <Drawer.Screen
-                    name="index"
-                    options={{
-                        drawerLabel: t("translationMenu.home"),
-                        headerTitle: "Go4success",
-                        drawerIcon: ({ size, color }) => (
-                            <Ionicons name="home-outline" size={size} color={color} />
-                        ),
-                    }}
-                />
+                                    >
+                                        <Ionicons name="home" size={24} color="#fff" />
+                                    </TouchableOpacity>
 
-                <Drawer.Screen
-                    name="profile"
-                    options={{
-                        drawerLabel: t("translationMenu.profil"),
-                        headerTitle: t("translationMenu.profil"),
-                        drawerIcon: ({ size, color }) => (
-                            <FontAwesome name="user-circle" size={size} color={color} />
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            console.log("Open notifications");
+                                        }}
+                                    >
+                                        <Ionicons
+                                            name="notifications"
+                                            size={24}
+                                            color="#fff"
+                                        />
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            router.push("/calendar");
+                                        }}
+                                    >
+                                        <Ionicons
+                                            name="calendar"
+                                            size={24}
+                                            color="#fff"
+                                        />
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            router.push("/profile");
+                                        }}
+                                    >
+                                        <Image
+                                            source={profilePicture}
+                                            style={{
+                                                borderRadius: 50,
+                                                marginLeft: 10,
+                                                width: 50,
+                                                height: 50,
+                                                resizeMode: "contain",
+                                                alignSelf: "center",
+                                            }}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            </>
                         ),
                     }}
-                />
+                >
+                    <Drawer.Screen
+                        name="index"
+                        options={{
+                            drawerLabel: t("translationMenu.home"),
+                            headerTitle: "Go4success",
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name="home-outline"
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
+
+                    <Drawer.Screen
+                        name="profile"
+                        options={{
+                            drawerLabel: t("translationMenu.profil"),
+                            headerTitle: t("translationMenu.profil"),
+                            drawerIcon: ({ size, color }) => (
+                                <FontAwesome
+                                    name="user-circle"
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
 
                     <Drawer.Screen
                         name="calendar"
@@ -155,17 +172,17 @@ export default function Layout() {
                             ),
                         }}
                     />
-                <Drawer.Screen
-                    name="workshops"
-                    options={{
-                        drawerLabel: "Ateliers",
-                        headerTitle: "Ateliers",
-                        drawerIcon: ({ size, color }) => (
-                            <Ionicons name="calendar" size={size} color={color} />
-                        ),
-                    }}
-                />
-            </Drawer>
+                    <Drawer.Screen
+                        name="workshops"
+                        options={{
+                            drawerLabel: "Ateliers",
+                            headerTitle: "Ateliers",
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons name="calendar" size={size} color={color} />
+                            ),
+                        }}
+                    />
+                </Drawer>
             </AuthProvider>
         </GestureHandlerRootView>
     );

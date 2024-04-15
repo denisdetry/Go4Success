@@ -35,14 +35,14 @@ const SelectList: React.FC<SelectListProps> = ({
     disabledItemStyles,
     disabledTextStyles,
     onSelect = () => {},
-    save = "key",
+    save = "",
     dropdownShown = false,
     fontFamily,
 }) => {
     const oldOption = React.useRef(null);
     const [_firstRender, _setFirstRender] = React.useState<boolean>(true);
     const [dropdown, setDropdown] = React.useState<boolean>(dropdownShown);
-    const [selectedval, setSelectedVal] = React.useState<any>("");
+    const [selectedval, setSelectedVal] = React.useState<any>([]);
     const [height, setHeight] = React.useState<number>(200);
     const animatedvalue = React.useRef(new Animated.Value(0)).current;
     const [filtereddata, setFilteredData] = React.useState(data);
@@ -229,7 +229,7 @@ const SelectList: React.FC<SelectListProps> = ({
                                                 } else {
                                                     setSelected(item);
                                                 }
- 
+
                                                 setSelectedVal(value);
                                                 slideup();
                                                 setTimeout(() => {

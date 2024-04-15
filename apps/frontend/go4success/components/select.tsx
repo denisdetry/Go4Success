@@ -2,7 +2,7 @@ import DropDownPicker, { ItemType } from "react-native-dropdown-picker";
 import React, { Dispatch, SetStateAction } from "react";
 
 export type SelectItem = {
-    label: string;
+    key: string;
     value: string;
 };
 

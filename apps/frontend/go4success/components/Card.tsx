@@ -179,7 +179,7 @@ const Card: React.FC<CardProps> = ({
 
     const handleRegister = useMutation({
         mutationFn: async () => {
-            const { data, error } = await fetchBackend({
+            const { data } = await fetchBackend({
                 type: "POST",
                 url: "activities/register_activity/",
                 data: {
@@ -187,7 +187,7 @@ const Card: React.FC<CardProps> = ({
                     student: user.id,
                 },
             });
-            return { data, error };
+            return { data };
         },
         onSuccess: () => {
             console.log("success");

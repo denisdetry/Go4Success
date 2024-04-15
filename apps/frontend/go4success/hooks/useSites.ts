@@ -28,9 +28,9 @@ export function useSites(siteId?: string) {
                 throw new Error(error);
             }
 
-            return data.map((site: { name: any; id: any }) => ({
-                label: site.name,
-                value: site.id,
+            return data.map((site: { id: number; name: string }) => ({
+                key: site.id,
+                value: site.name,
             }));
         },
     });

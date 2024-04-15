@@ -11,7 +11,7 @@ export type SelectSearchProps = {
     readonly items: SelectItem[];
     readonly toSave?: "key" | "value" | undefined;
     readonly search?: boolean;
-    readonly setSelected: (item: SelectItem) => void;
+    readonly setSelected: (item: any) => void;
 };
 
 function SelectSearch(props: SelectSearchProps) {

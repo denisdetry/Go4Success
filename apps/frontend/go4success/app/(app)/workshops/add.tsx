@@ -1,38 +1,37 @@
-import { ActivityIndicator, ScrollView, TextInput, View } from "react-native";
+import { ActivityIndicator, Button, ScrollView, TextInput, View } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 import styles from "@/styles/global";
-import SelectSearch from "@/components/SelectSearch";
 import React from "react";
 import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
 import InputAutocomplete from "@/components/InputAutocomplete";
-import MultipleSelectSearch from "@/components/MultipleSelectSearch";
+import DateTimePicker from "react-native-ui-datepicker";
+import dayjs from "dayjs";
+import InputAutocompleteMultiple from "@/components/InputAutocompleteMultiple";
 
 export default function Add() {
     const generateHourQuarterList = () => {
         const list = [];
         for (let hour = 0; hour < 24; hour++) {
             for (let quarter = 0; quarter < 4; quarter++) {
-                const label = `${hour.toString().padStart(2, "0")}:${(quarter * 15).toString().padStart(2, "0")}`;
-                list.push({ label, value: label });
+                const key = `${hour.toString().padStart(2, "0")}:${(quarter * 15).toString().padStart(2, "0")}`;
+                list.push({ key, value: key });
             }
         }
         return list;
     };
 
+    const [selectedRooms, setSelectedRooms] = React.useState([]);
+
     const hourQuarterList = generateHourQuarterList();
 
-    const { control, watch } = useForm();
+    const { control, handleSubmit, watch } = useForm();
 
     const { sites, isPending: sitePending, error: siteError } = useSites();
 
     const watchSite = watch("site", undefined);
 
-    const {
-        rooms,
-        isPending: roomPending,
-        error: roomError,
-    } = useRooms(watchSite, sites);
+    const { rooms, error: roomError } = useRooms(watchSite?.key);
 
     if (siteError) {
         return <View> Error: {siteError.message} </View>;
@@ -94,29 +93,42 @@ export default function Add() {
                 <Controller
                     control={control}
                     render={({ field: { onChange } }) => (
-                        <SelectSearch
+                        <InputAutocomplete
                             items={sites}
                             placeholder={"Select a site"}
-                            search={false}
-                            setSelected={onChange}
+                            onChange={onChange}
                         />
                     )}
                     name={"site"}
-                    defaultValue={""}
                 />
 
                 <Controller
                     control={control}
                     render={({ field: { onChange } }) => (
-                        <MultipleSelectSearch
+                        <InputAutocompleteMultiple
                             items={rooms}
-                            toSave={"key"}
-                            placeholder={"Select a room"}
-                            setSelected={onChange}
+                            placeholder={"Select one or multiple rooms"}
+                            onChange={(value) => {
+                                console.log("value", value);
+                            }}
                         />
                     )}
                     name={"room"}
-                    defaultValue={""}
+                />
+
+                <Controller
+                    control={control}
+                    render={({ field: { value, onChange } }) => {
+                        return (
+                            <DateTimePicker
+                                mode={"single"}
+                                date={value}
+                                onChange={(params) => onChange(params.date)}
+                            />
+                        );
+                    }}
+                    name={"WorkshopDate"}
+                    defaultValue={dayjs()}
                 />
 
                 <Controller
@@ -125,6 +137,9 @@ export default function Add() {
                         <InputAutocomplete
                             items={hourQuarterList}
                             placeholder={"Test"}
+                            onChange={(value) => {
+                                onChange(value);
+                            }}
                         />
                     )}
                     name={"startHour"}
@@ -137,10 +152,18 @@ export default function Add() {
                         <InputAutocomplete
                             items={hourQuarterList}
                             placeholder={"Test"}
+                            onChange={(value) => {
+                                onChange(value);
+                            }}
                         />
                     )}
                     name={"endHour"}
                     defaultValue={""}
+                />
+
+                <Button
+                    title="Submit"
+                    onPress={handleSubmit((data) => console.log("data", data))}
                 />
             </View>
         </ScrollView>

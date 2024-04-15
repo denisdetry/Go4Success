@@ -2,53 +2,54 @@ import React from "react";
 import { SafeAreaView, Text, TextInput, TouchableOpacity } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import styles from "@/styles/global";
+import { SelectItem } from "@/components/select";
 
 export interface InputAutocompleteProps {
-    readonly items: ItemData[];
+    readonly items: SelectItem[];
     readonly placeholder: string;
+    readonly onChange?: (value: SelectItem) => void;
 }
 
-export type ItemData = {
-    label: string;
-    value: string;
-};
-
 type ItemProps = {
-    readonly item: ItemData;
+    readonly item: SelectItem;
     readonly onPress: () => void;
 };
 
 const Item = ({ item, onPress }: ItemProps) => {
     return (
         <TouchableOpacity onPress={onPress}>
-            <Text>{item.label}</Text>
+            <Text>{item.value}</Text>
         </TouchableOpacity>
     );
 };
-
-export default function InputAutocomplete(props: InputAutocompleteProps) {
+const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
+    items,
+    placeholder,
+    onChange = () => {},
+}) => {
     const [visible, setVisible] = React.useState(false);
-    const [filteredData, setFilteredData] = React.useState<ItemData[]>(props.items);
+    const [filteredData, setFilteredData] = React.useState<SelectItem[]>(items);
 
-    const [selectedId, setSelectedId] = React.useState("");
+    const [selectedData, setselectedData] = React.useState<any>([]);
 
     const filterData = (text: string) => {
-        return props.items.filter((item) =>
+        return items.filter((item) =>
             text
                 .split("")
                 .every((letter) =>
-                    item.label.toLowerCase().includes(letter.toLowerCase()),
+                    item.value.toLowerCase().includes(letter.toLowerCase()),
                 ),
         );
     };
 
-    const renderItem = ({ item }: { item: ItemData }) => {
+    const renderItem = ({ item }: { item: SelectItem }) => {
         if (visible) {
             return (
                 <Item
                     item={item}
                     onPress={() => {
-                        setSelectedId(item.value);
+                        onChange(item);
+                        setselectedData(item);
                     }}
                 />
             );
@@ -60,20 +61,21 @@ export default function InputAutocomplete(props: InputAutocompleteProps) {
         return (
             <TextInput
                 style={styles.input}
-                placeholder={props.placeholder}
+                placeholder={placeholder}
                 onFocus={() => {
                     setVisible(true);
                 }}
                 onChangeText={(text) => {
                     setFilteredData(filterData(text));
-                    setSelectedId(text);
+                    setselectedData({ key: "none", value: text });
+                    onChange({ key: text, value: text });
                 }}
                 onBlur={() =>
                     setTimeout(() => {
                         setVisible(false);
                     }, 100)
                 }
-                value={selectedId}
+                value={selectedData.value ?? ""}
             />
         );
     }
@@ -91,4 +93,6 @@ export default function InputAutocomplete(props: InputAutocompleteProps) {
             />
         </SafeAreaView>
     );
-}
+};
+
+export default InputAutocomplete;

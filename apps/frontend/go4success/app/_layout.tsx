@@ -12,7 +12,6 @@ axiosConfig();
 export const queryClient = new QueryClient();
 
 export default function Layout() {
-    useCsrfToken();
     return (
         <QueryClientProvider client={queryClient}>
             <Slot />

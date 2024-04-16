@@ -10,7 +10,6 @@ export default function useUser() {
                     type: "GET",
                     url: "auth/current_user/",
                 });
-                console.log("response", response);
                 return response;
             } catch (err) {
                 return null;

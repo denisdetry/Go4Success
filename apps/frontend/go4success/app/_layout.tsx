@@ -5,7 +5,6 @@ import "../locales/i18n";
 import { QueryClient } from "@tanstack/query-core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import axiosConfig from "@/constants/axiosConfig";
-import { useCsrfToken } from "@/hooks/useCsrfToken";
 
 axiosConfig();
 

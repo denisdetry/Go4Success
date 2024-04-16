@@ -32,7 +32,7 @@ if (languageDetector) {
 
 void i18n.init({
     compatibilityJSON: "v3",
-    debug: true,
+    debug: false,
     lng: languageDetector ? undefined : languageCode,
     fallbackLng: languageDetector ? undefined : "en",
     keySeparator: ".",

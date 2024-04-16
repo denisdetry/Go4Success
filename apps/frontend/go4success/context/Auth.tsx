@@ -10,10 +10,10 @@ import { queryClient } from "@/app/_layout";
 import { ActivityIndicator } from "react-native";
 import styles from "@/styles/global";
 import Colors from "@/constants/Colors";
-import { useCsrfToken } from "@/hooks/useCsrfToken";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchBackend } from "@/utils/fetchBackend";
 import { fetchError } from "@/utils/fetchError";
-import { s } from "@tanstack/query-core/build/legacy/queryClient-K0zFyarY";
+import useUser from "@/hooks/useUser";
 
 const AuthContext = React.createContext<any>(null);
 
@@ -25,21 +25,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
     const { t } = useTranslation();
     const rootSegment = useSegments()[0];
 
-    const { isPending, data: user } = useQuery({
-        queryKey: ["current_user"],
-        queryFn: async () => {
-            try {
-                const { data: response } = await fetchBackend({
-                    type: "GET",
-                    url: "auth/current_user/",
-                });
-                console.log("response", response);
-                return response;
-            } catch (err) {
-                return null;
-            }
-        },
-    });
+    const { isPending, user } = useUser();
 
     if (isPending) {
         return (
@@ -80,6 +66,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             });
 
                             if (success) {
+                                AsyncStorage.setItem("accessToken", success.access);
+                                AsyncStorage.setItem("refreshToken", success.refresh);
                                 void queryClient.invalidateQueries({
                                     queryKey: ["current_user"],
                                 });
@@ -115,7 +103,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     try {
                         const { data: success } = await fetchBackend({
                             type: "POST",
-                            url: "auth/login/",
+                            url: "auth/token/",
                             data: {
                                 username: userData.username,
                                 password: userData.password,
@@ -123,6 +111,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         });
 
                         if (success) {
+                            AsyncStorage.setItem("accessToken", success.access);
+                            AsyncStorage.setItem("refreshToken", success.refresh);
+
                             void queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
                             });
@@ -154,21 +145,17 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
                 signOut: async () => {
                     try {
-                        const { data: success } = await fetchBackend({
-                            type: "POST",
-                            url: "auth/logout/",
-                        });
+                        AsyncStorage.removeItem("accessToken");
+                        AsyncStorage.removeItem("refreshToken");
 
-                        if (success) {
-                            void queryClient.invalidateQueries({
-                                queryKey: ["current_user"],
-                            });
-                            Toast.show({
-                                type: "success",
-                                text1: t("translateToast.LogoutSuccessText1"),
-                                text2: t("translateToast.LogoutSuccessText2"),
-                            });
-                        }
+                        void queryClient.invalidateQueries({
+                            queryKey: ["current_user"],
+                        });
+                        Toast.show({
+                            type: "success",
+                            text1: t("translateToast.LogoutSuccessText1"),
+                            text2: t("translateToast.LogoutSuccessText2"),
+                        });
                     } catch (error) {
                         console.log(error);
                     }

@@ -2,7 +2,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchError } from "@/utils/fetchError";
 import { t, use } from "i18next";
-import { useCsrfToken } from "@/hooks/useCsrfToken";
 
 export async function fetchBackend(options: {
     readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE";
@@ -14,9 +13,12 @@ export async function fetchBackend(options: {
     const { type, params, data } = options;
     let { url } = options;
 
-    // Get token from AsyncStorage if it doesn't exist query it with useCsrfToken
-    if (!(await AsyncStorage.getItem("csrf_token"))) {
-        await useCsrfToken();
+    const token = await AsyncStorage.getItem("accessToken");
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+
+    if (token) {
+        headers.append("Authorization", `Bearer ${token}`);
     }
 
     if (params && type === "GET") {
@@ -34,10 +36,7 @@ export async function fetchBackend(options: {
     const response = await fetch(`${backend_url}/` + url, {
         method: type,
         credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": await AsyncStorage.getItem("csrf_token"),
-        },
+        headers,
         ...(data && { body: JSON.stringify(data) }),
     });
 

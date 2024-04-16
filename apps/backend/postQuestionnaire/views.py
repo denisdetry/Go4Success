@@ -28,6 +28,13 @@ class QuestionnaireView(viewsets.ModelViewSet, APIView):
         serializer = QuestionnaireSerializer(data, many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = QuestionnaireSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class QuestionView(viewsets.ModelViewSet, APIView):
     """
@@ -43,3 +50,18 @@ class QuestionView(viewsets.ModelViewSet, APIView):
         data = Question.objects.all()
         serializer = QuestionSerializer(data, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        serializer = QuestionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, pk):
+        instance = self.get_object(pk=pk)
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)

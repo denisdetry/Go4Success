@@ -16,7 +16,9 @@ axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
+
 export default function RoleManagement() {
+
     axiosConfig();
     const [userRole, setUserRole] = useState<UserRole[]>([]);
 
@@ -244,10 +246,10 @@ const generateUsersInfoRole = (userInfo, userRole) => {
         const role = curr.is_professor
             ? "professor"
             : curr.is_tutor
-            ? "tutor"
-            : curr.is_superuser
-            ? "superuser"
-            : "student";
+                ? "tutor"
+                : curr.is_superuser
+                    ? "superuser"
+                    : "student";
         acc[curr.user] = role;
         return acc;
     }, {});

@@ -5,11 +5,12 @@ import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useAuth } from "@/context/Auth";
 import UserProfileModal from "@/components/modals/UserProfileModal";
-import { useMutation } from "@tanstack/react-query";
-import Toast from "react-native-toast-message";
 import { useTranslation } from "react-i18next";
-import { queryClient } from "@/app/_layout";
+import { useMutation } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
+import Toast from "react-native-toast-message";
+import { queryClient } from "@/app/_layout";
+import { fetchError } from "@/utils/fetchError";
 
 interface ChangeUserDataFieldsProps {
     readonly data: any;
@@ -18,10 +19,10 @@ interface ChangeUserDataFieldsProps {
 }
 
 const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
-    data,
-    label,
-    dataKey,
-}) => {
+                                                                       data,
+                                                                       label,
+                                                                       dataKey,
+                                                                   }) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editable, setEditable] = useState(false);
     const [newData, setNewData] = useState(data);
@@ -36,12 +37,12 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
         mutationFn: async () => {
             const data: { [index: string]: any } = {};
             data[dataKey] = newData;
-            await fetchBackend("PATCH", "auth/user_profile/" + user.id + "/", data);
+            await fetchBackend({ type: "PATCH", url: "auth/user_profile/" + user.id + "/", data: data });
         },
         onSuccess: () => {
             Toast.show({
                 type: "success",
-                text1: "Félicitation ! 🎉",
+                text1: t("translateToast.SuccessText1"),
                 text2:
                     t("translationProfile.changeUserInfoSuccessPart1") +
                     label.toLowerCase() +
@@ -50,13 +51,13 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
             void queryClient.invalidateQueries({ queryKey: ["current_user"] });
             switchEdit();
         },
-        onError: (error: any) => {
-            console.log(error);
-            const errorMessages =
-                error.response.data[dataKey] || "Une erreur est survenue";
+        onError: async (error: fetchError) => {
+            // console.error("Error : ", await error.responseError.json());
+            const errorResponse = await error.responseError.json();
+            const errorMessages = errorResponse[dataKey] || t("translationProfile.defaultErrorMessage");
             Toast.show({
                 type: "error",
-                text1: "Erreur",
+                text1: t("translationProfile.error"),
                 text2: errorMessages,
             });
         },
@@ -92,7 +93,7 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
             >
                 <TextInput
                     style={styles.input}
-                    value={newData}
+                    value={newData ? newData : undefined}
                     onChangeText={setNewData}
                     editable={editable}
                     clearButtonMode={"while-editing"} // on IOS

@@ -1,22 +1,15 @@
 import React, { useState } from "react";
-import {
-    Modal,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { Modal, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
 import { useAuth } from "@/context/Auth";
 import { isMobile, width } from "@/constants/screensWidth";
-import { useMutation } from "@tanstack/react-query";
-import Toast from "react-native-toast-message";
-import { queryClient } from "@/app/_layout";
 import { useTranslation } from "react-i18next";
 import { fetchBackend } from "@/utils/fetchBackend";
+import Toast from "react-native-toast-message";
+import { queryClient } from "@/app/_layout";
+import { useMutation } from "@tanstack/react-query";
+import { fetchError } from "@/utils/fetchError";
 
 // axiosConfig();
 
@@ -123,26 +116,32 @@ const styleFunctions = {
 };
 
 const Card: React.FC<CardProps> = ({
-    id,
-    title,
-    location,
-    date,
-    hour,
-    type,
-    description,
-}) => {
+                                       id,
+                                       title,
+                                       location,
+                                       date,
+                                       hour,
+                                       type,
+                                       description,
+                                   }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
     const { t } = useTranslation();
 
-    const handelRegister = useMutation({
+    const handleRegister = useMutation({
         mutationFn: async () => {
-            await fetchBackend("POST", "activities/register_activity/", {
-                activity: id,
-                student: user.id,
+            const { data, error } = await fetchBackend({
+                type: "POST",
+                url: "activities/register_activity/",
+                data: {
+                    activity: id,
+                    student: user.id,
+                },
             });
+            return { data, error };
         },
         onSuccess: () => {
+            console.log("success");
             Toast.show({
                 type: "success",
                 text1: t("translateToast.SuccessText1"),
@@ -153,8 +152,8 @@ const Card: React.FC<CardProps> = ({
             });
             setModalVisible(!modalVisible);
         },
-        onError: (error: any) => {
-            if (error.response.status === 400) {
+        onError: (error: fetchError) => {
+            if (error.responseError.status === 400) {
                 Toast.show({
                     type: "error",
                     text1: t("translateToast.ErrorText1"),
@@ -171,6 +170,7 @@ const Card: React.FC<CardProps> = ({
             setModalVisible(!modalVisible);
         },
     });
+
     return (
         <View style={styles.centeredView}>
             {/* Modal content */}
@@ -206,7 +206,7 @@ const Card: React.FC<CardProps> = ({
                         <View style={styles.buttonContainer}>
                             <ButtonComponent
                                 text={t("translateRegisterActivity.registerButton")}
-                                onPress={() => handelRegister.mutate()}
+                                onPress={() => handleRegister.mutate()}
                                 buttonType={"primary"}
                             />
                             <ButtonComponent

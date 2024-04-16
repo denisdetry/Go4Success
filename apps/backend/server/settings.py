@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "database",
     "activities",
     "corsheaders",
+    "feedback",
 ]
 
 MIDDLEWARE = [

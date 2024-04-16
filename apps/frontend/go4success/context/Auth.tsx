@@ -13,6 +13,7 @@ import Colors from "@/constants/Colors";
 import { useCsrfToken } from "@/hooks/useCsrfToken";
 import { fetchBackend } from "@/utils/fetchBackend";
 import { fetchError } from "@/utils/fetchError";
+import { s } from "@tanstack/query-core/build/legacy/queryClient-K0zFyarY";
 
 const AuthContext = React.createContext<any>(null);
 
@@ -23,20 +24,20 @@ export function useAuth() {
 export function AuthProvider({ children }: React.PropsWithChildren) {
     const { t } = useTranslation();
     const rootSegment = useSegments()[0];
-    const backend_url = process.env.EXPO_PUBLIC_API_URL;
 
     useCsrfToken();
 
-    const {
-        isPending,
-        data: user,
-        error,
-    } = useQuery({
+    const { isPending, data: user } = useQuery({
         queryKey: ["current_user"],
         queryFn: async () => {
             try {
-                return await axios.get(`${backend_url}/auth/current_user/`);
-            } catch (error) {
+                const { data: response } = await fetchBackend({
+                    type: "GET",
+                    url: "auth/current_user/",
+                });
+                console.log("response", response);
+                return response;
+            } catch (err) {
                 return null;
             }
         },
@@ -52,10 +53,6 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         );
     }
 
-    if (error) {
-        return <Redirect href={"/(auth)/login"} />;
-    }
-
     if (!user && rootSegment !== "(auth)") {
         return <Redirect href={"/(auth)/login"} />;
     } else if (user && rootSegment === "(auth)") {
@@ -65,7 +62,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
     return (
         <AuthContext.Provider
             value={{
-                user: user?.data,
+                user: user,
                 signUp: async (userData: UserRegister) => {
                     {
                         try {

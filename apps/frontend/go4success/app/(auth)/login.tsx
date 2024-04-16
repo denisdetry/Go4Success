@@ -29,7 +29,7 @@ export default function Login() {
         resolver: yupResolver(schema),
         defaultValues: {
             username: "uclouvainadmin",
-            password: "uclAdminpassword01@",
+            password: "UCLadminpassword01@",
         },
     });
 

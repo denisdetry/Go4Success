@@ -42,19 +42,21 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_probes",
     "rest_framework",
     "authentification",
     "database",
+    "rolemanagment",
     "activities",
     "corsheaders",
 ]
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -138,9 +140,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "database.User"
 
-CORS_ORIGINS_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = os.getenv("CORS_ORIGIN_WHITELIST").split(",") if os.getenv(
-    "CORS_ORIGIN_WHITELIST") else ["http://localhost:3000", "http://localhost:8081"]
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS").split(",") if os.getenv(
+    "CORS_ALLOWED_ORIGINS") else ["http://localhost:8081", "http://localhost:3000"]
+
 CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS").split(",") if os.getenv(
     "CSRF_TRUSTED_ORIGINS") else ["http://localhost:8081", "http://localhost:3000"]
+
+print("CORS_ALLOWED_ORIGINS: ", CORS_ALLOWED_ORIGINS)
+print("CSRF_TRUSTED_ORIGINS: ", CSRF_TRUSTED_ORIGINS)

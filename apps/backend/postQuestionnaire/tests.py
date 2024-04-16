@@ -25,14 +25,15 @@ class QuestionnaireTestCase(APITestCase):
 
     def test_create_questionnaire(self):
         data = {
-            "course": "course",
+            "course": 1,
             "title": "title",
             "description": "description",
             "points_total": 10,
             "date_start": "2024-03-30 12:07:52.031 +0100",
             "date_end": "2024-03-30 12:07:52.031 +0100"
         }
-        request = self.factory.post('/postquestionnaire/', data)
+        request = self.factory.post(
+            '/postquestionnaire/postquestionnaire', data)
         force_authenticate(request, user=self.userCreation)
         view = QuestionnaireView.as_view({'post': 'create'})
         response = view(request)
@@ -40,14 +41,15 @@ class QuestionnaireTestCase(APITestCase):
 
     def test_create_empty_questionnaire(self):
         data = {
-            "course": "",
+            "course": 1,
             "title": "",
             "description": "",
             "points_total": 0,
             "date_start": "",
             "date_end": ""
         }
-        request = self.factory.post('/postquestionnaire/', data)
+        request = self.factory.post(
+            '/postquestionnaire/postquestionnaire', data)
         force_authenticate(request, user=self.userCreation)
         view = QuestionnaireView.as_view({'post': 'create'})
         response = view(request)

@@ -1587,5 +1587,79 @@
             "additional_comment": "Ok",
             "date_submitted": "2024-04-12"
         }
+    },
+
+    {
+        "model": "database.Questionnaire",
+        "pk": 1,
+        "fields": {
+            "title": "superQuestionnaire",
+            "description": "superDescription",
+            "points_total": 20,
+            "date_start": "2024-04-24",
+            "date_end": "2024-04-24",
+            "course_id": 1,
+            "language_id": 1
+        }
+    },
+
+    {
+        "model": "database.Questionnaire",
+        "pk": 2,
+        "fields": {
+            "title": "superQuestionnaire2",
+            "description": "superDescription2",
+            "points_total": 20,
+            "date_start": "2024-04-24",
+            "date_end": "2024-04-24",
+            "course_id": 1,
+            "language_id": 1
+        }
+    },
+    {
+        "model": "database.Questionnaire",
+        "pk": 2,
+        "fields": {
+            "title": "superQuestionnaire2",
+            "description": "superDescription2",
+            "points_total": 20,
+            "date_start": "2024-04-24",
+            "date_end": "2024-04-24",
+            "course_id": 1,
+            "language_id": 1
+        }
+    },
+
+    {
+        "model": "database.Question",
+        "pk": 1,
+        "fields": {
+            "question": "superQuestion",
+            "points": 5,
+            "type": "choice",
+            "questionnaire_id": 1
+        }
+    },
+
+    {
+        "model": "database.Question",
+        "pk": 2,
+        "fields": {
+            "question": "superQuestion2",
+            "points": 5,
+            "type": "open",
+            "questionnaire_id": 1
+        }
+    },
+
+    {
+        "model": "database.Question",
+        "pk": 2,
+        "fields": {
+            "question": "superQuestion3",
+            "points": 5,
+            "type": "open",
+            "questionnaire_id": 1
+        }
     }
 ]

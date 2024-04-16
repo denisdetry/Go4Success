@@ -15,7 +15,8 @@
     "home": "Home",
     "profil": "My profile",
     "calendar": "My calendar",
-    "disconnect": "Log out"
+    "disconnect": "Log out",
+    "rolemanagement": "Role management"
   },
   "translationButton": {
     "OpenFilter": "Open Filter",
@@ -78,9 +79,16 @@
     "successPasswordChange": "Your password has been successfully changed",
     "defaultErrorMessage": "Something went wrong !",
     "error": "Error",
-    "areYouSure": "Are you sure to change your",
+    "areYouSure": "Are you sure to",
+    "changeTo": "change your",
+    "deleteUserAccount": "delete your account ? This action is irreversible.",
     "changeUserInfoSuccessPart1": "Your ",
-    "changeUserInfoSuccessPart2": " has been successfully changed"
+    "changeUserInfoSuccessPart2": " has been successfully changed",
+    "deleteUserTitle": "Delete account",
+    "deleteUserButton": "Delete account",
+    "cancelButtonModal": "Cancel",
+    "confirmButtonModal": "Confirm",
+    "successUserDelete": "Your account has been successfully deleted"
   },
   "translateToast": {
     "SuccessText1": "Congratulation ! \uD83C\uDF89",

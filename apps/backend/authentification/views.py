@@ -52,7 +52,7 @@ class LogoutView(APIView):
 
     def post(self, request):
         logout(request)
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK, data={'message': 'logged out'})
 
 
 class CurrentUserView(APIView):
@@ -68,6 +68,13 @@ class UpdateProfileView(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = UpdateUserSerializer
+
+
+class DeleteUserView(generics.DestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'id'
 
 
 class ChangePasswordView(generics.UpdateAPIView):

@@ -8,3 +8,4 @@ python-decouple
 python-dotenv
 mysqlclient
 python-dotenv
+psycopg2

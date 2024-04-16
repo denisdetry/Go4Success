@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from activities.views import ActivityViewSet, SiteViewSet, AttendViewSet, RoomViewSet, RegisterToActivityView
+from .views import ActivityViewSet, SiteViewSet, AttendViewSet, RoomViewSet, RegisterToActivityView
 
 router = DefaultRouter()
 

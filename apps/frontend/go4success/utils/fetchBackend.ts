@@ -2,7 +2,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchError } from "@/utils/fetchError";
 import { t, use } from "i18next";
-import { useCsrfToken } from "@/hooks/useCsrfToken";
 
 export async function fetchBackend(options: {
     readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE";
@@ -13,10 +12,6 @@ export async function fetchBackend(options: {
     const backend_url = process.env.EXPO_PUBLIC_API_URL;
     const { type, params, data } = options;
     let { url } = options;
-
-    if (!(await AsyncStorage.getItem("csrf_token"))) {
-        useCsrfToken();
-    }
 
     if (params && type === "GET") {
         url += "?";

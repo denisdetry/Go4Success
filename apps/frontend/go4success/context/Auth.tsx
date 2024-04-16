@@ -25,8 +25,6 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
     const { t } = useTranslation();
     const rootSegment = useSegments()[0];
 
-    useCsrfToken();
-
     const { isPending, data: user } = useQuery({
         queryKey: ["current_user"],
         queryFn: async () => {

@@ -107,3 +107,8 @@ admin.site.register(Question, QuestionAdmin)
 admin.site.register(OpenAnswer, OpenAnswerAdmin)
 admin.site.register(ChoiceAnswer, ChoiceAnswerAdmin)
 admin.site.register(ChoiceAnswerInstance, ChoiceAnswerInstanceAdmin)
+
+# customize admin site
+admin.site.site_title = "Go4success administration"
+admin.site.site_header = "Go4success administration"
+admin.site.index_title = "Go4success"

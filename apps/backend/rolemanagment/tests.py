@@ -1,15 +1,13 @@
-from django.test import TestCase
-from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
-from database.models import Teacher, User
-from .serializers import *
-from rest_framework import *
-from .views import *
+from database.models import User
 from django.core.exceptions import ValidationError
+from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
+
+from .serializers import *
+from .views import *
 
 
 class RoleManagementTest(APITestCase):
     def setUp(self):
-
         self.factory = APIRequestFactory()
         self.userCreation = User.objects.create(
             password='$LbR#2Yq7',
@@ -47,7 +45,6 @@ class RoleManagementTest(APITestCase):
         force_authenticate(request, user=self.superUser)
 
     def test_create_connection(self):
-
         correct_answer = {
             "id": 1,
             "first_name": "Gerry",
@@ -61,7 +58,6 @@ class RoleManagementTest(APITestCase):
         self.assertEqual(dict(response.data[0]), correct_answer)
 
     def test_is_tutor(self):
-
         request = self.factory.post(
             '/rolemanagement/editRole/', {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
         force_authenticate(request, user=self.superUser)
@@ -69,7 +65,6 @@ class RoleManagementTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_is_professor(self):
-
         request = self.factory.post(
             '/rolemanagement/editRole/', {'user': 1, 'is_professor': True, 'is_tutor': False}, format='json')
         force_authenticate(request, user=self.superUser)
@@ -87,7 +82,6 @@ class RoleManagementTest(APITestCase):
         self.assertEqual(str(context.exception), expected_error_message)
 
     def test_must_have_responsibilities(self):
-
         request = self.factory.post(
             '/rolemanagement/editRole/', {'user': 1, 'is_professor': False, 'is_tutor': False}, format='json')
         force_authenticate(request, user=self.superUser)
@@ -98,7 +92,6 @@ class RoleManagementTest(APITestCase):
         self.assertEqual(str(context.exception), expected_error_message)
 
     def test_user_does_not_exists(self):
-
         request = self.factory.post(
             '/rolemanagement/editRole/', {'user': 40, 'is_professor': False, 'is_tutor': False}, format='json')
         force_authenticate(request, user=self.superUser)
@@ -108,7 +101,6 @@ class RoleManagementTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_user(self):
-
         user_id = 1
 
         request_post = self.factory.post(
@@ -143,7 +135,6 @@ class RoleManagementTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_patch_professor_and_tutor(self):
-
         user_id = 1
 
         request = self.factory.post(
@@ -196,7 +187,6 @@ class RoleManagementTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_delete_unexistent_role(self):
-
         user_id = 1
 
         request_delete = self.factory.delete(
@@ -298,7 +288,6 @@ class SuperUserCreationDeletion(APITestCase):
         self.assertEqual(response.data, correct_answer)
 
     def test_patch_new_superUser(self):
-
         user_id = 1
         request_patch = self.factory.patch(
             f'/api/userview/{user_id}', {
@@ -315,7 +304,6 @@ class SuperUserCreationDeletion(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_patch_new_superUser(self):
-
         user_id = 3
         request_patch = self.factory.patch(
             f'/api/userview/{user_id}', {

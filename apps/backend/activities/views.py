@@ -64,12 +64,16 @@ def filter_queryset(self, qs, param=""):
     room = self.request.query_params.get('room')
     date_start = self.request.query_params.get('date_start')
     date_end = self.request.query_params.get('date_end')
+    language = self.request.query_params.get(
+        'language')
     if name not in none:
         qs = qs.filter(**{f"{param}name__icontains": name})
     if site not in none:
         qs = qs.filter(**{f"{param}room__site__id": site})
     if room not in none:
         qs = qs.filter(**{f"{param}room__id": room})
+    if language not in none:
+        qs = qs.filter(**{f"{param}language__id": language})
     if date_start not in none:
         if date_end not in none:
             qs = qs.filter(

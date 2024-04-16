@@ -1,8 +1,11 @@
-from django.urls import path, include
-from rest_framework import routers
+from django.urls import path
+from rest_framework.routers import DefaultRouter
+from .views import FeedbackCreateView, FeedbackListView
 
-router = routers.DefaultRouter()
+router = DefaultRouter()
+router.register(r'feedbacks', FeedbackListView, basename='feedbacks')
 
 urlpatterns = [
-    path('', include(router.urls)),
-]
+    path('feedback/newfeedback/',
+         FeedbackCreateView.as_view({'post': 'create'}), name='newfeedback'),
+] + router.urls

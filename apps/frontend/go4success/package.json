@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint . --ext .ts,.tsx",
-    "test":"jest"
+    "test": "jest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -28,6 +28,7 @@
     "i18next": "^23.10.1",
     "i18next-browser-languagedetector": "^7.2.1",
     "react": "18.2.0",
+    "react-data-table-component": "^7.6.2",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.51.0",
     "react-i18next": "^14.1.0",

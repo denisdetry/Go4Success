@@ -20,8 +20,6 @@ export function useActivities(
     startDateISO: string | null,
     endDateISO: string | null,
 ) {
-    // console.log("Called useActivities");
-
     const { isPending, data, error } = useQuery<Activity[]>({
         queryKey: [
             "activities",
@@ -34,7 +32,9 @@ export function useActivities(
         ],
         queryFn: async () => {
             const { data } = await fetchBackend({
-                type: "GET", url: `activities/${endpoint}/`, params: {
+                type: "GET",
+                url: `activities/${endpoint}/`,
+                params: {
                     name: searchName,
                     room: selectedRoom,
                     site: selectedSite,
@@ -44,7 +44,6 @@ export function useActivities(
                     end_date: endDateISO,
                 },
             });
-            // console.log("resp:", data);
             return data;
         },
     });

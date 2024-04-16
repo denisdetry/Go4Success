@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Modal, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+    Modal,
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
 import { useAuth } from "@/context/Auth";
@@ -21,6 +29,7 @@ interface CardProps {
     readonly hour: string;
     readonly type: string;
     readonly description: string;
+    readonly language: string;
 }
 
 const styleFunctions = {
@@ -116,14 +125,15 @@ const styleFunctions = {
 };
 
 const Card: React.FC<CardProps> = ({
-                                       id,
-                                       title,
-                                       location,
-                                       date,
-                                       hour,
-                                       type,
-                                       description,
-                                   }) => {
+    id,
+    title,
+    location,
+    date,
+    hour,
+    type,
+    description,
+    language,
+}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
     const { t } = useTranslation();
@@ -195,10 +205,21 @@ const Card: React.FC<CardProps> = ({
                         </View>
 
                         <View style={styleFunctions.getModalDataStyle(type)}>
-                            <Text style={styles.modalText}>Date : {date}</Text>
-                            <Text style={styles.modalText}>Hour : {hour}</Text>
-                            <Text style={styles.modalText}>Place : {location}</Text>
-                            <Text style={styles.modalText}>Type : {type}</Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.date")} : {date}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.hour")} : {hour}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.place")} : {location}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.type")} : {type}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.language")}: {language}
+                            </Text>
                             <View style={styles.separator} />
                             <Text style={styles.modalText}>{description}</Text>
                         </View>
@@ -231,6 +252,7 @@ const Card: React.FC<CardProps> = ({
                     </View>
 
                     <View style={styles.bottomRowDate}>
+                        <Text style={styles.text}>{language}</Text>
                         <Text style={styles.text}>{date}</Text>
                         <Text style={styles.text}>{hour}</Text>
                     </View>
@@ -283,6 +305,7 @@ const styles = StyleSheet.create({
 
     bottomRowLocation: {
         width: "50%",
+        justifyContent: "center",
         flexDirection: "row",
     },
 

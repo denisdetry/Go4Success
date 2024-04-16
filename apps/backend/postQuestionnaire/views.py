@@ -10,8 +10,6 @@ from .serializers import QuestionnaireSerializer, QuestionSerializer, OpenAnswer
 from rest_framework.generics import DestroyAPIView
 from .permissions import IsProfessorOrSuperUser
 
-# Create your views here.
-
 
 class QuestionnaireView(viewsets.ModelViewSet, APIView):
     """

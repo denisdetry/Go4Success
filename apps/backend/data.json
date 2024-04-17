@@ -397,7 +397,7 @@
             "user": 1,
             "content_type": 17,
             "object_id": "2",
-            "object_repr": "Franþais",
+            "object_repr": "Français",
             "action_flag": 2,
             "change_message": "[{\"changed\": {\"fields\": [\"Code\"]}}]"
         }
@@ -1503,7 +1503,7 @@
     {
         "model": "database.language",
         "pk": 2,
-        "fields": { "name": "Franþais", "code": "FR" }
+        "fields": { "name": "Français", "code": "FR" }
     },
     {
         "model": "database.activity",

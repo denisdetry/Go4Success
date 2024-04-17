@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ScrollView, Text, Modal, View, Pressable } from "react-native";
+import { ScrollView, Text, Modal, View, Pressable, FlatList } from "react-native";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { Feedback, useFeedback } from "@/hooks/useFeedback";
 import { useTranslation } from "react-i18next";
@@ -118,7 +118,8 @@ export default function FeedbackList() {
                                 ]}
                             >
                                 <Text style={styles.modalTitle}>
-                                    {selectedFeedback.id}
+                                    {selectedFeedback.id} {"."}{" "}
+                                    {selectedFeedback.activity.name}
                                 </Text>
                                 <Pressable
                                     style={styles.closeButton}
@@ -129,33 +130,53 @@ export default function FeedbackList() {
                             </View>
 
                             <View style={[styles.modalData]}>
-                                <Text style={styles.modalText}>
-                                    Student : {selectedFeedback.student.first_name} {}
-                                    {selectedFeedback.student.last_name} {"("}
-                                    {selectedFeedback.student.noma} {")"}
-                                </Text>
-                                <Text style={styles.modalText}>
-                                    Activity : {selectedFeedback.activity.name}
-                                </Text>
-                                <Text style={styles.modalText}>
-                                    evaluation : {selectedFeedback.evaluation}
-                                </Text>
-                                <Text style={styles.modalText}>
-                                    Positive point : {selectedFeedback.positive_point}
-                                </Text>
-                                <Text style={styles.modalText}>
-                                    Negative point : {selectedFeedback.negative_point}
-                                </Text>
-                                <Text style={styles.modalText}>
-                                    Suggestion : {selectedFeedback.suggestion}
-                                </Text>
-                                <Text style={styles.modalText}>
-                                    Additional comment :{" "}
-                                    {selectedFeedback.additional_comment}
-                                </Text>
-                                <Text style={styles.modalText}>
-                                    Date submitted : {selectedFeedback.date_submitted}
-                                </Text>
+                                <FlatList
+                                    data={[
+                                        {
+                                            title: "Student",
+                                            value: `${selectedFeedback.student.first_name} ${selectedFeedback.student.last_name} (${selectedFeedback.student.noma})`,
+                                        },
+                                        {
+                                            title: "Activity",
+                                            value: selectedFeedback.activity.name,
+                                        },
+                                        {
+                                            title: "Evaluation",
+                                            value: selectedFeedback.evaluation,
+                                        },
+                                        {
+                                            title: "Positive point",
+                                            value: selectedFeedback.positive_point,
+                                        },
+                                        {
+                                            title: "Negative point",
+                                            value: selectedFeedback.negative_point,
+                                        },
+                                        {
+                                            title: "Suggestion",
+                                            value: selectedFeedback.suggestion,
+                                        },
+                                        {
+                                            title: "Additional comment",
+                                            value: selectedFeedback.additional_comment,
+                                        },
+                                        {
+                                            title: "Date submitted",
+                                            value: selectedFeedback.date_submitted,
+                                        },
+                                    ]}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={({ item }) => (
+                                        <View style={styles.modalData}>
+                                            <Text>
+                                                <Text style={{ fontWeight: "bold" }}>
+                                                    {item.title}
+                                                </Text>{" "}
+                                                : {item.value}
+                                            </Text>
+                                        </View>
+                                    )}
+                                />
                             </View>
 
                             <View style={styles.buttonContainer}>

@@ -4,13 +4,18 @@ import { fetchBackend } from "@/utils/fetchBackend";
 export interface Feedback {
     id: string;
     student: {
+        id: string;
         username: string;
         first_name: string;
         last_name: string;
         noma: string;
     };
     activity: {
+        id: string;
         name: string;
+        date_start: string;
+        date_end: string;
+        noma: string;
     };
     evaluation: string;
     positive_point: string;
@@ -28,7 +33,6 @@ export function useFeedback() {
                 type: "GET",
                 url: `feedback/feedbacks`,
             });
-            console.log("resp:", data);
             return data;
         },
     });

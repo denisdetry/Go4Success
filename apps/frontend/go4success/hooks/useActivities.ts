@@ -12,6 +12,11 @@ export interface Activity {
     description: string;
 }
 
+export interface Attend {
+    activity: Activity;
+    student: string;
+}
+
 export function useActivities(
     endpoint: string,
     searchName: string,

@@ -6,6 +6,6 @@ router = DefaultRouter()
 router.register(r'feedbacks', FeedbackListView, basename='feedbacks')
 
 urlpatterns = [
-    path('feedback/newfeedback/',
+    path('newfeedback/',
          FeedbackCreateView.as_view({'post': 'create'}), name='newfeedback'),
 ] + router.urls

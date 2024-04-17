@@ -1,14 +1,21 @@
-import os
+from django.utils import timezone
 from django.core.exceptions import ValidationError
 from rest_framework import status
 from rest_framework.response import Response
-from database.models import Activity, Attend, User
+from database.models import Attend
 
 
 def validate_student_in_activity(data):
-    print("validate_student_in_activity was called.")
-    activity_id = data['activity'].strip()
-    student_id = data['student'].strip()
+    activity = data['activity']
+    student = data['student']
+    attend = Attend.objects.filter(activity=activity, student=student)
+    if not attend.exists():
+        raise ValidationError('student is not in the activity')
+    return data
 
-    print(f"Activity ID: {activity_id}", os.getcwd())
-    print(f"Student ID: {student_id}", os.getcwd())
+
+def validate_activity_is_finished(data):
+    activity_id = data['activity']
+    if activity_id.date_end > timezone.now():
+        raise ValidationError('The activity has not ended yet')
+    return data

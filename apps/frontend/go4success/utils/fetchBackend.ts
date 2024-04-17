@@ -1,7 +1,6 @@
-//import { API_BASE_URL } from "@/constants/ConfigApp";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchError } from "@/utils/fetchError";
-import { t, use } from "i18next";
+import { t } from "i18next";
 
 export async function fetchBackend(options: {
     readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE";
@@ -9,7 +8,7 @@ export async function fetchBackend(options: {
     readonly params?: any;
     readonly data?: any;
 }): Promise<any> {
-    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+    const backendUrl = process.env.EXPO_PUBLIC_API_URL;
     const { type, params, data } = options;
     let { url } = options;
 
@@ -33,7 +32,7 @@ export async function fetchBackend(options: {
         });
     }
 
-    const response = await fetch(`${backend_url}/` + url, {
+    const response = await fetch(`${backendUrl}/` + url, {
         method: type,
         credentials: "include",
         headers,

@@ -8,8 +8,6 @@ export type Site = {
 };
 
 export function useSites(siteId?: string) {
-    const backend_url = process.env.EXPO_PUBLIC_API_URL;
-
     const {
         isPending,
         data: sites,
@@ -30,9 +28,9 @@ export function useSites(siteId?: string) {
                 throw new Error(error);
             }
 
-            return data.map((site: { name: any; id: any }) => ({
-                label: site.name,
-                value: site.id,
+            return data.map((site: { id: number; name: string }) => ({
+                key: site.id,
+                value: site.name,
             }));
         },
     });

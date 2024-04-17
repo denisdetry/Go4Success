@@ -1,4 +1,4 @@
-from database.models import Activity, Attend, Site, Room, Course
+from database.models import Activity, Attend, Site, Room, Course, Language
 from rest_framework import serializers
 
 

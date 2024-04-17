@@ -1,5 +1,4 @@
 import { SelectItem } from "@/components/SelectSearch";
-import { API_BASE_URL } from "@/constants/ConfigApp";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -10,6 +9,8 @@ export type Room = {
 };
 
 export function useRooms(siteId: string | undefined, sites: SelectItem[]) {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
     const {
         isPending,
         data: rooms,
@@ -18,7 +19,7 @@ export function useRooms(siteId: string | undefined, sites: SelectItem[]) {
         queryKey: ["rooms", siteId],
         queryFn: async () => {
             const response = await axios.get(
-                `${API_BASE_URL}/activities/rooms/` + (siteId ? `site/${siteId}/` : ""),
+                `${backend_url}/activities/rooms/` + (siteId ? `site/${siteId}/` : ""),
             );
             return response.data.map((room: Room) => ({
                 label:

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from . import views
 from .views import UpdateProfileView
@@ -11,11 +12,12 @@ router.register(r'user_profile', UpdateProfileView, "user_profile")
 
 urlpatterns = [
     path('register/', views.UserRegisterView.as_view(), name='register'),
-    path('login/', views.LoginView.as_view(), name='login'),
-    path('logout/', views.LogoutView.as_view(), name='logout'),
     path('current_user/', views.CurrentUserView.as_view(), name='users'),
-    path('change_password/<int:id>/', views.ChangePasswordView.as_view(), name='change_password'),
-    path('csrf_token/', views.csrf_token, name='csrf-token'),
+    path('change_password/<int:id>/',
+         views.ChangePasswordView.as_view(), name='change_password'),
+    path('delete_user/<int:id>/', views.DeleteUserView.as_view(), name='delete_user'),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path("", include(router.urls)),
 ]
 

@@ -37,7 +37,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=255, unique=True,
                                 error_messages={"unique": "Ce nom d'utilisateur est déjà utilisé."})
-    email = models.EmailField(unique=True, error_messages={"unique": "Cette adresse mail est déjà utilisée."})
+    email = models.EmailField(unique=True, error_messages={
+                              "unique": "Cette adresse mail est déjà utilisée."})
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     noma = models.CharField(max_length=63, blank=True, null=True, unique=True,
@@ -101,6 +102,18 @@ class Room(models.Model):
         unique_together = (('name', 'site'),)
 
 
+class Language(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50)
+    code = models.CharField(max_length=6)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        unique_together = (('name'), ('code'),)
+
+
 class Activity(models.Model):
     id = models.AutoField(primary_key=True)
     type = models.CharField(max_length=255)
@@ -111,6 +124,8 @@ class Activity(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     course = models.ForeignKey(
         Course, on_delete=models.CASCADE, max_length=63, blank=True, null=True)
+    language = models.ForeignKey(
+        Language, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return "(%s) %s" % (self.id, self.name)
@@ -209,3 +224,78 @@ class See(models.Model):
 
     def __str__(self):
         return "%s sees %s" % (self.user.username, self.announcement)
+
+
+class FeedbackActivity(models.Model):
+    id = models.AutoField(primary_key=True)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    evaluation = models.IntegerField(null=False, blank=False)
+    positive_point = models.TextField(null=True, blank=True)
+    negative_point = models.TextField(null=True, blank=True)
+    suggestion = models.TextField(null=True, blank=True)
+    additional_comment = models.TextField(null=True, blank=True)
+    date_submitted = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Feedback for {self.activity.name} by {self.student.username}"
+
+
+class Questionnaire(models.Model):
+    id = models.AutoField(primary_key=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    points_total = models.IntegerField()
+    date_start = models.DateTimeField()
+    date_end = models.DateTimeField()
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.title} -{self.description} - {self.course.code} "
+
+
+class Question(models.Model):
+    QUESTION_TYPE_CHOICES = [
+        ('open', 'Open'),
+        ('multiple_choice', 'Multiple Choice'),
+    ]
+
+    id = models.AutoField(primary_key=True)
+    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
+    question = models.TextField()
+    type = models.CharField(choices=QUESTION_TYPE_CHOICES)
+    points = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.questionnaire.title} - {self.question} - {self.type} - {self.points}"
+
+
+class OpenAnswer(models.Model):
+    id = models.AutoField(primary_key=True)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    answer = models.TextField()
+    is_correct = models.BooleanField()
+
+    def __str__(self):
+        return f"{self.student.username} - {self.question.question} - {self.answer} - {self.is_correct}"
+
+
+class ChoiceAnswer(models.Model):
+    id = models.AutoField(primary_key=True)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.student.username} - {self.question.question}"
+
+
+class ChoiceAnswerInstance(models.Model):
+    id = models.AutoField(primary_key=True)
+    choice_answer = models.ForeignKey(ChoiceAnswer, on_delete=models.CASCADE)
+    choice = models.TextField()
+    is_correct = models.BooleanField()
+
+    def __str__(self):
+        return f"{self.choice_answer.student.username} - {self.choice_answer.question.question} - {self.choice.choice}"

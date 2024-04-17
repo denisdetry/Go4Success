@@ -4,15 +4,16 @@ import axios from "axios";
 import Toast from "react-native-toast-message";
 import { UserRegister } from "@/types/UserRegister";
 import { UserLogin } from "@/types/UserLogin";
-import { API_BASE_URL } from "@/constants/ConfigApp";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/app/_layout";
 import { ActivityIndicator } from "react-native";
 import styles from "@/styles/global";
 import Colors from "@/constants/Colors";
-import { useCsrfToken } from "@/hooks/useCsrfToken";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchBackend } from "@/utils/fetchBackend";
+import { fetchError } from "@/utils/fetchError";
+import useUser from "@/hooks/useUser";
 
 const AuthContext = React.createContext<any>(null);
 
@@ -24,22 +25,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
     const { t } = useTranslation();
     const rootSegment = useSegments()[0];
 
-    useCsrfToken();
-
-    const {
-        isPending,
-        data: user,
-        error,
-    } = useQuery({
-        queryKey: ["current_user"],
-        queryFn: async () => {
-            try {
-                return await axios.get(`${API_BASE_URL}/auth/current_user/`);
-            } catch (error) {
-                return null;
-            }
-        },
-    });
+    const { isPending, user } = useUser();
 
     if (isPending) {
         return (
@@ -51,10 +37,6 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         );
     }
 
-    if (error) {
-        return <Redirect href={"/(auth)/login"} />;
-    }
-
     if (!user && rootSegment !== "(auth)") {
         return <Redirect href={"/(auth)/login"} />;
     } else if (user && rootSegment === "(auth)") {
@@ -64,30 +46,91 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
     return (
         <AuthContext.Provider
             value={{
-                user: user?.data,
+                user: user,
                 signUp: async (userData: UserRegister) => {
                     {
-                        const { data: success, error } = await fetchBackend({
+                        try {
+                            const { data: success } = await fetchBackend({
+                                type: "POST",
+                                url: "auth/register/",
+                                data: {
+                                    username: userData.username,
+                                    email: userData.email,
+                                    // eslint-disable-next-line camelcase
+                                    last_name: userData.lastName,
+                                    // eslint-disable-next-line camelcase
+                                    first_name: userData.firstName,
+                                    noma: userData.noma,
+                                    password: userData.password,
+                                },
+                            });
+
+                            if (success) {
+                                AsyncStorage.setItem("accessToken", success.access);
+                                AsyncStorage.setItem("refreshToken", success.refresh);
+                                void queryClient.invalidateQueries({
+                                    queryKey: ["current_user"],
+                                });
+
+                                Toast.show({
+                                    type: "success",
+                                    text1: t("translateToast.SuccessText1"),
+                                    text2: t("translateToast.RegisterSuccessText2"),
+                                });
+                            }
+                        } catch (err) {
+                            const error = err as fetchError;
+                            if (error.responseError) {
+                                if (error.responseError.status === 401) {
+                                    Toast.show({
+                                        type: "error",
+                                        text1: t("translateToast.ErrorText1"),
+                                        text2: await error.responseError.json(),
+                                    });
+                                } else {
+                                    Toast.show({
+                                        type: "error",
+                                        text1: t("translateToast.ErrorText1"),
+                                        text2: t("translateToast.ServerErrorText2"),
+                                    });
+                                }
+                            }
+                        }
+                    }
+                },
+
+                signIn: async (userData: UserLogin) => {
+                    try {
+                        const { data: success } = await fetchBackend({
                             type: "POST",
-                            url: "auth/register/",
+                            url: "auth/token/",
                             data: {
                                 username: userData.username,
-                                email: userData.email,
-                                // eslint-disable-next-line camelcase
-                                last_name: userData.lastName,
-                                // eslint-disable-next-line camelcase
-                                first_name: userData.firstName,
-                                noma: userData.noma,
                                 password: userData.password,
                             },
                         });
 
-                        if (error) {
-                            if (error.status === 400) {
+                        if (success) {
+                            AsyncStorage.setItem("accessToken", success.access);
+                            AsyncStorage.setItem("refreshToken", success.refresh);
+
+                            void queryClient.invalidateQueries({
+                                queryKey: ["current_user"],
+                            });
+                            Toast.show({
+                                type: "success",
+                                text1: t("translateToast.SuccessText1"),
+                                text2: t("translateToast.LoginSuccessText2"),
+                            });
+                        }
+                    } catch (err) {
+                        const error = err as fetchError;
+                        if (error.responseError) {
+                            if (error.responseError.status === 401) {
                                 Toast.show({
                                     type: "error",
                                     text1: t("translateToast.ErrorText1"),
-                                    text2: await error.json(),
+                                    text2: t("translateToast.LoginInfoErrorText2"),
                                 });
                             } else {
                                 Toast.show({
@@ -97,69 +140,14 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 });
                             }
                         }
-
-                        if (success) {
-                            void queryClient.invalidateQueries({
-                                queryKey: ["current_user"],
-                            });
-
-                            Toast.show({
-                                type: "success",
-                                text1: t("translateToast.SuccessText1"),
-                                text2: t("translateToast.RegisterSuccessText2"),
-                            });
-                        }
-                    }
-                },
-
-                signIn: async (userData: UserLogin) => {
-                    const { data: success, error } = await fetchBackend({
-                        type: "POST",
-                        url: "auth/login/",
-                        data: {
-                            username: userData.username,
-                            password: userData.password,
-                        },
-                    });
-
-                    if (error) {
-                        if (error.status === 400) {
-                            Toast.show({
-                                type: "error",
-                                text1: t("translateToast.ErrorText1"),
-                                text2: t("translateToast.LoginInfoErrorText2"),
-                            });
-                        } else {
-                            Toast.show({
-                                type: "error",
-                                text1: t("translateToast.ErrorText1"),
-                                text2: t("translateToast.ServerErrorText2"),
-                            });
-                        }
-                    }
-
-                    if (success) {
-                        void queryClient.invalidateQueries({
-                            queryKey: ["current_user"],
-                        });
-                        Toast.show({
-                            type: "success",
-                            text1: t("translateToast.SuccessText1"),
-                            text2: t("translateToast.LoginSuccessText2"),
-                        });
                     }
                 },
 
                 signOut: async () => {
-                    const { data: success, error } = await fetchBackend({
-                        type: "POST",
-                        url: "auth/logout/",
-                    });
-                    if (error) {
-                        console.log(error);
-                    }
+                    try {
+                        AsyncStorage.removeItem("accessToken");
+                        AsyncStorage.removeItem("refreshToken");
 
-                    if (success) {
                         void queryClient.invalidateQueries({
                             queryKey: ["current_user"],
                         });
@@ -168,6 +156,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             text1: t("translateToast.LogoutSuccessText1"),
                             text2: t("translateToast.LogoutSuccessText2"),
                         });
+                    } catch (error) {
+                        console.log(error);
                     }
                 },
             }}

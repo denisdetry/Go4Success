@@ -6,15 +6,17 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 const UserProfileModal = ({
-    isVisible,
-    onCancel,
-    onConfirm,
-    dataLabelName,
-}: {
+                              isVisible,
+                              onCancel,
+                              onConfirm,
+                              dataLabelName,
+                              deleteAccount,
+                          }: {
     readonly isVisible: boolean;
     readonly onCancel: any;
     readonly onConfirm: any;
     readonly dataLabelName: string;
+    readonly deleteAccount?: boolean;
 }) => {
     const { t } = useTranslation();
     return (
@@ -39,9 +41,16 @@ const UserProfileModal = ({
                         borderRadius: 10,
                     }}
                 >
-                    <Text style={styles.text}>
-                        {t("translationProfile.areYouSure")} {dataLabelName} ?
-                    </Text>
+                    {deleteAccount ? (
+                        <Text style={styles.text}>
+                            {t("translationProfile.areYouSure")} {t("translationProfile.deleteUserAccount")}
+                        </Text>
+                    ) : (
+                        <Text style={styles.text}>
+                            {t("translationProfile.areYouSure")} {t("translationProfile.changeTo")} {dataLabelName}
+                        </Text>
+                    )}
+
                     <View
                         style={{
                             flexDirection: "row",
@@ -50,12 +59,12 @@ const UserProfileModal = ({
                         }}
                     >
                         <Button
-                            text="Annuler"
+                            text={t("translationProfile.cancelButtonModal")}
                             onPress={onCancel}
                             buttonType={"close"}
                         />
                         <Button
-                            text="Confirmer"
+                            text={t("translationProfile.confirmButtonModal")}
                             onPress={onConfirm}
                             buttonType={"primary"}
                         />

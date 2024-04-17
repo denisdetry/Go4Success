@@ -21,10 +21,8 @@ class UserView(viewsets.ModelViewSet, APIView):
 
     queryset = User.objects.all()
 
-    def get(self, request):
-        data = User.objects.all()
-        serializer = UserSerializer(data, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        return User.objects.exclude(last_name='').all()
 
     def patch(self, request, pk):
         instance = self.get_object(pk=pk)

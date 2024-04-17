@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from database.models import Activity, Attend, Site, Room, Course
+from database.models import Activity, Attend, Site, Room, Course, Language
 
 
 class SiteSerializer(serializers.ModelSerializer):
@@ -52,6 +52,12 @@ class AttendSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attend
         fields = ('activity', 'student')
+
+
+class SiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Site
+        fields = ('id', 'name')
 
 
 class RegisterToActivitySerializer(serializers.ModelSerializer):

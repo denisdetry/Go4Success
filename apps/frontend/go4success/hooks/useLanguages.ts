@@ -2,24 +2,25 @@ import { useQuery } from "@tanstack/react-query";
 import { SelectItem } from "@/components/SelectSearch";
 import { fetchBackend } from "@/utils/fetchBackend";
 
-export type Site = {
+export type Language = {
     id: string;
     name: string;
+    code: string;
 };
 
-export function useSites(siteId?: string) {
-    const backend_url = process.env.EXPO_PUBLIC_API_URL;
-
+export function useLanguages(languageId?: string) {
     const {
         isPending,
-        data: sites,
+        data: languages,
         error,
     } = useQuery<SelectItem[]>({
-        queryKey: ["getSites", siteId ?? ""],
+        queryKey: ["getLanguages", languageId ?? ""],
         queryFn: async () => {
             const { data, error } = await fetchBackend({
                 type: "GET",
-                url: "activities/sites/" + (siteId ? `site/${siteId}/` : ""),
+                url:
+                    "activities/languages/" +
+                    (languageId ? `languages/${languageId}/` : ""),
             });
 
             if (typeof data === "object" && "error" in data) {
@@ -30,12 +31,12 @@ export function useSites(siteId?: string) {
                 throw new Error(error);
             }
 
-            return data.map((site: { name: any; id: any }) => ({
-                label: site.name,
-                value: site.id,
+            return data.map((language: { name: any; id: any }) => ({
+                label: language.name,
+                value: language.id,
             }));
         },
     });
 
-    return { isPending, sites: sites ?? [], error };
+    return { isPending, languages: languages ?? [], error };
 }

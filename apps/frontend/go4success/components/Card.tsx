@@ -29,6 +29,7 @@ interface CardProps {
     readonly hour: string;
     readonly type: string;
     readonly description: string;
+    readonly language: string;
 }
 
 const styleFunctions = {
@@ -131,55 +132,15 @@ const Card: React.FC<CardProps> = ({
     hour,
     type,
     description,
+    language,
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
     const { t } = useTranslation();
 
-    /*const handleRegister = async () => {
-        const { data: success, error } = await fetchBackend({
-            type: "POST", url: "activities/register_activity/", data: {
-                activity: id,
-                student: user.id,
-            },
-        });
-
-        if (success) {
-            Toast.show({
-                type: "success",
-                text1: t("translateToast.SuccessText1"),
-                text2: t("translateToast.RegisterActivitySuccessText2") + title,
-            });
-            void queryClient.invalidateQueries({
-                queryKey: ["activities"],
-            });
-            setModalVisible(!modalVisible);
-
-        }
-
-        if (error) {
-            if (error.status === 400) {
-                Toast.show({
-                    type: "error",
-                    text1: t("translateToast.ErrorText1"),
-                    text2: t("translateToast.AlreadyRegisteredActivityText2"),
-                });
-            } else {
-                Toast.show({
-                    type: "error",
-                    text1: t("translateToast.ErrorText1"),
-                    text2: t("translateToast.RegisterActivityErrorText2"),
-                });
-            }
-
-            setModalVisible(!modalVisible);
-        }
-
-    };*/
-
     const handleRegister = useMutation({
         mutationFn: async () => {
-            const { data } = await fetchBackend({
+            const { data, error } = await fetchBackend({
                 type: "POST",
                 url: "activities/register_activity/",
                 data: {
@@ -187,7 +148,7 @@ const Card: React.FC<CardProps> = ({
                     student: user.id,
                 },
             });
-            return { data };
+            return { data, error };
         },
         onSuccess: () => {
             console.log("success");
@@ -202,7 +163,6 @@ const Card: React.FC<CardProps> = ({
             setModalVisible(!modalVisible);
         },
         onError: (error: fetchError) => {
-            console.log("error", error.responseError);
             if (error.responseError.status === 400) {
                 Toast.show({
                     type: "error",
@@ -245,10 +205,21 @@ const Card: React.FC<CardProps> = ({
                         </View>
 
                         <View style={styleFunctions.getModalDataStyle(type)}>
-                            <Text style={styles.modalText}>Date : {date}</Text>
-                            <Text style={styles.modalText}>Hour : {hour}</Text>
-                            <Text style={styles.modalText}>Place : {location}</Text>
-                            <Text style={styles.modalText}>Type : {type}</Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.date")} : {date}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.hour")} : {hour}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.place")} : {location}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.type")} : {type}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.language")}: {language}
+                            </Text>
                             <View style={styles.separator} />
                             <Text style={styles.modalText}>{description}</Text>
                         </View>
@@ -281,6 +252,7 @@ const Card: React.FC<CardProps> = ({
                     </View>
 
                     <View style={styles.bottomRowDate}>
+                        <Text style={styles.text}>{language}</Text>
                         <Text style={styles.text}>{date}</Text>
                         <Text style={styles.text}>{hour}</Text>
                     </View>
@@ -333,6 +305,7 @@ const styles = StyleSheet.create({
 
     bottomRowLocation: {
         width: "50%",
+        justifyContent: "flex-start",
         flexDirection: "row",
     },
 

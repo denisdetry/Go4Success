@@ -1,17 +1,16 @@
 import { SelectItem } from "@/components/SelectSearch";
-import { API_BASE_URL } from "@/constants/ConfigApp";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Site } from "@/hooks/useSites";
 
 export type Room = {
     id: string;
     name: string;
-    site: Site;
+    site: string;
 };
 
-export function useRooms(siteId: string | undefined) {
-    console.log("key", siteId);
+export function useRooms(siteId: string | undefined, sites: SelectItem[]) {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
     const {
         isPending,
         data: rooms,
@@ -20,14 +19,17 @@ export function useRooms(siteId: string | undefined) {
         queryKey: ["rooms", siteId],
         queryFn: async () => {
             const response = await axios.get(
-                `${API_BASE_URL}/activities/rooms/` + (siteId ? `site/${siteId}/` : ""),
+                `${backend_url}/activities/rooms/` + (siteId ? `site/${siteId}/` : ""),
             );
-
             return response.data.map((room: Room) => ({
-                key: room.id,
-                value: room.name + " - " + room.site.name,
+                label:
+                    room.name +
+                    " - " +
+                    sites.find((site) => site.value === room.site)?.label,
+                value: room.id,
             }));
         },
+        enabled: sites.length > 0,
     });
 
     return { isPending, rooms: rooms ?? [], error };

@@ -282,20 +282,18 @@ class OpenAnswer(models.Model):
         return f"{self.student.username} - {self.question.question} - {self.answer} - {self.is_correct}"
 
 
-class ChoiceAnswer(models.Model):
-    id = models.AutoField(primary_key=True)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.student.username} - {self.question.question}"
-
-
 class ChoiceAnswerInstance(models.Model):
     id = models.AutoField(primary_key=True)
-    choice_answer = models.ForeignKey(ChoiceAnswer, on_delete=models.CASCADE)
     choice = models.TextField()
     is_correct = models.BooleanField()
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+
+
+class ChoiceAnswer(models.Model):
+    id = models.AutoField(primary_key=True)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    choice_answer_instance = models.ForeignKey(
+        ChoiceAnswerInstance, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.choice_answer.student.username} - {self.choice_answer.question.question} - {self.choice.choice}"
+        return f"{self.student.username}"

@@ -1,10 +1,8 @@
 import React from "react";
-import { Dimensions, Platform, View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
-import Carousel from "react-native-reanimated-carousel";
+import { FlatList, Platform, ScrollView } from "react-native";
+import CarouselMobile from "react-native-reanimated-carousel";
 import styles from "@/styles/global";
-
-const { width } = Dimensions.get("screen");
+import { width } from "@/constants/screensWidth";
 
 interface CarouselProps {
     readonly data: any;
@@ -12,8 +10,9 @@ interface CarouselProps {
 }
 
 const RenderCarousel: React.FC<CarouselProps> = ({ data, renderItem }) => {
+
     return Platform.OS === "web" ? (
-        <View style={styles.containerCard}>
+        <ScrollView horizontal={true} style={styles.containerCard}>
             <FlatList
                 contentContainerStyle={{ gap: 10 }}
                 data={data}
@@ -21,10 +20,11 @@ const RenderCarousel: React.FC<CarouselProps> = ({ data, renderItem }) => {
                 horizontal={true}
                 pagingEnabled={true}
                 showsHorizontalScrollIndicator={false}
+                keyExtractor={(item: any) => item.id}
             />
-        </View>
+        </ScrollView>
     ) : (
-        <Carousel
+        <CarouselMobile
             width={width * 0.9}
             height={width / 1.9}
             renderItem={renderItem}

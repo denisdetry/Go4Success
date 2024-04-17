@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-    Modal,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { Modal, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
 import { useAuth } from "@/context/Auth";
@@ -18,8 +10,6 @@ import Toast from "react-native-toast-message";
 import { queryClient } from "@/app/_layout";
 import { useMutation } from "@tanstack/react-query";
 import { fetchError } from "@/utils/fetchError";
-
-// axiosConfig();
 
 interface CardProps {
     readonly id: string;
@@ -125,15 +115,15 @@ const styleFunctions = {
 };
 
 const Card: React.FC<CardProps> = ({
-    id,
-    title,
-    location,
-    date,
-    hour,
-    type,
-    description,
-    language,
-}) => {
+                                       id,
+                                       title,
+                                       location,
+                                       date,
+                                       hour,
+                                       type,
+                                       description,
+                                       language,
+                                   }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
     const { t } = useTranslation();

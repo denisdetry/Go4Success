@@ -8,13 +8,12 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint . --ext .ts,.tsx",
-    "test":"jest"
+    "test": "jest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-navigation/drawer": "^6.6.9",
-    "@rneui/base": "^4.0.0-rc.8",
     "@rneui/themed": "^4.0.0-rc.8",
     "@tanstack/react-query": "^5.28.14",
     "@types/react": "~18.2.45",
@@ -31,6 +30,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.51.0",
     "react-i18next": "^14.1.0",
+    "react-multi-carousel": "^2.8.5",
     "react-native": "0.73.4",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-gesture-handler": "~2.14.0",

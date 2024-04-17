@@ -5,8 +5,8 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
-from database.models import Question, Questionnaire, OpenAnswer, ChoiceAnswerInstance, ChoiceAnswer
-from .serializers import QuestionnaireSerializer, QuestionSerializer, OpenAnswerSerializer, ChoiceAnswerSerializer, ChoiceAnswerInstanceSerializer
+from database.models import Question, Questionnaire, OpenAnswer, ChoiceAnswerInstance, ChoiceAnswer, Course, Language
+from .serializers import QuestionnaireSerializer, QuestionSerializer, OpenAnswerSerializer, ChoiceAnswerSerializer, ChoiceAnswerInstanceSerializer, CourseSerializer, LanguageSerializer
 from rest_framework.generics import DestroyAPIView
 from .permissions import IsProfessorOrSuperUser
 
@@ -63,3 +63,49 @@ class QuestionView(viewsets.ModelViewSet, APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CourseView(viewsets.ModelViewSet, APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    permission_classes = (permissions.AllowAny,)
+
+    serializer_class = CourseSerializer
+
+    queryset = Course.objects.all()
+
+    def get(self, request):
+        data = Course.objects.all()
+        serializer = CourseSerializer(data, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = CourseSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LanguageView(viewsets.ModelViewSet, APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    permission_classes = (permissions.AllowAny,)
+
+    serializer_class = LanguageSerializer
+
+    queryset = Language.objects.all()
+
+    def get(self, request):
+        data = Language.objects.all()
+        serializer = LanguageSerializer(data, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = LanguageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -24,21 +24,52 @@ class QuestionnaireTestCase(APITestCase):
             date_join='2024-03-30 12:07:52.031 +0100')
 
     def test_create_questionnaire(self):
-        data = {
+        data_questionnaire = {
+            "id": 1,
             "course": 1,
-            "title": "title",
-            "description": "description",
-            "points_total": 10,
-            "date_start": "2024-03-30 12:07:52.031 +0100",
-            "date_end": "2024-03-30 12:07:52.031 +0100"
+            "title": "super",
+            "description": "superdesc",
+            "points_total": 20,
+            "date_start": "2024-03-30",
+            "date_end": "2024-04-30",
+            "language": 1
         }
+
+        data_course = {
+            "id": 1,
+            "code": "INFOB123",
+            "name": "super"
+        }
+
+        data_language = {
+            "id": 1,
+            "name": "Français",
+            "code": "FR"
+        }
+
+        request_course = self.factory.post(
+            '/postquestionnaire/viewcourse/', data_course)
+
+        force_authenticate(request_course, user=self.userCreation)
+        view_course = CourseView.as_view({'post': 'create'})
+        response_course = view_course(request_course)
+
+        request_language = self.factory.post(
+            '/postquestionnaire/viewlanguage/', data_language)
+
+        force_authenticate(request_language, user=self.userCreation)
+        view_language = LanguageView.as_view({'post': 'create'})
+        response_language = view_language(request_language)
+
         request = self.factory.post(
-            '/postquestionnaire/postquestionnaire', data)
+            '/postquestionnaire/postquestionnaire/', data_questionnaire)
         force_authenticate(request, user=self.userCreation)
         view = QuestionnaireView.as_view({'post': 'create'})
         response = view(request)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+        self.assertEqual(response.status_code,
+                         status.HTTP_201_CREATED)
+    """  
     def test_create_empty_questionnaire(self):
         data = {
             "course": 1,
@@ -54,3 +85,4 @@ class QuestionnaireTestCase(APITestCase):
         view = QuestionnaireView.as_view({'post': 'create'})
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    """

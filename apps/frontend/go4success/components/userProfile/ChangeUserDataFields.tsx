@@ -98,7 +98,7 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
             >
                 <TextInput
                     style={styles.input}
-                    value={newData ? newData : undefined}
+                    value={newData ? newData : ""}
                     onChangeText={setNewData}
                     editable={editable}
                     clearButtonMode={"while-editing"} // on IOS

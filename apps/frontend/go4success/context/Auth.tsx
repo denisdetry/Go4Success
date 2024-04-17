@@ -81,7 +81,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         } catch (err) {
                             const error = err as fetchError;
                             if (error.responseError) {
-                                if (error.responseError.status === 400) {
+                                if (error.responseError.status === 401) {
                                     Toast.show({
                                         type: "error",
                                         text1: t("translateToast.ErrorText1"),

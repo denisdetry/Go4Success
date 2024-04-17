@@ -109,3 +109,26 @@ class LanguageView(viewsets.ModelViewSet, APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChoiceAnswerInstanceView(viewsets.ModelViewSet, APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    permission_classes = (permissions.AllowAny,)
+
+    serializer_class = ChoiceAnswerInstanceSerializer
+
+    queryset = ChoiceAnswerInstance.objects.all()
+
+    def get(self, request):
+        data = ChoiceAnswerInstance.objects.all()
+        serializer = ChoiceAnswerInstanceSerializer(data, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ChoiceAnswerInstanceSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

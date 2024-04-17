@@ -54,3 +54,9 @@ class LanguageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Language
         fields = ["id", "name", "code"]
+
+
+class ChoiceAnswerInstanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChoiceAnswerInstance
+        fields = ["id", "choice_answer", "choice", "is_correct"]

@@ -12,7 +12,8 @@ type ButtonComponentProps = {
         | "danger"
         | "close"
         | "clear"
-        | "filter";
+        | "filter"
+        | "littlePrimary";
 };
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({
@@ -32,6 +33,12 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
         },
         primary: {
             backgroundColor: Colors.primaryColor,
+        },
+        littlePrimary: {
+            backgroundColor: Colors.primaryColor,
+            borderRadius: 10,
+            padding: 5,
+            margin: 2,
         },
         secondary: {
             backgroundColor: Colors.secondaryColor,

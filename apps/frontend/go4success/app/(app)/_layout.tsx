@@ -186,10 +186,14 @@ export default function Layout() {
                     <Drawer.Screen
                         name="feedbacklist"
                         options={{
-                            drawerLabel: "feedback",
-                            headerTitle: "feedback",
+                            drawerLabel: "Feedback",
+                            headerTitle: "Feedback",
                             drawerIcon: ({ size, color }) => (
-                                <Ionicons name="people" size={size} color={color} />
+                                <Ionicons
+                                    name="albums-outline"
+                                    size={size}
+                                    color={color}
+                                />
                             ),
                         }}
                     />

@@ -80,7 +80,7 @@ export default function FeedbackList() {
             name: t("translateFeedback.open"),
             cell: (row: Feedback) => (
                 <ButtonComponent
-                    buttonType={"secondary"}
+                    buttonType={"littlePrimary"}
                     text={t("translateFeedback.open")}
                     onPress={() => handleOpenModal(row)}
                 />
@@ -133,35 +133,37 @@ export default function FeedbackList() {
                                 <FlatList
                                     data={[
                                         {
-                                            title: "Student",
+                                            title: t("translateFeedback.student"),
                                             value: `${selectedFeedback.student.first_name} ${selectedFeedback.student.last_name} (${selectedFeedback.student.noma})`,
                                         },
                                         {
-                                            title: "Activity",
+                                            title: t("translateFeedback.activity"),
                                             value: selectedFeedback.activity.name,
                                         },
                                         {
-                                            title: "Evaluation",
+                                            title: t("translateFeedback.evaluation"),
                                             value: selectedFeedback.evaluation,
                                         },
                                         {
-                                            title: "Positive point",
+                                            title: t("translateFeedback.positivePoint"),
                                             value: selectedFeedback.positive_point,
                                         },
                                         {
-                                            title: "Negative point",
+                                            title: t("translateFeedback.negativePoint"),
                                             value: selectedFeedback.negative_point,
                                         },
                                         {
-                                            title: "Suggestion",
+                                            title: t("translateFeedback.suggestion"),
                                             value: selectedFeedback.suggestion,
                                         },
                                         {
-                                            title: "Additional comment",
+                                            title: t(
+                                                "translateFeedback.additionalComment",
+                                            ),
                                             value: selectedFeedback.additional_comment,
                                         },
                                         {
-                                            title: "Date submitted",
+                                            title: t("translateFeedback.dateSubmitted"),
                                             value: selectedFeedback.date_submitted,
                                         },
                                     ]}

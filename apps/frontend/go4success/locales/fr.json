@@ -112,6 +112,11 @@
         "student": "Etudiant",
         "activity": "Activité",
         "evaluation": "Evaluation",
+        "positivePoint": "Point positive",
+        "negativePoint": "Point negative",
+        "suggestion": "Suggestion",
+        "additionalComment": "Commentaire supplémentaire",
+        "dateSubmitted": "Date de soumission",
         "open": "Ouvrir"
     }
 }

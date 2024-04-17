@@ -8,6 +8,7 @@ export interface InputAutocompleteProps {
     readonly items: SelectItem[];
     readonly placeholder: string;
     readonly onChange?: (value: SelectItem) => void;
+    readonly search?: boolean;
 }
 
 type ItemProps = {
@@ -26,6 +27,7 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     items,
     placeholder,
     onChange = () => {},
+    search = true,
 }) => {
     const [visible, setVisible] = React.useState(false);
     const [filteredData, setFilteredData] = React.useState<SelectItem[]>(items);
@@ -33,13 +35,12 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     const [selectedData, setselectedData] = React.useState<any>([]);
 
     const filterData = (text: string) => {
-        return items.filter((item) =>
-            text
-                .split("")
-                .every((letter) =>
-                    item.value.toLowerCase().includes(letter.toLowerCase()),
-                ),
-        );
+        return items.filter((item) => {
+            const itemValue = item.value.toLowerCase().replace(":", "");
+            const searchText = text.toLowerCase();
+
+            return itemValue.includes(searchText);
+        });
     };
 
     const renderItem = ({ item }: { item: SelectItem }) => {
@@ -62,6 +63,7 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
             <TextInput
                 style={styles.input}
                 placeholder={placeholder}
+                editable={search}
                 onFocus={() => {
                     setVisible(true);
                 }}

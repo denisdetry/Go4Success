@@ -21,17 +21,19 @@ export default function Add() {
         return list;
     };
 
-    const [selectedRooms, setSelectedRooms] = React.useState([]);
-
     const hourQuarterList = generateHourQuarterList();
 
     const { control, handleSubmit, watch } = useForm();
 
     const { sites, isPending: sitePending, error: siteError } = useSites();
-
     const watchSite = watch("site", undefined);
 
     const { rooms, error: roomError } = useRooms(watchSite?.key);
+
+    const availableLanguages = [
+        { key: "en", value: "English" },
+        { key: "fr", value: "French" },
+    ];
 
     if (siteError) {
         return <View> Error: {siteError.message} </View>;
@@ -108,12 +110,26 @@ export default function Add() {
                         <InputAutocompleteMultiple
                             items={rooms}
                             placeholder={"Select one or multiple rooms"}
-                            onChange={(value) => {
-                                console.log("value", value);
+                            onChange={(data) => {
+                                onChange(data);
+                                console.log("data", data);
                             }}
                         />
                     )}
                     name={"room"}
+                />
+
+                <Controller
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                        <InputAutocomplete
+                            items={availableLanguages}
+                            search={false}
+                            placeholder={"Select a language"}
+                            onChange={onChange}
+                        />
+                    )}
+                    name={"language"}
                 />
 
                 <Controller
@@ -123,7 +139,7 @@ export default function Add() {
                             <DateTimePicker
                                 mode={"single"}
                                 date={value}
-                                onChange={(params) => onChange(params.date)}
+                                onChange={(params) => onChange(params.date?.toString())}
                             />
                         );
                     }}
@@ -163,7 +179,27 @@ export default function Add() {
 
                 <Button
                     title="Submit"
-                    onPress={handleSubmit((data) => console.log("data", data))}
+                    onPress={handleSubmit((data) => {
+                        const formattedStartHour = data.startHour.value.split(":");
+                        const formattedEndHour = data.endHour.value.split(":");
+                        const formattedData = {
+                            name: data.name,
+                            description: data.description,
+                            site: data.site,
+                            room: data.room,
+                            language: data.language,
+                            dateStart: dayjs(data.WorkshopDate)
+                                .set("hour", formattedStartHour[0])
+                                .set("minute", formattedStartHour[1])
+                                .toJSON(),
+                            dateEnd: dayjs(data.WorkshopDate)
+                                .set("hour", formattedEndHour[0])
+                                .set("minute", formattedEndHour[1])
+                                .toJSON(),
+                        };
+                        console.log("data", formattedData);
+                        console.log("now", dayjs().toJSON());
+                    })}
                 />
             </View>
         </ScrollView>

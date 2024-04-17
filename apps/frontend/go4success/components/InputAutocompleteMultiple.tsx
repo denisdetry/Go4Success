@@ -13,7 +13,8 @@ import styles from "@/styles/global";
 export interface InputAutocompleteProps {
     readonly items: SelectItem[];
     readonly placeholder: string;
-    readonly onChange?: (value: SelectItem) => void;
+    readonly onChange?: (value: SelectItem[]) => void;
+    readonly search?: boolean;
 }
 
 type ItemProps = {
@@ -35,6 +36,7 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     items,
     placeholder,
     onChange = () => {},
+    search = true,
 }) => {
     const [focus, setFocus] = React.useState(false);
     const [searchFocus, setSearchFocus] = React.useState(false);
@@ -64,13 +66,14 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                     style={styles.input}
                     placeholder={"Search a room"}
                     onFocus={() => setSearchFocus(true)}
+                    editable={search}
                     autoFocus={true}
                     onBlur={() => {
                         setSearchFocus(false);
                     }}
                     onChangeText={(text) => {
                         setFilteredData(filterData(text));
-                        onChange({ key: text, value: text });
+                        //onChange({ key: text, value: text });
                     }}
                 />
             );
@@ -82,11 +85,12 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
             <Item
                 item={item}
                 onPress={() => {
-                    if (!selectedData.includes(item)) {
-                        setselectedData([...selectedData, item]);
-                    } else {
-                        setselectedData(selectedData.filter((i) => i !== item));
-                    }
+                    const updatedData = selectedData.includes(item)
+                        ? selectedData.filter((i) => i !== item)
+                        : [...selectedData, item];
+
+                    setselectedData(updatedData);
+                    onChange(updatedData);
                 }}
             />
         );
@@ -135,11 +139,6 @@ const stylesin = StyleSheet.create({
     button: {
         alignItems: "center",
         backgroundColor: "#DDDDDD",
-        padding: 10,
-    },
-    bitton: {
-        alignItems: "center",
-        backgroundColor: "#0000FF",
         padding: 10,
     },
     countContainer: {

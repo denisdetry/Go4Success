@@ -1,5 +1,6 @@
 import React from "react";
-import { FlatList, Platform, ScrollView } from "react-native";
+import { Platform, ScrollView } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 import CarouselMobile from "react-native-reanimated-carousel";
 import styles from "@/styles/global";
 import { width } from "@/constants/screensWidth";
@@ -20,7 +21,6 @@ const RenderCarousel: React.FC<CarouselProps> = ({ data, renderItem }) => {
                 horizontal={true}
                 pagingEnabled={true}
                 showsHorizontalScrollIndicator={false}
-                keyExtractor={(item: any) => item.id}
             />
         </ScrollView>
     ) : (

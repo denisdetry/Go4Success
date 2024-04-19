@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
 
     bottomRowLocation: {
         width: "50%",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         flexDirection: "row",
     },
 

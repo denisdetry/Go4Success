@@ -3,17 +3,17 @@ import { Redirect, useSegments } from "expo-router";
 import axios from "axios";
 import Toast from "react-native-toast-message";
 import { UserRegister } from "@/types/UserRegister";
-import { API_BASE_URL } from "@/constants/ConfigApp";
+import { UserLogin } from "@/types/UserLogin";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/app/_layout";
 import { ActivityIndicator } from "react-native";
 import styles from "@/styles/global";
 import Colors from "@/constants/Colors";
-import { useCsrfToken } from "@/hooks/useCsrfToken";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchBackend } from "@/utils/fetchBackend";
-import { UserLogin } from "@/types/UserLogin";
 import { fetchError } from "@/utils/fetchError";
+import useUser from "@/hooks/useUser";
 
 const AuthContext = React.createContext<any>(null);
 
@@ -21,27 +21,11 @@ export function useAuth() {
     return React.useContext(AuthContext);
 }
 
-
 export function AuthProvider({ children }: React.PropsWithChildren) {
     const { t } = useTranslation();
     const rootSegment = useSegments()[0];
 
-    useCsrfToken();
-
-    const {
-        isPending,
-        data: user,
-        error,
-    } = useQuery({
-        queryKey: ["current_user"],
-        queryFn: async () => {
-            try {
-                return await axios.get(`${API_BASE_URL}/auth/current_user/`);
-            } catch (error) {
-                return null;
-            }
-        },
-    });
+    const { isPending, user } = useUser();
 
     if (isPending) {
         return (
@@ -53,10 +37,6 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         );
     }
 
-    if (error) {
-        return <Redirect href={"/(auth)/login"} />;
-    }
-
     if (!user && rootSegment !== "(auth)") {
         return <Redirect href={"/(auth)/login"} />;
     } else if (user && rootSegment === "(auth)") {
@@ -66,28 +46,28 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
     return (
         <AuthContext.Provider
             value={{
-                user: user?.data,
+                user: user,
                 signUp: async (userData: UserRegister) => {
                     {
                         try {
-                            const { data: success } = await fetchBackend(
-                                {
-                                    type: "POST",
-                                    url: "auth/register/",
-                                    data: {
-                                        username: userData.username,
-                                        email: userData.email,
-                                        // eslint-disable-next-line camelcase
-                                        last_name: userData.lastName,
-                                        // eslint-disable-next-line camelcase
-                                        first_name: userData.firstName,
-                                        noma: userData.noma,
-                                        password: userData.password,
-                                    },
+                            const { data: success } = await fetchBackend({
+                                type: "POST",
+                                url: "auth/register/",
+                                data: {
+                                    username: userData.username,
+                                    email: userData.email,
+                                    // eslint-disable-next-line camelcase
+                                    last_name: userData.lastName,
+                                    // eslint-disable-next-line camelcase
+                                    first_name: userData.firstName,
+                                    noma: userData.noma,
+                                    password: userData.password,
                                 },
-                            );
+                            });
 
                             if (success) {
+                                AsyncStorage.setItem("accessToken", success.access);
+                                AsyncStorage.setItem("refreshToken", success.refresh);
                                 void queryClient.invalidateQueries({
                                     queryKey: ["current_user"],
                                 });
@@ -101,7 +81,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         } catch (err) {
                             const error = err as fetchError;
                             if (error.responseError) {
-                                if (error.responseError.status === 400) {
+                                if (error.responseError.status === 401) {
                                     Toast.show({
                                         type: "error",
                                         text1: t("translateToast.ErrorText1"),
@@ -119,17 +99,21 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     }
                 },
 
-
                 signIn: async (userData: UserLogin) => {
                     try {
                         const { data: success } = await fetchBackend({
-                            type: "POST", url: "auth/login/", data: {
+                            type: "POST",
+                            url: "auth/token/",
+                            data: {
                                 username: userData.username,
                                 password: userData.password,
                             },
                         });
 
                         if (success) {
+                            AsyncStorage.setItem("accessToken", success.access);
+                            AsyncStorage.setItem("refreshToken", success.refresh);
+
                             void queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
                             });
@@ -142,7 +126,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     } catch (err) {
                         const error = err as fetchError;
                         if (error.responseError) {
-                            if (error.responseError.status === 400) {
+                            if (error.responseError.status === 401) {
                                 Toast.show({
                                     type: "error",
                                     text1: t("translateToast.ErrorText1"),
@@ -157,28 +141,25 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             }
                         }
                     }
-
                 },
 
                 signOut: async () => {
                     try {
-                        const { data: success } = await fetchBackend({ type: "POST", url: "auth/logout/" });
-                        
-                        if (success) {
-                            void queryClient.invalidateQueries({
-                                queryKey: ["current_user"],
-                            });
-                            Toast.show({
-                                type: "success",
-                                text1: t("translateToast.LogoutSuccessText1"),
-                                text2: t("translateToast.LogoutSuccessText2"),
-                            });
-                        }
+                        AsyncStorage.removeItem("accessToken");
+                        AsyncStorage.removeItem("refreshToken");
+
+                        void queryClient.invalidateQueries({
+                            queryKey: ["current_user"],
+                        });
+                        Toast.show({
+                            type: "success",
+                            text1: t("translateToast.LogoutSuccessText1"),
+                            text2: t("translateToast.LogoutSuccessText2"),
+                        });
                     } catch (error) {
                         console.log(error);
                     }
                 },
-
             }}
         >
             {children}

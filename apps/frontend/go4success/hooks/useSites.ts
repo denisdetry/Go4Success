@@ -8,6 +8,8 @@ export type Site = {
 };
 
 export function useSites(siteId?: string) {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
     const {
         isPending,
         data: sites,

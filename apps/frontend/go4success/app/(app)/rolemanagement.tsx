@@ -9,18 +9,17 @@ import {
 } from "react-native";
 import axios from "axios";
 import axiosConfig from "@/constants/axiosConfig";
-import { API_BASE_URL } from "@/constants/ConfigApp";
 import Toast from "react-native-toast-message";
 
 axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
-
 export default function RoleManagement() {
-
     axiosConfig();
     const [userRole, setUserRole] = useState<UserRole[]>([]);
+    const [selectedValue, setSelectedValue] = useState("");
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
 
     const [userInfo, setUserInfo] = useState([]);
 
@@ -40,7 +39,7 @@ export default function RoleManagement() {
 
     useEffect(() => {
         axios
-            .get(`${API_BASE_URL}/rolemanagement/rolemanagement/`)
+            .get(`${backend_url}/rolemanagement/rolemanagement/`)
             .then((res) => {
                 setUserInfo(res.data);
             })
@@ -49,7 +48,7 @@ export default function RoleManagement() {
             });
 
         axios
-            .get(`${API_BASE_URL}/rolemanagement/editRole/`)
+            .get(`${backend_url}/rolemanagement/editRole/`)
             .then((res) => {
                 setUserRole(res.data);
             })
@@ -60,7 +59,7 @@ export default function RoleManagement() {
 
     function editRolePost(id: any, is_tutor: any, is_professor: any) {
         axios
-            .post(`${API_BASE_URL}/rolemanagement/editRole/`, {
+            .post(`${backend_url}/rolemanagement/editRole/`, {
                 user: id,
                 is_tutor: is_tutor,
                 is_professor: is_professor,
@@ -83,7 +82,7 @@ export default function RoleManagement() {
 
     function editRolePatch(id: any, is_tutor: any, is_professor: any) {
         axios
-            .patch(`${API_BASE_URL}/rolemanagement/editRole/${id}/`, {
+            .patch(`${backend_url}/rolemanagement/editRole/${id}/`, {
                 user: id,
                 is_tutor: is_tutor,
                 is_professor: is_professor,
@@ -106,7 +105,7 @@ export default function RoleManagement() {
 
     function editRoleDelete(id: any) {
         axios
-            .delete(`${API_BASE_URL}/rolemanagement/editRole/${id}/`) // Correction ici
+            .delete(`${backend_url}/rolemanagement/editRole/${id}/`) // Correction ici
             .then((res) => {
                 Toast.show({
                     type: "success", // Utilisez 'success', 'error', etc., selon le thème
@@ -125,7 +124,7 @@ export default function RoleManagement() {
 
     function rolemanagementPatch(id: any, super_user: any) {
         axios
-            .patch(`${API_BASE_URL}/rolemanagement/rolemanagement/${id}/`, {
+            .patch(`${backend_url}/rolemanagement/rolemanagement/${id}/`, {
                 is_superuser: super_user,
             })
             .then((res) => {
@@ -246,10 +245,10 @@ const generateUsersInfoRole = (userInfo, userRole) => {
         const role = curr.is_professor
             ? "professor"
             : curr.is_tutor
-                ? "tutor"
-                : curr.is_superuser
-                    ? "superuser"
-                    : "student";
+              ? "tutor"
+              : curr.is_superuser
+                ? "superuser"
+                : "student";
         acc[curr.user] = role;
         return acc;
     }, {});

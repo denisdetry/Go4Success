@@ -10,6 +10,7 @@ import Toast from "react-native-toast-message";
 import { queryClient } from "@/app/_layout";
 import { useMutation } from "@tanstack/react-query";
 import { fetchError } from "@/utils/fetchError";
+import { Ionicons } from "@expo/vector-icons";
 
 interface CardProps {
     readonly id: string;
@@ -238,7 +239,10 @@ const Card: React.FC<CardProps> = ({
                 <Text style={styles.title}>{title}</Text>
                 <View style={styles.bottomRow}>
                     <View style={styles.bottomRowLocation}>
-                        <Text style={styles.text}>{location}</Text>
+                        <View style={{ flexDirection: "row", gap: 3 }}>
+                            <Ionicons name={"location-outline"} size={20} color={"white"} />
+                            <Text style={styles.text}>{location}</Text>
+                        </View>
                     </View>
 
                     <View style={styles.bottomRowDate}>
@@ -296,6 +300,7 @@ const styles = StyleSheet.create({
     bottomRowLocation: {
         width: "50%",
         justifyContent: "flex-start",
+        alignItems: "flex-end",
         flexDirection: "row",
     },
 

@@ -1,7 +1,7 @@
 import groupBy from "lodash/groupBy";
 import filter from "lodash/filter";
 import find from "lodash/find";
-
+import { fetchBackend } from "@/utils/fetchBackend";
 import React, { Component } from "react";
 import { Alert } from "react-native";
 import {
@@ -13,6 +13,7 @@ import {
     CalendarUtils,
 } from "react-native-calendars";
 import { useQuery } from "@tanstack/react-query";
+import { get } from "lodash";
 
 const EVENT_COLOR = "#e6add8";
 const today = new Date();
@@ -139,14 +140,8 @@ const EVENTS: TimelineEventProps[] = timelineEvents;
 
 function getAttendance() {
     console.log("getAttendance called");
-    const attendance = useQuery({
-        queryKey: ["attendance"],
-        queryFn: async () => {
-            const response = await fetch("http://localhost:8081/api/attends");
-            console.log("getAttendance response: ", response);
-            return response.json();
-        },
-    });
+    const attendance = fetchBackend({ type: "GET", url: "/api/attendance" });
+    console.log("attendance: ", attendance);
 }
 
 export default class TimelineCalendarScreen extends Component {
@@ -273,7 +268,7 @@ export default class TimelineCalendarScreen extends Component {
 
     render() {
         const { currentDate, eventsByDate } = this.state;
-
+        getAttendance();
         return (
             <CalendarProvider
                 date={currentDate}

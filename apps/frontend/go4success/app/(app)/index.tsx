@@ -18,6 +18,9 @@ export default function Index() {
     const { t } = useTranslation();
     const [allMessages, setAllMessages] = useState([]);
     const { user } = useAuth();
+    const today = new Date();
+    const dayOfMonth = today.getDate();
+    const month = today.getMonth() + 1;
 
     const renderMessages = ({ item }: { item: Message }) => {
         return <Text> {item.content}</Text>;
@@ -33,12 +36,22 @@ export default function Index() {
                 {user.first_name ? (
                     <Text style={styles.titleNoPadding}>
                         {t("translation.hello")}
-                        {user.first_name} ! 👋
+                        {user.first_name} !{" "}
+                        {dayOfMonth === 1 && month === 4
+                            ? "🐠"
+                            : dayOfMonth === 31 && month === 10
+                              ? "🎃"
+                              : "👋"}
                     </Text>
                 ) : (
                     <Text style={styles.titleNoPadding}>
                         {t("translation.hello")}
-                        {user.username} ! 👋
+                        {user.username} !{" "}
+                        {dayOfMonth === 1 && month === 4
+                            ? "🐠"
+                            : dayOfMonth === 31 && month === 10
+                              ? "🎃"
+                              : "👋"}
                     </Text>
                 )}
             </View>

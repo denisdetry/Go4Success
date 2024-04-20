@@ -72,6 +72,23 @@ export default StyleSheet.create({
         minWidth: 300,
     },
 
+    inputLargeField: {
+        borderWidth: 0.5,
+        borderColor: Colors.primaryColor,
+        borderRadius: 10,
+        flexDirection: "row",
+        alignItems: "center",
+        padding: 10,
+        minWidth: Platform.select({ ios: 300, android: 300, default: 600 }),
+    },
+    inputLargeFieldWithoutBorder: {
+        borderRadius: 10,
+        flexDirection: "row",
+        alignItems: "center",
+        padding: 0,
+        minWidth: Platform.select({ ios: 300, android: 300, default: 600 }),
+    },
+
     input: {
         flex: 1,
         color: "#333",
@@ -179,5 +196,9 @@ export default StyleSheet.create({
         padding: 12,
         height: 180,
         width: Platform.OS === "web" ? (isMobile ? 280 : 350) : width - 80,
+    },
+    label: {
+        fontSize: 16,
+        fontWeight: "bold",
     },
 });

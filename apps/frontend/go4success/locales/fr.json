@@ -102,7 +102,8 @@
         "LogoutSuccessText2": "A bientôt sur Go4Success ! \uD83D\uDE0A",
         "RegisterActivitySuccessText2": "Vous êtes parfaitement inscrit à l'atelier :",
         "RegisterActivityErrorText2": "Une erreur s'est produire lors de l'inscription à l'atelier",
-        "AlreadyRegisteredActivityText2": "Vous êtes déjà inscrit à cet atelier"
+        "AlreadyRegisteredActivityText2": "Vous êtes déjà inscrit à cet atelier",
+        "SelectSatisfaction": "Veuillez sélectionner un niveau de satisfaction"
     },
     "translateRegisterActivity": {
         "registerButton": "S'inscrire",
@@ -117,6 +118,14 @@
         "suggestion": "Suggestion",
         "additionalComment": "Commentaire supplémentaire",
         "dateSubmitted": "Date de soumission",
-        "open": "Ouvrir"
+        "open": "Ouvrir",
+        "send": "Envoyer"
+    },
+    "satisfactionLevels": {
+        "verySatisfied": "Très satisfait",
+        "satisfied": "Satisfait",
+        "neutral": "Neutre",
+        "unsatisfied": "Insatisfait",
+        "veryUnsatisfied": "Très insatisfait"
     }
 }

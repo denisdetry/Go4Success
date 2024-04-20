@@ -5,7 +5,7 @@ from rest_framework import serializers
 class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
-        fields = ['id', 'name', "date_start", "date_end"]
+        fields = ['id', 'name', "date_start", "date_end", "course"]
 
 
 class UserSerializer(serializers.ModelSerializer):

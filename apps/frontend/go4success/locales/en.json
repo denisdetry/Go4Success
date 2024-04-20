@@ -101,7 +101,8 @@
         "LogoutSuccessText2": "See you soon on Go4Success! \uD83D\uDE0A",
         "RegisterActivitySuccessText2": "You are perfectly registered for the workshop:",
         "RegisterActivityErrorText2": "An error occurred when registering for the workshop",
-        "AlreadyRegisteredActivityText2": "You are already registered for this workshop"
+        "AlreadyRegisteredActivityText2": "You are already registered for this workshop",
+        "SelectSatisfaction": "Please select a satisfaction level"
     },
     "translateRegisterActivity": {
         "registerButton": "Sign up",
@@ -116,6 +117,14 @@
         "suggestion": "Suggestion",
         "additionalComment": "Additional comment",
         "dateSubmitted": "Date submitted",
-        "open": "Open"
+        "open": "Open",
+        "send": "Send"
+    },
+    "satisfactionLevels": {
+        "verySatisfied": "Very satisfied",
+        "satisfied": "Satisfied",
+        "neutral": "Neutral",
+        "unsatisfied": "Unsatisfied",
+        "veryUnsatisfied": "Very unsatisfied"
     }
 }

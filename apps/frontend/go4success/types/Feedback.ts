@@ -14,7 +14,7 @@ export interface Feedback {
         date_end: string;
         noma: string;
     };
-    evaluation: string;
+    evaluation: number;
     positive_point: string;
     negative_point: string;
     suggestion: string;

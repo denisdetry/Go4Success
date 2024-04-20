@@ -73,7 +73,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         convertDateToISO(range.endDate),
     );
 
-
     const { data: allActivities } = useActivities(
         "activity",
         searchName,

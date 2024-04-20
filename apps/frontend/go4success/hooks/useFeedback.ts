@@ -17,7 +17,7 @@ export interface Feedback {
         date_end: string;
         noma: string;
     };
-    evaluation: string;
+    evaluation: number;
     positive_point: string;
     negative_point: string;
     suggestion: string;
@@ -36,5 +36,18 @@ export function useFeedback() {
             return data;
         },
     });
+
+    async function postFeedback(feedbackData: Feedback) {
+        try {
+            await fetchBackend({
+                type: "POST",
+                url: "feedback/newfeedback/",
+                data: feedbackData,
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return { isPending, feedbacks: data ?? [], error };
 }

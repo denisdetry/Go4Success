@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Modal, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+    Modal,
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
 import { useAuth } from "@/context/Auth";
@@ -116,14 +124,14 @@ const styleFunctions = {
 };
 
 const Card: React.FC<CardProps> = ({
-                                       id,
-                                       title,
-                                       location,
-                                       date,
-                                       hour,
-                                       type,
-                                       description,
-                                   }) => {
+    id,
+    title,
+    location,
+    date,
+    hour,
+    type,
+    description,
+}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
     const { t } = useTranslation();

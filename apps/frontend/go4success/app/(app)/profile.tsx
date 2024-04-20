@@ -47,8 +47,7 @@ export default function Profile() {
                         />
                         <Button
                             text={t("translationProfile.changeProfilePictureButton")}
-                            onPress={() => {
-                            }}
+                            onPress={() => {}}
                             buttonType={"primary"}
                         />
                     </View>

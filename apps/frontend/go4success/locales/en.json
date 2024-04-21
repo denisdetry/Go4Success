@@ -109,6 +109,7 @@
         "closeButton": "Close"
     },
     "translateFeedback": {
+        "feedback": "Feedback",
         "student": "Student",
         "activity": "Activity",
         "evaluation": "Evaluation",

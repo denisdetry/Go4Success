@@ -110,6 +110,7 @@
         "closeButton": "Fermer"
     },
     "translateFeedback": {
+        "feedback": "Feedback",
         "student": "Etudiant",
         "activity": "Activité",
         "evaluation": "Evaluation",

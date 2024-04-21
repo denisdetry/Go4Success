@@ -35,7 +35,7 @@ const customStyles = {
 };
 
 export default function FeedbackList() {
-    const { feedbacks } = useFeedback();
+    const { feedbacks, error: feedbackError } = useFeedback();
     const { t } = useTranslation();
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedFeedback, setSelectedFeedback] = useState<Feedback | null>(null);
@@ -96,6 +96,14 @@ export default function FeedbackList() {
             grow: 1,
         },
     ];
+
+    if (feedbackError) {
+        return (
+            <View>
+                <Text> Error: {feedbackError.message} </Text>
+            </View>
+        );
+    }
 
     return (
         <ScrollView contentContainerStyle={styles.mainContainer}>

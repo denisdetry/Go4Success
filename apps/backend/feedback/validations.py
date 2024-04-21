@@ -1,7 +1,5 @@
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-from rest_framework import status
-from rest_framework.response import Response
 from database.models import Attend, FeedbackActivity
 
 

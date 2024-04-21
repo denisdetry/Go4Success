@@ -234,7 +234,7 @@ const Card: React.FC<CardProps> = ({
                             />
                         </View>
                         <ButtonComponent
-                            text={t("Feedback")}
+                            text={t("translateFeedback.feedback")}
                             onPress={() => {
                                 navigation.navigate("feedbackcreate", {
                                     activityId: id,

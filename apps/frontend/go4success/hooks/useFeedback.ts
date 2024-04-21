@@ -31,23 +31,11 @@ export function useFeedback() {
         queryFn: async () => {
             const { data } = await fetchBackend({
                 type: "GET",
-                url: `feedback/feedbacks`,
+                url: "feedback/feedbacks",
             });
             return data;
         },
     });
-
-    async function postFeedback(feedbackData: Feedback) {
-        try {
-            await fetchBackend({
-                type: "POST",
-                url: "feedback/newfeedback/",
-                data: feedbackData,
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    }
 
     return { isPending, feedbacks: data ?? [], error };
 }

@@ -16,7 +16,7 @@ export function useUsers() {
         queryFn: async () => {
             const { data } = await fetchBackend({
                 type: "GET",
-                url: `auth/user_profile`,
+                url: "auth/user_profile",
             });
             console.log("resp:", data);
             return data;

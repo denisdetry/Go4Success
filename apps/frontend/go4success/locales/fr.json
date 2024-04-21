@@ -113,13 +113,14 @@
         "student": "Etudiant",
         "activity": "Activité",
         "evaluation": "Evaluation",
-        "positivePoint": "Point positive",
-        "negativePoint": "Point negative",
+        "positivePoint": "Point positif",
+        "negativePoint": "Point negatif",
         "suggestion": "Suggestion",
         "additionalComment": "Commentaire supplémentaire",
         "dateSubmitted": "Date de soumission",
         "open": "Ouvrir",
-        "send": "Envoyer"
+        "send": "Envoyer",
+        "for": "Feedback pour"
     },
     "satisfactionLevels": {
         "verySatisfied": "Très satisfait",

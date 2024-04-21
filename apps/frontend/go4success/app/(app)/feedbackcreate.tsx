@@ -1,24 +1,26 @@
 import React, { useState } from "react";
-import {
-    ScrollView,
-    Text,
-    TextInput,
-    Alert,
-    View,
-    StyleSheet,
-    Platform,
-} from "react-native";
+import { ScrollView, Text, TextInput, View, StyleSheet, Platform } from "react-native";
 import stylesGlobal from "@/styles/global";
-import { useActivitiesSelectItem } from "@/hooks/useActivities";
 import { fetchBackend } from "@/utils/fetchBackend";
 import { useAuth } from "@/context/Auth";
-import SelectSearch, { SelectItem } from "@/components/SelectSearch";
+import SelectSearch from "@/components/SelectSearch";
 import { useTranslation } from "react-i18next";
 import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
 import ButtonComponent from "@/components/ButtonComponent";
 import Toast from "react-native-toast-message";
+import { StackScreenProps } from "@react-navigation/stack";
+import { useRoute, RouteProp } from "@react-navigation/native";
+import { useActivities } from "@/hooks/useActivities";
 
-export default function FeedbackCreate() {
+type RootStackParamList = {
+    feedbackcreate: { activityId: string };
+};
+
+type FeedbackCreateScreenProps = StackScreenProps<RootStackParamList, "feedbackcreate">;
+
+export default function FeedbackCreate({}: Readonly<FeedbackCreateScreenProps>) {
+    const route = useRoute<RouteProp<RootStackParamList, "feedbackcreate">>();
+    const activityId = route?.params?.activityId ?? "not id present";
     const [viewHeight, setViewHeight] = useState(10);
     const { t } = useTranslation();
     const [evaluation, setEvaluation] = useState("");
@@ -27,6 +29,16 @@ export default function FeedbackCreate() {
     const [suggestion, setSuggestion] = useState("");
     const [additionalComment, setAdditionalComment] = useState("");
     const { user } = useAuth();
+
+    const { data: activityInformations } = useActivities(
+        "attends",
+        activityId,
+        "",
+        "",
+        "",
+        null,
+        null,
+    );
 
     const satisfactionLevels = [
         { value: "5", label: t("satisfactionLevels.verySatisfied") },
@@ -37,11 +49,6 @@ export default function FeedbackCreate() {
     ];
     const [evaluationOpen, setEvaluationOpen] = React.useState(false);
 
-    const [activityOpen, setActivityOpen] = React.useState(false);
-    const [selectedActivity, setSelectedActivity] = useState<SelectItem>();
-    const { activitiesData, error: activitesError } =
-        useActivitiesSelectItem("attends");
-    useActivitiesSelectItem;
     const handleSendFeedback = async () => {
         if (!evaluation) {
             Toast.show({
@@ -53,7 +60,7 @@ export default function FeedbackCreate() {
         }
         const feedbackData = {
             student_id: user.id,
-            activity_id: selectedActivity?.value,
+            activity_id: activityId,
             evaluation: evaluation,
             positive_point: positivePoint,
             negative_point: negativePoint,
@@ -68,19 +75,11 @@ export default function FeedbackCreate() {
                 url: "feedback/newfeedback/",
                 data: feedbackData,
             });
-            if (response.status === 201) {
-                Toast.show({
-                    type: "success",
-                    text1: t("translateToast.SuccessText1"),
-                    text2: response.data.message,
-                });
-            } else {
-                Toast.show({
-                    type: "error",
-                    text1: t("translateToast.ErrorText1"),
-                    text2: response.data.message,
-                });
-            }
+            Toast.show({
+                type: "success",
+                text1: t("translateToast.SuccessText1"),
+                text2: response.data.message,
+            });
         } catch (error) {
             console.error(error);
             if (error instanceof Error) {
@@ -93,21 +92,20 @@ export default function FeedbackCreate() {
         }
     };
 
-    if (activitesError) {
-        return (
-            <View>
-                <Text> Error: {activitesError.message} </Text>
-            </View>
-        );
-    }
-
     return (
         <ScrollView contentContainerStyle={stylesGlobal.mainContainer}>
             <View style={stylesGlobal.container}>
                 <Text
                     style={[stylesGlobal.title, { fontSize: 30, textAlign: "center" }]}
                 >
-                    Feedback Create
+                    {t("translateFeedback.for")}{" "}
+                    {activityInformations
+                        .map((item) =>
+                            "activity" in item
+                                ? (item.activity as any).name
+                                : item.name,
+                        )
+                        .join(", ")}
                 </Text>
 
                 {/* Evaluation */}
@@ -215,33 +213,6 @@ export default function FeedbackCreate() {
                     </View>
                 </View>
 
-                {/* Activity */}
-                <View style={styles.feedbackContainer}>
-                    <View style={styles.feedbackFields}>
-                        <Text style={stylesGlobal.label}>
-                            {t("translateFeedback.activity")} :{" "}
-                        </Text>
-
-                        <View style={[stylesGlobal.inputLargeFieldWithoutBorder]}>
-                            <SelectSearch
-                                zIndex={99}
-                                items={activitiesData}
-                                placeholder={"Select a activity"}
-                                searchable={true}
-                                onSelectItem={(item) => {
-                                    setSelectedActivity(
-                                        activitiesData.find(
-                                            (activity) => activity.value === item.value,
-                                        ),
-                                    );
-                                }}
-                                open={activityOpen}
-                                setOpen={setActivityOpen}
-                                value={selectedActivity?.value ?? null}
-                            />
-                        </View>
-                    </View>
-                </View>
                 <View style={styles.feedbackContainer}>
                     <ButtonComponent
                         buttonType={"primary"}

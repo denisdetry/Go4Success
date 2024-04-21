@@ -118,7 +118,8 @@
         "additionalComment": "Additional comment",
         "dateSubmitted": "Date submitted",
         "open": "Open",
-        "send": "Send"
+        "send": "Send",
+        "for": "Feedback for"
     },
     "satisfactionLevels": {
         "verySatisfied": "Very satisfied",

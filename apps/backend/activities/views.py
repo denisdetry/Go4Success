@@ -58,11 +58,14 @@ class AttendViewSet(viewsets.ModelViewSet):
 
 def filter_queryset(self, qs, param=""):
     none = [None, 'undefined', 'null', '']
+    id = self.request.query_params.get('id')
     name = self.request.query_params.get('name')
     site = self.request.query_params.get('site')
     room = self.request.query_params.get('room')
     date_start = self.request.query_params.get('date_start')
     date_end = self.request.query_params.get('date_end')
+    if id not in none:
+        qs = qs.filter(**{f"{param}id": id})
     if name not in none:
         qs = qs.filter(**{f"{param}name__icontains": name})
     if site not in none:

@@ -66,6 +66,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
     const { data: registeredActivities } = useActivities(
         "attends",
+        "",
         searchName,
         selectedRoom?.value,
         selectedSite?.value,
@@ -75,6 +76,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
     const { data: allActivities } = useActivities(
         "activity",
+        "",
         searchName,
         selectedRoom?.value,
         selectedSite?.value,

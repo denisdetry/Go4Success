@@ -18,8 +18,12 @@ import Toast from "react-native-toast-message";
 import { queryClient } from "@/app/_layout";
 import { useMutation } from "@tanstack/react-query";
 import { fetchError } from "@/utils/fetchError";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
 
-// axiosConfig();
+type RootStackParamList = {
+    feedbackcreate: { activityId: string };
+};
 
 interface CardProps {
     readonly id: string;
@@ -30,6 +34,11 @@ interface CardProps {
     readonly type: string;
     readonly description: string;
 }
+
+type FeedbackCreateScreenNavigationProp = StackNavigationProp<
+    RootStackParamList,
+    "feedbackcreate"
+>;
 
 const styleFunctions = {
     getModalViewTitleStyle: (type: string) => {
@@ -135,6 +144,7 @@ const Card: React.FC<CardProps> = ({
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
     const { t } = useTranslation();
+    const navigation = useNavigation<FeedbackCreateScreenNavigationProp>();
 
     const handleRegister = useMutation({
         mutationFn: async () => {
@@ -223,6 +233,16 @@ const Card: React.FC<CardProps> = ({
                                 buttonType={"close"}
                             />
                         </View>
+                        <ButtonComponent
+                            text={t("Feedback")}
+                            onPress={() => {
+                                navigation.navigate("feedbackcreate", {
+                                    activityId: id,
+                                });
+                                setModalVisible(false);
+                            }}
+                            buttonType={"secondary"}
+                        />
                     </View>
                 </View>
             </Modal>

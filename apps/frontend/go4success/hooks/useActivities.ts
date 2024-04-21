@@ -1,7 +1,6 @@
 import { Room } from "./useRooms";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
-import { SelectItem } from "@/components/SelectSearch";
 
 export interface Activity {
     id: string;
@@ -20,6 +19,7 @@ export interface Attend {
 
 export function useActivities(
     endpoint: string,
+    id: string,
     searchName: string,
     selectedRoom: string | undefined,
     selectedSite: string | undefined,
@@ -30,6 +30,7 @@ export function useActivities(
         queryKey: [
             "activities",
             endpoint,
+            id,
             searchName,
             selectedRoom,
             selectedSite,
@@ -41,6 +42,7 @@ export function useActivities(
                 type: "GET",
                 url: `activities/${endpoint}/`,
                 params: {
+                    id: id,
                     name: searchName,
                     room: selectedRoom,
                     site: selectedSite,
@@ -54,46 +56,4 @@ export function useActivities(
         },
     });
     return { isPending, data: data ?? [], error };
-}
-
-export function useActivitiesSelectItem(endpoint: string) {
-    const {
-        isLoading,
-        data: activitiesData,
-        error,
-    } = useQuery<SelectItem[]>({
-        queryKey: ["getActivitySelectItem", endpoint],
-        queryFn: async () => {
-            const { data, error } = await fetchBackend({
-                type: "GET",
-                url: `activities/${endpoint}/`,
-            });
-
-            if (typeof data === "object" && "error" in data) {
-                throw new Error(data.error);
-            }
-
-            if (error) {
-                throw new Error(error);
-            }
-
-            return data.map((item: any) => {
-                if (item.activity) {
-                    // item is an attend object
-                    return {
-                        label: item.activity.name,
-                        value: item.activity.id,
-                    };
-                } else {
-                    // item is an activity object
-                    return {
-                        label: item.name,
-                        value: item.id,
-                    };
-                }
-            });
-        },
-    });
-
-    return { isLoading, activitiesData: activitiesData ?? [], error };
 }

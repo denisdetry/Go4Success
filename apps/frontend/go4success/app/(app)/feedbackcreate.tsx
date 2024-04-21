@@ -130,7 +130,7 @@ export default function FeedbackCreate() {
                                 open={evaluationOpen}
                                 setOpen={(isOpen) => {
                                     setEvaluationOpen(isOpen);
-                                    setViewHeight(isOpen ? 150 : 10);
+                                    setViewHeight(isOpen ? 160 : 10);
                                 }}
                             />
                         </View>

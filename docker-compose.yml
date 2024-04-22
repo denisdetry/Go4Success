@@ -2,42 +2,53 @@ version: "3"
 
 services:
     go4success:
+        pull_policy: build
         build:
-            context: ./apps/frontend
+            context: apps/frontend
             dockerfile: Dockerfile
             args:
-                - NODE_ENV=development
+                - BACKEND_API_URL=${BACKEND_API_URL}
         environment:
-            - NODE_ENV=development
+            - FRONTEND_PORT=${FRONTEND_PORT:-8081}
         tty: true
         ports:
-            - "8081:8081"
+            - "${FRONTEND_PORT:-8081}:3000"
             - "19001:19001"
             - "19002:19002"
         volumes:
-            - ./apps/frontend/go4success:/opt/go4success/app:delegated
-            - ./apps/frontend/go4success/package.json:/opt/go4success/package.json
-            - ./apps/frontend/go4success/package-lock.json:/opt/go4success/package-lock.json
+            - ${FRONT_PATH}:/opt/go4success/app:delegated
+            - ${FRONT_PATH}/package.json:/opt/go4success/package.json
+            #- ${FRONT_PATH}/package-lock.json:/opt/go4success/package-lock.json
+
+    backend:
+        pull_policy: build
+        build:
+            context: apps/backend
+            dockerfile: Dockerfile
+        depends_on:
+            - db
+        environment:
+            - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost}
+            - CSRF_TRUSTED_ORIGINS=${CSRF_TRUSTED_ORIGINS:-localhost}
+            - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-localhost}
+            - SECRET_KEY=${SECRET_KEY}
+            - DB_HOST=${DB_HOST:-db}
+            - DB_PORT=${DB_PORT:-5432}
+            - POSTGRES_DB=${POSTGRES_DB}
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - BACKEND_PORT=${BACKEND_PORT:-8000}
+        command: bash -c "python manage.py wait_for_database && python manage.py makemigrations activities authentification database rolemanagment && python manage.py migrate && python manage.py loaddata data.json && python manage.py runserver 0.0.0.0:${BACKEND_PORT:-8000}"
+        ports:
+            - "${BACKEND_PORT:-8000}:${BACKEND_PORT:-8000}"
 
     db:
         image: postgres
         volumes:
-            - ./data/db:/var/lib/postgresql/data
+            - ${DB_PATH:-./data/db}:/var/lib/postgresql/data
         environment:
             - POSTGRES_DB=${POSTGRES_DB}
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-
-    backend:
-        build:
-            context: ./apps/backend
-            dockerfile: Dockerfile
-        env_file:
-            - .env
-        command: python manage.py runserver 0.0.0.0:8000
-        volumes:
-            - ./apps/backend:/app
         ports:
-            - "8000:8000"
-        depends_on:
-            - db
+            - ${DB_PORT:-5432}:5432

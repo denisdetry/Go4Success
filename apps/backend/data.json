@@ -397,7 +397,7 @@
             "user": 1,
             "content_type": 17,
             "object_id": "2",
-            "object_repr": "Franþais",
+            "object_repr": "Français",
             "action_flag": 2,
             "change_message": "[{\"changed\": {\"fields\": [\"Code\"]}}]"
         }
@@ -1388,11 +1388,11 @@
         "model": "database.user",
         "pk": 1,
         "fields": {
-            "password": "pbkdf2_sha256$720000$HlYt6byNYAwOrXN9pw7vBV$5Of2GLGecho9FSwi71fgXdNURQ7iTPtzy/0JfsgCJk4=",
-            "username": "allmaxou",
-            "email": "max@gmail.com",
-            "first_name": "",
-            "last_name": "",
+            "password": "pbkdf2_sha256$720000$3pc9akh2ajbCuUvJ3AR07M$V5ZKmrRi+rUDvYK9VU1o8TRQgqn4zgjJ+5gd2303b3M=",
+            "username": "uclouvainadmin",
+            "email": "admin@uclouvain.be",
+            "first_name": "Admin",
+            "last_name": "UCLouvain",
             "noma": null,
             "is_active": true,
             "is_staff": true,
@@ -1503,7 +1503,7 @@
     {
         "model": "database.language",
         "pk": 2,
-        "fields": { "name": "Franþais", "code": "FR" }
+        "fields": { "name": "Français", "code": "FR" }
     },
     {
         "model": "database.activity",

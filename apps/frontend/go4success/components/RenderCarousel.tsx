@@ -26,7 +26,7 @@ const RenderCarousel: React.FC<CarouselProps> = ({ data, renderItem }) => {
     ) : (
         <Carousel
             width={width * 0.9}
-            height={width / 1.9}
+            height={210}
             renderItem={renderItem}
             data={data}
             loop={false}

@@ -1,11 +1,9 @@
 import * as React from "react";
 import { Redirect, useSegments } from "expo-router";
-import axios from "axios";
 import Toast from "react-native-toast-message";
 import { UserRegister } from "@/types/UserRegister";
 import { UserLogin } from "@/types/UserLogin";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/app/_layout";
 import { ActivityIndicator } from "react-native";
 import styles from "@/styles/global";
@@ -66,8 +64,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             });
 
                             if (success) {
-                                AsyncStorage.setItem("accessToken", success.access);
-                                AsyncStorage.setItem("refreshToken", success.refresh);
+                                await AsyncStorage.setItem("accessToken", success.access);
+                                await AsyncStorage.setItem("refreshToken", success.refresh);
                                 void queryClient.invalidateQueries({
                                     queryKey: ["current_user"],
                                 });
@@ -81,7 +79,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         } catch (err) {
                             const error = err as fetchError;
                             if (error.responseError) {
-                                if (error.responseError.status === 401) {
+                                if (error.responseError.status === 400 || error.responseError.status === 401) {
                                     Toast.show({
                                         type: "error",
                                         text1: t("translateToast.ErrorText1"),
@@ -111,8 +109,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         });
 
                         if (success) {
-                            AsyncStorage.setItem("accessToken", success.access);
-                            AsyncStorage.setItem("refreshToken", success.refresh);
+                            await AsyncStorage.setItem("accessToken", success.access);
+                            await AsyncStorage.setItem("refreshToken", success.refresh);
 
                             void queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
@@ -126,7 +124,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     } catch (err) {
                         const error = err as fetchError;
                         if (error.responseError) {
-                            if (error.responseError.status === 401) {
+                            if (error.responseError.status === 400 || error.responseError.status === 401) {
                                 Toast.show({
                                     type: "error",
                                     text1: t("translateToast.ErrorText1"),

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "863647699278",
+    "project_id": "go4success-7e1be",
+    "storage_bucket": "go4success-7e1be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863647699278:android:32ed5854f6bba802250e1f",
+        "android_client_info": {
+          "package_name": "com.anonymous.go4success"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMS_2DrCzm5ziISJ0nEkrJvm5NJNTLd4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

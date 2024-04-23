@@ -48,7 +48,7 @@ export function useCourses() {
     return { isPending, sites: sites ?? [], error };
 }
 
-export function post_questionnaire() {
+export function postQuestionnaire() {
     const backend_url = process.env.EXPO_PUBLIC_API_URL;
     let questionnaire: Questionnaire;
     const {

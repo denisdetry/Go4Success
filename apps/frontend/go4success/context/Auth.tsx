@@ -79,7 +79,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         } catch (err) {
                             const error = err as fetchError;
                             if (error.responseError) {
-                                if (error.responseError.status === 400 || error.responseError.status === 401) {
+                                if (error.responseError.status === 401 || error.responseError.status === 400) {
                                     Toast.show({
                                         type: "error",
                                         text1: t("translateToast.ErrorText1"),
@@ -124,7 +124,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     } catch (err) {
                         const error = err as fetchError;
                         if (error.responseError) {
-                            if (error.responseError.status === 400 || error.responseError.status === 401) {
+                            if (error.responseError.status === 401 || error.responseError.status === 400) {
                                 Toast.show({
                                     type: "error",
                                     text1: t("translateToast.ErrorText1"),

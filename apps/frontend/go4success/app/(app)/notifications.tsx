@@ -5,11 +5,13 @@ import { usePushNotifications } from "@/hooks/usePushNotifications";
 import ButtonComponent from "@/components/ButtonComponent";
 import styles from "@/styles/global";
 import Colors from "@/constants/Colors";
+import useAllUsers from "@/hooks/useAllUsers";
 
-export default function notifications() {
+export default function Notifications() {
     const { expoPushToken, notification } = usePushNotifications();
     const [count, setCount] = React.useState(0);
     const [isSending, setIsSending] = React.useState(false);
+    const { allUsers } = useAllUsers();
 
     async function sendPushNotification(expoPushToken: string) {
         const message = {
@@ -38,6 +40,14 @@ export default function notifications() {
         }
     }
 
+    function sendNotificationsToAllUsers() {
+        allUsers.map((user: any) => {
+            if (user.expo_push_token) {
+                sendPushNotification(user.expo_push_token);
+            }
+        }, []);
+    }
+
     const data = JSON.stringify(notification, undefined, 2);
 
     return (
@@ -47,11 +57,8 @@ export default function notifications() {
                 {isSending && !data && (
                     <ActivityIndicator size={"large"} color={Colors.primaryColor} />
                 )}
-                <ScrollView
-                    contentContainerStyle={{ maxHeight: 200 }}
-                    nestedScrollEnabled={true}
-                >
-                    <Text>{data}</Text>
+                <ScrollView>
+                    <Text style={{ maxHeight: 200 }}>{data}</Text>
                 </ScrollView>
                 <ButtonComponent
                     text="Send notification"
@@ -61,6 +68,11 @@ export default function notifications() {
                             sendPushNotification(expoPushToken);
                         }
                     }}
+                />
+
+                <ButtonComponent text={"Send notifications to all users"} onPress={() => {
+                    sendNotificationsToAllUsers();
+                }} buttonType={"secondary"}
                 />
             </View>
         </ScrollView>

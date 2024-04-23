@@ -9,6 +9,7 @@ from .views import UpdateProfileView
 router = routers.DefaultRouter()
 
 router.register(r'user_profile', UpdateProfileView, "user_profile")
+router.register(r'all_users', views.AllUsersView, "all_users")
 
 urlpatterns = [
     path('register/', views.UserRegisterView.as_view(), name='register'),

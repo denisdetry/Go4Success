@@ -1,13 +1,12 @@
 from database.models import User
-from django.contrib.auth import login, logout
 from django.http import JsonResponse
 from django.middleware import csrf
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import status, permissions, generics
+from rest_framework import status, generics
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -52,6 +51,13 @@ class CurrentUserView(APIView):
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class AllUsersView(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 class UpdateProfileView(viewsets.ModelViewSet):

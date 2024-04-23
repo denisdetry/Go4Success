@@ -61,13 +61,13 @@ export default function Register() {
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            email: "",
-            username: "",
-            lastName: "",
-            firstName: "",
-            noma: "",
-            password: "",
-            passwordRetype: "",
+            email: "test@gmail.com",
+            username: "test",
+            lastName: "test",
+            firstName: "test",
+            noma: "11223344",
+            password: "Azerty123_",
+            passwordRetype: "Azerty123_",
         },
     });
 
@@ -89,6 +89,7 @@ export default function Register() {
                         render={({ field: { onChange, value } }) => (
                             <View style={styles.inputField}>
                                 <TextInput
+                                    autoCapitalize={"none"}
                                     style={styles.input}
                                     placeholder={t("translateRegister.email")}
                                     onChangeText={onChange}
@@ -110,6 +111,7 @@ export default function Register() {
                         render={({ field: { onChange, value } }) => (
                             <View style={styles.inputField}>
                                 <TextInput
+                                    autoCapitalize={"none"}
                                     style={styles.input}
                                     placeholder={t("translateRegister.username")}
                                     onChangeText={onChange}
@@ -133,6 +135,7 @@ export default function Register() {
                         render={({ field: { onChange, value } }) => (
                             <View style={styles.inputField}>
                                 <TextInput
+                                    autoCapitalize={"none"}
                                     style={styles.input}
                                     placeholder={t("translateRegister.lastName")}
                                     onChangeText={onChange}
@@ -156,6 +159,7 @@ export default function Register() {
                         render={({ field: { onChange, value } }) => (
                             <View style={styles.inputField}>
                                 <TextInput
+                                    autoCapitalize={"none"}
                                     style={styles.input}
                                     placeholder={t("translateRegister.firstName")}
                                     onChangeText={onChange}
@@ -178,6 +182,7 @@ export default function Register() {
                         render={({ field: { onChange, value } }) => (
                             <View style={styles.inputField}>
                                 <TextInput
+                                    autoCapitalize={"none"}
                                     style={styles.input}
                                     placeholder={t("translateRegister.noma")}
                                     onChangeText={onChange}

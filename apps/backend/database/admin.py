@@ -8,7 +8,8 @@ from .models import User, Teacher, Give, Announcement, \
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'email', 'first_name',
-                    'last_name', 'noma', 'is_active')
+                    'last_name', 'noma', 'profile_picture', 'expo_push_notification_token', 'is_active', 'is_staff',
+                    'is_superuser')
 
 
 class SiteAdmin(admin.ModelAdmin):

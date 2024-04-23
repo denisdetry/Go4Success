@@ -53,7 +53,7 @@ class CurrentUserView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class AllUsersView(viewsets.ModelViewSet):
+class AllUsersView(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
 
     queryset = User.objects.all()

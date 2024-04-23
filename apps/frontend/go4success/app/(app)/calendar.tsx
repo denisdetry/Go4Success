@@ -14,6 +14,7 @@ import {
 } from "react-native-calendars";
 import { useQuery } from "@tanstack/react-query";
 import { get } from "lodash";
+import { Activity } from "@/hooks/useActivities";
 
 const EVENT_COLOR = "#e6add8";
 const today = new Date();
@@ -138,13 +139,27 @@ export const timelineEvents: TimelineEventProps[] = [
 const INITIAL_TIME = { hour: 9, minutes: 0 };
 const EVENTS: TimelineEventProps[] = timelineEvents;
 
-function getAttendance() {
+function GetAttendance() {
     console.log("getAttendance called");
-    const attendance = fetchBackend({ type: "GET", url: "/api/attendance" });
-    console.log("attendance: ", attendance);
+    //const attendance = fetchBackend({ type: "GET", url: "/activities/attends" });
+
+    const { isPending, data, error } = useQuery<Activity[]>({
+        queryKey: ["activities", "attends"],
+        queryFn: async () => {
+            const { data } = await fetchBackend({
+                type: "GET",
+                url: "/activities/attends",
+            });
+            console.log("resp:", data);
+            return data;
+        },
+    });
+
+    console.log("attendance fetched");
+    console.log("attendance: ", data);
 }
 
-export default class TimelineCalendarScreen extends Component {
+class TimelineCalendarScreen extends Component {
     state = {
         currentDate: getDate(),
         events: EVENTS,
@@ -153,6 +168,7 @@ export default class TimelineCalendarScreen extends Component {
         ) as {
             [key: string]: TimelineEventProps[];
         },
+        myHookValue: null,
     };
 
     marked = {
@@ -265,10 +281,9 @@ export default class TimelineCalendarScreen extends Component {
     };
 
     format24h = true;
-
     render() {
-        const { currentDate, eventsByDate } = this.state;
-        getAttendance();
+        const { currentDate, eventsByDate, myHookValue } = this.state;
+        console.log("myHookValue: ", myHookValue);
         return (
             <CalendarProvider
                 date={currentDate}
@@ -296,3 +311,12 @@ export default class TimelineCalendarScreen extends Component {
         );
     }
 }
+
+function withMyHook(Component: any) {
+    return function WrappedComponent() {
+        const myHookValue = GetAttendance();
+        return <Component myHookValue={myHookValue} />;
+    };
+}
+
+export default withMyHook(TimelineCalendarScreen);

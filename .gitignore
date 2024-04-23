@@ -190,6 +190,7 @@ data
 apps/backend/Pipfile
 apps/backend/Pipfile.lock
 apps/backend/authentification/migrations/0001_initial.py
+migrations/
 
 # Frontend
 .expo

@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-    Modal,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { Modal, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
 import { useAuth } from "@/context/Auth";
@@ -18,8 +10,7 @@ import Toast from "react-native-toast-message";
 import { queryClient } from "@/app/_layout";
 import { useMutation } from "@tanstack/react-query";
 import { fetchError } from "@/utils/fetchError";
-
-// axiosConfig();
+import { Ionicons } from "@expo/vector-icons";
 
 interface CardProps {
     readonly id: string;
@@ -125,15 +116,15 @@ const styleFunctions = {
 };
 
 const Card: React.FC<CardProps> = ({
-    id,
-    title,
-    location,
-    date,
-    hour,
-    type,
-    description,
-    language,
-}) => {
+                                       id,
+                                       title,
+                                       location,
+                                       date,
+                                       hour,
+                                       type,
+                                       description,
+                                       language,
+                                   }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
     const { t } = useTranslation();
@@ -248,7 +239,10 @@ const Card: React.FC<CardProps> = ({
                 <Text style={styles.title}>{title}</Text>
                 <View style={styles.bottomRow}>
                     <View style={styles.bottomRowLocation}>
-                        <Text style={styles.text}>{location}</Text>
+                        <View style={{ flexDirection: "row", gap: 3 }}>
+                            <Ionicons name={"location-outline"} size={20} color={"white"} />
+                            <Text style={styles.text}>{location}</Text>
+                        </View>
                     </View>
 
                     <View style={styles.bottomRowDate}>
@@ -306,6 +300,7 @@ const styles = StyleSheet.create({
     bottomRowLocation: {
         width: "50%",
         justifyContent: "flex-start",
+        alignItems: "flex-end",
         flexDirection: "row",
     },
 

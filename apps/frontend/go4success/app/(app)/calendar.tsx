@@ -139,24 +139,33 @@ export const timelineEvents: TimelineEventProps[] = [
 const INITIAL_TIME = { hour: 9, minutes: 0 };
 const EVENTS: TimelineEventProps[] = timelineEvents;
 
-function GetAttendance() {
+async function GetAttendance() {
     console.log("getAttendance called");
     //const attendance = fetchBackend({ type: "GET", url: "/activities/attends" });
 
     const { isPending, data, error } = useQuery<Activity[]>({
         queryKey: ["activities", "attends"],
         queryFn: async () => {
-            const { data } = await fetchBackend({
-                type: "GET",
-                url: "/activities/attends",
-            });
-            console.log("resp:", data);
-            return data;
+            try {
+                const { data } = await fetchBackend({
+                    type: "GET",
+                    url: "/activities/attends",
+                });
+                console.log("resp:", data);
+                return data;
+            } catch (err) {
+                console.log("error:", err);
+                return null;
+            }
         },
     });
-
+    while (isPending) {
+        console.log("fetching attendance");
+    }
     console.log("attendance fetched");
     console.log("attendance: ", data);
+
+    return data;
 }
 
 class TimelineCalendarScreen extends Component {
@@ -168,9 +177,8 @@ class TimelineCalendarScreen extends Component {
         ) as {
             [key: string]: TimelineEventProps[];
         },
-        myHookValue: null,
     };
-
+    myHookValue: any;
     marked = {
         [`${getDate(-1)}`]: { marked: true },
         [`${getDate()}`]: { marked: true },
@@ -282,8 +290,8 @@ class TimelineCalendarScreen extends Component {
 
     format24h = true;
     render() {
-        const { currentDate, eventsByDate, myHookValue } = this.state;
-        console.log("myHookValue: ", myHookValue);
+        const { currentDate, eventsByDate } = this.state;
+        console.log("myHookValue (in component): ", this.myHookValue);
         return (
             <CalendarProvider
                 date={currentDate}
@@ -313,9 +321,16 @@ class TimelineCalendarScreen extends Component {
 }
 
 function withMyHook(Component: any) {
-    return function WrappedComponent() {
-        const myHookValue = GetAttendance();
-        return <Component myHookValue={myHookValue} />;
+    return function WrappedComponent(props: any) {
+        const attendanceFetch = GetAttendance();
+
+        const attendanceData = attendanceFetch.then(async (data) => {
+            console.log("myHookValue (function): ", data);
+            return data;
+        });
+
+        console.log("myHookValue (function): ", attendanceData);
+        return <Component {...props} myHookValue={attendanceData} />;
     };
 }
 

@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
-from pathlib import Path
 from datetime import timedelta
+from pathlib import Path
+
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -120,9 +121,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "fr-fr"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Brussels"
 
 USE_I18N = True
 
@@ -143,8 +144,7 @@ AUTH_USER_MODEL = "database.User"
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS").split(",") if os.getenv(
-    "CORS_ALLOWED_ORIGINS") else ["http://localhost:8081", "http://localhost:3000"]
-
+    "CORS_ALLOWED_ORIGINS") else ["http://localhost:8081", "http://localhost:3000", "exp://192.168.2.15:8081"]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (

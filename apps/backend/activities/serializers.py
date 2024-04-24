@@ -52,6 +52,13 @@ class ActivitySerializer(serializers.ModelSerializer):
         return
 
 
+class ActivityCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Activity
+        fields = ('type', 'name', 'description', 'date_start',
+                  'date_end', 'room', 'course', 'language')
+
+
 class AttendSerializer(serializers.ModelSerializer):
     activity = ActivitySerializer(read_only=True)
 

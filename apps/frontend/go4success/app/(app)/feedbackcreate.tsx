@@ -81,7 +81,6 @@ export default function FeedbackCreate({}: Readonly<FeedbackCreateScreenProps>) 
                 text2: response.data.message,
             });
         } catch (error) {
-            console.error(error);
             if (error instanceof Error) {
                 Toast.show({
                     type: "error",

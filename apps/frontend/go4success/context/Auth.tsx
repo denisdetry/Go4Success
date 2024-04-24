@@ -1,11 +1,9 @@
 import * as React from "react";
 import { Redirect, useSegments } from "expo-router";
-import axios from "axios";
 import Toast from "react-native-toast-message";
 import { UserRegister } from "@/types/UserRegister";
 import { UserLogin } from "@/types/UserLogin";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/app/_layout";
 import { ActivityIndicator } from "react-native";
 import styles from "@/styles/global";
@@ -66,8 +64,14 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             });
 
                             if (success) {
-                                AsyncStorage.setItem("accessToken", success.access);
-                                AsyncStorage.setItem("refreshToken", success.refresh);
+                                await AsyncStorage.setItem(
+                                    "accessToken",
+                                    success.access,
+                                );
+                                await AsyncStorage.setItem(
+                                    "refreshToken",
+                                    success.refresh,
+                                );
                                 void queryClient.invalidateQueries({
                                     queryKey: ["current_user"],
                                 });
@@ -111,8 +115,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         });
 
                         if (success) {
-                            AsyncStorage.setItem("accessToken", success.access);
-                            AsyncStorage.setItem("refreshToken", success.refresh);
+                            await AsyncStorage.setItem("accessToken", success.access);
+                            await AsyncStorage.setItem("refreshToken", success.refresh);
 
                             void queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
@@ -145,8 +149,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
                 signOut: async () => {
                     try {
-                        AsyncStorage.removeItem("accessToken");
-                        AsyncStorage.removeItem("refreshToken");
+                        await AsyncStorage.removeItem("accessToken");
+                        await AsyncStorage.removeItem("refreshToken");
 
                         void queryClient.invalidateQueries({
                             queryKey: ["current_user"],

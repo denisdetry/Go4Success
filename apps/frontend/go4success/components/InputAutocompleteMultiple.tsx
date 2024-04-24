@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import {
+    Pressable,
+    SafeAreaView,
+    ScrollView,
     StyleSheet,
     Text,
     TextInput,
-    TouchableWithoutFeedback,
     View,
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
@@ -14,7 +16,7 @@ export interface InputAutocompleteProps {
     readonly items: SelectItem[];
     readonly placeholder: string;
     readonly onChange?: (value: SelectItem[]) => void;
-    readonly search?: boolean;
+    readonly readOnly?: boolean;
 }
 
 type ItemProps = {
@@ -24,19 +26,16 @@ type ItemProps = {
 
 const Item = ({ item, onPress }: ItemProps) => {
     return (
-        <TouchableWithoutFeedback
-            onPress={onPress}
-            onFocus={() => console.log("Focus")}
-        >
+        <Pressable onPress={onPress} onFocus={() => console.log("Focus")}>
             <Text>{item.value}</Text>
-        </TouchableWithoutFeedback>
+        </Pressable>
     );
 };
 const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     items,
     placeholder,
     onChange = () => {},
-    search = true,
+    readOnly = false,
 }) => {
     const [focus, setFocus] = React.useState(false);
     const [searchFocus, setSearchFocus] = React.useState(false);
@@ -63,10 +62,10 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
         if (focus) {
             return (
                 <TextInput
-                    style={styles.input}
+                    style={styles.inputField}
                     placeholder={"Search a room"}
                     onFocus={() => setSearchFocus(true)}
-                    editable={search}
+                    readOnly={readOnly}
                     autoFocus={true}
                     onBlur={() => {
                         setSearchFocus(false);
@@ -97,16 +96,14 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     };
 
     return (
-        <View>
-            <TouchableWithoutFeedback
+        <ScrollView horizontal={true} scrollEnabled={false}>
+            <Pressable
                 onPress={() => {
-                    if (!searchFocus) {
-                        setFocus(!focus);
-                        setFilteredData(items);
-                    }
+                    setFocus(!focus);
+                    setFilteredData(items);
                 }}
             >
-                <View>
+                <SafeAreaView>
                     <Text style={stylesin.button}>
                         {selectedData.length > 0
                             ? selectedData.map((item) => item.value).join(", ")
@@ -114,19 +111,19 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                     </Text>
 
                     {focus && (
-                        <FlatList
-                            style={{
-                                maxHeight: 200,
-                            }}
-                            data={filteredData}
-                            ListHeaderComponent={textInput()}
-                            renderItem={renderItem}
-                            keyExtractor={(item) => item.value}
-                        />
+                        <View>
+                            <FlatList
+                                style={{ maxHeight: 200 }}
+                                data={filteredData}
+                                ListHeaderComponent={textInput()}
+                                renderItem={renderItem}
+                                keyExtractor={(item) => item.value}
+                            />
+                        </View>
                     )}
-                </View>
-            </TouchableWithoutFeedback>
-        </View>
+                </SafeAreaView>
+            </Pressable>
+        </ScrollView>
     );
 };
 

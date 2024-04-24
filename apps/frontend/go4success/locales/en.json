@@ -114,5 +114,15 @@
         "place": "Place",
         "type": "Type",
         "language": "Language"
+    },
+    "translationActivities": {
+        "title": "Workshop title",
+        "description": "Description",
+        "site": "Select a site",
+        "room": "Select one or more rooms",
+        "language": "Select a language",
+        "date": "Select the date",
+        "beginTime": "Start time",
+        "endTime": "End time"
     }
 }

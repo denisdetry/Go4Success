@@ -115,5 +115,15 @@
         "place": "Lieu",
         "type": "Type",
         "language": "Langue"
+    },
+    "translationActivities": {
+        "title": "Titre de l'atelier",
+        "description": "Description",
+        "site": "Selectionner un site",
+        "room": "Selectionner une ou plusieurs salles",
+        "language": "Selectionner une langue",
+        "date": "Selectionner une date",
+        "beginTime": "Heure de début",
+        "endTime": "Heure de fin"
     }
 }

@@ -31,9 +31,9 @@ export function useLanguages(languageId?: string) {
                 throw new Error(error);
             }
 
-            return data.map((language: { name: any; id: any }) => ({
-                label: language.name,
-                value: language.id,
+            return data.map((language: Language) => ({
+                key: language.id,
+                value: language.name,
             }));
         },
     });

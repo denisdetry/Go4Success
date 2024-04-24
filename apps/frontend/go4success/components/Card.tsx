@@ -19,6 +19,12 @@ import { queryClient } from "@/app/_layout";
 import { useMutation } from "@tanstack/react-query";
 import { fetchError } from "@/utils/fetchError";
 import { Ionicons } from "@expo/vector-icons";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
+
+type RootStackParamList = {
+    feedbackcreate: { activityId: string };
+};
 
 interface CardProps {
     readonly id: string;

@@ -4,7 +4,11 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { AuthProvider, useAuth } from "@/context/Auth";
 import Colors from "@/constants/Colors";
-import { DrawerContentScrollView, DrawerItem, DrawerItemList } from "@react-navigation/drawer";
+import {
+    DrawerContentScrollView,
+    DrawerItem,
+    DrawerItemList,
+} from "@react-navigation/drawer";
 import { Image, Platform, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -12,7 +16,7 @@ import { useTranslation } from "react-i18next";
 
 import profilePicture from "@/assets/images/profile-picture.jpg";
 
-function customDrawerContent(props: any) {
+function CustomDrawerContent(props: any) {
     const router = useRouter();
     const { t } = useTranslation();
     const { signOut } = useAuth();
@@ -51,7 +55,7 @@ export default function Layout() {
         <GestureHandlerRootView style={{ flex: 1 }}>
             <AuthProvider>
                 <Drawer
-                    drawerContent={customDrawerContent}
+                    drawerContent={CustomDrawerContent}
                     screenOptions={{
                         drawerHideStatusBarOnOpen: true,
                         drawerActiveBackgroundColor: Colors.primaryColor,

@@ -79,7 +79,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 Toast.show({
                                     type: "success",
                                     text1: t("translateToast.SuccessText1"),
-                                    text2: t("translateToast.RegisterSuccessText2"),
+                                    text2: t(
+                                        "translateToast.RegisterSuccessText2",
+                                    ),
                                 });
                             }
                         } catch (err) {
@@ -95,7 +97,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                     Toast.show({
                                         type: "error",
                                         text1: t("translateToast.ErrorText1"),
-                                        text2: t("translateToast.ServerErrorText2"),
+                                        text2: t(
+                                            "translateToast.ServerErrorText2",
+                                        ),
                                     });
                                 }
                             }
@@ -115,8 +119,14 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         });
 
                         if (success) {
-                            await AsyncStorage.setItem("accessToken", success.access);
-                            await AsyncStorage.setItem("refreshToken", success.refresh);
+                            await AsyncStorage.setItem(
+                                "accessToken",
+                                success.access,
+                            );
+                            await AsyncStorage.setItem(
+                                "refreshToken",
+                                success.refresh,
+                            );
 
                             void queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
@@ -134,7 +144,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 Toast.show({
                                     type: "error",
                                     text1: t("translateToast.ErrorText1"),
-                                    text2: t("translateToast.LoginInfoErrorText2"),
+                                    text2: t(
+                                        "translateToast.LoginInfoErrorText2",
+                                    ),
                                 });
                             } else {
                                 Toast.show({

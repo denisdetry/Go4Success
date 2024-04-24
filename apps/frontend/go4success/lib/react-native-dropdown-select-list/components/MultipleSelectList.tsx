@@ -91,13 +91,21 @@ const MultipleSelectList: React.FC<MultipleSelectListProps> = ({
             {dropdown && search ? (
                 <View style={[styles.wrapper, boxStyles]}>
                     <View
-                        style={{ flexDirection: "row", alignItems: "center", flex: 1 }}
+                        style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            flex: 1,
+                        }}
                     >
                         {!searchicon ? (
                             <Image
                                 source={require("../assets/images/search.png")}
                                 resizeMode="contain"
-                                style={{ width: 20, height: 20, marginRight: 7 }}
+                                style={{
+                                    width: 20,
+                                    height: 20,
+                                    marginRight: 7,
+                                }}
                             />
                         ) : (
                             searchicon
@@ -149,7 +157,12 @@ const MultipleSelectList: React.FC<MultipleSelectListProps> = ({
                     }}
                 >
                     <View>
-                        <Text style={[{ fontWeight: "600", fontFamily }, labelStyles]}>
+                        <Text
+                            style={[
+                                { fontWeight: "600", fontFamily },
+                                labelStyles,
+                            ]}
+                        >
                             {label}
                         </Text>
                         <View
@@ -167,7 +180,8 @@ const MultipleSelectList: React.FC<MultipleSelectListProps> = ({
                                         | boolean
                                         | React.ReactElement<
                                               any,
-                                              string | React.JSXElementConstructor<any>
+                                              | string
+                                              | React.JSXElementConstructor<any>
                                           >
                                         | Iterable<React.ReactNode>
                                         | React.ReactPortal
@@ -254,173 +268,228 @@ const MultipleSelectList: React.FC<MultipleSelectListProps> = ({
                             nestedScrollEnabled={true}
                         >
                             {filtereddata.length >= 1 ? (
-                                filtereddata.map((item: L1Keys, index: number) => {
-                                    const key = item.key ?? item.value ?? item;
-                                    const value = item.value ?? item;
-                                    const disabled = item.disabled ?? false;
-                                    if (disabled) {
-                                        return (
-                                            <TouchableOpacity
-                                                style={[
-                                                    styles.disabledoption,
-                                                    disabledItemStyles,
-                                                ]}
-                                                key={index}
-                                            >
-                                                <View
+                                filtereddata.map(
+                                    (item: L1Keys, index: number) => {
+                                        const key =
+                                            item.key ?? item.value ?? item;
+                                        const value = item.value ?? item;
+                                        const disabled = item.disabled ?? false;
+                                        if (disabled) {
+                                            return (
+                                                <TouchableOpacity
                                                     style={[
-                                                        {
-                                                            width: 15,
-                                                            height: 15,
-                                                            marginRight: 10,
-                                                            borderRadius: 3,
-                                                            justifyContent: "center",
-                                                            alignItems: "center",
-                                                            backgroundColor: "#c4c5c6",
-                                                        },
-                                                        disabledCheckBoxStyles,
+                                                        styles.disabledoption,
+                                                        disabledItemStyles,
                                                     ]}
+                                                    key={index}
                                                 >
-                                                    {selectedval?.includes(value) ? (
-                                                        <Image
-                                                            key={index}
-                                                            source={require("../assets/images/check.png")}
-                                                            resizeMode="contain"
-                                                            style={[
-                                                                {
+                                                    <View
+                                                        style={[
+                                                            {
+                                                                width: 15,
+                                                                height: 15,
+                                                                marginRight: 10,
+                                                                borderRadius: 3,
+                                                                justifyContent:
+                                                                    "center",
+                                                                alignItems:
+                                                                    "center",
+                                                                backgroundColor:
+                                                                    "#c4c5c6",
+                                                            },
+                                                            disabledCheckBoxStyles,
+                                                        ]}
+                                                    >
+                                                        {selectedval?.includes(
+                                                            value,
+                                                        ) ? (
+                                                            <Image
+                                                                key={index}
+                                                                source={require("../assets/images/check.png")}
+                                                                resizeMode="contain"
+                                                                style={[
+                                                                    {
+                                                                        width: 8,
+                                                                        height: 8,
+                                                                        paddingLeft: 7,
+                                                                    },
+                                                                ]}
+                                                            />
+                                                        ) : null}
+                                                    </View>
+                                                    <Text
+                                                        style={[
+                                                            {
+                                                                fontFamily,
+                                                                color: "#c4c5c6",
+                                                            },
+                                                            disabledTextStyles,
+                                                        ]}
+                                                    >
+                                                        {value}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            );
+                                        } else {
+                                            return (
+                                                <TouchableOpacity
+                                                    style={[
+                                                        styles.option,
+                                                        dropdownItemStyles,
+                                                    ]}
+                                                    key={index}
+                                                    onPress={() => {
+                                                        const existing =
+                                                            selectedval?.indexOf(
+                                                                value,
+                                                            );
+
+                                                        // console.log(existing);
+
+                                                        if (
+                                                            existing !== -1 &&
+                                                            existing !==
+                                                                undefined
+                                                        ) {
+                                                            const sv = [
+                                                                ...selectedval,
+                                                            ];
+                                                            sv.splice(
+                                                                existing,
+                                                                1,
+                                                            );
+                                                            setSelectedVal(sv);
+
+                                                            setSelected(
+                                                                (val: any) => {
+                                                                    const temp =
+                                                                        [
+                                                                            ...val,
+                                                                        ];
+                                                                    temp.splice(
+                                                                        existing,
+                                                                        1,
+                                                                    );
+                                                                    return temp;
+                                                                },
+                                                            );
+
+                                                            // onSelect()
+                                                        } else {
+                                                            if (
+                                                                save === "value"
+                                                            ) {
+                                                                setSelected(
+                                                                    (
+                                                                        val: any,
+                                                                    ) => {
+                                                                        return [
+                                                                            ...new Set(
+                                                                                [
+                                                                                    ...val,
+                                                                                    value,
+                                                                                ],
+                                                                            ),
+                                                                        ];
+                                                                    },
+                                                                );
+                                                            } else if (
+                                                                save === "key"
+                                                            ) {
+                                                                setSelected(
+                                                                    (
+                                                                        val: any,
+                                                                    ) => {
+                                                                        return [
+                                                                            ...new Set(
+                                                                                [
+                                                                                    ...val,
+                                                                                    key,
+                                                                                ],
+                                                                            ),
+                                                                        ];
+                                                                    },
+                                                                );
+                                                            } else {
+                                                                setSelected(
+                                                                    (
+                                                                        val: any,
+                                                                    ) => {
+                                                                        return [
+                                                                            ...new Set(
+                                                                                [
+                                                                                    ...val,
+                                                                                    item,
+                                                                                ],
+                                                                            ),
+                                                                        ];
+                                                                    },
+                                                                );
+                                                            }
+
+                                                            setSelectedVal(
+                                                                (val: any) => {
+                                                                    return [
+                                                                        ...new Set(
+                                                                            [
+                                                                                ...val,
+                                                                                value,
+                                                                            ],
+                                                                        ),
+                                                                    ];
+                                                                },
+                                                            );
+
+                                                            // onSelect()
+                                                        }
+                                                    }}
+                                                >
+                                                    <View
+                                                        style={[
+                                                            {
+                                                                width: 15,
+                                                                height: 15,
+                                                                borderWidth: 1,
+                                                                marginRight: 10,
+                                                                borderColor:
+                                                                    "gray",
+                                                                borderRadius: 3,
+                                                                justifyContent:
+                                                                    "center",
+                                                                alignItems:
+                                                                    "center",
+                                                            },
+                                                            checkBoxStyles,
+                                                        ]}
+                                                    >
+                                                        {selectedval?.includes(
+                                                            value,
+                                                        ) ? (
+                                                            <Image
+                                                                key={index}
+                                                                source={require("../assets/images/check.png")}
+                                                                resizeMode="contain"
+                                                                style={{
                                                                     width: 8,
                                                                     height: 8,
                                                                     paddingLeft: 7,
-                                                                },
-                                                            ]}
-                                                        />
-                                                    ) : null}
-                                                </View>
-                                                <Text
-                                                    style={[
-                                                        {
-                                                            fontFamily,
-                                                            color: "#c4c5c6",
-                                                        },
-                                                        disabledTextStyles,
-                                                    ]}
-                                                >
-                                                    {value}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        );
-                                    } else {
-                                        return (
-                                            <TouchableOpacity
-                                                style={[
-                                                    styles.option,
-                                                    dropdownItemStyles,
-                                                ]}
-                                                key={index}
-                                                onPress={() => {
-                                                    const existing =
-                                                        selectedval?.indexOf(value);
-
-                                                    // console.log(existing);
-
-                                                    if (
-                                                        existing !== -1 &&
-                                                        existing !== undefined
-                                                    ) {
-                                                        const sv = [...selectedval];
-                                                        sv.splice(existing, 1);
-                                                        setSelectedVal(sv);
-
-                                                        setSelected((val: any) => {
-                                                            const temp = [...val];
-                                                            temp.splice(existing, 1);
-                                                            return temp;
-                                                        });
-
-                                                        // onSelect()
-                                                    } else {
-                                                        if (save === "value") {
-                                                            setSelected((val: any) => {
-                                                                return [
-                                                                    ...new Set([
-                                                                        ...val,
-                                                                        value,
-                                                                    ]),
-                                                                ];
-                                                            });
-                                                        } else if (save === "key") {
-                                                            setSelected((val: any) => {
-                                                                return [
-                                                                    ...new Set([
-                                                                        ...val,
-                                                                        key,
-                                                                    ]),
-                                                                ];
-                                                            });
-                                                        } else {
-                                                            setSelected((val: any) => {
-                                                                return [
-                                                                    ...new Set([
-                                                                        ...val,
-                                                                        item,
-                                                                    ]),
-                                                                ];
-                                                            });
-                                                        }
-
-                                                        setSelectedVal((val: any) => {
-                                                            return [
-                                                                ...new Set([
-                                                                    ...val,
-                                                                    value,
-                                                                ]),
-                                                            ];
-                                                        });
-
-                                                        // onSelect()
-                                                    }
-                                                }}
-                                            >
-                                                <View
-                                                    style={[
-                                                        {
-                                                            width: 15,
-                                                            height: 15,
-                                                            borderWidth: 1,
-                                                            marginRight: 10,
-                                                            borderColor: "gray",
-                                                            borderRadius: 3,
-                                                            justifyContent: "center",
-                                                            alignItems: "center",
-                                                        },
-                                                        checkBoxStyles,
-                                                    ]}
-                                                >
-                                                    {selectedval?.includes(value) ? (
-                                                        <Image
-                                                            key={index}
-                                                            source={require("../assets/images/check.png")}
-                                                            resizeMode="contain"
-                                                            style={{
-                                                                width: 8,
-                                                                height: 8,
-                                                                paddingLeft: 7,
-                                                            }}
-                                                        />
-                                                    ) : null}
-                                                </View>
-                                                <Text
-                                                    style={[
-                                                        { fontFamily },
-                                                        dropdownTextStyles,
-                                                    ]}
-                                                >
-                                                    {value}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        );
-                                    }
-                                })
+                                                                }}
+                                                            />
+                                                        ) : null}
+                                                    </View>
+                                                    <Text
+                                                        style={[
+                                                            { fontFamily },
+                                                            dropdownTextStyles,
+                                                        ]}
+                                                    >
+                                                        {value}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            );
+                                        }
+                                    },
+                                )
                             ) : (
                                 <TouchableOpacity
                                     style={[styles.option, dropdownItemStyles]}
@@ -428,7 +497,10 @@ const MultipleSelectList: React.FC<MultipleSelectListProps> = ({
                                         setSelected(undefined);
                                         setSelectedVal([]);
                                         slideup();
-                                        setTimeout(() => setFilteredData(data), 800);
+                                        setTimeout(
+                                            () => setFilteredData(data),
+                                            800,
+                                        );
                                     }}
                                 >
                                     <Text style={dropdownTextStyles}>
@@ -495,7 +567,8 @@ const MultipleSelectList: React.FC<MultipleSelectListProps> = ({
                                                     key={index}
                                                     style={[
                                                         {
-                                                            backgroundColor: "gray",
+                                                            backgroundColor:
+                                                                "gray",
                                                             paddingHorizontal: 20,
                                                             paddingVertical: 5,
                                                             borderRadius: 50,

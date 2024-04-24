@@ -1,7 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { t } from "i18next";
 import { fetchError } from "./fetchError";
-import { fetchBackend } from "./fetchBackend";
 
 export async function fetchNewToken() {
     const backend_url = process.env.EXPO_PUBLIC_API_URL;
@@ -18,6 +17,9 @@ export async function fetchNewToken() {
         const responseData = await response.json();
         await AsyncStorage.setItem("accessToken", responseData.access);
     } else {
-        throw new fetchError(t("translationProfile.defaultErrorMessage"), response);
+        throw new fetchError(
+            t("translationProfile.defaultErrorMessage"),
+            response,
+        );
     }
 }

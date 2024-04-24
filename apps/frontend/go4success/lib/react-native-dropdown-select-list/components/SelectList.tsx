@@ -73,7 +73,11 @@ const SelectList: React.FC<SelectListProps> = ({
     }, [selectedval]);
 
     React.useEffect(() => {
-        if (!_firstRender && defaultOption && oldOption.current !== defaultOption.key) {
+        if (
+            !_firstRender &&
+            defaultOption &&
+            oldOption.current !== defaultOption.key
+        ) {
             // oldOption.current != null
             oldOption.current = defaultOption.key;
             setSelected(defaultOption.key);
@@ -98,13 +102,21 @@ const SelectList: React.FC<SelectListProps> = ({
             {dropdown && search ? (
                 <View style={[styles.wrapper, boxStyles]}>
                     <View
-                        style={{ flexDirection: "row", alignItems: "center", flex: 1 }}
+                        style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            flex: 1,
+                        }}
                     >
                         {!searchicon ? (
                             <Image
                                 source={require("../assets/images/search.png")}
                                 resizeMode="contain"
-                                style={{ width: 20, height: 20, marginRight: 7 }}
+                                style={{
+                                    width: 20,
+                                    height: 20,
+                                    marginRight: 7,
+                                }}
                             />
                         ) : (
                             searchicon
@@ -121,7 +133,12 @@ const SelectList: React.FC<SelectListProps> = ({
                                 setFilteredData(result);
                             }}
                             style={[
-                                { padding: 0, height: 20, width: 50, fontFamily },
+                                {
+                                    padding: 0,
+                                    height: 20,
+                                    width: 50,
+                                    fontFamily,
+                                },
                                 inputStyles,
                             ]}
                         />
@@ -219,7 +236,10 @@ const SelectList: React.FC<SelectListProps> = ({
                                 } else {
                                     return (
                                         <TouchableOpacity
-                                            style={[styles.option, dropdownItemStyles]}
+                                            style={[
+                                                styles.option,
+                                                dropdownItemStyles,
+                                            ]}
                                             key={index}
                                             onPress={() => {
                                                 if (save === "value") {
@@ -256,10 +276,15 @@ const SelectList: React.FC<SelectListProps> = ({
                                     setSelected(undefined);
                                     setSelectedVal("");
                                     slideup();
-                                    setTimeout(() => setFilteredData(data), 800);
+                                    setTimeout(
+                                        () => setFilteredData(data),
+                                        800,
+                                    );
                                 }}
                             >
-                                <Text style={[{ fontFamily }, dropdownTextStyles]}>
+                                <Text
+                                    style={[{ fontFamily }, dropdownTextStyles]}
+                                >
                                     {notFoundText}
                                 </Text>
                             </TouchableOpacity>

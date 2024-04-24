@@ -41,7 +41,10 @@ function CustomDrawerContent(props: any) {
                     />
                 </TouchableOpacity>
                 <DrawerItemList {...props} />
-                <DrawerItem label={t("translationMenu.disconnect")} onPress={signOut} />
+                <DrawerItem
+                    label={t("translationMenu.disconnect")}
+                    onPress={signOut}
+                />
             </DrawerContentScrollView>
             {Platform.OS === "web" && <LanguageSwitcher />}
         </>
@@ -83,7 +86,11 @@ export default function Layout() {
                                             router.push("/");
                                         }}
                                     >
-                                        <Ionicons name="home" size={24} color="#fff" />
+                                        <Ionicons
+                                            name="home"
+                                            size={24}
+                                            color="#fff"
+                                        />
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
@@ -168,7 +175,11 @@ export default function Layout() {
                             drawerLabel: t("translationMenu.calendar"),
                             headerTitle: t("translationMenu.calendar"),
                             drawerIcon: ({ size, color }) => (
-                                <Ionicons name="calendar" size={size} color={color} />
+                                <Ionicons
+                                    name="calendar"
+                                    size={size}
+                                    color={color}
+                                />
                             ),
                         }}
                     />
@@ -179,7 +190,11 @@ export default function Layout() {
                             drawerLabel: "Gestion des rôles",
                             headerTitle: "Gestion des rôles",
                             drawerIcon: ({ size, color }) => (
-                                <Ionicons name="people" size={size} color={color} />
+                                <Ionicons
+                                    name="people"
+                                    size={size}
+                                    color={color}
+                                />
                             ),
                         }}
                     />
@@ -189,7 +204,11 @@ export default function Layout() {
                             drawerLabel: "Ateliers",
                             headerTitle: "Ateliers",
                             drawerIcon: ({ size, color }) => (
-                                <Ionicons name="calendar" size={size} color={color} />
+                                <Ionicons
+                                    name="calendar"
+                                    size={size}
+                                    color={color}
+                                />
                             ),
                         }}
                     />

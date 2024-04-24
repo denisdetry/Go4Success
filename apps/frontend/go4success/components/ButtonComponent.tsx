@@ -62,7 +62,10 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
     });
 
     return (
-        <TouchableOpacity style={[styles.common, styles[buttonType]]} onPress={onPress}>
+        <TouchableOpacity
+            style={[styles.common, styles[buttonType]]}
+            onPress={onPress}
+        >
             <Text style={styles.common}>{text}</Text>
         </TouchableOpacity>
     );

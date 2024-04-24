@@ -42,7 +42,9 @@ export const ChangeUserPasswordFields = () => {
     const fetchData = useMutation({
         mutationFn: async () => {
             await fetchBackend({
-                type: "PUT", url: "auth/change_password/" + user.id + "/", data: {
+                type: "PUT",
+                url: "auth/change_password/" + user.id + "/",
+                data: {
                     // eslint-disable-next-line camelcase
                     old_password: oldPassword,
                     password: newPassword,
@@ -79,7 +81,9 @@ export const ChangeUserPasswordFields = () => {
             Toast.show({
                 type: "error",
                 text1: t("translationProfile.error"),
-                text2: errorMessages || t("translationProfile.defaultErrorMessage"),
+                text2:
+                    errorMessages ||
+                    t("translationProfile.defaultErrorMessage"),
             });
         },
     });
@@ -144,7 +148,9 @@ export const ChangeUserPasswordFields = () => {
                 isVisible={isModalVisible}
                 onCancel={handleCancel}
                 onConfirm={handleConfirm}
-                dataLabelName={t("translationProfile.passwordTitle").toLowerCase()}
+                dataLabelName={t(
+                    "translationProfile.passwordTitle",
+                ).toLowerCase()}
             />
 
             {passwordFields(
@@ -180,7 +186,9 @@ export const ChangeUserPasswordFields = () => {
                         }}
                     >
                         <ButtonComponent
-                            text={t("translationProfile.cancelPasswordChangeButton")}
+                            text={t(
+                                "translationProfile.cancelPasswordChangeButton",
+                            )}
                             onPress={() => {
                                 switchEdit();
                                 clearFields();
@@ -188,7 +196,9 @@ export const ChangeUserPasswordFields = () => {
                             buttonType={"danger"}
                         />
                         <ButtonComponent
-                            text={t("translationProfile.confirmPasswordChangeButton")}
+                            text={t(
+                                "translationProfile.confirmPasswordChangeButton",
+                            )}
                             onPress={() => {
                                 setIsModalVisible(true);
                             }}

@@ -16,20 +16,22 @@ function PickerSite({
     setSelectedSite,
     selectedSite,
 }: {
-    setSelectedSite: React.Dispatch<React.SetStateAction<Site | null>>;
-    selectedSite: Site | null;
+    readonly setSelectedSite: React.Dispatch<React.SetStateAction<Site | null>>;
+    readonly selectedSite: Site | null;
 } & Readonly<any>) {
     const { error, data: sites } = useQuery<Site[]>({
         queryKey: ["site"],
         queryFn: async () => {
-            const response = await axios.get(`${API_BASE_URL}/workshops/sites/`);
-            const data = response.data
+            const response = await axios.get(
+                `${API_BASE_URL}/workshops/sites/`,
+            );
+            return response.data
                 .map((Site: any) => ({ id: Site.id, name: Site.name }))
                 .filter(
                     (value: any, index: number, self: any[]) =>
-                        self.findIndex((v: any) => v.name === value.name) === index,
+                        self.findIndex((v: any) => v.name === value.name) ===
+                        index,
                 );
-            return data;
         },
         refetchOnMount: true,
         refetchOnReconnect: true,
@@ -55,7 +57,11 @@ function PickerSite({
         >
             <Picker.Item label="ALL" value="" />
             {sites.map((site: Site) => (
-                <Picker.Item key={site.id} label={site.name} value={site.name} />
+                <Picker.Item
+                    key={site.id}
+                    label={site.name}
+                    value={site.name}
+                />
             ))}
         </Picker>
     );

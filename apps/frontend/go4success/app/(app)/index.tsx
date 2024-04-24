@@ -54,7 +54,10 @@ export default function Index() {
                         renderItem={renderMessages}
                     />
                 ) : (
-                    <Text style={styles.text}> {t("translation.noMessage")}</Text>
+                    <Text style={styles.text}>
+                        {" "}
+                        {t("translation.noMessage")}
+                    </Text>
                 )}
             </View>
 
@@ -75,7 +78,9 @@ export default function Index() {
             {/* Calendar container */}
             <View style={styles.container}>
                 <Text style={styles.title}>{t("translation.calendar")}</Text>
-                <Text style={styles.text}>{t("translation.calendarWorking")}</Text>
+                <Text style={styles.text}>
+                    {t("translation.calendarWorking")}
+                </Text>
             </View>
         </ScrollView>
     );

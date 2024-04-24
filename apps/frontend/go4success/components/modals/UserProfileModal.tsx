@@ -6,12 +6,12 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 const UserProfileModal = ({
-                              isVisible,
-                              onCancel,
-                              onConfirm,
-                              dataLabelName,
-                              deleteAccount,
-                          }: {
+    isVisible,
+    onCancel,
+    onConfirm,
+    dataLabelName,
+    deleteAccount,
+}: {
     readonly isVisible: boolean;
     readonly onCancel: any;
     readonly onConfirm: any;
@@ -43,11 +43,13 @@ const UserProfileModal = ({
                 >
                     {deleteAccount ? (
                         <Text style={styles.text}>
-                            {t("translationProfile.areYouSure")} {t("translationProfile.deleteUserAccount")}
+                            {t("translationProfile.areYouSure")}{" "}
+                            {t("translationProfile.deleteUserAccount")}
                         </Text>
                     ) : (
                         <Text style={styles.text}>
-                            {t("translationProfile.areYouSure")} {t("translationProfile.changeTo")} {dataLabelName}
+                            {t("translationProfile.areYouSure")}{" "}
+                            {t("translationProfile.changeTo")} {dataLabelName}
                         </Text>
                     )}
 

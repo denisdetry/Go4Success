@@ -19,7 +19,8 @@ export function useRooms(siteId: string | undefined) {
         queryKey: ["rooms", siteId],
         queryFn: async () => {
             const response = await axios.get(
-                `${backendUrl}/activities/rooms/` + (siteId ? `site/${siteId}/` : ""),
+                `${backendUrl}/activities/rooms/` +
+                    (siteId ? `site/${siteId}/` : ""),
             );
 
             return response.data.map((room: Room) => ({

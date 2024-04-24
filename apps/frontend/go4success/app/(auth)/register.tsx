@@ -38,9 +38,16 @@ export default function Register() {
                 /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
                 t("translateRegister.yupPasswordConstraint"),
             )
-            .equals([yup.ref("password")], t("translateRegister.yupPasswordEquals")),
-        lastName: yup.string().required(t("translateRegister.yupLastNameRequired")),
-        firstName: yup.string().required(t("translateRegister.yupFirstNameRequired")),
+            .equals(
+                [yup.ref("password")],
+                t("translateRegister.yupPasswordEquals"),
+            ),
+        lastName: yup
+            .string()
+            .required(t("translateRegister.yupLastNameRequired")),
+        firstName: yup
+            .string()
+            .required(t("translateRegister.yupFirstNameRequired")),
         noma: yup
             .string()
             .matches(/^[0-9]{8}$/, {
@@ -77,9 +84,17 @@ export default function Register() {
 
     return (
         <ScrollView
-            contentContainerStyle={[styles.mainContainer, { justifyContent: "center" }]}
+            contentContainerStyle={[
+                styles.mainContainer,
+                { justifyContent: "center" },
+            ]}
         >
-            <View style={[styles.container, { shadowRadius: 0, backgroundColor: "" }]}>
+            <View
+                style={[
+                    styles.container,
+                    { shadowRadius: 0, backgroundColor: "" },
+                ]}
+            >
                 <Text style={styles.title}>{t("translateRegister.title")}</Text>
                 {/*Email field*/}
                 <View style={styles.form}>
@@ -101,7 +116,9 @@ export default function Register() {
                     />
                     {/*Error message for email field*/}
                     {errors.email && (
-                        <Text style={styles.errorMsg}>{errors.email.message}</Text>
+                        <Text style={styles.errorMsg}>
+                            {errors.email.message}
+                        </Text>
                     )}
                     {/*Username field*/}
                     <Controller
@@ -111,7 +128,9 @@ export default function Register() {
                             <View style={styles.inputField}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder={t("translateRegister.username")}
+                                    placeholder={t(
+                                        "translateRegister.username",
+                                    )}
                                     onChangeText={onChange}
                                     value={value}
                                 />
@@ -123,7 +142,9 @@ export default function Register() {
 
                     {/* Error message for username field*/}
                     {errors.username && (
-                        <Text style={styles.errorMsg}>{errors.username.message}</Text>
+                        <Text style={styles.errorMsg}>
+                            {errors.username.message}
+                        </Text>
                     )}
 
                     {/*Last Name field*/}
@@ -134,7 +155,9 @@ export default function Register() {
                             <View style={styles.inputField}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder={t("translateRegister.lastName")}
+                                    placeholder={t(
+                                        "translateRegister.lastName",
+                                    )}
                                     onChangeText={onChange}
                                     value={value}
                                 />
@@ -146,7 +169,9 @@ export default function Register() {
 
                     {/*Error message for lastname field*/}
                     {errors.lastName && (
-                        <Text style={styles.errorMsg}>{errors.lastName.message}</Text>
+                        <Text style={styles.errorMsg}>
+                            {errors.lastName.message}
+                        </Text>
                     )}
 
                     {/* firstname field*/}
@@ -157,7 +182,9 @@ export default function Register() {
                             <View style={styles.inputField}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder={t("translateRegister.firstName")}
+                                    placeholder={t(
+                                        "translateRegister.firstName",
+                                    )}
                                     onChangeText={onChange}
                                     value={value}
                                 />
@@ -168,7 +195,9 @@ export default function Register() {
                     />
                     {/*Error message for firstname field*/}
                     {errors.firstName && (
-                        <Text style={styles.errorMsg}>{errors.firstName.message}</Text>
+                        <Text style={styles.errorMsg}>
+                            {errors.firstName.message}
+                        </Text>
                     )}
 
                     {/*Noma field*/}
@@ -191,7 +220,9 @@ export default function Register() {
                     {/*Error message for noma field*/}
 
                     {errors.noma && (
-                        <Text style={styles.errorMsg}>{errors.noma.message}</Text>
+                        <Text style={styles.errorMsg}>
+                            {errors.noma.message}
+                        </Text>
                     )}
 
                     {/* Password field */}
@@ -202,7 +233,9 @@ export default function Register() {
                             <View style={styles.inputField}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder={t("translateRegister.password")}
+                                    placeholder={t(
+                                        "translateRegister.password",
+                                    )}
                                     onChangeText={onChange}
                                     value={value}
                                     secureTextEntry={!showPassword}
@@ -212,7 +245,9 @@ export default function Register() {
                                     name={showPassword ? "eye-off" : "eye"}
                                     size={24}
                                     color="black"
-                                    onPress={() => setShowPassword(!showPassword)}
+                                    onPress={() =>
+                                        setShowPassword(!showPassword)
+                                    }
                                 />
                             </View>
                         )}
@@ -221,7 +256,9 @@ export default function Register() {
                     />
                     {/*Error message for password field*/}
                     {errors.password && (
-                        <Text style={styles.errorMsg}>{errors.password.message}</Text>
+                        <Text style={styles.errorMsg}>
+                            {errors.password.message}
+                        </Text>
                     )}
                     {/*Password retype field*/}
                     <Controller
@@ -231,18 +268,24 @@ export default function Register() {
                             <View style={styles.inputField}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder={t("translateRegister.confirmPassword")}
+                                    placeholder={t(
+                                        "translateRegister.confirmPassword",
+                                    )}
                                     onChangeText={onChange}
                                     value={value}
                                     secureTextEntry={!showPasswordRetype}
                                 />
 
                                 <MaterialCommunityIcons
-                                    name={showPasswordRetype ? "eye-off" : "eye"}
+                                    name={
+                                        showPasswordRetype ? "eye-off" : "eye"
+                                    }
                                     size={24}
                                     color="black"
                                     onPress={() =>
-                                        setShowPasswordRetype(!showPasswordRetype)
+                                        setShowPasswordRetype(
+                                            !showPasswordRetype,
+                                        )
                                     }
                                 />
                             </View>

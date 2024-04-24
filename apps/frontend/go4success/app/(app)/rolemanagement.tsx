@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
-    Picker,
     FlatList,
+    Picker,
+    StyleSheet,
     Text,
     TouchableOpacity,
     View,
-    StyleSheet,
 } from "react-native";
 import axios from "axios";
 import axiosConfig from "@/constants/axiosConfig";
@@ -223,7 +223,9 @@ export default function RoleManagement() {
                             style={styles.saveButton}
                             id="saveChange"
                         >
-                            <Text style={{ color: "#fff", textAlign: "center" }}>
+                            <Text
+                                style={{ color: "#fff", textAlign: "center" }}
+                            >
                                 Save
                             </Text>
                         </TouchableOpacity>

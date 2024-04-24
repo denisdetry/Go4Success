@@ -48,6 +48,9 @@ export async function fetchBackend(options: {
             return { data: "success" };
         }
     } else {
-        throw new fetchError(t("translationProfile.defaultErrorMessage"), response);
+        throw new fetchError(
+            t("translationProfile.defaultErrorMessage"),
+            response,
+        );
     }
 }

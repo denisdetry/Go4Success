@@ -15,7 +15,9 @@ function ListWorkshops() {
     const { isPending, error, data } = useQuery<Workshop[]>({
         queryKey: ["allWorkshops"],
         queryFn: async () => {
-            const response = await axios.get("http://localhost:8000/workshops/");
+            const response = await axios.get(
+                "http://localhost:8000/workshops/",
+            );
             return response.data;
         },
     });

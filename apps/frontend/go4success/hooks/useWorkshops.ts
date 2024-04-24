@@ -31,15 +31,18 @@ export function useWorkshops(
             endDateISO,
         ],
         queryFn: async () => {
-            const response = await axios.get(`${API_BASE_URL}/workshops/${endpoint}/`, {
-                params: {
-                    name: searchName,
-                    room: selectedRoom,
-                    site: selectedSite,
-                    date_start: startDateISO,
-                    date_end: endDateISO,
+            const response = await axios.get(
+                `${API_BASE_URL}/workshops/${endpoint}/`,
+                {
+                    params: {
+                        name: searchName,
+                        room: selectedRoom,
+                        site: selectedSite,
+                        date_start: startDateISO,
+                        date_end: endDateISO,
+                    },
                 },
-            });
+            );
             return response.data;
         },
         refetchOnMount: true,

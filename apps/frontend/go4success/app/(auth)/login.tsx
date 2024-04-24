@@ -15,8 +15,12 @@ export default function Login() {
     const { t } = useTranslation();
 
     const schema = yup.object().shape({
-        username: yup.string().required(t("translateLogin.yupUsernameRequired")),
-        password: yup.string().required(t("translateLogin.yupPasswordRequired")),
+        username: yup
+            .string()
+            .required(t("translateLogin.yupUsernameRequired")),
+        password: yup
+            .string()
+            .required(t("translateLogin.yupPasswordRequired")),
     });
 
     const { signIn } = useAuth();
@@ -39,7 +43,12 @@ export default function Login() {
 
     return (
         <ScrollView contentContainerStyle={styles.mainContainer}>
-            <View style={[styles.container, { shadowRadius: 0, backgroundColor: "" }]}>
+            <View
+                style={[
+                    styles.container,
+                    { shadowRadius: 0, backgroundColor: "" },
+                ]}
+            >
                 <Text style={styles.title}>{t("translateLogin.title")}</Text>
                 <View style={styles.form}>
                     <Controller
@@ -61,7 +70,9 @@ export default function Login() {
                     />
 
                     {errors.username && (
-                        <Text style={styles.errorMsg}>{errors.username.message}</Text>
+                        <Text style={styles.errorMsg}>
+                            {errors.username.message}
+                        </Text>
                     )}
 
                     <Controller
@@ -81,7 +92,9 @@ export default function Login() {
                                     name={showPassword ? "eye-off" : "eye"}
                                     size={24}
                                     color="black"
-                                    onPress={() => setShowPassword(!showPassword)}
+                                    onPress={() =>
+                                        setShowPassword(!showPassword)
+                                    }
                                 />
                             </View>
                         )}
@@ -90,7 +103,9 @@ export default function Login() {
                     />
 
                     {errors.password && (
-                        <Text style={styles.errorMsg}>{errors.password.message}</Text>
+                        <Text style={styles.errorMsg}>
+                            {errors.password.message}
+                        </Text>
                     )}
 
                     <Button

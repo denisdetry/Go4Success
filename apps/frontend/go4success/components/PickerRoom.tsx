@@ -20,25 +20,28 @@ function PickerRoom({
     selectedRoom,
     selectedSite,
 }: {
-    setSelectedRoom: React.Dispatch<React.SetStateAction<Room | null>>;
-    selectedRoom: Room | null;
-    selectedSite?: Site | null;
+    readonly setSelectedRoom: React.Dispatch<React.SetStateAction<Room | null>>;
+    readonly selectedRoom: Room | null;
+    readonly selectedSite?: Site | null;
 } & Readonly<any>) {
     const { error, data: rooms } = useQuery<Room[]>({
         queryKey: ["room", selectedSite ? selectedSite.id : "all"],
         queryFn: async () => {
-            const response = await axios.get(`${API_BASE_URL}/workshops/rooms/`, {
-                params: {
-                    site: selectedSite ? selectedSite.id : undefined,
+            const response = await axios.get(
+                `${API_BASE_URL}/workshops/rooms/`,
+                {
+                    params: {
+                        site: selectedSite ? selectedSite.id : undefined,
+                    },
                 },
-            });
-            const data = response.data
+            );
+            return response.data
                 .map((Room: any) => ({ id: Room.id, name: Room.name }))
                 .filter(
                     (value: any, index: number, self: any[]) =>
-                        self.findIndex((v: any) => v.name === value.name) === index,
+                        self.findIndex((v: any) => v.name === value.name) ===
+                        index,
                 );
-            return data;
         },
         refetchOnMount: true,
         refetchOnReconnect: true,
@@ -64,7 +67,11 @@ function PickerRoom({
         >
             <Picker.Item label="ALL" value="" />
             {rooms.map((room: Room) => (
-                <Picker.Item key={room.id} label={room.name} value={room.name} />
+                <Picker.Item
+                    key={room.id}
+                    label={room.name}
+                    value={room.name}
+                />
             ))}
         </Picker>
     );

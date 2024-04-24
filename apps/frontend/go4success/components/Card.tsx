@@ -18,12 +18,7 @@ import Toast from "react-native-toast-message";
 import { queryClient } from "@/app/_layout";
 import { useMutation } from "@tanstack/react-query";
 import { fetchError } from "@/utils/fetchError";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation } from "@react-navigation/native";
-
-type RootStackParamList = {
-    feedbackcreate: { activityId: string };
-};
+import { Ionicons } from "@expo/vector-icons";
 
 interface CardProps {
     readonly id: string;
@@ -33,6 +28,7 @@ interface CardProps {
     readonly hour: string;
     readonly type: string;
     readonly description: string;
+    readonly language: string;
 }
 
 type FeedbackCreateScreenNavigationProp = StackNavigationProp<
@@ -140,6 +136,7 @@ const Card: React.FC<CardProps> = ({
     hour,
     type,
     description,
+    language,
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
@@ -213,10 +210,21 @@ const Card: React.FC<CardProps> = ({
                         </View>
 
                         <View style={styleFunctions.getModalDataStyle(type)}>
-                            <Text style={styles.modalText}>Date : {date}</Text>
-                            <Text style={styles.modalText}>Hour : {hour}</Text>
-                            <Text style={styles.modalText}>Place : {location}</Text>
-                            <Text style={styles.modalText}>Type : {type}</Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.date")} : {date}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.hour")} : {hour}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.place")} : {location}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.type")} : {type}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.language")}: {language}
+                            </Text>
                             <View style={styles.separator} />
                             <Text style={styles.modalText}>{description}</Text>
                         </View>
@@ -255,10 +263,18 @@ const Card: React.FC<CardProps> = ({
                 <Text style={styles.title}>{title}</Text>
                 <View style={styles.bottomRow}>
                     <View style={styles.bottomRowLocation}>
-                        <Text style={styles.text}>{location}</Text>
+                        <View style={{ flexDirection: "row", gap: 3 }}>
+                            <Ionicons
+                                name={"location-outline"}
+                                size={20}
+                                color={"white"}
+                            />
+                            <Text style={styles.text}>{location}</Text>
+                        </View>
                     </View>
 
                     <View style={styles.bottomRowDate}>
+                        <Text style={styles.text}>{language}</Text>
                         <Text style={styles.text}>{date}</Text>
                         <Text style={styles.text}>{hour}</Text>
                     </View>
@@ -311,6 +327,8 @@ const styles = StyleSheet.create({
 
     bottomRowLocation: {
         width: "50%",
+        justifyContent: "flex-start",
+        alignItems: "flex-end",
         flexDirection: "row",
     },
 

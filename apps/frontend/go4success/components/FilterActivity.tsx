@@ -13,6 +13,7 @@ import { ItemType } from "react-native-dropdown-picker";
 import { Activity, useActivities } from "@/hooks/useActivities";
 import { useTranslation } from "react-i18next";
 import RenderCarousel from "@/components/RenderCarousel";
+import { useLanguages } from "@/hooks/useLanguages";
 
 interface Attend {
     activity: Activity;
@@ -29,9 +30,11 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const { t } = useTranslation();
     const [siteOpen, setSiteOpen] = React.useState(false);
     const [roomOpen, setRoomOpen] = React.useState(false);
+    const [languageOpen, setLanguageOpen] = React.useState(false);
     const [searchName, setSearchName] = useState("");
     const [selectedRoom, setSelectedRoom] = useState<SelectItem>();
     const [selectedSite, setSelectedSite] = useState<SelectItem>();
+    const [selectedLanguage, setSelectedLanguage] = useState<SelectItem>();
 
     const [range, setRange] = React.useState<{
         startDate: DateType;
@@ -43,6 +46,9 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
     const { rooms, error: roomError } = useRooms(selectedSite?.value, sites);
     const allRooms = [{ label: "All", value: "" }, ...rooms];
+
+    const { languages, error: languageError } = useLanguages();
+    const allLanguages = [{ label: "All", value: "" }, ...languages];
 
     const onChange = useCallback(
         (range: { startDate: DateType; endDate: DateType }) => {
@@ -70,6 +76,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         searchName,
         selectedRoom?.value,
         selectedSite?.value,
+        selectedLanguage?.value,
         convertDateToISO(range.startDate),
         convertDateToISO(range.endDate),
     );
@@ -80,6 +87,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         searchName,
         selectedRoom?.value,
         selectedSite?.value,
+        selectedLanguage?.value,
         convertDateToISO(range.startDate),
         convertDateToISO(range.endDate),
     );
@@ -103,6 +111,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 hour={activityHour}
                 type={activity.type}
                 description={activity.description}
+                language={activity.language.name}
             />
         );
     };
@@ -133,10 +142,19 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         );
     }
 
+    if (languageError) {
+        return (
+            <View>
+                <Text> Error: {languageError.message} </Text>
+            </View>
+        );
+    }
+
     const handleClearFilter = () => {
         setSearchName("");
         setSelectedRoom(undefined);
         setSelectedSite(undefined);
+        setSelectedLanguage(undefined);
         setRange({ startDate: null, endDate: null });
     };
 
@@ -192,6 +210,21 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                             open={roomOpen}
                             setOpen={setRoomOpen}
                             value={selectedRoom?.value ?? null}
+                        />
+
+                        <View style={{ height: 10 }} />
+
+                        <SelectSearch
+                            zIndex={98}
+                            items={allLanguages}
+                            placeholder={t("translationButton.SelectLanguage")}
+                            searchable={true}
+                            onSelectItem={(item) => {
+                                setSelectedLanguage(item as Required<ItemType<string>>);
+                            }}
+                            open={languageOpen}
+                            setOpen={setLanguageOpen}
+                            value={selectedLanguage?.value ?? null}
                         />
 
                         <View

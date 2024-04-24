@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     },
 
     userProfileFields: {
+        alignContent: "center",
         alignSelf: Platform.OS === "web" ? "auto" : "center",
         gap: 10,
     },

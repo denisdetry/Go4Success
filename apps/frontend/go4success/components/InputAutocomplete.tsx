@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Pressable,
     SafeAreaView,
@@ -50,6 +50,11 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
             return itemValue.includes(searchText);
         });
     };
+
+    useEffect(() => {
+        setFilteredData(items);
+        setSelectedData({ key: "", value: "" });
+    }, [items]);
 
     const renderItem = ({ item }: { item: SelectItem }) => {
         if (visible) {
@@ -106,7 +111,6 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                 <FlatList
                     style={{ maxHeight: 200 }}
                     data={filteredData}
-                    //ListHeaderComponent={textInput}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.value}
                 />

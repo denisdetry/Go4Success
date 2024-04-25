@@ -107,6 +107,7 @@ export default function Add() {
     const { sites, isPending: sitePending, error: siteError } = useSites();
 
     const watchSite = watch("site", undefined);
+
     const { rooms, error: roomError } = useRooms(watchSite?.key);
 
     const { languages } = useLanguages();
@@ -232,6 +233,7 @@ export default function Add() {
                         <InputAutocomplete
                             items={sites}
                             placeholder={t("translationActivities.site")}
+                            readOnly={true}
                             onChange={onChange}
                         />
                     )}

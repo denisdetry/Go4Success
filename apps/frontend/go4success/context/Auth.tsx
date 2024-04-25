@@ -64,8 +64,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             });
 
                             if (success) {
-                                AsyncStorage.setItem("accessToken", success.access);
-                                AsyncStorage.setItem("refreshToken", success.refresh);
+                                await AsyncStorage.setItem("accessToken", success.access);
+                                await AsyncStorage.setItem("refreshToken", success.refresh);
                                 void queryClient.invalidateQueries({
                                     queryKey: ["current_user"],
                                 });
@@ -109,8 +109,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         });
 
                         if (success) {
-                            AsyncStorage.setItem("accessToken", success.access);
-                            AsyncStorage.setItem("refreshToken", success.refresh);
+                            await AsyncStorage.setItem("accessToken", success.access);
+                            await AsyncStorage.setItem("refreshToken", success.refresh);
 
                             void queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
@@ -123,6 +123,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         }
                     } catch (err) {
                         const error = err as fetchError;
+                        console.log(error);
                         if (error.responseError) {
                             if (error.responseError.status === 401 || error.responseError.status === 400) {
                                 Toast.show({
@@ -137,8 +138,16 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                     text2: t("translateToast.ServerErrorText2"),
                                 });
                             }
+                        } else {
+                            Toast.show({
+                                type: "error",
+                                text1: t("translateToast.ErrorText1"),
+                                text2: t("translateToast.ServerErrorText2"),
+                            });
                         }
+
                     }
+
                 },
 
                 signOut: async () => {

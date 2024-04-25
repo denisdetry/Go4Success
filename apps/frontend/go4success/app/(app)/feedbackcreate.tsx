@@ -10,6 +10,8 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import Colors from "@/constants/Colors";
 import { ItemType } from "react-native-dropdown-picker";
 import { useActivities } from "@/hooks/useActivities";
+import DateTimePicker from "react-native-ui-datepicker";
+import dayjs from "dayjs";
 
 export default function FeedbackCreate() {
     const { t } = useTranslation();
@@ -20,6 +22,7 @@ export default function FeedbackCreate() {
     const [isCheckedAdditionalComment, setIsCheckedAdditionalComment] = useState(true);
     const [customQuestions, setCustomQuestions] = useState([""]);
     const [viewHeight, setViewHeight] = useState(10);
+    const [date, setDate] = useState(dayjs());
 
     const [activityOpen, setActivityOpen] = React.useState(false);
     const [selectedActivity, setSelectedActivity] = useState<SelectItem>();
@@ -33,6 +36,8 @@ export default function FeedbackCreate() {
         null,
         null,
     );
+
+    const send = () => {};
 
     const addQuestion = () => {
         setCustomQuestions([...customQuestions, ""]);
@@ -50,18 +55,18 @@ export default function FeedbackCreate() {
                 <Text
                     style={[stylesGlobal.title, { fontSize: 30, textAlign: "center" }]}
                 >
-                    Create Feedback
+                    {t("translateFeedback.create")}
                 </Text>
 
                 <View style={stylesGlobal.buttonContainer}>
                     <ButtonComponent
-                        text="Course"
+                        text={t("translateFeedback.course")}
                         onPress={() => setSelection("course")}
                         buttonType={selection === "course" ? "primary" : "secondary"}
                     />
 
                     <ButtonComponent
-                        text="Activity"
+                        text={t("translateFeedback.activity")}
                         onPress={() => setSelection("activity")}
                         buttonType={selection === "activity" ? "primary" : "secondary"}
                     />
@@ -79,6 +84,10 @@ export default function FeedbackCreate() {
                 {selection === "activity" && (
                     <>
                         {/* Activites select */}
+                        <Text style={stylesGlobal.titleH2NoPadding}>
+                            {t("translateFeedback.activity")}
+                        </Text>
+
                         <View style={styles.feedbackContainer}>
                             <View style={styles.feedbackFields}>
                                 <View
@@ -112,7 +121,7 @@ export default function FeedbackCreate() {
                         <Text style={styles.lineStyle}> ────────────────────────</Text>
 
                         <Text style={stylesGlobal.titleH2NoPadding}>
-                            Default select
+                            {t("translateFeedback.defaultSelect")}
                         </Text>
 
                         <View style={styles.feedbackContainer}>
@@ -123,7 +132,7 @@ export default function FeedbackCreate() {
                                         size={25}
                                         fillColor={Colors.primaryColor}
                                         unFillColor="#FFFFFF"
-                                        text={"Positive Point"}
+                                        text={t("translateFeedback.positivePoint")}
                                         iconStyle={{ borderColor: Colors.primaryColor }}
                                         style={{ marginBottom: 10 }}
                                         innerIconStyle={{ borderWidth: 2 }}
@@ -141,7 +150,7 @@ export default function FeedbackCreate() {
                                         size={25}
                                         fillColor={Colors.primaryColor}
                                         unFillColor="#FFFFFF"
-                                        text={"Negative Point"}
+                                        text={t("translateFeedback.negativePoint")}
                                         iconStyle={{ borderColor: Colors.primaryColor }}
                                         style={{ marginBottom: 10 }}
                                         innerIconStyle={{ borderWidth: 2 }}
@@ -159,7 +168,7 @@ export default function FeedbackCreate() {
                                         size={25}
                                         fillColor={Colors.primaryColor}
                                         unFillColor="#FFFFFF"
-                                        text={"Suggestion"}
+                                        text={t("translateFeedback.suggestion")}
                                         iconStyle={{ borderColor: Colors.primaryColor }}
                                         style={{ marginBottom: 10 }}
                                         innerIconStyle={{ borderWidth: 2 }}
@@ -177,7 +186,7 @@ export default function FeedbackCreate() {
                                         size={25}
                                         fillColor={Colors.primaryColor}
                                         unFillColor="#FFFFFF"
-                                        text={"Additional comment"}
+                                        text={t("translateFeedback.additionalComment")}
                                         iconStyle={{ borderColor: Colors.primaryColor }}
                                         style={{ marginBottom: 10 }}
                                         innerIconStyle={{ borderWidth: 2 }}
@@ -193,10 +202,33 @@ export default function FeedbackCreate() {
                                 </View>
                             </View>
                         </View>
+
+                        <Text style={styles.lineStyle}> ────────────────────────</Text>
+
+                        <Text style={stylesGlobal.titleH2NoPadding}>
+                            {t("translateFeedback.dateEnd")}
+                        </Text>
+
+                        {/* Date de fin */}
+                        <View style={stylesGlobal.containerDatePicker}>
+                            <DateTimePicker
+                                mode="single"
+                                locale="fr"
+                                date={date}
+                                onChange={(params) =>
+                                    setDate(params.date ? dayjs(params.date) : dayjs())
+                                }
+                                selectedItemColor={Colors.primaryColor}
+                                headerContainerStyle={{
+                                    backgroundColor: "white",
+                                }}
+                                headerTextStyle={{ color: Colors.thirdColor }}
+                            />
+                        </View>
                         {/* More question */}
                         <Text style={styles.lineStyle}> ────────────────────────</Text>
                         <Text style={stylesGlobal.titleH2NoPadding}>
-                            Questions supplémentaires
+                            {t("translateFeedback.moreQuestions")}
                         </Text>
                         {customQuestions.map((question, index) => (
                             <View style={styles.feedbackContainer}>
@@ -209,7 +241,9 @@ export default function FeedbackCreate() {
                                             onChangeText={(text) =>
                                                 updateQuestion(text, index)
                                             }
-                                            placeholder={"Enter your question"}
+                                            placeholder={t(
+                                                "translateFeedback.enterQuestion",
+                                            )}
                                             multiline={true}
                                         />
                                     </View>
@@ -217,9 +251,15 @@ export default function FeedbackCreate() {
                             </View>
                         ))}
                         <ButtonComponent
-                            text="Add more questions"
+                            text={t("translateFeedback.addQuestion")}
                             onPress={addQuestion}
                             buttonType={"primary"}
+                        />
+                        <View style={{ height: 10 }} />
+                        <ButtonComponent
+                            text={t("translateFeedback.send")}
+                            onPress={send}
+                            buttonType={"secondary"}
                         />
                     </>
                 )}

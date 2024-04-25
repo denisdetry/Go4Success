@@ -118,8 +118,11 @@
     },
     "translateFeedback": {
         "feedback": "Feedback",
+        "create": "Creating feedback",
+        "show": "See feedback",
         "student": "Student",
         "activity": "Activity",
+        "course": "Course",
         "evaluation": "Evaluation",
         "positivePoint": "Positive point",
         "negativePoint": "Negative point",
@@ -128,7 +131,12 @@
         "dateSubmitted": "Date submitted",
         "open": "Open",
         "send": "Send",
-        "for": "Feedback for"
+        "for": "Feedback for",
+        "defaultSelect": "Default select",
+        "moreQuestions": "Additional questions",
+        "enterQuestion": "Enter your question",
+        "addQuestion": "Add more questions",
+        "dateEnd": "Date end"
     },
     "satisfactionLevels": {
         "verySatisfied": "Very satisfied",

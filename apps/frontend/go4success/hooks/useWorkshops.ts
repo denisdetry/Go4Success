@@ -38,7 +38,9 @@ export function useWorkshops(
                         name: searchName,
                         room: selectedRoom,
                         site: selectedSite,
+                        // eslint-disable-next-line camelcase
                         date_start: startDateISO,
+                        // eslint-disable-next-line camelcase
                         date_end: endDateISO,
                     },
                 },

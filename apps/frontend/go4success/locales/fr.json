@@ -27,7 +27,8 @@
         "SelectRoom": "Sélectionner une salle",
         "SelectLanguage": "Sélectionner une langue",
         "ClearDates": "Effacer les dates",
-        "SearchTitleWorkshop": "Rechercher un atelier"
+        "SearchTitleWorkshop": "Rechercher un atelier",
+        "AddWorkshop": "Ajouter l'atelier"
     },
     "translateLogin": {
         "title": "Connexion",
@@ -120,7 +121,7 @@
         "title": "Titre de l'atelier",
         "description": "Description",
         "site": "Selectionner un site",
-        "room": "Selectionner une ou plusieurs salles",
+        "room": "Selectionner une salle",
         "language": "Selectionner une langue",
         "date": "Selectionner une date",
         "beginTime": "Heure de début",

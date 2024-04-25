@@ -27,7 +27,8 @@
         "SelectRoom": "Select a room",
         "SelectLanguage": "Select a language",
         "ClearDates": "Clear dates",
-        "SearchTitleWorkshop": "Search title Workshop"
+        "SearchTitleWorkshop": "Search title Workshop",
+        "AddWorkshop": "Add a workshop"
     },
     "translateLogin": {
         "title": "Sign in",
@@ -119,7 +120,7 @@
         "title": "Workshop title",
         "description": "Description",
         "site": "Select a site",
-        "room": "Select one or more rooms",
+        "room": "Select one room",
         "language": "Select a language",
         "date": "Select the date",
         "beginTime": "Start time",

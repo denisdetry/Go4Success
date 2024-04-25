@@ -3,7 +3,6 @@ import {
     Pressable,
     SafeAreaView,
     ScrollView,
-    StyleSheet,
     Text,
     TextInput,
     View,
@@ -27,7 +26,7 @@ type ItemProps = {
 const Item = ({ item, onPress }: ItemProps) => {
     return (
         <Pressable onPress={onPress} onFocus={() => console.log("Focus")}>
-            <Text>{item.value}</Text>
+            <Text style={styles.text}>{item.value}</Text>
         </Pressable>
     );
 };
@@ -38,14 +37,13 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     readOnly = false,
 }) => {
     const [focus, setFocus] = React.useState(false);
-    const [searchFocus, setSearchFocus] = React.useState(false);
 
     const [filteredData, setFilteredData] = React.useState<SelectItem[]>(items);
-    const [selectedData, setselectedData] = React.useState<SelectItem[]>([]);
+    const [selectedData, setSelectedData] = React.useState<SelectItem[]>([]);
 
     useEffect(() => {
         setFilteredData(items);
-        setselectedData([]);
+        setSelectedData([]);
     }, [items]);
 
     const filterData = (text: string) => {
@@ -64,12 +62,8 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                 <TextInput
                     style={styles.inputField}
                     placeholder={"Search a room"}
-                    onFocus={() => setSearchFocus(true)}
                     readOnly={readOnly}
                     autoFocus={true}
-                    onBlur={() => {
-                        setSearchFocus(false);
-                    }}
                     onChangeText={(text) => {
                         setFilteredData(filterData(text));
                         //onChange({ key: text, value: text });
@@ -88,7 +82,7 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                         ? selectedData.filter((i) => i !== item)
                         : [...selectedData, item];
 
-                    setselectedData(updatedData);
+                    setSelectedData(updatedData);
                     onChange(updatedData);
                 }}
             />
@@ -104,7 +98,7 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                 }}
             >
                 <SafeAreaView>
-                    <Text style={stylesin.button}>
+                    <Text style={styles.inputField}>
                         {selectedData.length > 0
                             ? selectedData.map((item) => item.value).join(", ")
                             : placeholder}
@@ -126,21 +120,5 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
         </ScrollView>
     );
 };
-
-const stylesin = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        paddingHorizontal: 10,
-    },
-    button: {
-        alignItems: "center",
-        backgroundColor: "#DDDDDD",
-        padding: 10,
-    },
-    countContainer: {
-        alignItems: "center",
-    },
-});
 
 export default InputAutocomplete;

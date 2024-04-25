@@ -18,15 +18,24 @@ export function useRooms(siteId: string | undefined) {
     } = useQuery<SelectItem[]>({
         queryKey: ["rooms", siteId],
         queryFn: async () => {
-            const response = await axios.get(
-                `${backendUrl}/activities/rooms/` +
-                    (siteId ? `site/${siteId}/` : ""),
-            );
+            try {
+                const response = await axios.get(
+                    `${backendUrl}/activities/rooms/` +
+                        (siteId ? `site/${siteId}/` : ""),
+                );
 
-            return response.data.map((room: Room) => ({
-                key: room.id,
-                value: room.name + " - " + room.site.name,
-            }));
+                return response.data.map((room: Room) => ({
+                    key: room.id,
+                    value: room.name + " - " + room.site.name,
+                }));
+            } catch (error) {
+                return [
+                    {
+                        key: "error",
+                        value: "Error fetching rooms",
+                    },
+                ];
+            }
         },
     });
 

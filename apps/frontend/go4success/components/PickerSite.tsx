@@ -3,9 +3,7 @@ import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
 import stylesGlobal from "../styles/global";
 import { API_BASE_URL } from "../constants/ConfigApp";
-import { QueryClient, useQuery } from "@tanstack/react-query";
-
-const queryClient = new QueryClient();
+import { useQuery } from "@tanstack/react-query";
 
 interface Site {
     id: string;

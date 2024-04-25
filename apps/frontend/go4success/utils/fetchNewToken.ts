@@ -3,9 +3,9 @@ import { t } from "i18next";
 import { fetchError } from "./fetchError";
 
 export async function fetchNewToken() {
-    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+    const backendUrl = process.env.EXPO_PUBLIC_API_URL;
     const token = await AsyncStorage.getItem("refreshToken");
-    const response = await fetch(`${backend_url}/auth/refresh_token/`, {
+    const response = await fetch(`${backendUrl}/auth/refresh_token/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

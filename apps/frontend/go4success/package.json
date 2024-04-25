@@ -34,6 +34,7 @@
         "react-hook-form": "^7.51.0",
         "react-i18next": "^14.1.0",
         "react-native": "0.73.4",
+        "react-native-bouncy-checkbox": "^4.0.0",
         "react-native-dropdown-picker": "^5.4.6",
         "react-native-gesture-handler": "~2.14.0",
         "react-native-picker-select": "^9.1.3",

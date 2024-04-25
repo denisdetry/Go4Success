@@ -108,6 +108,14 @@
         "registerButton": "Sign up",
         "closeButton": "Close"
     },
+
+    "translateCard": {
+        "date": "Date",
+        "hour": "Hour",
+        "place": "Place",
+        "type": "Type",
+        "language": "Language"
+    },
     "translateFeedback": {
         "feedback": "Feedback",
         "student": "Student",

@@ -23,7 +23,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 
 type RootStackParamList = {
-    feedbackcreate: { activityId: string };
+    feedbackanswer: { activityId: string };
 };
 
 interface CardProps {
@@ -38,9 +38,9 @@ interface CardProps {
     readonly dateEnd: string;
 }
 
-type FeedbackCreateScreenNavigationProp = StackNavigationProp<
+type FeedbackAnswerScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
-    "feedbackcreate"
+    "feedbackanswer"
 >;
 
 const styleFunctions = {
@@ -167,7 +167,7 @@ const Card: React.FC<CardProps> = ({
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
     const { t } = useTranslation();
-    const navigation = useNavigation<FeedbackCreateScreenNavigationProp>();
+    const navigation = useNavigation<FeedbackAnswerScreenNavigationProp>();
     const currentDate = new Date();
     const [datePart, timePart] = dateEnd.split(" - ");
     const [day, month, year] = datePart.split("-");
@@ -289,7 +289,7 @@ const Card: React.FC<CardProps> = ({
                                 <ButtonComponent
                                     text={t("translateFeedback.feedback")}
                                     onPress={() => {
-                                        navigation.navigate("feedbackcreate", {
+                                        navigation.navigate("feedbackanswer", {
                                             activityId: id,
                                         });
                                         setModalVisible(false);

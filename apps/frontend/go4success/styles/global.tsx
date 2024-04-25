@@ -24,6 +24,10 @@ export default StyleSheet.create({
         fontSize: 28,
         fontWeight: "500",
     },
+    titleH2NoPadding: {
+        fontSize: 22,
+        fontWeight: "500",
+    },
     text: {
         fontSize: 16,
         fontWeight: "200",
@@ -36,10 +40,10 @@ export default StyleSheet.create({
                 ? isMobile
                     ? 360
                     : isTabletMini
-                        ? 360
-                        : isTablet
-                            ? 710
-                            : 1435
+                      ? 360
+                      : isTablet
+                        ? 710
+                        : 1435
                 : 1435, // isDesktop for the last one
         paddingBottom: 20,
     },

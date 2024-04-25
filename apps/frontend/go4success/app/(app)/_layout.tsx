@@ -197,6 +197,20 @@ export default function Layout() {
                             ),
                         }}
                     />
+                    <Drawer.Screen
+                        name="feedbackcreate"
+                        options={{
+                            drawerLabel: "Feedback create",
+                            headerTitle: "Feedback create",
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name="albums-outline"
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
                 </Drawer>
             </AuthProvider>
         </GestureHandlerRootView>

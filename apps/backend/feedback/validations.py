@@ -1,6 +1,6 @@
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-from database.models import Attend, FeedbackActivity
+from database.models import Attend, Feedback
 
 
 def validate_student_in_activity(data):
@@ -22,7 +22,7 @@ def validate_activity_is_finished(data):
 def validate_feedback_not_exists(data):
     activity = data['activity']
     student = data['student']
-    feedback = FeedbackActivity.objects.filter(
+    feedback = Feedback.objects.filter(
         activity=activity, student=student)
     if feedback.exists():
         raise ValidationError(

@@ -121,6 +121,7 @@ export const ChangeUserPasswordFields = () => {
                         style={styles.input}
                         value={value}
                         placeholder={editable ? "" : "*".repeat(8)}
+                        placeholderTextColor={"grey"}
                         onChangeText={onChangeText}
                         clearButtonMode={"while-editing"}
                         editable={editable}

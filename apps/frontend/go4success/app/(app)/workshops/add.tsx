@@ -92,6 +92,16 @@ export default function Add() {
         formState: { errors },
     } = useForm({
         resolver: yupResolver(schema),
+        defaultValues: {
+            title: "",
+            description: "",
+            site: undefined,
+            room: undefined,
+            language: undefined,
+            workshopDate: [],
+            beginTime: [],
+            endTime: [],
+        },
     });
 
     const { sites, isPending: sitePending, error: siteError } = useSites();
@@ -171,11 +181,11 @@ export default function Add() {
     };
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.mainContainer}
-        >
-            <ScrollView nestedScrollEnabled={true}>
+        <ScrollView>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={styles.mainContainer}
+            >
                 <Controller
                     control={control}
                     rules={{ required: true }}
@@ -183,12 +193,12 @@ export default function Add() {
                         <TextInput
                             style={styles.inputField}
                             placeholder={t("translationActivities.title")}
+                            placeholderTextColor={"grey"}
                             onChangeText={onChange}
                             value={value}
                         />
                     )}
                     name="title"
-                    defaultValue=""
                 />
 
                 {errors.title && (
@@ -202,12 +212,12 @@ export default function Add() {
                         <TextInput
                             style={styles.inputField}
                             placeholder={t("translationActivities.description")}
+                            placeholderTextColor={"grey"}
                             onChangeText={onChange}
                             value={value}
                         />
                     )}
                     name="description"
-                    defaultValue=""
                 />
 
                 {errors.description && (
@@ -336,8 +346,8 @@ export default function Add() {
                         {t("translationButton.AddWorkshop")}
                     </Text>
                 </Pressable>
-            </ScrollView>
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+        </ScrollView>
     );
 }
 

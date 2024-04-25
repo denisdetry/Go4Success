@@ -78,6 +78,7 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                     <TextInput
                         style={styles.input}
                         placeholder={placeholder}
+                        placeholderTextColor={"grey"}
                         readOnly={readOnly}
                         onChangeText={(text) => {
                             setFilteredData(filterData(text));
@@ -89,7 +90,11 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                         onPressIn={() => setVisible(true)}
                     />
 
-                    <Pressable onPress={() => setVisible(!visible)}>
+                    <Pressable
+                        onPress={() => {
+                            setVisible(!visible);
+                        }}
+                    >
                         <AntDesign
                             name={visible ? "up" : "down"}
                             size={26}

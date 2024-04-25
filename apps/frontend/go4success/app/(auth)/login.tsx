@@ -60,6 +60,7 @@ export default function Login() {
                                     autoCapitalize={"none"}
                                     style={styles.input}
                                     placeholder={t("translateLogin.username")}
+                                    placeholderTextColor={"grey"}
                                     onChangeText={onChange}
                                     value={value}
                                 />
@@ -83,6 +84,7 @@ export default function Login() {
                                 <TextInput
                                     style={styles.input}
                                     placeholder={t("translateLogin.password")}
+                                    placeholderTextColor={"grey"}
                                     onChangeText={onChange}
                                     value={value}
                                     secureTextEntry={!showPassword}

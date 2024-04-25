@@ -15,7 +15,7 @@ export const usePushNotifications = (): PushNotificationState => {
     Notifications.setNotificationHandler({
         handleNotification: async () => ({
             shouldShowAlert: true,
-            shouldPlaySound: true,
+            shouldPlaySound: false,
             shouldSetBadge: true,
         }),
     });
@@ -51,16 +51,16 @@ export const usePushNotifications = (): PushNotificationState => {
     //     });
     // }
 
-    // async function schedulePushNotification() {
-    //     await Notifications.scheduleNotificationAsync({
-    //         content: {
-    //             title: "You've got mail! 📬",
-    //             body: "Here is the notification body",
-    //             data: { data: "goes here" },
-    //         },
-    //         trigger: { seconds: 2 },
-    //     });
-    // }
+    async function schedulePushNotification() {
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: "You've got mail! 📬",
+                body: "Here is the notification body",
+                data: { data: "goes here" },
+            },
+            trigger: { seconds: 2 },
+        });
+    }
 
 
     function handleRegistrationError(errorMessage: string) {

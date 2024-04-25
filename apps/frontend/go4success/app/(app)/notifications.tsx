@@ -13,12 +13,13 @@ export default function Notifications() {
     const [isSending, setIsSending] = React.useState(false);
     const { allUsers } = useAllUsers();
 
+
     async function sendPushNotification(expoPushToken: string) {
         const message = {
             to: expoPushToken,
             sound: "default",
-            title: "Original Title " + count,
-            body: "And here is the body!",
+            title: "Venez voir !",
+            body: "Vous avez reçu un feedback de la part de vos étudiants! 📬",
             data: { someData: "goes here" },
         };
 

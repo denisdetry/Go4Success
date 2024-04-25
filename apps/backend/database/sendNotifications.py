@@ -18,10 +18,12 @@ session.headers.update(
 )
 
 
+# Basic arguments. You should extend this function with the push features you
+# want to use, or simply pass in a `PushMessage` object.
 def send_push_message(token, message, extra=None):
     response = PushClient(session=session).publish(
         PushMessage(to=token,
                     body=message,
                     data=extra))
 
-    return response
+    response.validate_response()

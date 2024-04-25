@@ -79,15 +79,13 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 Toast.show({
                                     type: "success",
                                     text1: t("translateToast.SuccessText1"),
-                                    text2: t(
-                                        "translateToast.RegisterSuccessText2",
-                                    ),
+                                    text2: t("translateToast.RegisterSuccessText2"),
                                 });
                             }
                         } catch (err) {
                             const error = err as fetchError;
                             if (error.responseError) {
-                                if (error.responseError.status === 401) {
+                                if (error.responseError.status === 401 || error.responseError.status === 400) {
                                     Toast.show({
                                         type: "error",
                                         text1: t("translateToast.ErrorText1"),
@@ -140,7 +138,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     } catch (err) {
                         const error = err as fetchError;
                         if (error.responseError) {
-                            if (error.responseError.status === 401) {
+                            if (error.responseError.status === 401 || error.responseError.status === 400) {
                                 Toast.show({
                                     type: "error",
                                     text1: t("translateToast.ErrorText1"),
@@ -155,6 +153,12 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                     text2: t("translateToast.ServerErrorText2"),
                                 });
                             }
+                        } else {
+                            Toast.show({
+                                type: "error",
+                                text1: t("translateToast.ErrorText1"),
+                                text2: t("translateToast.ServerErrorText2"),
+                            });
                         }
                     }
                 },

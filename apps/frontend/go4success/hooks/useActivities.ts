@@ -44,9 +44,9 @@ export function useActivities(
                     site: selectedSite,
                     language: selectedLanguage,
                     // eslint-disable-next-line camelcase
-                    start_date: startDateISO,
+                    date_start: startDateISO,
                     // eslint-disable-next-line camelcase
-                    end_date: endDateISO,
+                    date_end: endDateISO,
                 },
             });
             // console.log("resp:", data);

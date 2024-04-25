@@ -51,7 +51,7 @@ class ActivityViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         data = request.data
         data['name'] = data['title'].title()
-        data['room'] = data['room'][0]['key']
+        data['room'] = data['room']['key']
 
         # Get the language id
         data['language'] = data['language']['key']

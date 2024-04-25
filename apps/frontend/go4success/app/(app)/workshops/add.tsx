@@ -23,6 +23,7 @@ import * as yup from "yup";
 import { InferType } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { fetchBackend } from "@/utils/fetchBackend";
+import Toast from "react-native-toast-message";
 
 export default function Add() {
     const { t } = useTranslation();
@@ -121,7 +122,7 @@ export default function Add() {
     }
 
     const createActivity: SubmitHandler<AddActivity> = async (data) => {
-        const modifiedDates = data.workshopDate.map((date) => {
+        const dates = data.workshopDate.map((date) => {
             return [
                 dayjs(date)
                     .set("hour", Number(data.beginTime[0]))
@@ -133,25 +134,39 @@ export default function Add() {
                     .toJSON(),
             ];
         });
-
-        const formattedData = {
-            type: "workshop",
-            title: data.title,
-            description: data.description,
-            site: data.site,
-            room: data.room,
-            language: data.language,
-            dates: modifiedDates,
-        };
-
-        try {
-            await fetchBackend({
-                type: "POST",
-                url: "activities/create/",
-                data: formattedData,
+        const errors = [];
+        for (const date of dates) {
+            console.log(date[0], date[1]);
+            const formattedData = {
+                type: "workshop",
+                title: data.title,
+                description: data.description,
+                site: data.site,
+                room: data.room,
+                language: data.language,
+                dateStart: date[0],
+                dateEnd: date[1],
+            };
+            try {
+                await fetchBackend({
+                    type: "POST",
+                    url: "activities/create/",
+                    data: formattedData,
+                });
+            } catch (error) {
+                errors.push(error);
+            }
+        }
+        if (errors.length > 0) {
+            Toast.show({
+                type: "error",
+                text1: t("translationActivities.addError"),
             });
-        } catch (error) {
-            console.log("error", error);
+        } else {
+            Toast.show({
+                type: "success",
+                text1: t("translationActivities.addSuccess"),
+            });
         }
     };
 

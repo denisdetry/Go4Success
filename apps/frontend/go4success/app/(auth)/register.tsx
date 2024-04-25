@@ -61,13 +61,13 @@ export default function Register() {
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            email: "test@gmail.com",
-            username: "test",
-            lastName: "test",
-            firstName: "test",
-            noma: "11223344",
-            password: "Azerty123_",
-            passwordRetype: "Azerty123_",
+            email: "",
+            username: "",
+            lastName: "",
+            firstName: "",
+            noma: "",
+            password: "",
+            passwordRetype: "",
         },
     });
 

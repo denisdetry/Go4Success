@@ -151,6 +151,15 @@ l'autre et allouer certaines permissions à chaque role.
 
 #### Vues (Rolemanagement)
 
+### Server
+
+Celui n'est pas une application django, mais le serveur django en lui-même. Il contient les fichiers de configuration,
+les urls, les settings, etc.
+
+#### Settings (Server)
+
+#### Urls (Server)
+
 [//]: # (### Vues Django)
 
 [//]: # (Les vues fonctionnent en utilisant l'APIView de l'API rest. Chaque vue possède une méthode _post_ et/ou _get_ qui sont)

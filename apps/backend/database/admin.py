@@ -8,8 +8,7 @@ from .models import User, Teacher, Give, Announcement, \
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'email', 'first_name',
-                    'last_name', 'noma', 'profile_picture', 'is_active', 'is_staff',
-                    'is_superuser')
+                    'last_name', 'noma', 'is_active', 'is_staff', 'is_superuser')
 
 
 class ExpoTokenAdmin(admin.ModelAdmin):

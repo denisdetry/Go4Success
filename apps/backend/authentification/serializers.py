@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'noma', 'expo_push_notification_token')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'noma')
 
     def validate_noma(self, value):
         if len(value) != 8 and len(value) != 0:

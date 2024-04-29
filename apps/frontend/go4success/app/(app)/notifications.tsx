@@ -1,8 +1,7 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import React from "react";
 import ButtonComponent from "@/components/ButtonComponent";
-import styles from "@/styles/global";
 import useAllExpoTokens from "@/hooks/useAllExpoTokens";
 import { useAuth } from "@/context/Auth";
 import { sendNotificationsToAllUsers, sendPushNotification } from "@/utils/sendNotification";
@@ -30,11 +29,15 @@ export default function Notifications() {
                     }}
                 />
 
-                <ButtonComponent text={"Send notifications to all users"} onPress={() => {
-                    sendNotificationsToAllUsers(allExpoTokens, "Venez voir !", "Vous avez reçu un feedback de la part de vos étudiants! 📬", { someData: "goes here" });
-                }} buttonType={"secondary"}
+                <ButtonComponent
+                    text={"Send notifications to all users"}
+                    onPress={() => {
+                        sendNotificationsToAllUsers(allExpoTokens, "Venez voir !", "Vous avez reçu un feedback de la part de vos étudiants! 📬", { someData: "goes here" });
+                    }}
+                    buttonType={"secondary"}
                 />
             </View>
         </ScrollView>
     );
+
 }

@@ -25,7 +25,7 @@ export async function sendPushNotification(expoPushToken: Notifications.ExpoPush
     }
 }
 
-export function sendNotificationsToAllUsers(allExpoTokens: Notifications.ExpoPushToken[], title, body, data) {
+export function sendNotificationsToAllUsers(allExpoTokens: Notifications.ExpoPushToken[], title: string, body: string, data: any) {
     if (!allExpoTokens) {
         return;
     }

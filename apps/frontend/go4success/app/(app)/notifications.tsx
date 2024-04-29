@@ -10,8 +10,9 @@ import { sendNotificationsToAllUsers, sendPushNotification } from "@/utils/sendN
 export default function Notifications() {
     const { allExpoTokens } = useAllExpoTokens();
     const { expoPushToken, notification } = useAuth();
-    
+
     const data = JSON.stringify(notification, undefined, 2);
+    
 
     return (
         <ScrollView nestedScrollEnabled={true} contentContainerStyle={[styles.mainContainer, { flexGrow: 0 }]}>
@@ -25,13 +26,13 @@ export default function Notifications() {
                     buttonType="primary"
                     onPress={() => {
                         if (expoPushToken) {
-                            void sendPushNotification(expoPushToken);
+                            void sendPushNotification(expoPushToken, "Venez voir !", "Vous avez reçu un feedback de la part de vos étudiants! 📬", { someData: "goes here" });
                         }
                     }}
                 />
 
                 <ButtonComponent text={"Send notifications to all users"} onPress={() => {
-                    sendNotificationsToAllUsers(allExpoTokens);
+                    sendNotificationsToAllUsers(allExpoTokens, "Venez voir !", "Vous avez reçu un feedback de la part de vos étudiants! 📬", { someData: "goes here" });
                 }} buttonType={"secondary"}
                 />
             </View>

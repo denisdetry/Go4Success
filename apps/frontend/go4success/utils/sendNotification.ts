@@ -1,12 +1,12 @@
 import * as Notifications from "expo-notifications";
 
-export async function sendPushNotification(expoPushToken: Notifications.ExpoPushToken) {
+export async function sendPushNotification(expoPushToken: Notifications.ExpoPushToken, title: string, body: string, data: any) {
     const message = {
         to: expoPushToken,
         sound: "default",
-        title: "Venez voir !",
-        body: "Vous avez reçu un feedback de la part de vos étudiants! 📬",
-        data: { someData: "goes here" },
+        title: title,
+        body: body,
+        data: data,
     };
 
     try {
@@ -25,14 +25,14 @@ export async function sendPushNotification(expoPushToken: Notifications.ExpoPush
     }
 }
 
-export function sendNotificationsToAllUsers(allExpoTokens: Notifications.ExpoPushToken[]) {
+export function sendNotificationsToAllUsers(allExpoTokens: Notifications.ExpoPushToken[], title, body, data) {
     if (!allExpoTokens) {
         return;
     }
 
     allExpoTokens.map((userTokens: any) => {
         if (userTokens.token && userTokens.is_active) {
-            sendPushNotification(userTokens.token);
+            sendPushNotification(userTokens.token, title, body, data);
         }
     }, []);
 }

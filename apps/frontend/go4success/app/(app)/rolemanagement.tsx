@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from "react";
-import {
-    Picker,
-    FlatList,
-    Text,
-    TouchableOpacity,
-    View,
-    StyleSheet,
-} from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import axiosConfig from "@/constants/axiosConfig";
 import Toast from "react-native-toast-message";
 
-axios.defaults.withCredentials = true;
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-axios.defaults.xsrfCookieName = "csrftoken";
+axiosConfig();
 
 export default function RoleManagement() {
     axiosConfig();
     const [userRole, setUserRole] = useState<UserRole[]>([]);
     const [selectedValue, setSelectedValue] = useState("");
-    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+    const backendURL = process.env.EXPO_PUBLIC_API_URL;
 
     const [userInfo, setUserInfo] = useState([]);
 
@@ -39,7 +31,7 @@ export default function RoleManagement() {
 
     useEffect(() => {
         axios
-            .get(`${backend_url}/rolemanagement/rolemanagement/`)
+            .get(`${backendURL}/rolemanagement/rolemanagement/`)
             .then((res) => {
                 setUserInfo(res.data);
             })
@@ -48,7 +40,7 @@ export default function RoleManagement() {
             });
 
         axios
-            .get(`${backend_url}/rolemanagement/editRole/`)
+            .get(`${backendURL}/rolemanagement/editRole/`)
             .then((res) => {
                 setUserRole(res.data);
             })
@@ -57,21 +49,23 @@ export default function RoleManagement() {
             });
     }, []);
 
-    function editRolePost(id: any, is_tutor: any, is_professor: any) {
+    function editRolePost(id: any, isTutor: any, isProfessor: any) {
         axios
-            .post(`${backend_url}/rolemanagement/editRole/`, {
+            .post(`${backendURL}/rolemanagement/editRole/`, {
                 user: id,
-                is_tutor: is_tutor,
-                is_professor: is_professor,
+                // eslint-disable-next-line camelcase
+                is_tutor: isTutor,
+                // eslint-disable-next-line camelcase
+                is_professor: isProfessor,
             })
-            .then((res) => {
+            .then(() => {
                 Toast.show({
                     type: "success", // Utilisez 'success', 'error', etc., selon le thème
                     text1: "Succès",
                     text2: "Changement enregistré",
                 });
             })
-            .catch((err) =>
+            .catch(() =>
                 Toast.show({
                     type: "error",
                     text1: "Erreur",
@@ -80,21 +74,23 @@ export default function RoleManagement() {
             );
     }
 
-    function editRolePatch(id: any, is_tutor: any, is_professor: any) {
+    function editRolePatch(id: any, isTutor: any, isProfessor: any) {
         axios
-            .patch(`${backend_url}/rolemanagement/editRole/${id}/`, {
+            .patch(`${backendURL}/rolemanagement/editRole/${id}/`, {
                 user: id,
-                is_tutor: is_tutor,
-                is_professor: is_professor,
+                // eslint-disable-next-line camelcase
+                is_tutor: isTutor,
+                // eslint-disable-next-line camelcase
+                is_professor: isProfessor,
             })
-            .then((res) => {
+            .then(() => {
                 Toast.show({
                     type: "success", // Utilisez 'success', 'error', etc., selon le thème
                     text1: "Succès",
                     text2: "Changement enregistré",
                 });
             })
-            .catch((err) =>
+            .catch(() =>
                 Toast.show({
                     type: "error",
                     text1: "Erreur",
@@ -105,15 +101,15 @@ export default function RoleManagement() {
 
     function editRoleDelete(id: any) {
         axios
-            .delete(`${backend_url}/rolemanagement/editRole/${id}/`) // Correction ici
-            .then((res) => {
+            .delete(`${backendURL}/rolemanagement/editRole/${id}/`) // Correction ici
+            .then(() => {
                 Toast.show({
                     type: "success", // Utilisez 'success', 'error', etc., selon le thème
                     text1: "Succès",
                     text2: "Changement enregistré",
                 });
             })
-            .catch((err) =>
+            .catch(() =>
                 Toast.show({
                     type: "error",
                     text1: "Erreur",
@@ -122,19 +118,20 @@ export default function RoleManagement() {
             );
     }
 
-    function rolemanagementPatch(id: any, super_user: any) {
+    function rolemanagementPatch(id: any, isSuperUser: any) {
         axios
-            .patch(`${backend_url}/rolemanagement/rolemanagement/${id}/`, {
-                is_superuser: super_user,
+            .patch(`${backendURL}/rolemanagement/rolemanagement/${id}/`, {
+                // eslint-disable-next-line camelcase
+                is_superuser: isSuperUser,
             })
-            .then((res) => {
+            .then(() => {
                 Toast.show({
                     type: "success", // Utilisez 'success', 'error', etc., selon le thème
                     text1: "Succès",
                     text2: "Changement enregistré",
                 });
             })
-            .catch((err) =>
+            .catch(() =>
                 Toast.show({
                     type: "error",
                     text1: "Erreur",
@@ -147,7 +144,7 @@ export default function RoleManagement() {
 
     const MyListComponent = () => {
         const handlePress = (userId: any) => {
-            const user = users.find((u) => u.id === userId);
+            const user = users.find((u: any) => u.id === userId);
             if (!user) {
                 console.error("Utilisateur non trouvé");
                 return;
@@ -180,12 +177,12 @@ export default function RoleManagement() {
         // Ajout d'un état pour suivre la valeur sélectionnée de chaque liste déroulante
         // Initialiser chaque élément avec son rôle actuel
         const [users, setUsers] = useState(
-            usersInfoRole.map((user) => ({ ...user, selectedRole: user.role })),
+            usersInfoRole.map((user: User) => ({ ...user, selectedRole: user.role })),
         );
 
-        const handleValueChange = (itemValue, itemId) => {
+        const handleValueChange = (itemValue: any, itemId: any) => {
             // Mettre à jour l'état avec la nouvelle valeur sélectionnée pour l'utilisateur spécifié
-            const updatedUsers = users.map((user) => {
+            const updatedUsers = users.map((user: User) => {
                 if (user.id === itemId) {
                     return { ...user, selectedRole: itemValue };
                 }
@@ -209,7 +206,7 @@ export default function RoleManagement() {
                         <Picker
                             selectedValue={item.selectedRole}
                             style={styles.rolePicker}
-                            onValueChange={(itemValue) =>
+                            onValueChange={(itemValue: any) =>
                                 handleValueChange(itemValue, item.id)
                             }
                         >
@@ -240,22 +237,24 @@ export default function RoleManagement() {
     );
 }
 
-const generateUsersInfoRole = (userInfo, userRole) => {
-    const roleMap = userRole.reduce((acc, curr) => {
+const generateUsersInfoRole = (userInfo: any, userRole: any) => {
+    const roleMap = userRole.reduce((acc: any, curr: any) => {
         const role = curr.is_professor
             ? "professor"
             : curr.is_tutor
-              ? "tutor"
-              : curr.is_superuser
-                ? "superuser"
-                : "student";
+                ? "tutor"
+                : curr.is_superuser
+                    ? "superuser"
+                    : "student";
         acc[curr.user] = role;
         return acc;
     }, {});
 
-    return userInfo.map((user) => ({
+    return userInfo.map((user: any) => ({
         id: user.id,
+        // eslint-disable-next-line camelcase
         first_name: user.first_name,
+        // eslint-disable-next-line camelcase
         last_name: user.last_name,
 
         role: roleMap[user.id] || (user.is_superuser ? "superuser" : "student"),

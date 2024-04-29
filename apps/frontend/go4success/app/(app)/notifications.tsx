@@ -1,10 +1,11 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import React from "react";
 import ButtonComponent from "@/components/ButtonComponent";
 import useAllExpoTokens from "@/hooks/useAllExpoTokens";
 import { useAuth } from "@/context/Auth";
 import { sendNotificationsToAllUsers, sendPushNotification } from "@/utils/sendNotification";
+import styles from "@/styles/global";
 
 export default function Notifications() {
     const { allExpoTokens } = useAllExpoTokens();

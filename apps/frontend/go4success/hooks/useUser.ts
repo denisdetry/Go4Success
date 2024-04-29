@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
 
 export default function useUser() {
+
     const { isPending, data: user } = useQuery({
         queryKey: ["current_user"],
         queryFn: async () => {

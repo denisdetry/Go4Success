@@ -43,10 +43,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=255)
     noma = models.CharField(max_length=63, blank=True, null=True, unique=True,
                             error_messages={"unique": "Ce noma est déjà utilisé."})
-    profile_picture = models.ImageField(
-        upload_to="profile_pictures/", blank=True, null=True)
-    expo_push_notification_token = models.CharField(
-        max_length=255, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -72,6 +68,19 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.first_name
+
+
+class ExpoToken(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "User %s - %s" % (self.user, self.token)
+
+    class Meta:
+        unique_together = (('user', 'token'),)
 
 
 class Course(models.Model):

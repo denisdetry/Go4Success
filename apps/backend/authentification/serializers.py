@@ -1,5 +1,4 @@
-from database.models import User
-from django.contrib.auth import authenticate
+from database.models import User, ExpoToken
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -23,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'noma')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'noma', 'expo_push_notification_token')
 
     def validate_noma(self, value):
         if len(value) != 8 and len(value) != 0:
@@ -62,3 +61,9 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class ExpoTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExpoToken
+        fields = '__all__'

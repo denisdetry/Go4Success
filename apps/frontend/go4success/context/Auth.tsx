@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchBackend } from "@/utils/fetchBackend";
 import { fetchError } from "@/utils/fetchError";
 import useUser from "@/hooks/useUser";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 const AuthContext = React.createContext<any>(null);
 
@@ -24,6 +25,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
     const rootSegment = useSegments()[0];
 
     const { isPending, user } = useUser();
+    const { expoPushToken, notification } = usePushNotifications(user);
 
     if (isPending) {
         return (
@@ -66,7 +68,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             if (success) {
                                 await AsyncStorage.setItem("accessToken", success.access);
                                 await AsyncStorage.setItem("refreshToken", success.refresh);
-                                void queryClient.invalidateQueries({
+                                await queryClient.invalidateQueries({
                                     queryKey: ["current_user"],
                                 });
 
@@ -112,7 +114,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             await AsyncStorage.setItem("accessToken", success.access);
                             await AsyncStorage.setItem("refreshToken", success.refresh);
 
-                            void queryClient.invalidateQueries({
+                            await queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
                             });
                             Toast.show({
@@ -143,21 +145,37 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
                 signOut: async () => {
                     try {
-                        AsyncStorage.removeItem("accessToken");
-                        AsyncStorage.removeItem("refreshToken");
+                        await fetchBackend({
+                            type: "PATCH",
+                            url: "auth/update_expo_token/" + user.id + "/",
+                            data: {
+                                token: expoPushToken,
+                                // eslint-disable-next-line camelcase
+                                is_active: false,
+                            },
+                        });
 
-                        void queryClient.invalidateQueries({
+                        await AsyncStorage.removeItem("accessToken");
+                        await AsyncStorage.removeItem("refreshToken");
+                        
+                        await queryClient.invalidateQueries({
                             queryKey: ["current_user"],
                         });
+
                         Toast.show({
                             type: "success",
                             text1: t("translateToast.LogoutSuccessText1"),
                             text2: t("translateToast.LogoutSuccessText2"),
                         });
                     } catch (error) {
-                        console.log(error);
+                        const err = error as fetchError;
+                        console.log(err.responseError);
                     }
+
+
                 },
+                expoPushToken: expoPushToken,
+                notification: notification,
             }}
         >
             {children}

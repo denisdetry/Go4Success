@@ -5,17 +5,20 @@ import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 
 import { Platform } from "react-native";
+import { fetchBackend } from "@/utils/fetchBackend";
+import { User } from "@/types/User";
+import { fetchError } from "@/utils/fetchError";
 
 export interface PushNotificationState {
     expoPushToken?: Notifications.ExpoPushToken;
     notification?: Notifications.Notification;
 }
 
-export const usePushNotifications = (): PushNotificationState => {
+export const usePushNotifications = (user: User): PushNotificationState => {
     Notifications.setNotificationHandler({
         handleNotification: async () => ({
             shouldShowAlert: true,
-            shouldPlaySound: false,
+            shouldPlaySound: true,
             shouldSetBadge: true,
         }),
     });
@@ -31,37 +34,6 @@ export const usePushNotifications = (): PushNotificationState => {
     const notificationListener = useRef<Notifications.Subscription>();
     const responseListener = useRef<Notifications.Subscription>();
 
-    // async function sendPushNotification(expoPushToken: string) {
-    //     const message = {
-    //         to: expoPushToken,
-    //         sound: "default",
-    //         title: "Original Title",
-    //         body: "And here is the body!",
-    //         data: { someData: "goes here" },
-    //     };
-    //
-    //     await fetch("https://exp.host/--/api/v2/push/send", {
-    //         method: "POST",
-    //         headers: {
-    //             Accept: "application/json",
-    //             "Accept-encoding": "gzip, deflate",
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(message),
-    //     });
-    // }
-
-    async function schedulePushNotification() {
-        await Notifications.scheduleNotificationAsync({
-            content: {
-                title: "You've got mail! 📬",
-                body: "Here is the notification body",
-                data: { data: "goes here" },
-            },
-            trigger: { seconds: 2 },
-        });
-    }
-
 
     function handleRegistrationError(errorMessage: string) {
         alert(errorMessage);
@@ -70,7 +42,7 @@ export const usePushNotifications = (): PushNotificationState => {
 
     async function registerForPushNotificationsAsync() {
         if (Platform.OS === "android") {
-            Notifications.setNotificationChannelAsync("default", {
+            await Notifications.setNotificationChannelAsync("default", {
                 name: "default",
                 importance: Notifications.AndroidImportance.MAX,
                 vibrationPattern: [0, 250, 250, 250],
@@ -102,7 +74,6 @@ export const usePushNotifications = (): PushNotificationState => {
                         projectId,
                     })
                 ).data;
-                console.log(pushTokenString);
                 return pushTokenString;
             } catch (e: unknown) {
                 handleRegistrationError(`${e}`);
@@ -115,7 +86,49 @@ export const usePushNotifications = (): PushNotificationState => {
 
     useEffect(() => {
         registerForPushNotificationsAsync()
-            .then((token) => setExpoPushToken(token ?? ""))
+            .then(async (token) => {
+                setExpoPushToken(token ?? "");
+
+                if (user?.id) {
+                    try {
+                        await fetchBackend({
+                            type: "POST",
+                            url: "auth/expo_token/",
+                            data: {
+                                user: user?.id,
+                                token: token,
+                                // eslint-disable-next-line camelcase
+                                is_active: true,
+                            },
+                        });
+
+                    } catch (e) {
+                        const error = e as fetchError;
+                        if (error.responseError.status === 400) {
+                            console.log("PushNotif POST: ", error.responseError);
+                        }
+                    }
+
+                    try {
+                        await fetchBackend({
+                            type: "PATCH",
+                            url: "auth/update_expo_token/" + user?.id + "/",
+                            data: {
+                                token: token,
+                                // eslint-disable-next-line camelcase
+                                is_active: true,
+                            },
+                        });
+                    } catch (e) {
+                        const error = e as fetchError;
+                        if (error.responseError.status === 400) {
+                            console.log("PushNotif PATCH: ", error.responseError);
+                        }
+                    }
+                }
+
+
+            })
             .catch((error: any) => setExpoPushToken(`${error}`));
 
 

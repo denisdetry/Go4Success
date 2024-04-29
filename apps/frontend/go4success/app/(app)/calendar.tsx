@@ -4,6 +4,7 @@ import find from "lodash/find";
 import { fetchBackend } from "@/utils/fetchBackend";
 import React, { Component } from "react";
 import { Alert } from "react-native";
+import { View, StyleSheet } from "react-native";
 import {
     ExpandableCalendar,
     TimelineEventProps,
@@ -13,7 +14,7 @@ import {
     CalendarUtils,
 } from "react-native-calendars";
 import { useQuery } from "@tanstack/react-query";
-import { get } from "lodash";
+import { get, max } from "lodash";
 import { Activity } from "@/hooks/useActivities";
 
 const EVENT_COLOR = "#e6add8";
@@ -23,116 +24,36 @@ export const getDate = (offset = 0) =>
 
 export const timelineEvents: TimelineEventProps[] = [
     {
-        start: `${getDate(-1)} 09:20:00`,
-        end: `${getDate(-1)} 12:00:00`,
-        title: "Merge Request to React Native Calendars",
-        summary: "Merge Timeline Calendar to React Native Calendars",
-    },
-    {
         start: `${getDate()} 01:15:00`,
         end: `${getDate()} 02:30:00`,
-        title: "Meeting A",
-        summary: "Summary for meeting A",
+        title: "Comment bien préparer son blocus",
+        summary:
+            "Trucs et astuce pour aider les nouveaux étudiants à préparer leur blocus",
         color: EVENT_COLOR,
     },
     {
         start: `${getDate()} 01:30:00`,
         end: `${getDate()} 02:30:00`,
-        title: "Meeting B",
-        summary: "Summary for meeting B",
+        title: "Rattrapage mathématique",
+        summary:
+            "Scéance de rattrapage pour les étudiants en difficulté en mathématique",
         color: EVENT_COLOR,
     },
     {
         start: `${getDate()} 01:45:00`,
         end: `${getDate()} 02:45:00`,
-        title: "Meeting C",
-        summary: "Summary for meeting C",
-        color: EVENT_COLOR,
-    },
-    {
-        start: `${getDate()} 02:40:00`,
-        end: `${getDate()} 03:10:00`,
-        title: "Meeting D",
-        summary: "Summary for meeting D",
-        color: EVENT_COLOR,
-    },
-    {
-        start: `${getDate()} 02:50:00`,
-        end: `${getDate()} 03:20:00`,
-        title: "Meeting E",
-        summary: "Summary for meeting E",
+        title: "Rattrapage programmation",
+        summary:
+            "Scéance de rattrapage pour les étudiants en difficulté en programmation",
         color: EVENT_COLOR,
     },
     {
         start: `${getDate()} 04:30:00`,
         end: `${getDate()} 05:30:00`,
-        title: "Meeting F",
-        summary: "Summary for meeting F",
+        title: "Comment bien écrire un rapport",
+        summary:
+            "Trucs et astuce pour aider les nouveaux étudiants à bien écrire un rapport de stage",
         color: EVENT_COLOR,
-    },
-    {
-        start: `${getDate(1)} 00:30:00`,
-        end: `${getDate(1)} 01:30:00`,
-        title: "Visit Grand Mother",
-        summary: "Visit Grand Mother and bring some fruits.",
-        color: "lightblue",
-    },
-    {
-        start: `${getDate(1)} 02:30:00`,
-        end: `${getDate(1)} 03:20:00`,
-        title: "Meeting with Prof. Behjet Zuhaira",
-        summary: "Meeting with Prof. Behjet at 130 in her office.",
-        color: EVENT_COLOR,
-    },
-    {
-        start: `${getDate(1)} 04:10:00`,
-        end: `${getDate(1)} 04:40:00`,
-        title: "Tea Time with Dr. Hasan",
-        summary: "Tea Time with Dr. Hasan, Talk about Project",
-    },
-    {
-        start: `${getDate(1)} 01:05:00`,
-        end: `${getDate(1)} 01:35:00`,
-        title: "Dr. Mariana Joseph",
-        summary: "3412 Piedmont Rd NE, GA 3032",
-    },
-    {
-        start: `${getDate(1)} 14:30:00`,
-        end: `${getDate(1)} 16:30:00`,
-        title: "Meeting Some Friends in ARMED",
-        summary: "Arsalan, Hasnaat, Talha, Waleed, Bilal",
-        color: "pink",
-    },
-    {
-        start: `${getDate(2)} 01:40:00`,
-        end: `${getDate(2)} 02:25:00`,
-        title: "Meet Sir Khurram Iqbal",
-        summary: "Computer Science Dept. Comsats Islamabad",
-        color: "orange",
-    },
-    {
-        start: `${getDate(2)} 04:10:00`,
-        end: `${getDate(2)} 04:40:00`,
-        title: "Tea Time with Colleagues",
-        summary: "WeRplay",
-    },
-    {
-        start: `${getDate(2)} 00:45:00`,
-        end: `${getDate(2)} 01:45:00`,
-        title: "Lets Play Apex Legends",
-        summary: "with Boys at Work",
-    },
-    {
-        start: `${getDate(2)} 11:30:00`,
-        end: `${getDate(2)} 12:30:00`,
-        title: "Dr. Mariana Joseph",
-        summary: "3412 Piedmont Rd NE, GA 3032",
-    },
-    {
-        start: `${getDate(4)} 12:10:00`,
-        end: `${getDate(4)} 13:45:00`,
-        title: "Merge Request to React Native Calendars",
-        summary: "Merge Timeline Calendar to React Native Calendars",
     },
 ];
 
@@ -196,87 +117,10 @@ class TimelineCalendarScreen extends Component {
         console.log("TimelineCalendarScreen onMonthChange: ", month, updateSource);
     };
 
-    createNewEvent: TimelineProps["onBackgroundLongPress"] = (
-        timeString,
-        timeObject,
-    ) => {
-        const { eventsByDate } = this.state;
-        const hourString = `${(timeObject.hour + 1).toString().padStart(2, "0")}`;
-        const minutesString = `${timeObject.minutes.toString().padStart(2, "0")}`;
-
-        const newEvent = {
-            id: "draft",
-            start: `${timeString}`,
-            end: `${timeObject.date} ${hourString}:${minutesString}:00`,
-            title: "New Event",
-            color: "white",
-        };
-
-        if (timeObject.date) {
-            if (eventsByDate[timeObject.date]) {
-                eventsByDate[timeObject.date] = [
-                    ...eventsByDate[timeObject.date],
-                    newEvent,
-                ];
-                this.setState({ eventsByDate });
-            } else {
-                eventsByDate[timeObject.date] = [newEvent];
-                this.setState({ eventsByDate: { ...eventsByDate } });
-            }
-        }
-    };
-
-    approveNewEvent: TimelineProps["onBackgroundLongPressOut"] = (
-        _timeString,
-        timeObject,
-    ) => {
-        const { eventsByDate } = this.state;
-
-        Alert.prompt("New Event", "Enter event title", [
-            {
-                text: "Cancel",
-                onPress: () => {
-                    if (timeObject.date) {
-                        eventsByDate[timeObject.date] = filter(
-                            eventsByDate[timeObject.date],
-                            (e) => e.id !== "draft",
-                        );
-
-                        this.setState({
-                            eventsByDate,
-                        });
-                    }
-                },
-            },
-            {
-                text: "Create",
-                onPress: (eventTitle) => {
-                    if (timeObject.date) {
-                        const draftEvent = find(eventsByDate[timeObject.date], {
-                            id: "draft",
-                        });
-                        if (draftEvent) {
-                            draftEvent.id = undefined;
-                            draftEvent.title = eventTitle ?? "New Event";
-                            draftEvent.color = "lightgreen";
-                            eventsByDate[timeObject.date] = [
-                                ...eventsByDate[timeObject.date],
-                            ];
-
-                            this.setState({
-                                eventsByDate,
-                            });
-                        }
-                    }
-                },
-            },
-        ]);
-    };
-
     private timelineProps: Partial<TimelineProps> = {
         format24h: true,
-        onBackgroundLongPress: this.createNewEvent,
-        onBackgroundLongPressOut: this.approveNewEvent,
+        //onBackgroundLongPress: this.createNewEvent,
+        //onBackgroundLongPressOut: this.approveNewEvent,
         // scrollToFirst: true,
         // start: 0,
         // end: 24,
@@ -287,13 +131,14 @@ class TimelineCalendarScreen extends Component {
         overlapEventsSpacing: 8,
         rightEdgeSpacing: 24,
     };
+    //set max width to 30% of the screen
 
-    format24h = true;
     render() {
         const { currentDate, eventsByDate } = this.state;
         console.log("myHookValue (in component): ", this.myHookValue);
         return (
             <CalendarProvider
+                style={styles.calendar}
                 date={currentDate}
                 onDateChanged={this.onDateChanged}
                 onMonthChange={this.onMonthChange}
@@ -302,6 +147,7 @@ class TimelineCalendarScreen extends Component {
                 // numberOfDays={3}
             >
                 <ExpandableCalendar
+                    style={styles.calendar}
                     firstDay={1}
                     leftArrowImageSource={require("../../assets/images/previous.png")}
                     rightArrowImageSource={require("../../assets/images/next.png")}
@@ -314,6 +160,7 @@ class TimelineCalendarScreen extends Component {
                     // scrollToNow
                     scrollToFirst
                     initialTime={INITIAL_TIME}
+                    //style={styles.timeline}
                 />
             </CalendarProvider>
         );
@@ -322,16 +169,25 @@ class TimelineCalendarScreen extends Component {
 
 function withMyHook(Component: any) {
     return function WrappedComponent(props: any) {
-        const attendanceFetch = GetAttendance();
+        const attendanceFetch = null;
 
-        const attendanceData = attendanceFetch.then(async (data) => {
-            console.log("myHookValue (function): ", data);
-            return data;
-        });
+        // const attendanceData = attendanceFetch.then(async (data) => {
+        //     console.log("myHookValue (function): ", data);
+        //     return data;
+        // });
 
-        console.log("myHookValue (function): ", attendanceData);
-        return <Component {...props} myHookValue={attendanceData} />;
+        console.log("myHookValue (function): ", attendanceFetch);
+        return <Component {...props} myHookValue={attendanceFetch} />;
     };
 }
 
 export default withMyHook(TimelineCalendarScreen);
+
+const styles = StyleSheet.create({
+    calendar: {
+        maxWidth: 500,
+    },
+    timeline: {
+        maxWidth: 500,
+    },
+});

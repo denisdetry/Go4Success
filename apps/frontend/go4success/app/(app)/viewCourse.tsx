@@ -16,9 +16,9 @@ const styles = StyleSheet.create({
         backgroundColor: "#f7f7f7",
     },
     listItem: {
-        flexDirection: "row", // Changement ici pour afficher les éléments en ligne
-        justifyContent: "space-between", // Espacer les éléments
-        alignItems: "center", // Aligner les éléments verticalement
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
         backgroundColor: "#fff",
         marginBottom: 10,
         padding: 15,
@@ -83,7 +83,6 @@ const CoursesComponent = ({ createQuestionnaire }) => {
 
 const ViewCourse = () => {
     const createQuestionnaire = (courseId) => {
-        // Logique pour créer un questionnaire pour un cours spécifique
         console.log("Créer questionnaire pour le cours:", courseId);
     };
 

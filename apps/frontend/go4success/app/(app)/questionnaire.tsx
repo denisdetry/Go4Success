@@ -4,13 +4,56 @@ import {
     StyleSheet,
     View,
     Text,
-    FlatList,
-    TouchableOpacity,
+    TextInput,
+    Picker,
+    Button,
+    ScrollView,
     ActivityIndicator,
 } from "react-native";
+import DatePicker from "react-native-datepicker"; // Importer DatePicker
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignSelf: "center",
+        padding: 20,
+    },
+    bigText: {
+        fontSize: 24,
+        fontWeight: "bold",
+        marginBottom: 20,
+    },
+    input: {
+        height: 40,
+        borderColor: "gray",
+        borderWidth: 1,
+        marginTop: 10,
+        padding: 10,
+    },
+    textarea: {
+        height: 90,
+        borderColor: "gray",
+        borderWidth: 1,
+        marginTop: 10,
+        padding: 10,
+        textAlignVertical: "top",
+    },
+    select: {
+        height: 40,
+        borderColor: "gray",
+        borderWidth: 1,
+        marginTop: 10,
+        padding: 10,
+    },
+    button: {
+        marginTop: 20,
+        backgroundColor: "#0066cc",
+        padding: 10,
+    },
+});
+
 function App() {
     const { isPending, sites, error } = useCourses();
-
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -19,90 +62,96 @@ function App() {
         language: "",
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const handleChange = (name, value) => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = () => {
-        console.log("FormData", formData);
-    };
-
-    if (isPending) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
+    if (isPending) return <ActivityIndicator size="large" />;
+    if (error) return <Text>Error: {error.message}</Text>;
 
     return (
-        <div className="container">
-            <h1>Select a Course</h1>
-            <ul>
-                {sites.map((site) => (
-                    <li key={site.id}>{site.name}</li>
-                ))}
-            </ul>
-            <h2>Create Questionnaire</h2>
-            <input
-                type="text"
-                name="title"
+        <ScrollView style={styles.container}>
+            <Text style={styles.bigText}>
+                {sites.length > 0 ? sites[0].name : "Loading Courses..."}
+            </Text>
+            <Text>Create Questionnaire</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={(text) => handleChange("title", text)}
                 value={formData.title}
-                onChange={handleChange}
                 placeholder="Title of the questionnaire"
             />
-            <textarea
-                name="description"
+            <TextInput
+                style={styles.textarea}
+                onChangeText={(text) => handleChange("description", text)}
                 value={formData.description}
-                onChange={handleChange}
                 placeholder="Description"
+                multiline
             />
-            <input
-                type="date"
-                name="startDate"
-                value={formData.startDate}
-                onChange={handleChange}
+            <DatePicker
+                style={{ width: "100%" }}
+                date={formData.startDate}
+                mode="date"
+                placeholder="Select start date"
+                format="YYYY-MM-DD"
+                minDate="2020-01-01"
+                maxDate="2030-01-01"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                customStyles={{
+                    dateIcon: {
+                        position: "absolute",
+                        left: 0,
+                        top: 4,
+                        marginLeft: 0,
+                    },
+                    dateInput: {
+                        marginLeft: 36,
+                    },
+                }}
+                onDateChange={(date) => handleChange("startDate", date)}
             />
-            <input
-                type="date"
-                name="endDate"
-                value={formData.endDate}
-                onChange={handleChange}
+            <DatePicker
+                style={{ width: "100%" }}
+                date={formData.endDate}
+                mode="date"
+                placeholder="Select end date"
+                format="YYYY-MM-DD"
+                minDate="2020-01-01"
+                maxDate="2030-01-01"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                customStyles={{
+                    dateIcon: {
+                        position: "absolute",
+                        left: 0,
+                        top: 4,
+                        marginLeft: 0,
+                    },
+                    dateInput: {
+                        marginLeft: 36,
+                    },
+                }}
+                onDateChange={(date) => handleChange("endDate", date)}
             />
-            <select name="language" value={formData.language} onChange={handleChange}>
-                <option value="">Select Language</option>
-                <option value="English">English</option>
-                <option value="French">French</option>
-            </select>
-            <button onClick={handleSubmit}>Next</button>
-        </div>
+            <Picker
+                selectedValue={formData.language}
+                onValueChange={(itemValue, itemIndex) =>
+                    handleChange("language", itemValue)
+                }
+                style={styles.select}
+            >
+                <Picker.Item label="Select Language" value="" />
+                <Picker.Item label="English" value="English" />
+                <Picker.Item label="French" value="French" />
+            </Picker>
+            <Button
+                title="Next"
+                onPress={() => console.log("Submit", formData)}
+                color="#0066cc"
+            />
+        </ScrollView>
     );
 }
 
 export default App;
-const styles = StyleSheet.create({
-    container: {
-        width: "80%", // Width needs to be a string when using percentage
-        alignSelf: "center", // 'margin: auto' is not directly supported, use 'alignSelf' for centering in React Native
-        padding: 20,
-    },
-    input: {
-        width: "100%",
-        padding: 10,
-        marginTop: 10,
-    },
-    textarea: {
-        width: "100%",
-        padding: 10,
-        marginTop: 10,
-    },
-    select: {
-        width: "100%",
-        padding: 10,
-        marginTop: 10,
-    },
-    button: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        backgroundColor: "#0066cc",
-        color: "white",
-        borderRadius: 5,
-        marginTop: 20,
-    },
-});

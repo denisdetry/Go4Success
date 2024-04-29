@@ -235,10 +235,10 @@ class Feedback(models.Model):
     suggestion = models.BooleanField(null=False, blank=False)
     additional_comment = models.BooleanField(null=False, blank=False)
     date_start = models.DateField(auto_now_add=True)
-    date_end = models.DateField(auto_now_add=True)
+    date_end = models.DateField(auto_now_add=False)
 
     def __str__(self):
-        return f"Feedback for {self.activity.name} by {self.student.username}"
+        return f"Feedback for {self.activity.name} by {self.user.username}"
 
 
 class FeedbackAdditionalQuestions(models.Model):

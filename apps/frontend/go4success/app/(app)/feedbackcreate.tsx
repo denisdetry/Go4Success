@@ -10,11 +10,14 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import Colors from "@/constants/Colors";
 import { ItemType } from "react-native-dropdown-picker";
 import { useActivities } from "@/hooks/useActivities";
-import DateTimePicker from "react-native-ui-datepicker";
+import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 import dayjs from "dayjs";
+import { useAuth } from "@/context/Auth";
+import { fetchBackend } from "@/utils/fetchBackend";
 
 export default function FeedbackCreate() {
     const { t } = useTranslation();
+    const { user } = useAuth();
     const [selection, setSelection] = useState<string | null>(null);
     const [isCheckedPositivePoint, setIsCheckedPositivePoint] = useState(true);
     const [isCheckedNegativePoint, setIsCheckedNegativePoint] = useState(true);
@@ -37,7 +40,76 @@ export default function FeedbackCreate() {
         null,
     );
 
-    const send = () => {};
+    const convertDateToISO = (date: DateType): string | null => {
+        if (date instanceof Date) {
+            return date.toISOString().split("T")[0];
+        } else if (typeof date === "string" && date !== "") {
+            return date;
+        } else if (typeof date === "number") {
+            return new Date(date).toISOString().split("T")[0];
+        } else if (date instanceof dayjs) {
+            return date.format("YYYY-MM-DD");
+        } else {
+            return null;
+        }
+    };
+
+    const handleSendFeedback = async () => {
+        if (!selectedActivity) {
+            Toast.show({
+                type: "error",
+                text1: t("translateToast.ErrorText1"),
+                text2: t("translateToast.SelectActivity"),
+            });
+            return;
+        }
+
+        const feedbackDataDefault = {
+            user_id: user.id,
+            activity_id: selectedActivity.value,
+            positive_point: isCheckedPositivePoint,
+            negative_point: isCheckedNegativePoint,
+            suggestion: isCheckedSuggestion,
+            additional_comment: isCheckedAdditionalComment,
+            date_end: convertDateToISO(date),
+        };
+
+        try {
+            const responseDefault = await fetchBackend({
+                type: "POST",
+                url: "feedback/newfeedback/",
+                data: feedbackDataDefault,
+            });
+            const feedbackId = responseDefault.data.id;
+
+            for (const question of customQuestions) {
+                const feedbackDataSuppQuestion = {
+                    feedback: feedbackId,
+                    question: question,
+                };
+
+                await fetchBackend({
+                    type: "POST",
+                    url: "feedback/feedbackadditionnalquestions/",
+                    data: feedbackDataSuppQuestion,
+                });
+            }
+
+            Toast.show({
+                type: "success",
+                text1: t("translateToast.SuccessText1"),
+                text2: responseDefault.data.message,
+            });
+        } catch (error) {
+            if (error instanceof Error) {
+                Toast.show({
+                    type: "error",
+                    text1: t("translateToast.ErrorText1"),
+                    text2: error.message,
+                });
+            }
+        }
+    };
 
     const addQuestion = () => {
         setCustomQuestions([...customQuestions, ""]);
@@ -258,7 +330,7 @@ export default function FeedbackCreate() {
                         <View style={{ height: 10 }} />
                         <ButtonComponent
                             text={t("translateFeedback.send")}
-                            onPress={send}
+                            onPress={handleSendFeedback}
                             buttonType={"secondary"}
                         />
                     </>

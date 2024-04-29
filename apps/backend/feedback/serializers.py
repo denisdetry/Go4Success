@@ -27,7 +27,7 @@ class FeedbackSerializer(serializers.ModelSerializer):
         model = Feedback
         fields = [
             'id', 'user', 'user_id', 'activity', 'activity_id', 'positive_point',
-            'negative_point', 'suggestion', 'additional_comment', '"date_start', 'date_end']
+            'negative_point', 'suggestion', 'additional_comment', 'date_start', 'date_end']
 
 
 class FeedbackAdditionalQuestionsSerializer(serializers.ModelSerializer):

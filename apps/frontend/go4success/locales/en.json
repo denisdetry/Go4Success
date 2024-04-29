@@ -102,7 +102,8 @@
         "RegisterActivitySuccessText2": "You are perfectly registered for the workshop:",
         "RegisterActivityErrorText2": "An error occurred when registering for the workshop",
         "AlreadyRegisteredActivityText2": "You are already registered for this workshop",
-        "SelectSatisfaction": "Please select a satisfaction level"
+        "SelectSatisfaction": "Please select a satisfaction level",
+        "SelectActivity": "Please select an activity"
     },
     "translateRegisterActivity": {
         "registerButton": "Sign up",
@@ -136,7 +137,8 @@
         "moreQuestions": "Additional questions",
         "enterQuestion": "Enter your question",
         "addQuestion": "Add more questions",
-        "dateEnd": "Date end"
+        "dateEnd": "Date end",
+        "nofeedback": "No feedback for this activity"
     },
     "satisfactionLevels": {
         "verySatisfied": "Very satisfied",

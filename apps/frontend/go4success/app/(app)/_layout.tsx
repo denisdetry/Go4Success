@@ -198,6 +198,20 @@ export default function Layout() {
                         }}
                     />
                     <Drawer.Screen
+                        name="feedbacklistdetails"
+                        options={{
+                            drawerLabel: "test",
+                            headerTitle: "test",
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name="albums-outline"
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
+                    <Drawer.Screen
                         name="feedbackcreate"
                         options={{
                             drawerLabel: t("translateFeedback.create"),

@@ -12,7 +12,6 @@ export default function Notifications() {
     const { expoPushToken, notification } = useAuth();
 
     const data = JSON.stringify(notification, undefined, 2);
-    
 
     return (
         <ScrollView nestedScrollEnabled={true} contentContainerStyle={[styles.mainContainer, { flexGrow: 0 }]}>

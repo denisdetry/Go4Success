@@ -123,6 +123,14 @@ export default function FeedbackCreate() {
         setCustomQuestions(newQuestions);
     };
 
+    if (activityError) {
+        return (
+            <View>
+                <Text> Error: {activityError.message} </Text>
+            </View>
+        );
+    }
+
     return (
         <ScrollView contentContainerStyle={stylesGlobal.mainContainer}>
             <View style={stylesGlobal.container}>

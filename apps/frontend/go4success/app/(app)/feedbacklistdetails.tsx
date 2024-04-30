@@ -57,7 +57,6 @@ export default function FeedbackListDetails({}: Readonly<FeedbackListDetailsScre
     const feedbackId = route?.params?.feedbackId ?? "not id present";
     const activityName = route?.params?.activityName ?? "not name present";
     const { feedbackStudent, error: feedbackError } = useFeedbackStudent(feedbackId);
-    const { feedbacks } = useFeedback(feedbackId, "");
 
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedFeedback, setSelectedFeedback] = useState<FeedbackStudent | null>(
@@ -73,7 +72,7 @@ export default function FeedbackListDetails({}: Readonly<FeedbackListDetailsScre
 
     const { feedbackstudentadditionnalquestions } =
         useFeedbackStudentAdditionalQuestions(
-            selectedFeedback?.student.id || "",
+            selectedFeedback?.student.id ?? "",
             feedbackId,
         );
 

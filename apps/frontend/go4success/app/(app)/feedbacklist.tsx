@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { ScrollView, Text, View } from "react-native";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { Feedback, useFeedback } from "@/hooks/useFeedback";

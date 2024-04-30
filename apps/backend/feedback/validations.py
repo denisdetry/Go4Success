@@ -1,6 +1,6 @@
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-from database.models import Attend, Feedback, FeedbackStudent
+from database.models import Attend, FeedbackStudent
 
 
 def validate_student_in_activity(student_id, activity_id):

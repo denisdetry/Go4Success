@@ -10,93 +10,15 @@ import {
     ScrollView,
     ActivityIndicator,
 } from "react-native";
-import DatePicker from "react-datepicker"; // Importer DatePicker
+import DateTimePicker from "@react-native-community/datetimepicker";
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignSelf: "center",
-        padding: 20,
-        backgroundColor: "#f0f0f0", // Light gray background for softer look
-    },
-    bigText: {
-        fontSize: 28,
-        fontWeight: "bold",
-        marginBottom: 20,
-        color: "#333", // Darker font for better readability
-    },
-    input: {
-        height: 50,
-        borderColor: "#ccc", // Softer border color
-        borderWidth: 1,
-        marginTop: 12,
-        padding: 10,
-        borderRadius: 5, // Rounded corners
-        backgroundColor: "#fff", // White background for inputs
-    },
-    textarea: {
-        height: 100,
-        borderColor: "#ccc",
-        borderWidth: 1,
-        marginTop: 12,
-        padding: 10,
-        borderRadius: 5,
-        backgroundColor: "#fff",
-        textAlignVertical: "top",
-    },
-    select: {
-        height: 50,
-        borderColor: "#ccc",
-        borderWidth: 1,
-        marginTop: 12,
-        padding: 10,
-        borderRadius: 5,
-        backgroundColor: "#fff",
-    },
-    button: {
-        marginTop: 20,
-        backgroundColor: "#0044cc", // Slightly darker blue for the button
-        padding: 12,
-        borderRadius: 5, // Rounded corners for buttons
-    },
-    datePickerStyle: {
-        width: "100%",
-        marginTop: 12,
-    },
-    datePickerCustomStyles: {
-        dateIcon: {
-            position: "absolute",
-            left: 0,
-            top: 4,
-            marginLeft: 0,
-        },
-        dateInput: {
-            marginLeft: 36,
-            borderRadius: 5,
-            height: 50,
-            borderColor: "#ccc",
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 1.5,
-            elevation: 3, // Only for Android
-        },
-        placeholderText: {
-            color: "gray", // Light gray color for placeholder text
-        },
-        dateText: {
-            color: "#333", // Darker text for better readability
-        },
-    },
-});
-
-function App() {
+export default function App() {
     const { isPending, sites, error } = useCourses();
     const [formData, setFormData] = useState({
         title: "",
         description: "",
-        startDate: "",
-        endDate: "",
+        startDate: new Date(),
+        endDate: new Date(),
         language: "",
     });
 
@@ -104,15 +26,25 @@ function App() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    if (isPending) return <ActivityIndicator size="large" />;
-    if (error) return <Text>Error: {error.message}</Text>;
+    const handleStartDateChange = (event, selectedDate) => {
+        const currentDate = selectedDate || formData.startDate;
+        handleChange("startDate", currentDate);
+    };
+
+    const handleEndDateChange = (event, selectedDate) => {
+        const currentDate = selectedDate || formData.endDate;
+        handleChange("endDate", currentDate);
+    };
+
+    if (isPending) return <ActivityIndicator size="large" style={styles.container} />;
+    if (error) return <Text style={styles.errorText}>Error: {error.message}</Text>;
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.bigText}>
+            <Text style={styles.title}>
                 {sites.length > 0 ? sites[0].name : "Loading Courses..."}
             </Text>
-            <Text>Create Questionnaire</Text>
+            <Text style={styles.title}>Create Questionnaire</Text>
             <TextInput
                 style={styles.input}
                 onChangeText={(text) => handleChange("title", text)}
@@ -120,44 +52,34 @@ function App() {
                 placeholder="Title of the questionnaire"
             />
             <TextInput
-                style={styles.textarea}
+                style={styles.input}
                 onChangeText={(text) => handleChange("description", text)}
                 value={formData.description}
                 placeholder="Description"
                 multiline
             />
-            <DatePicker
-                style={{ width: "100%" }}
-                date={formData.startDate}
-                mode="date"
-                placeholder="Select start date"
-                format="YYYY-MM-DD"
-                minDate="2020-01-01"
-                maxDate="2030-01-01"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={styles.datePickerCustomStyles}
-                onDateChange={(date) => handleChange("startDate", date)}
-            />
-            <DatePicker
-                style={{ width: "100%" }}
-                date={formData.endDate}
-                mode="date"
-                placeholder="Select end date"
-                format="YYYY-MM-DD"
-                minDate="2020-01-01"
-                maxDate="2030-01-01"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={styles.datePickerCustomStyles}
-                onDateChange={(date) => handleChange("endDate", date)}
-            />
+            <View style={styles.labelContainer}>
+                <Text style={styles.label}>Start:</Text>
+                <DateTimePicker
+                    value={formData.startDate}
+                    mode="date"
+                    onChange={handleStartDateChange}
+                />
+            </View>
+            <View style={styles.labelContainer}>
+                <Text style={styles.label}>End:</Text>
+                <DateTimePicker
+                    value={formData.endDate}
+                    mode="date"
+                    onChange={handleEndDateChange}
+                />
+            </View>
             <Picker
+                style={styles.picker}
                 selectedValue={formData.language}
                 onValueChange={(itemValue, itemIndex) =>
                     handleChange("language", itemValue)
                 }
-                style={styles.select}
             >
                 <Picker.Item label="Select Language" value="" />
                 <Picker.Item label="English" value="English" />
@@ -172,4 +94,62 @@ function App() {
     );
 }
 
-export default App;
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#f5f5f5",
+        padding: 20,
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: "bold",
+        color: "#333",
+        marginBottom: 20,
+        textAlign: "center",
+    },
+    input: {
+        backgroundColor: "#fff",
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 15,
+        fontSize: 16,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 3,
+    },
+    picker: {
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 5,
+        marginBottom: 15,
+        padding: 10,
+        backgroundColor: "#fff",
+    },
+    button: {
+        backgroundColor: "#0066cc",
+        color: "#fff",
+        fontSize: 16,
+        fontWeight: "500",
+        padding: 10,
+        textAlign: "center",
+        borderRadius: 5,
+    },
+    errorText: {
+        color: "red",
+        textAlign: "center",
+        marginBottom: 10,
+    },
+    labelContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 15,
+    },
+    label: {
+        marginRight: 10,
+        fontSize: 16,
+    },
+});

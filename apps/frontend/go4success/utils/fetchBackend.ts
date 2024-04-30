@@ -4,7 +4,7 @@ import { fetchError } from "@/utils/fetchError";
 import { t } from "i18next";
 
 export async function fetchBackend(options: {
-    readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE";
+    readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE" | "OPTIONS";
     url: string;
     readonly params?: any;
     readonly data?: any;

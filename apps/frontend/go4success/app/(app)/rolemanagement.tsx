@@ -1,31 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import axios from "axios";
-import axiosConfig from "@/constants/axiosConfig";
 import Toast from "react-native-toast-message";
-import { useUserInfo, useUserRole, useEditRole } from "./hooks";
-axiosConfig();
+import { useUserInfo, useUserRole, usePostSite } from "@/hooks/useRoleManagement";
+import { useMutation } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export default function RoleManagement() {
-    axiosConfig();
-    const [userRole, setUserRole] = useState<UserRole[]>([]);
     const [selectedValue, setSelectedValue] = useState("");
     const backendURL = process.env.EXPO_PUBLIC_API_URL;
 
-    const [userInfo, setUserInfo] = useState([]);
-
-    const {
-        data: userInfo,
-        isLoading: loadingUserInfo,
-        error: errorUserInfo,
-    } = useUserInfo();
-    const {
-        data: userRole,
-        isLoading: loadingUserRole,
-        error: errorUserRole,
-    } = useUserRole();
-    const { mutate: editRole, isLoading: loadingEditRole } = useEditRole();
+    const { mutatePostSite, isError, error, data } = usePostSite();
 
     interface User {
         selectedRole: string;
@@ -41,116 +26,11 @@ export default function RoleManagement() {
         is_tutor: boolean;
     }
 
-    useEffect(() => {
-        axios
-            .get(`${backendURL}/rolemanagement/rolemanagement/`)
-            .then((res) => {
-                setUserInfo(res.data);
-            })
-            .catch((err) => {
-                throw err;
-            });
+    function editRolePatch(id: any, isTutor: any, isProfessor: any) {}
 
-        axios
-            .get(`${backendURL}/rolemanagement/editRole/`)
-            .then((res) => {
-                setUserRole(res.data);
-            })
-            .catch((err) => {
-                throw err;
-            });
-    }, []);
+    function editRoleDelete(id: any) {}
 
-    function editRolePost(id: any, isTutor: any, isProfessor: any) {
-        axios
-            .post(`${backendURL}/rolemanagement/editRole/`, {
-                user: id,
-                // eslint-disable-next-line camelcase
-                is_tutor: isTutor,
-                // eslint-disable-next-line camelcase
-                is_professor: isProfessor,
-            })
-            .then(() => {
-                Toast.show({
-                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
-                    text1: "Succès",
-                    text2: "Changement enregistré",
-                });
-            })
-            .catch(() =>
-                Toast.show({
-                    type: "error",
-                    text1: "Erreur",
-                    text2: "Une erreur est survenue lors de la requête.",
-                }),
-            );
-    }
-
-    function editRolePatch(id: any, isTutor: any, isProfessor: any) {
-        axios
-            .patch(`${backendURL}/rolemanagement/editRole/${id}/`, {
-                user: id,
-                // eslint-disable-next-line camelcase
-                is_tutor: isTutor,
-                // eslint-disable-next-line camelcase
-                is_professor: isProfessor,
-            })
-            .then(() => {
-                Toast.show({
-                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
-                    text1: "Succès",
-                    text2: "Changement enregistré",
-                });
-            })
-            .catch(() =>
-                Toast.show({
-                    type: "error",
-                    text1: "Erreur",
-                    text2: "Une erreur est survenue lors de la requête.",
-                }),
-            );
-    }
-
-    function editRoleDelete(id: any) {
-        axios
-            .delete(`${backendURL}/rolemanagement/editRole/${id}/`) // Correction ici
-            .then(() => {
-                Toast.show({
-                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
-                    text1: "Succès",
-                    text2: "Changement enregistré",
-                });
-            })
-            .catch(() =>
-                Toast.show({
-                    type: "error",
-                    text1: "Erreur",
-                    text2: "Une erreur est survenue lors de la requête.",
-                }),
-            );
-    }
-
-    function rolemanagementPatch(id: any, isSuperUser: any) {
-        axios
-            .patch(`${backendURL}/rolemanagement/rolemanagement/${id}/`, {
-                // eslint-disable-next-line camelcase
-                is_superuser: isSuperUser,
-            })
-            .then(() => {
-                Toast.show({
-                    type: "success", // Utilisez 'success', 'error', etc., selon le thème
-                    text1: "Succès",
-                    text2: "Changement enregistré",
-                });
-            })
-            .catch(() =>
-                Toast.show({
-                    type: "error",
-                    text1: "Erreur",
-                    text2: "Une erreur est survenue lors de la requête.",
-                }),
-            );
-    }
+    function rolemanagementPatch(id: any, isSuperUser: any) {}
 
     const usersInfoRole = generateUsersInfoRole(userInfo, userRole);
 

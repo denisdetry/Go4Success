@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
 import { useMutation } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Toast from "react-native-toast-message";
 
 export function useUserInfo() {
     const backendURL = process.env.EXPO_PUBLIC_API_URL;
@@ -47,22 +49,16 @@ export function useUserRole() {
     return { userRole, error, isFetching };
 }
 
-const postSite = async (newSiteData: any) => {
-    const { data, error } = await fetchBackend({
-        type: "POST",
-        url: `/rolemanagement/${endpoint}/`,
-        body: JSON.stringify(newSiteData),
-    });
-
-    if (error) {
-        throw new Error(error);
-    }
-
-    return data;
-};
-
-export function usePostSite() {
-    const { mutate, isLoading, isError, error, data } = useMutation(postSite, {
+export function usePostSite(endpoint: string, newSiteData: any) {
+    const { mutate, isError, error, data } = useMutation({
+        mutationFn: async () => {
+            const { data, error } = await fetchBackend({
+                type: "POST",
+                url: `/rolemanagement/${endpoint}/`,
+                data: JSON.stringify(newSiteData),
+            });
+            return { data, error };
+        },
         onSuccess: () => {
             // Affiche un toast en cas de succès
             Toast.show({
@@ -83,7 +79,6 @@ export function usePostSite() {
 
     return {
         mutatePostSite: mutate,
-        isLoading,
         isError,
         error,
         data,

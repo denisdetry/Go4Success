@@ -36,10 +36,10 @@ export default StyleSheet.create({
                 ? isMobile
                     ? 360
                     : isTabletMini
-                        ? 360
-                        : isTablet
-                            ? 710
-                            : 1435
+                      ? 360
+                      : isTablet
+                        ? 710
+                        : 1435
                 : 1435, // isDesktop for the last one
         paddingBottom: 20,
     },
@@ -75,6 +75,14 @@ export default StyleSheet.create({
     input: {
         flex: 1,
         color: "#333",
+        fontSize: 16,
+        borderColor: "#777",
+        padding: 10,
+    },
+
+    placeholder: {
+        flex: 1,
+        color: "grey",
         fontSize: 16,
         borderColor: "#777",
         padding: 10,

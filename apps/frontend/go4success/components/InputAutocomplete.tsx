@@ -6,6 +6,7 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
+    TouchableWithoutFeedback,
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import styles from "@/styles/global";
@@ -80,20 +81,36 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
         >
             <SafeAreaView style={{ width: "100%" }}>
                 <SafeAreaView style={styles.inputField}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder={placeholder}
-                        placeholderTextColor={"grey"}
-                        readOnly={readOnly}
-                        onChangeText={(text) => {
-                            setFilteredData(filterData(text));
-                            setSelectedData({ key: text, value: text });
-                            onChange(selectedData);
-                        }}
-                        value={selectedData.value ?? ""}
-                        onFocus={() => setVisible(true)}
-                        onPressIn={() => setVisible(true)}
-                    />
+                    {readOnly ? (
+                        <TextInput
+                            style={styles.input}
+                            placeholder={placeholder}
+                            placeholderTextColor={"grey"}
+                            onChangeText={(text) => {
+                                setFilteredData(filterData(text));
+                                setSelectedData({ key: text, value: text });
+                                onChange(selectedData);
+                            }}
+                            value={selectedData.value ?? ""}
+                            onFocus={() => setVisible(true)}
+                            onPressIn={() => setVisible(true)}
+                        />
+                    ) : (
+                        <TouchableWithoutFeedback
+                            style={styles.input}
+                            onPressIn={() => setVisible(!visible)}
+                        >
+                            {selectedData.value === "" ? (
+                                <Text style={styles.placeholder}>
+                                    {placeholder}
+                                </Text>
+                            ) : (
+                                <Text style={styles.input}>
+                                    {selectedData.value}
+                                </Text>
+                            )}
+                        </TouchableWithoutFeedback>
+                    )}
 
                     <Pressable
                         onPress={() => {

@@ -162,8 +162,8 @@ const signUp = async (userData: UserRegister) => {
         });
 
         if (success) {
-            // Ces instructions sont essentiels pour la déconnexion. 
-            // Elles ajoutent les tokens du local storage 
+            // Ces instructions sont essentiels pour la déconnexion.
+            // Elles ajoutent les tokens du local storage
             // et mettent à jour le contexte de l'utilisateur.
             await AsyncStorage.setItem("accessToken", success.access);
             await AsyncStorage.setItem("refreshToken", success.refresh);
@@ -210,8 +210,8 @@ const signIn = async (userData: UserLogin) => {
         });
 
         if (success) {
-            // Ces instructions sont essentiels pour la déconnexion. 
-            // Elles ajoutent les tokens du local storage 
+            // Ces instructions sont essentiels pour la déconnexion.
+            // Elles ajoutent les tokens du local storage
             // et mettent à jour le contexte de l'utilisateur.
             await AsyncStorage.setItem("accessToken", success.access);
             await AsyncStorage.setItem("refreshToken", success.refresh);
@@ -229,7 +229,7 @@ const signIn = async (userData: UserLogin) => {
             // {...} gestion de l'erreur 401
         }
     }
-}
+};
 ```
 
 - **_LogoutView_** : Il n'y pas de vue de déconnexion, car la déconnexion se fait automatiquement en supprimant le
@@ -243,8 +243,8 @@ import { fetchError } from "@/utils/fetchError";
 
 const signOut = async () => {
     try {
-        // Ces instructions sont essentiels pour la déconnexion. 
-        // Elles suppriment les tokens du local storage 
+        // Ces instructions sont essentiels pour la déconnexion.
+        // Elles suppriment les tokens du local storage
         // et mettent à jour le contexte de l'utilisateur.
         await AsyncStorage.removeItem("accessToken");
         await AsyncStorage.removeItem("refreshToken");
@@ -254,12 +254,11 @@ const signOut = async () => {
         });
 
         // {...} gestion du success de la déconnexion avec des Toast ou autre
-
     } catch (err) {
         const error = err as fetchError;
         // {...} gestion de l'erreur
     }
-}
+};
 ```
 
 - **_CurrentUserView_** : fonctionne avec un GET uniquement. Renvoie les informations de l'utilisateur connecté dans la
@@ -298,7 +297,7 @@ export default function useUser() {
 import { useMutation } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
 import { fetchError } from "@/utils/fetchError";
-import { queryClient } from "@/context/AuthContext";
+import { queryClient } from "@/app/_layout";
 import { useTranslation } from "react-i18next";
 
 const { t } = useTranslation();
@@ -319,7 +318,8 @@ const fetchData = useMutation({
     },
     onError: async (error: fetchError) => {
         const errorResponse = await error.responseError.json();
-        const errorMessages = errorResponse[dataKey] || t("translationProfile.defaultErrorMessage");
+        const errorMessages =
+            errorResponse[dataKey] || t("translationProfile.defaultErrorMessage");
         // {...} gestion de l'erreur avec des toast ou autre
     },
 });
@@ -332,7 +332,7 @@ const fetchData = useMutation({
 // Exemple de suppression du profil en frontend avec react
 import { useMutation } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
-import { queryClient } from "@/context/AuthContext";
+import { queryClient } from "@/app/_layout";
 import { useTranslation } from "react-i18next";
 
 const { t } = useTranslation();
@@ -341,7 +341,8 @@ const { user } = useAuth();
 const handleDeleteUser = useMutation({
     mutationFn: async () => {
         await fetchBackend({
-            type: "DELETE", url: "auth/delete_user/" + user.id + "/",
+            type: "DELETE",
+            url: "auth/delete_user/" + user.id + "/",
         });
     },
     onSettled: () => {
@@ -352,7 +353,6 @@ const handleDeleteUser = useMutation({
     onError: () => {
         // {...} gestion de l'erreur avec des toast ou autre
     },
-
 });
 ```
 
@@ -364,9 +364,8 @@ const handleDeleteUser = useMutation({
 import { useMutation } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
 import { fetchError } from "@/utils/fetchError";
-import { queryClient } from "@/context/AuthContext";
+import { queryClient } from "@/app/_layout";
 import { useTranslation } from "react-i18next";
-
 
 const { t } = useTranslation();
 const { user, signIn } = useAuth();
@@ -374,7 +373,9 @@ const { user, signIn } = useAuth();
 const fetchData = useMutation({
     mutationFn: async () => {
         await fetchBackend({
-            type: "PUT", url: "auth/change_password/" + user.id + "/", data: {
+            type: "PUT",
+            url: "auth/change_password/" + user.id + "/",
+            data: {
                 // eslint-disable-next-line camelcase
                 old_password: oldPassword,
                 password: newPassword,
@@ -456,52 +457,52 @@ les urls, les settings, etc.
 
 #### Urls (Server)
 
-[//]: # (### Vues Django)
+[//]: # "### Vues Django"
 
-[//]: # (Les vues fonctionnent en utilisant l'APIView de l'API rest. Chaque vue possède une méthode _post_ et/ou _get_ qui sont)
+[//]: # "Les vues fonctionnent en utilisant l'APIView de l'API rest. Chaque vue possède une méthode _post_ et/ou _get_ qui sont"
 
-[//]: # (appelées quand la vue est appelée avec une requête HTTP GET ou POST.)
+[//]: # "appelées quand la vue est appelée avec une requête HTTP GET ou POST."
 
-[//]: # ()
+[//]: #
 
-[//]: # (- **UserRegisterView** : La vue qui s'occupe d'inscrire les utilisateurs. Elle reçoit les information de l'inscription)
+[//]: # "- **UserRegisterView** : La vue qui s'occupe d'inscrire les utilisateurs. Elle reçoit les information de l'inscription"
 
-[//]: # (  dans la requête POST.)
+[//]: # "  dans la requête POST."
 
-[//]: # ()
+[//]: #
 
-[//]: # (- **LoginView** : s'occupe de vérifier les credentials de l'utilisateur pour que celui-ci puisse se connecter. La vue)
+[//]: # "- **LoginView** : s'occupe de vérifier les credentials de l'utilisateur pour que celui-ci puisse se connecter. La vue"
 
-[//]: # (  fait appel aux méthodes _validate_username_ et _validate_password_ pour faire la validation des credentials.)
+[//]: # "  fait appel aux méthodes _validate_username_ et _validate_password_ pour faire la validation des credentials."
 
-[//]: # ()
+[//]: #
 
-[//]: # (- **LogoutView** : s'occupe de fermer la session de l'utilisateur.)
+[//]: # "- **LogoutView** : s'occupe de fermer la session de l'utilisateur."
 
-[//]: # ()
+[//]: #
 
-[//]: # (- **CurrentUserView** : fonctionne avec un GET uniquement. Renvoie les informations de l'utilisateur connecté dans la)
+[//]: # "- **CurrentUserView** : fonctionne avec un GET uniquement. Renvoie les informations de l'utilisateur connecté dans la"
 
-[//]: # (  session actuelle.)
+[//]: # "  session actuelle."
 
-[//]: # ()
+[//]: #
 
-[//]: # (- **ActivityViewSet** :)
+[//]: # "- **ActivityViewSet** :"
 
-[//]: # ()
+[//]: #
 
-[//]: # (- **AttendViewSet** : renvoie toutes les _Activity_ auxquelles l'uilisateur est inscrit. Utilisée dans la page d'accueil)
+[//]: # "- **AttendViewSet** : renvoie toutes les _Activity_ auxquelles l'uilisateur est inscrit. Utilisée dans la page d'accueil"
 
-[//]: # (  et le calendrier.)
+[//]: # "  et le calendrier."
 
-[//]: # ()
+[//]: #
 
-[//]: # (- **RegisterToActivityView** : Permet d'inscrire un utilisateur à une activité.)
+[//]: # "- **RegisterToActivityView** : Permet d'inscrire un utilisateur à une activité."
 
-[//]: # ()
+[//]: #
 
-[//]: # (### _validations.py_)
+[//]: # "### _validations.py_"
 
-[//]: # ()
+[//]: #
 
-[//]: # (Ce fichier contient des méthodes qui s'occupe de valider les différents credentials donnés par un utilisateur.)
+[//]: # "Ce fichier contient des méthodes qui s'occupe de valider les différents credentials donnés par un utilisateur."

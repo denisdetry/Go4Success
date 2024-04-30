@@ -12,6 +12,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { useRoute, RouteProp } from "@react-navigation/native";
 import { useActivities } from "@/hooks/useActivities";
 import { useFeedback, useFeedbackAdditionalQuestions } from "@/hooks/useFeedback";
+import { useNavigation } from "expo-router";
 
 type RootStackParamList = {
     feedbackanswer: { activityId: string };
@@ -21,6 +22,7 @@ type FeedbackAnswerScreenProps = StackScreenProps<RootStackParamList, "feedbacka
 
 export default function FeedbackAnswer({}: Readonly<FeedbackAnswerScreenProps>) {
     const route = useRoute<RouteProp<RootStackParamList, "feedbackanswer">>();
+    const navigation = useNavigation();
     const activityId = route?.params?.activityId ?? "not id present";
     const [viewHeight, setViewHeight] = useState(10);
     const { t } = useTranslation();
@@ -50,7 +52,7 @@ export default function FeedbackAnswer({}: Readonly<FeedbackAnswerScreenProps>) 
         { value: "1", label: t("satisfactionLevels.veryUnsatisfied") },
     ];
     const [evaluationOpen, setEvaluationOpen] = React.useState(false);
-    const { feedbacks } = useFeedback(activityId);
+    const { feedbacks } = useFeedback("", activityId);
     const firstFeedbackId = feedbacks.length > 0 ? feedbacks[0].id : "";
     const { feedbackAdditionalQuestions } =
         useFeedbackAdditionalQuestions(firstFeedbackId);
@@ -123,6 +125,7 @@ export default function FeedbackAnswer({}: Readonly<FeedbackAnswerScreenProps>) 
                 text1: t("translateToast.SuccessText1"),
                 text2: response.data.message,
             });
+            navigation.goBack();
         } catch (error) {
             if (error instanceof Error) {
                 Toast.show({
@@ -154,6 +157,14 @@ export default function FeedbackAnswer({}: Readonly<FeedbackAnswerScreenProps>) 
     return (
         <ScrollView contentContainerStyle={stylesGlobal.mainContainer}>
             <View style={stylesGlobal.container}>
+                <View style={{ alignSelf: "flex-start" }}>
+                    <ButtonComponent
+                        icon="arrow-back-circle-outline"
+                        text="Back"
+                        onPress={() => navigation.goBack()}
+                        buttonType={"primary"}
+                    />
+                </View>
                 <Text
                     style={[stylesGlobal.title, { fontSize: 30, textAlign: "center" }]}
                 >
@@ -186,7 +197,7 @@ export default function FeedbackAnswer({}: Readonly<FeedbackAnswerScreenProps>) 
                                 open={evaluationOpen}
                                 setOpen={(isOpen) => {
                                     setEvaluationOpen(isOpen);
-                                    setViewHeight(isOpen ? 160 : 10);
+                                    setViewHeight(isOpen ? 180 : 10);
                                 }}
                             />
                         </View>

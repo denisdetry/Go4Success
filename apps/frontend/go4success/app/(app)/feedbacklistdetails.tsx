@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import { ScrollView, Text, Modal, View, Pressable, FlatList } from "react-native";
 import DataTable, { TableColumn } from "react-data-table-component";
-import { FeedbackStudent, useFeedbackStudent } from "@/hooks/useFeedback";
+import {
+    FeedbackStudent,
+    useFeedbackStudent,
+    useFeedback,
+    useFeedbackStudentAdditionalQuestions,
+} from "@/hooks/useFeedback";
 import { useTranslation } from "react-i18next";
 import styles from "@/styles/global";
 import Colors from "@/constants/Colors";
 import ButtonComponent from "@/components/ButtonComponent";
 import { StackScreenProps } from "@react-navigation/stack";
-import { useRoute, RouteProp } from "@react-navigation/native";
+import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 
 type RootStackParamList = {
     feedbacklistdetails: { feedbackId: string; activityName: string };
@@ -46,11 +51,13 @@ const customStyles = {
 };
 
 export default function FeedbackListDetails({}: Readonly<FeedbackListDetailsScreenProps>) {
-    const { feedbackStudent, error: feedbackError } = useFeedbackStudent("");
     const { t } = useTranslation();
+    const navigation = useNavigation();
     const route = useRoute<RouteProp<RootStackParamList, "feedbacklistdetails">>();
     const feedbackId = route?.params?.feedbackId ?? "not id present";
     const activityName = route?.params?.activityName ?? "not name present";
+    const { feedbackStudent, error: feedbackError } = useFeedbackStudent(feedbackId);
+    const { feedbacks } = useFeedback(feedbackId, "");
 
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedFeedback, setSelectedFeedback] = useState<FeedbackStudent | null>(
@@ -63,6 +70,12 @@ export default function FeedbackListDetails({}: Readonly<FeedbackListDetailsScre
         { value: "2", label: t("satisfactionLevels.unsatisfied") },
         { value: "1", label: t("satisfactionLevels.veryUnsatisfied") },
     ];
+
+    const { feedbackstudentadditionnalquestions } =
+        useFeedbackStudentAdditionalQuestions(
+            selectedFeedback?.student.id || "",
+            feedbackId,
+        );
 
     const handleOpenModal = (feedback: FeedbackStudent) => {
         setSelectedFeedback(feedback);
@@ -77,7 +90,7 @@ export default function FeedbackListDetails({}: Readonly<FeedbackListDetailsScre
     const columns: TableColumn<FeedbackStudent>[] = [
         {
             name: "ID",
-            selector: (row: FeedbackStudent) => row.id.toString(),
+            selector: (_, index: number = 0) => (index + 1).toString(),
             sortable: true,
             grow: 1,
         },
@@ -120,6 +133,14 @@ export default function FeedbackListDetails({}: Readonly<FeedbackListDetailsScre
     return (
         <ScrollView contentContainerStyle={styles.mainContainer}>
             <View style={styles.container}>
+                <View style={{ alignSelf: "flex-start" }}>
+                    <ButtonComponent
+                        icon="arrow-back-circle-outline"
+                        text="Back"
+                        onPress={() => navigation.navigate("feedbacklist")} //Affiche une erreur, mais fonctionne tkt
+                        buttonType={"primary"}
+                    />
+                </View>
                 <Text style={styles.title}>Feedback : {activityName}</Text>
                 <DataTable
                     columns={columns}
@@ -145,9 +166,7 @@ export default function FeedbackListDetails({}: Readonly<FeedbackListDetailsScre
                                         { backgroundColor: Colors.workshopColor },
                                     ]}
                                 >
-                                    <Text style={styles.modalTitle}>
-                                        {selectedFeedback.id} {"."}{" "}
-                                    </Text>
+                                    <Text style={styles.modalTitle}>Modal</Text>
                                     <Pressable
                                         style={styles.closeButton}
                                         onPress={() => setModalVisible(!modalVisible)}
@@ -212,6 +231,22 @@ export default function FeedbackListDetails({}: Readonly<FeedbackListDetailsScre
                                                         {item.title}
                                                     </Text>{" "}
                                                     : {item.value}
+                                                </Text>
+                                            </View>
+                                        )}
+                                    />
+                                    <FlatList
+                                        data={feedbackstudentadditionnalquestions}
+                                        keyExtractor={(item, index) => index.toString()}
+                                        renderItem={({ item }) => (
+                                            <View style={styles.modalData}>
+                                                <Text>
+                                                    <Text
+                                                        style={{ fontWeight: "bold" }}
+                                                    >
+                                                        {item.question.question}
+                                                    </Text>{" "}
+                                                    : {item.answer}
                                                 </Text>
                                             </View>
                                         )}

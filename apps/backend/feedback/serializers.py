@@ -51,8 +51,11 @@ class FeedbackStudentAdditionalQuestionsSerializer(serializers.ModelSerializer):
     student = UserSerializer(read_only=True)
     student_id = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(), write_only=True, source='student')
+    question = FeedbackAdditionalQuestionsSerializer(read_only=True)
+    question_id = serializers.PrimaryKeyRelatedField(
+        queryset=FeedbackAdditionalQuestions.objects.all(), write_only=True, source='question')
 
     class Meta:
         model = FeedbackStudentAdditionalQuestions
         fields = ['id', 'student', 'student_id',
-                  'feedback', 'question', 'answer']
+                  'feedback', 'question', 'question_id', 'answer']

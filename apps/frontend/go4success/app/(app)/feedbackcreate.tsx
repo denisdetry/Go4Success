@@ -14,9 +14,11 @@ import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 import dayjs from "dayjs";
 import { useAuth } from "@/context/Auth";
 import { fetchBackend } from "@/utils/fetchBackend";
+import { useNavigation } from "expo-router";
 
 export default function FeedbackCreate() {
     const { t } = useTranslation();
+    const navigation = useNavigation();
     const { user } = useAuth();
     const [selection, setSelection] = useState<string | null>(null);
     const [isCheckedPositivePoint, setIsCheckedPositivePoint] = useState(true);
@@ -124,6 +126,14 @@ export default function FeedbackCreate() {
     return (
         <ScrollView contentContainerStyle={stylesGlobal.mainContainer}>
             <View style={stylesGlobal.container}>
+                <View style={{ alignSelf: "flex-start" }}>
+                    <ButtonComponent
+                        icon="arrow-back-circle-outline"
+                        text="Back"
+                        onPress={() => navigation.goBack()}
+                        buttonType={"primary"}
+                    />
+                </View>
                 <Text
                     style={[stylesGlobal.title, { fontSize: 30, textAlign: "center" }]}
                 >

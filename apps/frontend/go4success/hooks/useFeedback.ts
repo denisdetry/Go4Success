@@ -49,14 +49,29 @@ export interface FeedbackAdditionalQuestions {
     question: string;
 }
 
-export function useFeedback(activityId: string) {
+export interface FeedbackStudentAdditionalQuestions {
+    id: string;
+    student: {
+        id: string;
+        username: string;
+        first_name: string;
+        last_name: string;
+        noma: string;
+    };
+    feedback: string;
+    question: FeedbackAdditionalQuestions;
+    answer: string;
+}
+
+export function useFeedback(feedbackId: string, activityId: string) {
     const { isPending, data, error } = useQuery<Feedback[]>({
-        queryKey: ["feedbacks", activityId],
+        queryKey: ["feedbacks", feedbackId, activityId],
         queryFn: async () => {
             const { data } = await fetchBackend({
                 type: "GET",
                 url: "feedback/feedbacks",
                 params: {
+                    id: feedbackId,
                     activity_id: activityId,
                 },
             });
@@ -101,4 +116,26 @@ export function useFeedbackAdditionalQuestions(feedbackId: string) {
     });
 
     return { isPending, feedbackAdditionalQuestions: data ?? [], error };
+}
+
+export function useFeedbackStudentAdditionalQuestions(
+    studentId: string,
+    feedbackId: string,
+) {
+    const { isPending, data, error } = useQuery<FeedbackStudentAdditionalQuestions[]>({
+        queryKey: ["feedbackstudentadditionnalquestions", studentId, feedbackId],
+        queryFn: async () => {
+            const { data } = await fetchBackend({
+                type: "GET",
+                url: "feedback/feedbackstudentadditionnalquestions",
+                params: {
+                    student_id: studentId,
+                    feedback: feedbackId,
+                },
+            });
+            return data;
+        },
+    });
+
+    return { isPending, feedbackstudentadditionnalquestions: data ?? [], error };
 }

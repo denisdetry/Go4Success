@@ -46,10 +46,8 @@ const customStyles = {
 };
 
 export default function FeedbackList() {
-    const { feedbacks, error: feedbackError } = useFeedback("");
+    const { feedbacks, error: feedbackError } = useFeedback("", "");
     const { t } = useTranslation();
-    const [modalVisible, setModalVisible] = useState(false);
-    const [selectedFeedback, setSelectedFeedback] = useState<Feedback | null>(null);
     const navigation = useNavigation<FeedbackListDetailsScreenNavigationProp>();
 
     const columns: TableColumn<Feedback>[] = [
@@ -76,7 +74,6 @@ export default function FeedbackList() {
                             feedbackId: row.id.toString(),
                             activityName: row.activity.name,
                         });
-                        setModalVisible(false);
                     }}
                 />
             ),
@@ -96,6 +93,14 @@ export default function FeedbackList() {
     return (
         <ScrollView contentContainerStyle={styles.mainContainer}>
             <View style={styles.container}>
+                <View style={{ alignSelf: "flex-start" }}>
+                    <ButtonComponent
+                        icon="arrow-back-circle-outline"
+                        text="Back"
+                        onPress={() => navigation.goBack()}
+                        buttonType={"primary"}
+                    />
+                </View>
                 <Text style={styles.title}>Feedback</Text>
                 <DataTable
                     columns={columns}

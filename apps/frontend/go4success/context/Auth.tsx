@@ -13,6 +13,12 @@ import { fetchBackend } from "@/utils/fetchBackend";
 import { fetchError } from "@/utils/fetchError";
 import useUser from "@/hooks/useUser";
 
+function isListIncluded(mainList: any[][], searchList: any[]): boolean {
+    return mainList.some(subList =>
+        subList.length === searchList.length && subList.every((value, index) => value === searchList[index]),
+    );
+}
+
 const AuthContext = React.createContext<any>(null);
 
 export function useAuth() {
@@ -21,7 +27,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }: React.PropsWithChildren) {
     const { t } = useTranslation();
-    const rootSegment = useSegments()[0];
+    const rootSegment = useSegments();
 
     const { isPending, user } = useUser();
 
@@ -35,9 +41,19 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         );
     }
 
-    if (!user && rootSegment !== "(auth)") {
+    if (!user && rootSegment[0] !== "(auth)") {
         return <Redirect href={"/(auth)/login"} />;
-    } else if (user && rootSegment === "(auth)") {
+    } else if (user && rootSegment[0] === "(auth)") {
+        return <Redirect href={"/"} />;
+    }
+
+    const deniedRoutesForNonSuperUser = [
+        ["(app)", "rolemanagement"],
+    ];
+
+    const isNotSuperUser = !user?.is_superuser && user;
+
+    if (isNotSuperUser && isListIncluded(deniedRoutesForNonSuperUser, rootSegment)) {
         return <Redirect href={"/"} />;
     }
 
@@ -152,10 +168,10 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
                 signOut: async () => {
                     try {
-                        AsyncStorage.removeItem("accessToken");
-                        AsyncStorage.removeItem("refreshToken");
+                        await AsyncStorage.removeItem("accessToken");
+                        await AsyncStorage.removeItem("refreshToken");
 
-                        void queryClient.invalidateQueries({
+                        await queryClient.invalidateQueries({
                             queryKey: ["current_user"],
                         });
                         Toast.show({

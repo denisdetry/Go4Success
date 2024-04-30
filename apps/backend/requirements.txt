@@ -3,9 +3,11 @@ pep8-naming>=0.11.1
 
 Django>=5.0.2
 djangorestframework>=3.14.0
+djangorestframework_simplejwt
 django-cors-headers
+django-probes
 python-decouple
 python-dotenv
 mysqlclient
-psycopg2>=2.8
 python-dotenv
+psycopg2

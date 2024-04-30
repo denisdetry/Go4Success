@@ -1,19 +1,28 @@
-import { Dimensions, ScaledSize, StyleSheet } from "react-native";
-import { useEffect, useState } from "react";
+import { Platform, StyleSheet } from "react-native";
 import Colors from "@/constants/Colors";
+import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
 
-const windowDimensions = Dimensions.get("window");
 export default StyleSheet.create({
     mainContainer: {
-        flex: 1,
         alignItems: "center",
-        height: windowDimensions.height,
-        width: windowDimensions.width,
+        justifyContent: "center",
+        flexGrow: 1,
+    },
+    titleContainer: {
+        width: "90%",
+        alignContent: "flex-start",
+        marginHorizontal: 20,
+        marginTop: 20,
+        padding: 10,
     },
     title: {
         fontSize: 28,
-        fontWeight: "600",
-        marginBottom: 10,
+        fontWeight: "500",
+        paddingBottom: 10,
+    },
+    titleNoPadding: {
+        fontSize: 28,
+        fontWeight: "500",
     },
     text: {
         fontSize: 16,
@@ -21,40 +30,46 @@ export default StyleSheet.create({
         color: "black",
     },
     containerCard: {
-        flex: 1,
-        width: windowDimensions.width - windowDimensions.width * 0.13,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        gap: 20,
+        width: "100%",
+        maxWidth:
+            Platform.OS === "web"
+                ? isMobile
+                    ? 360
+                    : isTabletMini
+                        ? 360
+                        : isTablet
+                            ? 710
+                            : 1435
+                : 1435, // isDesktop for the last one
+        paddingBottom: 20,
     },
     container: {
-        width: windowDimensions.width - windowDimensions.width * 0.1,
-        padding: 50,
-        margin: 30,
-        justifyContent: "center",
-        alignItems: "center",
-        alignContent: "center",
-        shadowRadius: 5,
+        width: "90%",
         borderRadius: 10,
+        shadowRadius: 3,
         shadowColor: "lightgray",
         backgroundColor: "white",
+        justifyContent: "center",
+        alignItems: "center",
+        alignContent: "flex-start",
+        paddingVertical: Platform.OS === "web" ? 30 : 20,
+        paddingHorizontal: 20,
+        margin: 20,
     },
 
     form: {
-        flex: 1,
-        gap: 15,
+        gap: 10,
         justifyContent: "center",
     },
 
     inputField: {
-        flex: 1,
-        shadowRadius: 2,
-        shadowColor: "#000",
+        borderWidth: 0.5,
+        borderColor: Colors.primaryColor,
         borderRadius: 10,
         flexDirection: "row",
         alignItems: "center",
         padding: 10,
+        minWidth: 300,
     },
 
     input: {
@@ -62,7 +77,7 @@ export default StyleSheet.create({
         color: "#333",
         fontSize: 16,
         borderColor: "#777",
-        margin: 10,
+        padding: 10,
     },
 
     errorMsg: {
@@ -78,5 +93,28 @@ export default StyleSheet.create({
         fontSize: 22,
         fontWeight: "bold",
         marginBottom: 10,
+    },
+    containerDatePicker: {
+        flex: 1,
+        backgroundColor: "#F5FCFF",
+    },
+    picker: {
+        height: 50,
+        width: "100%",
+        backgroundColor: "#fafafa",
+        borderColor: "gray",
+        borderWidth: 1,
+        borderRadius: 4,
+        marginBottom: 10,
+    },
+    inputLittle: {
+        height: 50,
+        width: "100%",
+        backgroundColor: "#fafafa",
+        borderColor: "gray",
+        borderWidth: 1,
+        borderRadius: 4,
+        marginBottom: 10,
+        padding: 10,
     },
 });

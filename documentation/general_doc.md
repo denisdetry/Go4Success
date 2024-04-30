@@ -305,7 +305,7 @@ const { t } = useTranslation();
 const fetchData = useMutation({
     mutationFn: async () => {
         const data: { [index: string]: any } = {};
-        data[dataKey] = newData;
+        data[dataKey] = newData; // dataKey représente l'attribut à mettre à jour
         await fetchBackend({
             type: "PATCH",
             url: "auth/user_profile/" + user.id + "/",

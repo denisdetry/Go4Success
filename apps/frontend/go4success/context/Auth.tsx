@@ -66,7 +66,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             if (success) {
                                 await AsyncStorage.setItem("accessToken", success.access);
                                 await AsyncStorage.setItem("refreshToken", success.refresh);
-                                void queryClient.invalidateQueries({
+                                await queryClient.invalidateQueries({
                                     queryKey: ["current_user"],
                                 });
 
@@ -112,9 +112,10 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             await AsyncStorage.setItem("accessToken", success.access);
                             await AsyncStorage.setItem("refreshToken", success.refresh);
 
-                            void queryClient.invalidateQueries({
+                            await queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
                             });
+
                             Toast.show({
                                 type: "success",
                                 text1: t("translateToast.SuccessText1"),
@@ -152,10 +153,10 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
                 signOut: async () => {
                     try {
-                        AsyncStorage.removeItem("accessToken");
-                        AsyncStorage.removeItem("refreshToken");
+                        await AsyncStorage.removeItem("accessToken");
+                        await AsyncStorage.removeItem("refreshToken");
 
-                        void queryClient.invalidateQueries({
+                        await queryClient.invalidateQueries({
                             queryKey: ["current_user"],
                         });
                         Toast.show({

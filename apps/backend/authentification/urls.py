@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -20,7 +19,3 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path("", include(router.urls)),
 ]
-
-admin.site.site_title = "Go4success administration"
-admin.site.site_header = "Go4success administration"
-admin.site.index_title = "Go4success"

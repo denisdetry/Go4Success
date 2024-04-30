@@ -2,73 +2,49 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
 import { useMutation } from "@tanstack/react-query";
 
-interface User {
-    id: number | null;
-    first_name: string | null;
-    last_name: string | null;
-    is_superuser: string | null;
+export function useUserInfo() {
+    const backendURL = process.env.EXPO_PUBLIC_API_URL;
+    const {
+        data: userInfo,
+        error,
+        isFetching,
+    } = useQuery(["getUserInfo"], async () => {
+        const { data, error } = await fetchBackend({
+            type: "GET",
+            url: `${backendURL}/rolemanagement/rolemanagement/`,
+        });
+
+        if (error) {
+            throw new Error(error);
+        }
+
+        return data;
+    });
+
+    return { userInfo, error, isFetching };
 }
 
-interface UserRole {
-    user: number;
-    is_professor: boolean;
-    is_tutor: boolean;
-}
+export function useUserRole() {
+    const backendURL = process.env.EXPO_PUBLIC_API_URL;
 
-export function useRoleManagement(
-    id: number | null,
-    first_name: string | undefined,
-    last_name: string | undefined,
-    is_superUser: string | undefined,
-    is_professor: string | null,
-    is_tutor: string | null,
-    user: number | null,
-) {
-    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+    const {
+        data: userRole,
+        error,
+        isFetching,
+    } = useQuery(["getUserRole"], async () => {
+        const { data, error } = await fetchBackend({
+            type: "GET",
+            url: `${backendURL}/rolemanagement/editRole/`,
+        });
 
-    // console.log("Called useActivities");
+        if (error) {
+            throw new Error(error);
+        }
 
-    const { isPending, data, error } = useQuery<UserRole[]>({
-        queryKey: ["userRole", user, is_professor, is_tutor],
-        queryFn: async () => {
-            const { data } = await fetchBackend({
-                type: "GET",
-                url: `/rolemanagement/${endpoint}/`,
-                params: {
-                    // eslint-disable-next-line camelcase
-
-                    user: user,
-                    // eslint-disable-next-line camelcase
-                    is_professor: is_professor,
-                    // eslint-disable-next-line camelcase
-                    is_tutor: is_tutor,
-                },
-            });
-            // console.log("resp:", data);
-            return data;
-        },
+        return data; // Ajustez en fonction du format attendu
     });
-    const { isPending, data, error } = useQuery<User[]>({
-        queryKey: ["rolemanagement", id, first_name, last_name, is_superUser],
-        queryFn: async () => {
-            const { data } = await fetchBackend({
-                type: "GET",
-                url: `/rolemanagement/${endpoint}/`,
-                params: {
-                    id: id,
-                    // eslint-disable-next-line camelcase
-                    first_name: first_name,
-                    // eslint-disable-next-line camelcase
-                    last_name: last_name,
-                    // eslint-disable-next-line camelcase
-                    is_superUser: is_superUser,
-                },
-            });
-            // console.log("resp:", data);
-            return data;
-        },
-    });
-    return { isPending, data: data ?? [], error };
+
+    return { userRole, error, isFetching };
 }
 
 const postSite = async (newSiteData: any) => {
@@ -85,9 +61,25 @@ const postSite = async (newSiteData: any) => {
     return data;
 };
 
-// Hook pour utiliser la mutation
 export function usePostSite() {
-    const { mutate, isLoading, isError, error, data } = useMutation(postSite);
+    const { mutate, isLoading, isError, error, data } = useMutation(postSite, {
+        onSuccess: () => {
+            // Affiche un toast en cas de succès
+            Toast.show({
+                type: "success",
+                text1: "Succès",
+                text2: "Les informations ont bien été envoyées.",
+            });
+        },
+        onError: (error) => {
+            // Affiche un toast en cas d'erreur
+            Toast.show({
+                type: "error",
+                text1: "Erreur",
+                text2: error.message || "Une erreur est survenue.",
+            });
+        },
+    });
 
     return {
         mutatePostSite: mutate,

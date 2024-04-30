@@ -4,7 +4,7 @@ import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import axiosConfig from "@/constants/axiosConfig";
 import Toast from "react-native-toast-message";
-
+import { useUserInfo, useUserRole, useEditRole } from "./hooks";
 axiosConfig();
 
 export default function RoleManagement() {
@@ -14,6 +14,18 @@ export default function RoleManagement() {
     const backendURL = process.env.EXPO_PUBLIC_API_URL;
 
     const [userInfo, setUserInfo] = useState([]);
+
+    const {
+        data: userInfo,
+        isLoading: loadingUserInfo,
+        error: errorUserInfo,
+    } = useUserInfo();
+    const {
+        data: userRole,
+        isLoading: loadingUserRole,
+        error: errorUserRole,
+    } = useUserRole();
+    const { mutate: editRole, isLoading: loadingEditRole } = useEditRole();
 
     interface User {
         selectedRole: string;
@@ -242,10 +254,10 @@ const generateUsersInfoRole = (userInfo: any, userRole: any) => {
         const role = curr.is_professor
             ? "professor"
             : curr.is_tutor
-                ? "tutor"
-                : curr.is_superuser
-                    ? "superuser"
-                    : "student";
+            ? "tutor"
+            : curr.is_superuser
+            ? "superuser"
+            : "student";
         acc[curr.user] = role;
         return acc;
     }, {});

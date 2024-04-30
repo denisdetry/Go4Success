@@ -46,52 +46,50 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
             value={{
                 user: user,
                 signUp: async (userData: UserRegister) => {
-                    {
-                        try {
-                            const { data: success } = await fetchBackend({
-                                type: "POST",
-                                url: "auth/register/",
-                                data: {
-                                    username: userData.username,
-                                    email: userData.email,
-                                    // eslint-disable-next-line camelcase
-                                    last_name: userData.lastName,
-                                    // eslint-disable-next-line camelcase
-                                    first_name: userData.firstName,
-                                    noma: userData.noma,
-                                    password: userData.password,
-                                },
+                    try {
+                        const { data: success } = await fetchBackend({
+                            type: "POST",
+                            url: "auth/register/",
+                            data: {
+                                username: userData.username,
+                                email: userData.email,
+                                // eslint-disable-next-line camelcase
+                                last_name: userData.lastName,
+                                // eslint-disable-next-line camelcase
+                                first_name: userData.firstName,
+                                noma: userData.noma,
+                                password: userData.password,
+                            },
+                        });
+
+                        if (success) {
+                            await AsyncStorage.setItem("accessToken", success.access);
+                            await AsyncStorage.setItem("refreshToken", success.refresh);
+                            await queryClient.invalidateQueries({
+                                queryKey: ["current_user"],
                             });
 
-                            if (success) {
-                                await AsyncStorage.setItem("accessToken", success.access);
-                                await AsyncStorage.setItem("refreshToken", success.refresh);
-                                void queryClient.invalidateQueries({
-                                    queryKey: ["current_user"],
-                                });
-
+                            Toast.show({
+                                type: "success",
+                                text1: t("translateToast.SuccessText1"),
+                                text2: t("translateToast.RegisterSuccessText2"),
+                            });
+                        }
+                    } catch (err) {
+                        const error = err as fetchError;
+                        if (error.responseError) {
+                            if (error.responseError.status === 401 || error.responseError.status === 400) {
                                 Toast.show({
-                                    type: "success",
-                                    text1: t("translateToast.SuccessText1"),
-                                    text2: t("translateToast.RegisterSuccessText2"),
+                                    type: "error",
+                                    text1: t("translateToast.ErrorText1"),
+                                    text2: await error.responseError.json(),
                                 });
-                            }
-                        } catch (err) {
-                            const error = err as fetchError;
-                            if (error.responseError) {
-                                if (error.responseError.status === 401 || error.responseError.status === 400) {
-                                    Toast.show({
-                                        type: "error",
-                                        text1: t("translateToast.ErrorText1"),
-                                        text2: await error.responseError.json(),
-                                    });
-                                } else {
-                                    Toast.show({
-                                        type: "error",
-                                        text1: t("translateToast.ErrorText1"),
-                                        text2: t("translateToast.ServerErrorText2"),
-                                    });
-                                }
+                            } else {
+                                Toast.show({
+                                    type: "error",
+                                    text1: t("translateToast.ErrorText1"),
+                                    text2: t("translateToast.ServerErrorText2"),
+                                });
                             }
                         }
                     }
@@ -112,9 +110,10 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             await AsyncStorage.setItem("accessToken", success.access);
                             await AsyncStorage.setItem("refreshToken", success.refresh);
 
-                            void queryClient.invalidateQueries({
+                            await queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
                             });
+
                             Toast.show({
                                 type: "success",
                                 text1: t("translateToast.SuccessText1"),

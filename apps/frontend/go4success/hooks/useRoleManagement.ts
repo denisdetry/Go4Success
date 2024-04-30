@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
+import { useMutation } from "@tanstack/react-query";
 
 interface User {
     id: number | null;
@@ -34,6 +35,8 @@ export function useRoleManagement(
                 type: "GET",
                 url: `/rolemanagement/${endpoint}/`,
                 params: {
+                    // eslint-disable-next-line camelcase
+
                     user: user,
                     // eslint-disable-next-line camelcase
                     is_professor: is_professor,
@@ -66,4 +69,31 @@ export function useRoleManagement(
         },
     });
     return { isPending, data: data ?? [], error };
+}
+
+const postSite = async (newSiteData: any) => {
+    const { data, error } = await fetchBackend({
+        type: "POST",
+        url: `/rolemanagement/${endpoint}/`,
+        body: JSON.stringify(newSiteData),
+    });
+
+    if (error) {
+        throw new Error(error);
+    }
+
+    return data;
+};
+
+// Hook pour utiliser la mutation
+export function usePostSite() {
+    const { mutate, isLoading, isError, error, data } = useMutation(postSite);
+
+    return {
+        mutatePostSite: mutate,
+        isLoading,
+        isError,
+        error,
+        data,
+    };
 }

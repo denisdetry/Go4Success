@@ -261,7 +261,8 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                         <View
                             style={{
                                 flexDirection: "row",
-                                justifyContent: "space-between",
+                                justifyContent: "center",
+                                alignItems: "center",
                             }}
                         >
                             <ButtonComponent

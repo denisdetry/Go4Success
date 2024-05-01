@@ -163,7 +163,6 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                 signOut: async () => {
                     try {
                         if (Platform.OS !== "web") {
-                            console.log("Hello");
                             await fetchBackend({
                                 type: "PATCH",
                                 url: "auth/update_expo_token/" + user.id + "/",

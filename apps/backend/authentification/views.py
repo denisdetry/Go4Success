@@ -1,3 +1,4 @@
+from database.models import User, ExpoToken
 from database.models import User
 from django.http import JsonResponse
 from django.middleware import csrf
@@ -11,8 +12,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import UserRegistrationSerializer, UserSerializer, UpdateUserSerializer, \
-    ChangePasswordSerializer
-from .validations import custom_validation
+    ChangePasswordSerializer, ExpoTokenSerializer
+from .validations import custom_validation, validate_username, validate_password
 
 
 class UserRegisterView(APIView):
@@ -60,6 +61,20 @@ class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = ChangePasswordSerializer
     lookup_field = 'id'
+
+
+class ExpoTokenView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    queryset = ExpoToken.objects.all()
+    serializer_class = ExpoTokenSerializer
+
+
+class UpdateExpoTokenView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = ExpoToken.objects.all()
+    serializer_class = ExpoTokenSerializer
+    lookup_field = 'user'
 
 
 @csrf_exempt

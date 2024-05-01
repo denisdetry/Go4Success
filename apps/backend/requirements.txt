@@ -11,3 +11,6 @@ python-dotenv
 mysqlclient
 python-dotenv
 psycopg2
+requests
+exponent_server_sdk
+rollbar

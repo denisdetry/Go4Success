@@ -38,7 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255, unique=True,
                                 error_messages={"unique": "Ce nom d'utilisateur est déjà utilisé."})
     email = models.EmailField(unique=True, error_messages={
-                              "unique": "Cette adresse mail est déjà utilisée."})
+        "unique": "Cette adresse mail est déjà utilisée."})
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     noma = models.CharField(max_length=63, blank=True, null=True, unique=True,
@@ -68,6 +68,19 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.first_name
+
+
+class ExpoToken(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "User %s - %s" % (self.user, self.token)
+
+    class Meta:
+        unique_together = (('user', 'token'),)
 
 
 class Course(models.Model):
@@ -147,6 +160,7 @@ class Teacher(models.Model):
         User, on_delete=models.CASCADE, primary_key=True)
     is_tutor = models.BooleanField()
     is_professor = models.BooleanField()
+
     # check if the user is either tutor or professor
 
     def clean(self):

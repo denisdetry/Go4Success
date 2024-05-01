@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchBackend } from "@/utils/fetchBackend";
 import { fetchError } from "@/utils/fetchError";
 import useUser from "@/hooks/useUser";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 function isListIncluded(mainList: any[][], searchList: any[]): boolean {
     return mainList.some(subList =>
@@ -30,6 +31,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
     const rootSegment = useSegments();
 
     const { isPending, user } = useUser();
+    const { expoPushToken, notification } = usePushNotifications(user);
 
     if (isPending) {
         return (
@@ -140,7 +142,6 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         }
                     } catch (err) {
                         const error = err as fetchError;
-                        console.log(error);
                         if (error.responseError) {
                             if (error.responseError.status === 401 || error.responseError.status === 400) {
                                 Toast.show({
@@ -155,35 +156,43 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                     text2: t("translateToast.ServerErrorText2"),
                                 });
                             }
-                        } else {
-                            Toast.show({
-                                type: "error",
-                                text1: t("translateToast.ErrorText1"),
-                                text2: t("translateToast.ServerErrorText2"),
-                            });
                         }
-
                     }
-
                 },
 
                 signOut: async () => {
                     try {
+                        await fetchBackend({
+                            type: "PATCH",
+                            url: "auth/update_expo_token/" + user.id + "/",
+                            data: {
+                                token: expoPushToken,
+                                // eslint-disable-next-line camelcase
+                                is_active: false,
+                            },
+                        });
+
                         await AsyncStorage.removeItem("accessToken");
                         await AsyncStorage.removeItem("refreshToken");
 
                         await queryClient.invalidateQueries({
                             queryKey: ["current_user"],
                         });
+
                         Toast.show({
                             type: "success",
                             text1: t("translateToast.LogoutSuccessText1"),
                             text2: t("translateToast.LogoutSuccessText2"),
                         });
                     } catch (error) {
-                        console.log(error);
+                        const err = error as fetchError;
+                        console.log(err.responseError);
                     }
+
+
                 },
+                expoPushToken: expoPushToken,
+                notification: notification,
             }}
         >
             {children}

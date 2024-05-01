@@ -9,10 +9,10 @@ import { Image, Platform, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-
 import profilePicture from "@/assets/images/profile-picture.jpg";
+import useUser from "@/hooks/useUser";
 
-function customDrawerContent(props: any) {
+function CustomDrawerContent(props: any) {
     const router = useRouter();
     const { t } = useTranslation();
     const { signOut } = useAuth();
@@ -46,12 +46,15 @@ function customDrawerContent(props: any) {
 
 export default function Layout() {
     const router = useRouter();
+
+    const { user } = useUser();
+
     const { t } = useTranslation();
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <AuthProvider>
                 <Drawer
-                    drawerContent={customDrawerContent}
+                    drawerContent={CustomDrawerContent}
                     screenOptions={{
                         drawerHideStatusBarOnOpen: true,
                         drawerActiveBackgroundColor: Colors.primaryColor,
@@ -172,8 +175,9 @@ export default function Layout() {
                     <Drawer.Screen
                         name="rolemanagement"
                         options={{
-                            drawerLabel: "Gestion des rôles",
-                            headerTitle: "Gestion des rôles",
+                            drawerItemStyle: { display: user?.is_superuser ? "flex" : "none" },
+                            drawerLabel: t("translationMenu.rolemanagement"),
+                            headerTitle: t("translationMenu.rolemanagement"),
                             drawerIcon: ({ size, color }) => (
                                 <Ionicons name="people" size={size} color={color} />
                             ),

@@ -14,6 +14,12 @@ import { fetchError } from "@/utils/fetchError";
 import useUser from "@/hooks/useUser";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 
+function isListIncluded(mainList: any[][], searchList: any[]): boolean {
+    return mainList.some(subList =>
+        subList.length === searchList.length && subList.every((value, index) => value === searchList[index]),
+    );
+}
+
 const AuthContext = React.createContext<any>(null);
 
 export function useAuth() {
@@ -22,7 +28,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }: React.PropsWithChildren) {
     const { t } = useTranslation();
-    const rootSegment = useSegments()[0];
+    const rootSegment = useSegments();
 
     const { isPending, user } = useUser();
     const { expoPushToken, notification } = usePushNotifications(user);
@@ -37,9 +43,19 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         );
     }
 
-    if (!user && rootSegment !== "(auth)") {
+    if (!user && rootSegment[0] !== "(auth)") {
         return <Redirect href={"/(auth)/login"} />;
-    } else if (user && rootSegment === "(auth)") {
+    } else if (user && rootSegment[0] === "(auth)") {
+        return <Redirect href={"/"} />;
+    }
+
+    const deniedRoutesForNonSuperUser = [
+        ["(app)", "rolemanagement"],
+    ];
+
+    const isNotSuperUser = !user?.is_superuser && user;
+
+    if (isNotSuperUser && isListIncluded(deniedRoutesForNonSuperUser, rootSegment)) {
         return <Redirect href={"/"} />;
     }
 
@@ -117,6 +133,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             await queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
                             });
+
                             Toast.show({
                                 type: "success",
                                 text1: t("translateToast.SuccessText1"),
@@ -157,7 +174,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
                         await AsyncStorage.removeItem("accessToken");
                         await AsyncStorage.removeItem("refreshToken");
-                        
+
                         await queryClient.invalidateQueries({
                             queryKey: ["current_user"],
                         });

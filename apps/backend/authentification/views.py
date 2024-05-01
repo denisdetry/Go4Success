@@ -1,4 +1,5 @@
 from database.models import User, ExpoToken
+from database.models import User
 from django.http import JsonResponse
 from django.middleware import csrf
 from django.views.decorators.csrf import csrf_exempt
@@ -31,18 +32,6 @@ class UserRegisterView(APIView):
             return Response({'refresh': str(refresh),
                              'access': str(refresh.access_token)}, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-class LoginView(APIView):
-    permission_classes = (AllowAny,)
-    authentication_classes = [JWTAuthentication]
-
-    def post(self, request):
-        data = request.data
-
-        assert validate_username(data)
-        assert validate_password(data)
-        return Response(status=status.HTTP_200_OK)
 
 
 class CurrentUserView(APIView):

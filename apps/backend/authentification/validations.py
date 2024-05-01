@@ -12,7 +12,7 @@ def custom_validation(data):
     email = data['email'].strip()
     username = data['username'].strip()
     password = data['password'].strip()
-    noma = data['noma']
+
     # Email
     if not email or UserModel.objects.filter(email=email).exists():
         return Response('choisir une autre adresse mail, celui-ci existe déjà', status=status.HTTP_400_BAD_REQUEST)
@@ -33,9 +33,11 @@ def custom_validation(data):
     if not username or UserModel.objects.filter(username=username).exists():
         return Response('choisir un autre nom d’utilisateur, celui-ci existe déjà', status=status.HTTP_400_BAD_REQUEST)
 
-    if UserModel.objects.filter(noma=noma).exists():
-        return Response('choisir un autre noma, celui-ci est déjà utilisé',
-                        status=status.HTTP_400_BAD_REQUEST)
+    if 'noma' in data:
+        noma = data['noma'].strip()
+        if UserModel.objects.filter(noma=noma).exists() and noma != "":
+            return Response('choisir un autre noma, celui-ci est déjà utilisé',
+                            status=status.HTTP_400_BAD_REQUEST)
     return data
 
 

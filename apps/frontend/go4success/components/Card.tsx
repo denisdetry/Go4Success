@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Modal, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
 import { useAuth } from "@/context/Auth";
@@ -186,12 +186,12 @@ const Card: React.FC<CardProps> = ({
                     <View style={styles.modalView}>
                         <View style={styleFunctions.getModalViewTitleStyle(type)}>
                             <Text style={styles.modalTitle}>{title}</Text>
-                            <Pressable
+                            <TouchableOpacity
                                 style={styles.closeButton}
                                 onPress={() => setModalVisible(!modalVisible)}
                             >
-                                <Text style={styles.closeButtonText}>✖</Text>
-                            </Pressable>
+                                <Ionicons name={"close"} color={"white"} size={24}></Ionicons>
+                            </TouchableOpacity>
                         </View>
 
                         <View style={styleFunctions.getModalDataStyle(type)}>
@@ -310,20 +310,20 @@ const styles = StyleSheet.create({
     },
 
     centeredView: {
-        marginTop: 22,
         justifyContent: "center",
         alignItems: "center",
+        marginTop: 10,
     },
     centeredViewModal: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22,
         backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     modalView: {
         backgroundColor: Colors.workshopLightColor,
         borderRadius: 20,
+        width: "95%",
         alignItems: "center",
         shadowColor: "#000",
         shadowOpacity: 0.25,
@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
     text: {
         alignSelf: "flex-end",
         alignItems: "stretch",
-        fontSize: isMobile ? 13 : 16,
+        fontSize: isMobile ? 14 : 16,
         color: "white",
     },
 });

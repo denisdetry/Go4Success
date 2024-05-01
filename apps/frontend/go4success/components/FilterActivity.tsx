@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Modal, StyleSheet, Text, TextInput, View } from "react-native";
+import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Card from "./Card";
 import ButtonComponent from "./ButtonComponent";
 import Colors from "../constants/Colors";
@@ -14,6 +14,7 @@ import { Activity, useActivities } from "@/hooks/useActivities";
 import { useTranslation } from "react-i18next";
 import RenderCarousel from "@/components/RenderCarousel";
 import { useLanguages } from "@/hooks/useLanguages";
+import { Ionicons } from "@expo/vector-icons";
 
 interface Attend {
     activity: Activity;
@@ -158,7 +159,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
     return (
         <>
-            <View style={{ width: "100%", justifyContent: "flex-start" }}>
+            <View style={{ width: "100%", justifyContent: "flex-start", marginTop: 10 }}>
                 <ButtonComponent
                     text={t("translationButton.OpenFilter")}
                     onPress={toggleModal}
@@ -174,7 +175,13 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 onRequestClose={toggleModal}
             >
                 <View style={styles.centeredView}>
+
                     <View style={styles.modalView}>
+                        <TouchableOpacity style={styles.closeButton} onPress={() => {
+                            setModalVisible(!modalVisible);
+                        }}>
+                            <Ionicons name={"close"} color={Colors.primaryColor} size={24}></Ionicons>
+                        </TouchableOpacity>
                         <TextInput
                             style={stylesGlobal.inputLittle}
                             value={searchName}
@@ -305,11 +312,9 @@ const styles = StyleSheet.create({
         color: "gray",
     },
     centeredView: {
-        // height: "100%",
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22,
         backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     modalView: {
@@ -326,6 +331,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+    },
+    closeButton: {
+        position: "absolute",
+        top: 10,
+        right: 10,
     },
 });
 

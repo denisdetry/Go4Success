@@ -30,17 +30,16 @@ export default StyleSheet.create({
         color: "black",
     },
     containerCard: {
-        flex: 1,
         width: "100%",
         maxWidth:
             Platform.OS === "web"
                 ? isMobile
                     ? 360
                     : isTabletMini
-                      ? 360
-                      : isTablet
-                        ? 710
-                        : 1435
+                        ? 360
+                        : isTablet
+                            ? 710
+                            : 1435
                 : 1435, // isDesktop for the last one
         paddingBottom: 20,
     },
@@ -53,9 +52,8 @@ export default StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         alignContent: "flex-start",
-        padding: 50,
         paddingVertical: Platform.OS === "web" ? 30 : 20,
-        paddingHorizontal: Platform.OS === "web" ? 20 : 50,
+        paddingHorizontal: 20,
         margin: 20,
     },
 

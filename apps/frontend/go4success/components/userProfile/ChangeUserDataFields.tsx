@@ -3,13 +3,14 @@ import styles from "@/styles/global";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
-import axios from "axios";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/context/Auth";
 import UserProfileModal from "@/components/modals/UserProfileModal";
-import { API_BASE_URL } from "@/constants/ConfigApp";
+import { useTranslation } from "react-i18next";
 import { useMutation } from "@tanstack/react-query";
+import { fetchBackend } from "@/utils/fetchBackend";
 import Toast from "react-native-toast-message";
-
+import { queryClient } from "@/app/_layout";
+import { fetchError } from "@/utils/fetchError";
 
 interface ChangeUserDataFieldsProps {
     readonly data: any;
@@ -25,8 +26,9 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editable, setEditable] = useState(false);
     const [newData, setNewData] = useState(data);
-    const { user, refreshUser } = useAuth();
+    const { user } = useAuth();
 
+    const { t } = useTranslation();
     const switchEdit = () => {
         setEditable(!editable);
     };
@@ -35,29 +37,32 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
         mutationFn: async () => {
             const data: { [index: string]: any } = {};
             data[dataKey] = newData;
-            const response = await axios.patch(
-                `${API_BASE_URL}/auth/user_profile/` + user.id + "/",
-                data,
-            );
-
-            return response.data;
+            await fetchBackend({
+                type: "PATCH",
+                url: "auth/user_profile/" + user.id + "/",
+                data: data,
+            });
         },
         onSuccess: () => {
             Toast.show({
                 type: "success",
-                text1: "Félicitation ! 🎉",
-                text2: "Votre " + label.toLowerCase() + " a été mise à jour",
+                text1: t("translateToast.SuccessText1"),
+                text2:
+                    t("translationProfile.changeUserInfoSuccessPart1") +
+                    label.toLowerCase() +
+                    t("translationProfile.changeUserInfoSuccessPart2"),
             });
-            refreshUser();
+            void queryClient.invalidateQueries({ queryKey: ["current_user"] });
             switchEdit();
         },
-        onError: (error: any) => {
-            console.log(error);
+        onError: async (error: fetchError) => {
+            // console.error("Error : ", await error.responseError.json());
+            const errorResponse = await error.responseError.json();
             const errorMessages =
-                error.response.data[dataKey] || "Une erreur est survenue";
+                errorResponse[dataKey] || t("translationProfile.defaultErrorMessage");
             Toast.show({
                 type: "error",
-                text1: "Erreur",
+                text1: t("translationProfile.error"),
                 text2: errorMessages,
             });
         },
@@ -93,7 +98,7 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
             >
                 <TextInput
                     style={styles.input}
-                    value={newData}
+                    value={newData ? newData : ""}
                     onChangeText={setNewData}
                     editable={editable}
                     clearButtonMode={"while-editing"} // on IOS

@@ -1,34 +1,26 @@
 import React, { useState } from "react";
-import {
-    Modal,
-    Pressable,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { Modal, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
-
-import { useAuth } from "@/context/auth";
-import { isMobile } from "@/constants/screensWidth";
-import axiosConfig from "@/constants/axiosConfig";
-import { useMutation } from "@tanstack/react-query";
-import { API_BASE_URL } from "@/constants/ConfigApp";
-import axios from "axios";
+import { useAuth } from "@/context/Auth";
+import { isMobile, width } from "@/constants/screensWidth";
+import { useTranslation } from "react-i18next";
+import { fetchBackend } from "@/utils/fetchBackend";
 import Toast from "react-native-toast-message";
-
 import { queryClient } from "@/app/_layout";
-
-axiosConfig();
+import { useMutation } from "@tanstack/react-query";
+import { fetchError } from "@/utils/fetchError";
+import { Ionicons } from "@expo/vector-icons";
 
 interface CardProps {
     readonly id: string;
     readonly title: string;
     readonly location: string;
     readonly date: string;
+    readonly hour: string;
     readonly type: string;
     readonly description: string;
+    readonly language: string;
 }
 
 const styleFunctions = {
@@ -124,57 +116,61 @@ const styleFunctions = {
 };
 
 const Card: React.FC<CardProps> = ({
-    id,
-    title,
-    location,
-    date,
-    type,
-    description,
-}) => {
+                                       id,
+                                       title,
+                                       location,
+                                       date,
+                                       hour,
+                                       type,
+                                       description,
+                                       language,
+                                   }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
+    const { t } = useTranslation();
 
-    const handelRegister = useMutation({
+    const handleRegister = useMutation({
         mutationFn: async () => {
-            const response = await axios.post(
-                `${API_BASE_URL}/activities/register_activity/`,
-                {
+            const { data, error } = await fetchBackend({
+                type: "POST",
+                url: "activities/register_activity/",
+                data: {
                     activity: id,
                     student: user.id,
                 },
-            );
-            return response.data;
+            });
+            return { data, error };
         },
         onSuccess: () => {
             Toast.show({
                 type: "success",
-                text1: "Félicitation ! 🎉",
-                text2: "Vous êtes parfaitement inscrit à l'atelier : " + title,
+                text1: t("translateToast.SuccessText1"),
+                text2: t("translateToast.RegisterActivitySuccessText2") + title,
             });
             void queryClient.invalidateQueries({
                 queryKey: ["activities"],
-
             });
             setModalVisible(!modalVisible);
         },
-        onError: (error: any) => {
-            if (error.response.status === 400) {
+        onError: (error: fetchError) => {
+            if (error.responseError.status === 400) {
                 Toast.show({
                     type: "error",
-                    text1: "Erreur",
-                    text2: "Vous êtes déjà inscrit à cet atelier",
+                    text1: t("translateToast.ErrorText1"),
+                    text2: t("translateToast.AlreadyRegisteredActivityText2"),
                 });
             } else {
                 Toast.show({
                     type: "error",
-                    text1: "Erreur",
-                    text2: "Une erreur s'est produite lors de l'inscription",
+                    text1: t("translateToast.ErrorText1"),
+                    text2: t("translateToast.RegisterActivityErrorText2"),
                 });
             }
 
             setModalVisible(!modalVisible);
         },
     });
+
     return (
         <View style={styles.centeredView}>
             {/* Modal content */}
@@ -199,21 +195,33 @@ const Card: React.FC<CardProps> = ({
                         </View>
 
                         <View style={styleFunctions.getModalDataStyle(type)}>
-                            <Text style={styles.modalText}>Date : {date}</Text>
-                            <Text style={styles.modalText}>Place : {location}</Text>
-                            <Text style={styles.modalText}>Type : {type}</Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.date")} : {date}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.hour")} : {hour}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.place")} : {location}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.type")} : {type}
+                            </Text>
+                            <Text style={styles.modalText}>
+                                {t("translateCard.language")}: {language}
+                            </Text>
                             <View style={styles.separator} />
                             <Text style={styles.modalText}>{description}</Text>
                         </View>
 
                         <View style={styles.buttonContainer}>
                             <ButtonComponent
-                                text="S'inscrire"
-                                onPress={() => handelRegister.mutate()}
+                                text={t("translateRegisterActivity.registerButton")}
+                                onPress={() => handleRegister.mutate()}
                                 buttonType={"primary"}
                             />
                             <ButtonComponent
-                                text="Fermer"
+                                text={t("translateRegisterActivity.closeButton")}
                                 onPress={() => setModalVisible(!modalVisible)}
                                 buttonType={"close"}
                             />
@@ -229,8 +237,18 @@ const Card: React.FC<CardProps> = ({
             >
                 <Text style={styles.title}>{title}</Text>
                 <View style={styles.bottomRow}>
-                    <Text style={styles.text}>{location}</Text>
-                    <Text style={styles.text}>{date}</Text>
+                    <View style={styles.bottomRowLocation}>
+                        <View style={{ flexDirection: "row", gap: 3 }}>
+                            <Ionicons name={"location-outline"} size={20} color={"white"} />
+                            <Text style={styles.text}>{location}</Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.bottomRowDate}>
+                        <Text style={styles.text}>{language}</Text>
+                        <Text style={styles.text}>{date}</Text>
+                        <Text style={styles.text}>{hour}</Text>
+                    </View>
                 </View>
             </TouchableOpacity>
         </View>
@@ -267,15 +285,30 @@ const styles = StyleSheet.create({
     },
     card: {
         borderRadius: 10,
-        padding: 15,
+        padding: 12,
         height: 180,
-        width: isMobile ? 280 : 350,
+        width: Platform.OS === "web" ? (isMobile ? 280 : 350) : width - 80,
     },
     bottomRow: {
         flex: 1,
+        width: "100%",
         flexDirection: "row",
-        gap: 30,
+        justifyContent: "space-between",
     },
+
+    bottomRowLocation: {
+        width: "50%",
+        justifyContent: "flex-start",
+        alignItems: "flex-end",
+        flexDirection: "row",
+    },
+
+    bottomRowDate: {
+        width: "50%",
+        justifyContent: "flex-end",
+        flexDirection: "column",
+    },
+
     centeredView: {
         marginTop: 22,
         justifyContent: "center",

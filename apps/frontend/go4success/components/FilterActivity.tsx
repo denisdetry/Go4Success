@@ -13,6 +13,7 @@ import { ItemType } from "react-native-dropdown-picker";
 import { Activity, useActivities } from "@/hooks/useActivities";
 import { useTranslation } from "react-i18next";
 import RenderCarousel from "@/components/RenderCarousel";
+import { useLanguages } from "@/hooks/useLanguages";
 
 interface Attend {
     activity: Activity;
@@ -29,9 +30,11 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const { t } = useTranslation();
     const [siteOpen, setSiteOpen] = React.useState(false);
     const [roomOpen, setRoomOpen] = React.useState(false);
+    const [languageOpen, setLanguageOpen] = React.useState(false);
     const [searchName, setSearchName] = useState("");
     const [selectedRoom, setSelectedRoom] = useState<SelectItem>();
     const [selectedSite, setSelectedSite] = useState<SelectItem>();
+    const [selectedLanguage, setSelectedLanguage] = useState<SelectItem>();
 
     const [range, setRange] = React.useState<{
         startDate: DateType;
@@ -43,6 +46,9 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
     const { rooms, error: roomError } = useRooms(selectedSite?.value, sites);
     const allRooms = [{ label: "All", value: "" }, ...rooms];
+
+    const { languages, error: languageError } = useLanguages();
+    const allLanguages = [{ label: "All", value: "" }, ...languages];
 
     const onChange = useCallback(
         (range: { startDate: DateType; endDate: DateType }) => {
@@ -69,6 +75,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         searchName,
         selectedRoom?.value,
         selectedSite?.value,
+        selectedLanguage?.value,
         convertDateToISO(range.startDate),
         convertDateToISO(range.endDate),
     );
@@ -78,6 +85,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         searchName,
         selectedRoom?.value,
         selectedSite?.value,
+        selectedLanguage?.value,
         convertDateToISO(range.startDate),
         convertDateToISO(range.endDate),
     );
@@ -86,14 +94,22 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         const activity = "activity" in item ? item.activity : item;
         const siteName = sites.find((site) => site.value === activity.room.site)?.label;
 
+        const activityDate = activity.date_start.split(" - ")[0];
+        const activityHour =
+            activity.date_start.split(" - ")[1] +
+            " - " +
+            activity.date_end.split(" - ")[1];
+
         return (
             <Card
                 id={activity.id}
                 title={activity.name}
                 location={activity.room.name + " - " + siteName}
-                date={activity.date_start}
+                date={activityDate}
+                hour={activityHour}
                 type={activity.type}
                 description={activity.description}
+                language={activity.language.name}
             />
         );
     };
@@ -124,10 +140,19 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         );
     }
 
+    if (languageError) {
+        return (
+            <View>
+                <Text> Error: {languageError.message} </Text>
+            </View>
+        );
+    }
+
     const handleClearFilter = () => {
         setSearchName("");
         setSelectedRoom(undefined);
         setSelectedSite(undefined);
+        setSelectedLanguage(undefined);
         setRange({ startDate: null, endDate: null });
     };
 
@@ -143,7 +168,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
             {/* Modal view */}
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={toggleModal}
@@ -185,8 +210,27 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                             value={selectedRoom?.value ?? null}
                         />
 
+                        <View style={{ height: 10 }} />
+
+                        <SelectSearch
+                            zIndex={98}
+                            items={allLanguages}
+                            placeholder={t("translationButton.SelectLanguage")}
+                            searchable={true}
+                            onSelectItem={(item) => {
+                                setSelectedLanguage(item as Required<ItemType<string>>);
+                            }}
+                            open={languageOpen}
+                            setOpen={setLanguageOpen}
+                            value={selectedLanguage?.value ?? null}
+                        />
+
                         <View
-                            style={{ flexDirection: "column", alignItems: "flex-end" }}
+                            style={{
+                                flex: 1,
+                                flexDirection: "column",
+                                alignItems: "flex-end",
+                            }}
                         >
                             <View style={stylesGlobal.containerDatePicker}>
                                 <DateTimePicker
@@ -261,10 +305,12 @@ const styles = StyleSheet.create({
         color: "gray",
     },
     centeredView: {
+        // height: "100%",
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
         marginTop: 22,
+        backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     modalView: {
         margin: 20,

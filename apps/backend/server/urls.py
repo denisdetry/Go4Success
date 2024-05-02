@@ -21,4 +21,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("auth/", include("authentification.urls")),
     path("activities/", include("activities.urls")),
+    path("rolemanagement/", include("rolemanagment.urls"))
 ]
+
+admin.site.site_title = "Go4success administration"
+admin.site.site_header = "Go4success administration"
+admin.site.index_title = "Go4success"

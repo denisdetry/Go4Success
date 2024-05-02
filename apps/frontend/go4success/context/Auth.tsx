@@ -70,14 +70,14 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 type: "POST",
                                 url: "auth/register/",
                                 data: {
-                                    username: userData.username,
                                     email: userData.email,
+                                    username: userData.username,
                                     // eslint-disable-next-line camelcase
                                     last_name: userData.lastName,
                                     // eslint-disable-next-line camelcase
                                     first_name: userData.firstName,
-                                    noma: userData.noma,
                                     password: userData.password,
+                                    noma: userData.noma ? userData.noma : undefined,
                                 },
                             });
 

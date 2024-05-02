@@ -25,9 +25,9 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'noma')
 
     def validate_noma(self, value):
-        if len(value) != 8 and len(value) != 0:
-            raise ValidationError("Le noma doit contenir 8 chiffres")
-        return value
+        if (value.isdigit and len(value) == 8) or len(value) == 0:
+            return value
+        raise ValidationError("Le noma doit contenir 8 chiffres")
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):

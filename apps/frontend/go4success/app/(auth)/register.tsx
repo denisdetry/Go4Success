@@ -1,10 +1,10 @@
 // import Button from "@/components/Button";
-import { ScrollView, Text, TextInput, View } from "react-native";
+import { Alert, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Button from "@/components/ButtonComponent";
 import React, { useState } from "react";
 import styles from "@/styles/global";
 import { useAuth } from "@/context/Auth";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
@@ -28,14 +28,14 @@ export default function Register() {
             .string()
             .required(t("translateRegister.yupPasswordRequired"))
             .matches(
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>-_+])(?=.{8,})/,
                 t("translateRegister.yupPasswordConstraint"),
             ),
         passwordRetype: yup
             .string()
             .required(t("translateRegister.yupConfirmPasswordRequired"))
             .matches(
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_])(?=.{8,})/,
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>-_+])(?=.{8,})/,
                 t("translateRegister.yupPasswordConstraint"),
             )
             .equals(
@@ -53,8 +53,7 @@ export default function Register() {
             .matches(/^[0-9]{8}$/, {
                 message: t("translateRegister.yupNomaConstraint"),
                 excludeEmptyString: true,
-            })
-            .required(t("translateRegister.yupNomaRequired")),
+            }),
     });
 
     const { signUp } = useAuth();
@@ -72,7 +71,6 @@ export default function Register() {
             username: "",
             lastName: "",
             firstName: "",
-            noma: "",
             password: "",
             passwordRetype: "",
         },
@@ -207,7 +205,7 @@ export default function Register() {
                     {/*Noma field*/}
                     <Controller
                         control={control}
-                        rules={{ required: true }}
+                        rules={{ required: false }}
                         render={({ field: { onChange, value } }) => (
                             <View style={styles.inputField}>
                                 <TextInput
@@ -215,15 +213,23 @@ export default function Register() {
                                     style={styles.input}
                                     placeholder={t("translateRegister.noma")}
                                     onChangeText={onChange}
-                                    value={value}
+                                    value={value?.toString()}
                                 />
+                                <TouchableOpacity onPress={() => {
+                                    if (Platform.OS === "web") {
+                                        alert(t("translateRegister.nomaInfo"));
+                                    } else {
+                                        Alert.alert("Info", t("translateRegister.nomaInfo"));
+                                    }
+                                }}>
+                                    <Ionicons name={"information-circle"} size={24} color="black" />
+                                </TouchableOpacity>
                             </View>
                         )}
                         name="noma"
                     />
 
                     {/*Error message for noma field*/}
-
                     {errors.noma && (
                         <Text style={styles.errorMsg}>
                             {errors.noma.message}

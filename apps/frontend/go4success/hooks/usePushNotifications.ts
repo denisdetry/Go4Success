@@ -50,7 +50,7 @@ export const usePushNotifications = (user: User): PushNotificationState => {
             });
         }
 
-        if (Device.isDevice) {
+        if (Device.isDevice && Platform.OS !== "web") {
             const { status: existingStatus } =
                 await Notifications.getPermissionsAsync();
             let finalStatus = existingStatus;
@@ -79,7 +79,9 @@ export const usePushNotifications = (user: User): PushNotificationState => {
                 handleRegistrationError(`${e}`);
             }
         } else {
-            handleRegistrationError("Must use physical device for push notifications");
+            if (Platform.OS !== "web") {
+                handleRegistrationError("Must use physical device for push notifications");
+            }
         }
     }
 

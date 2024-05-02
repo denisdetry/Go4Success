@@ -22,7 +22,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         extra_fields.setdefault("is_active", True)
-        extra_fields.setdefault("noma", "")
+        extra_fields.setdefault("noma", None)
         return self._create_user(username, email, password, **extra_fields)
 
     def create_superuser(self, email=None, username=None, password=None, **extra_fields):
@@ -41,7 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         "unique": "Cette adresse mail est déjà utilisée."})
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    noma = models.CharField(max_length=63, blank=True, null=True, unique=True,
+    noma = models.CharField(max_length=8, blank=True, null=True, unique=True, default=None,
                             error_messages={"unique": "Ce noma est déjà utilisé."})
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

@@ -1,20 +1,30 @@
+/**
+ * @file feedbackcreate.tsx
+ * @author Allemeersch Maxime <max.allemeersch@gmail.com>
+ * @date 02/05/2024
+ * @description This page can create feedback for an activity or course
+ */
+
 import React, { useState } from "react";
-import SelectSearch, { SelectItem } from "@/components/SelectSearch";
 import { ScrollView, Text, TextInput, View, StyleSheet, Platform } from "react-native";
-import stylesGlobal from "@/styles/global";
-import { useTranslation } from "react-i18next";
-import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
-import ButtonComponent from "@/components/ButtonComponent";
-import Toast from "react-native-toast-message";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import Colors from "@/constants/Colors";
 import { ItemType } from "react-native-dropdown-picker";
-import { useActivities } from "@/hooks/useActivities";
-import DateTimePicker, { DateType } from "react-native-ui-datepicker";
+import { useTranslation } from "react-i18next";
+import Toast from "react-native-toast-message";
+import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from "dayjs";
+import { useNavigation } from "expo-router";
+
 import { useAuth } from "@/context/Auth";
 import { fetchBackend } from "@/utils/fetchBackend";
-import { useNavigation } from "expo-router";
+import { convertDateToISO } from "@/utils/dateUtils";
+import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
+import ButtonComponent from "@/components/ButtonComponent";
+import SelectSearch, { SelectItem } from "@/components/SelectSearch";
+
+import stylesGlobal from "@/styles/global";
+import Colors from "@/constants/Colors";
+import { useActivities } from "@/hooks/useActivities";
 
 export default function FeedbackCreate() {
     const { t } = useTranslation();
@@ -41,20 +51,6 @@ export default function FeedbackCreate() {
         null,
         null,
     );
-
-    const convertDateToISO = (date: DateType): string | null => {
-        if (date instanceof Date) {
-            return date.toISOString().split("T")[0];
-        } else if (typeof date === "string" && date !== "") {
-            return date;
-        } else if (typeof date === "number") {
-            return new Date(date).toISOString().split("T")[0];
-        } else if (date instanceof dayjs) {
-            return date.format("YYYY-MM-DD");
-        } else {
-            return null;
-        }
-    };
 
     const handleSendFeedback = async () => {
         if (!selectedActivity) {

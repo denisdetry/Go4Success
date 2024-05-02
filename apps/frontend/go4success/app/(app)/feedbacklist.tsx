@@ -1,13 +1,23 @@
+/**
+ * @file feedbacklist.tsx
+ * @author Allemeersch Maxime <max.allemeersch@gmail.com>
+ * @date 02/05/2024
+ * @description This page displays a table of all feedback created and select them
+ */
+
 import React from "react";
 import { ScrollView, Text, View } from "react-native";
-import DataTable, { TableColumn } from "react-data-table-component";
-import { Feedback, useFeedback } from "@/hooks/useFeedback";
+import { TableColumn } from "react-data-table-component";
 import { useTranslation } from "react-i18next";
-import styles from "@/styles/global";
-import Colors from "@/constants/Colors";
-import ButtonComponent from "@/components/ButtonComponent";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
+
+import { useFeedback } from "@/hooks/useFeedback";
+import { Feedback } from "@/types/Feedback";
+import ButtonComponent from "@/components/ButtonComponent";
+import FeedbackTable from "@/components/FeedbackTable";
+
+import styles from "@/styles/global";
 
 type RootStackParamList = {
     feedbacklistdetails: { feedbackId: string; activityName: string };
@@ -17,33 +27,6 @@ type FeedbackListDetailsScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
     "feedbacklistdetails"
 >;
-
-const customStyles = {
-    rows: {
-        style: {
-            minHeight: "72px",
-            fontSize: 16,
-            fontFamily: "Arial",
-        },
-    },
-    headCells: {
-        style: {
-            paddingLeft: "8px",
-            paddingRight: "8px",
-            fontSize: 18,
-            fontWeight: "bold",
-            fontFamily: "Arial",
-            backgroundColor: Colors.primaryColor,
-            color: "white",
-        },
-    },
-    cells: {
-        style: {
-            paddingLeft: "8px",
-            paddingRight: "8px",
-        },
-    },
-};
 
 export default function FeedbackList() {
     const { feedbacks, error: feedbackError } = useFeedback("", "");
@@ -102,13 +85,7 @@ export default function FeedbackList() {
                     />
                 </View>
                 <Text style={styles.title}>Feedback</Text>
-                <DataTable
-                    columns={columns}
-                    data={feedbacks}
-                    pagination
-                    highlightOnHover
-                    customStyles={customStyles}
-                />
+                <FeedbackTable feedbacks={feedbacks} columns={columns} />
             </View>
         </ScrollView>
     );

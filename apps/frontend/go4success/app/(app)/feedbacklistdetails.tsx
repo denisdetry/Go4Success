@@ -1,18 +1,27 @@
+/**
+ * @file feedbacklistdetails.tsx
+ * @author Allemeersch Maxime <max.allemeersch@gmail.com>
+ * @date  02/05/2024
+ * @description This page displays the various feedbacks for the previously selected activity.
+ */
+
 import React, { useState } from "react";
 import { ScrollView, Text, Modal, View, Pressable, FlatList } from "react-native";
-import DataTable, { TableColumn } from "react-data-table-component";
-import {
-    FeedbackStudent,
-    useFeedbackStudent,
-    useFeedback,
-    useFeedbackStudentAdditionalQuestions,
-} from "@/hooks/useFeedback";
+import { TableColumn } from "react-data-table-component";
 import { useTranslation } from "react-i18next";
-import styles from "@/styles/global";
-import Colors from "@/constants/Colors";
-import ButtonComponent from "@/components/ButtonComponent";
 import { StackScreenProps } from "@react-navigation/stack";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
+
+import {
+    useFeedbackStudent,
+    useFeedbackStudentAdditionalQuestions,
+} from "@/hooks/useFeedback";
+import { FeedbackStudent } from "@/types/Feedback";
+import ButtonComponent from "@/components/ButtonComponent";
+import { FeedbackStudentTable } from "@/components/FeedbackTable";
+
+import styles from "@/styles/global";
+import Colors from "@/constants/Colors";
 
 type RootStackParamList = {
     feedbacklistdetails: { feedbackId: string; activityName: string };
@@ -23,34 +32,9 @@ type FeedbackListDetailsScreenProps = StackScreenProps<
     "feedbacklistdetails"
 >;
 
-const customStyles = {
-    rows: {
-        style: {
-            minHeight: "72px",
-            fontSize: 16,
-            fontFamily: "Arial",
-        },
-    },
-    headCells: {
-        style: {
-            paddingLeft: "8px",
-            paddingRight: "8px",
-            fontSize: 18,
-            fontWeight: "bold",
-            fontFamily: "Arial",
-            backgroundColor: Colors.primaryColor,
-            color: "white",
-        },
-    },
-    cells: {
-        style: {
-            paddingLeft: "8px",
-            paddingRight: "8px",
-        },
-    },
-};
-
-export default function FeedbackListDetails({}: Readonly<FeedbackListDetailsScreenProps>) {
+export default function FeedbackListDetails(
+    props: Readonly<FeedbackListDetailsScreenProps>,
+) {
     const { t } = useTranslation();
     const navigation = useNavigation();
     const route = useRoute<RouteProp<RootStackParamList, "feedbacklistdetails">>();
@@ -136,18 +120,12 @@ export default function FeedbackListDetails({}: Readonly<FeedbackListDetailsScre
                     <ButtonComponent
                         icon="arrow-back-circle-outline"
                         text="Back"
-                        onPress={() => navigation.navigate("feedbacklist")} //Affiche une erreur, mais fonctionne tkt
+                        onPress={() => navigation.navigate({ name: "feedbacklist" })} //Affiche une erreur, mais fonctionne tkt
                         buttonType={"primary"}
                     />
                 </View>
                 <Text style={styles.title}>Feedback : {activityName}</Text>
-                <DataTable
-                    columns={columns}
-                    data={feedbackStudent}
-                    pagination
-                    highlightOnHover
-                    customStyles={customStyles}
-                />
+                <FeedbackStudentTable feedbacks={feedbackStudent} columns={columns} />
                 {selectedFeedback && (
                     <Modal
                         animationType="fade"
@@ -220,7 +198,7 @@ export default function FeedbackListDetails({}: Readonly<FeedbackListDetailsScre
                                                 value: selectedFeedback.date_submitted,
                                             },
                                         ]}
-                                        keyExtractor={(item, index) => index.toString()}
+                                        keyExtractor={(_, index) => index.toString()}
                                         renderItem={({ item }) => (
                                             <View style={styles.modalData}>
                                                 <Text>

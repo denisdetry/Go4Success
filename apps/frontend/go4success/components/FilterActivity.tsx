@@ -1,19 +1,21 @@
 import React, { useCallback, useState } from "react";
 import { Modal, StyleSheet, Text, TextInput, View } from "react-native";
+import DateTimePicker, { DateType } from "react-native-ui-datepicker";
+import { ItemType } from "react-native-dropdown-picker";
+import { useTranslation } from "react-i18next";
+
 import Card from "./Card";
 import ButtonComponent from "./ButtonComponent";
-import Colors from "../constants/Colors";
-import stylesGlobal from "../styles/global";
-import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 import SelectSearch, { SelectItem } from "./SelectSearch";
-import dayjs from "dayjs";
+import { convertDateToISO } from "@/utils/dateUtils";
+import RenderCarousel from "@/components/RenderCarousel";
 import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
-import { ItemType } from "react-native-dropdown-picker";
 import { Activity, useActivities } from "@/hooks/useActivities";
-import { useTranslation } from "react-i18next";
-import RenderCarousel from "@/components/RenderCarousel";
 import { useLanguages } from "@/hooks/useLanguages";
+
+import Colors from "../constants/Colors";
+import stylesGlobal from "../styles/global";
 
 interface Attend {
     activity: Activity;
@@ -56,19 +58,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         },
         [],
     );
-    const convertDateToISO = (date: DateType): string | null => {
-        if (date instanceof Date) {
-            return date.toISOString().split("T")[0];
-        } else if (typeof date === "string" && date !== "") {
-            return date;
-        } else if (typeof date === "number") {
-            return new Date(date).toISOString().split("T")[0];
-        } else if (date instanceof dayjs) {
-            return date.format("YYYY-MM-DD");
-        } else {
-            return null;
-        }
-    };
 
     const { data: registeredActivities } = useActivities(
         "attends",

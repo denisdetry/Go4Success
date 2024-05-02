@@ -1,3 +1,10 @@
+"""
+urls.py
+@author: Allemeersch Maxime <max.allemeersch@gmail.com>
+@date: 02/05/2024
+@description: This file includes the url for Feedback.
+"""
+
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import FeedbackCreateView, FeedbackListView, FeedbackAdditionalQuestionsView, \

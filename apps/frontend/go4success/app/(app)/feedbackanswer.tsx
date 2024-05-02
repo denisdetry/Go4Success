@@ -1,15 +1,23 @@
+/**
+ * @file feedbackanswer.tsx
+ * @author Allemeersch Maxime <max.allemeersch@gmail.com>
+ * @date 02/05/2024
+ * @description This page allows a user to fill in feedback for an activity
+ */
+
 import React, { useState } from "react";
 import { ScrollView, Text, TextInput, View, StyleSheet, Platform } from "react-native";
+import { useTranslation } from "react-i18next";
+import { StackScreenProps } from "@react-navigation/stack";
+import { useRoute, RouteProp } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
+
 import stylesGlobal from "@/styles/global";
 import { fetchBackend } from "@/utils/fetchBackend";
 import { useAuth } from "@/context/Auth";
 import SelectSearch from "@/components/SelectSearch";
-import { useTranslation } from "react-i18next";
 import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
 import ButtonComponent from "@/components/ButtonComponent";
-import Toast from "react-native-toast-message";
-import { StackScreenProps } from "@react-navigation/stack";
-import { useRoute, RouteProp } from "@react-navigation/native";
 import { useActivities } from "@/hooks/useActivities";
 import { useFeedback, useFeedbackAdditionalQuestions } from "@/hooks/useFeedback";
 import { useNavigation } from "expo-router";
@@ -20,7 +28,7 @@ type RootStackParamList = {
 
 type FeedbackAnswerScreenProps = StackScreenProps<RootStackParamList, "feedbackanswer">;
 
-export default function FeedbackAnswer({}: Readonly<FeedbackAnswerScreenProps>) {
+export default function FeedbackAnswer(props: Readonly<FeedbackAnswerScreenProps>) {
     const route = useRoute<RouteProp<RootStackParamList, "feedbackanswer">>();
     const navigation = useNavigation();
     const activityId = route?.params?.activityId ?? "not id present";

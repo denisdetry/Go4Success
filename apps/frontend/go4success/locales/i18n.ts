@@ -15,7 +15,7 @@ const resources = {
     },
 };
 
-let languageDetector = null;
+let languageDetector = undefined;
 let languageCode = undefined;
 
 if (Platform.OS === "web") {

@@ -22,7 +22,7 @@ export function useWorkshops(
 ) {
     return useQuery<Workshop[]>({
         queryKey: [
-            "workshops",
+            "activities",
             endpoint,
             searchName,
             selectedRoom,

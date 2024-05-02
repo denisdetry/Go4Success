@@ -17,13 +17,13 @@ import { useRooms } from "@/hooks/useRooms";
 import InputAutocomplete from "@/components/InputAutocomplete";
 import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from "dayjs";
-import { useTranslation } from "react-i18next";
 import { useLanguages } from "@/hooks/useLanguages";
 import * as yup from "yup";
 import { InferType } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { fetchBackend } from "@/utils/fetchBackend";
 import Toast from "react-native-toast-message";
+import { useTranslation } from "react-i18next";
 
 export default function Add() {
     const { t } = useTranslation();
@@ -51,10 +51,10 @@ export default function Add() {
                 .required(t("translationActivities.yupLanguageRequired")),
             value: yup.string(),
         }),
-        workshopDate: yup
+        activityDate: yup
             .array()
             .of(yup.string())
-            .min(1, t("translationActivities.yupWorkshopDateRequired"))
+            .min(1, t("translationActivities.yupActivityDateRequired"))
             .required(),
         beginTime: yup
             .array()
@@ -98,7 +98,7 @@ export default function Add() {
             site: undefined,
             room: undefined,
             language: undefined,
-            workshopDate: [],
+            activityDate: [],
             beginTime: [],
             endTime: [],
         },
@@ -133,7 +133,7 @@ export default function Add() {
     }
 
     const createActivity: SubmitHandler<AddActivity> = async (data) => {
-        const dates = data.workshopDate.map((date) => {
+        const dates = data.activityDate.map((date) => {
             return [
                 dayjs(date)
                     .set("hour", Number(data.beginTime[0]))
@@ -292,12 +292,12 @@ export default function Add() {
                             />
                         );
                     }}
-                    name={"workshopDate"}
+                    name={"activityDate"}
                     defaultValue={[]}
                 />
-                {errors.workshopDate && (
+                {errors.activityDate && (
                     <Text style={styles.errorMsg}>
-                        {errors.workshopDate.message}
+                        {errors.activityDate.message}
                     </Text>
                 )}
                 <Controller
@@ -345,7 +345,7 @@ export default function Add() {
                     onPress={handleSubmit(createActivity)}
                 >
                     <Text style={ownStyle.text}>
-                        {t("translationButton.AddWorkshop")}
+                        {t("translationActivities.addButton")}
                     </Text>
                 </Pressable>
             </KeyboardAvoidingView>

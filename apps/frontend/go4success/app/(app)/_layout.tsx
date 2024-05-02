@@ -160,8 +160,8 @@ export default function Layout() {
                     <Drawer.Screen
                         name="profile"
                         options={{
-                            drawerLabel: t("translationMenu.profil"),
-                            headerTitle: t("translationMenu.profil"),
+                            drawerLabel: t("translationMenu.profile"),
+                            headerTitle: t("translationMenu.profile"),
                             drawerIcon: ({ size, color }) => (
                                 <FontAwesome
                                     name="user-circle"
@@ -190,26 +190,14 @@ export default function Layout() {
                     <Drawer.Screen
                         name="rolemanagement"
                         options={{
-                            drawerItemStyle: { display: user?.is_superuser ? "flex" : "none" },
-                            drawerLabel: t("translationMenu.rolemanagement"),
-                            headerTitle: t("translationMenu.rolemanagement"),
+                            drawerItemStyle: {
+                                display: user?.is_superuser ? "flex" : "none",
+                            },
+                            drawerLabel: t("translationMenu.roleManagement"),
+                            headerTitle: t("translationMenu.roleManagement"),
                             drawerIcon: ({ size, color }) => (
                                 <Ionicons
                                     name="people"
-                                    size={size}
-                                    color={color}
-                                />
-                            ),
-                        }}
-                    />
-                    <Drawer.Screen
-                        name="workshops"
-                        options={{
-                            drawerLabel: "Ateliers",
-                            headerTitle: "Ateliers",
-                            drawerIcon: ({ size, color }) => (
-                                <Ionicons
-                                    name="calendar"
                                     size={size}
                                     color={color}
                                 />
@@ -223,7 +211,30 @@ export default function Layout() {
                             drawerLabel: "Notifications",
                             headerTitle: "Notifications",
                             drawerIcon: ({ size, color }) => (
-                                <Ionicons name="notifications" size={size} color={color} />
+                                <Ionicons
+                                    name="notifications"
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
+
+                    <Drawer.Screen
+                        name="activities/add"
+                        options={{
+                            drawerLabel: t(
+                                "translationMenu.activityManagement",
+                            ),
+                            headerTitle: t(
+                                "translationMenu.activityManagement",
+                            ),
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name="school"
+                                    size={size}
+                                    color={color}
+                                />
                             ),
                         }}
                     />

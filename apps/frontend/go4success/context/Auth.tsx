@@ -5,7 +5,7 @@ import { UserRegister } from "@/types/UserRegister";
 import { UserLogin } from "@/types/UserLogin";
 import { useTranslation } from "react-i18next";
 import { queryClient } from "@/app/_layout";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, Platform } from "react-native";
 import styles from "@/styles/global";
 import Colors from "@/constants/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -162,15 +162,17 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
                 signOut: async () => {
                     try {
-                        await fetchBackend({
-                            type: "PATCH",
-                            url: "auth/update_expo_token/" + user.id + "/",
-                            data: {
-                                token: expoPushToken,
-                                // eslint-disable-next-line camelcase
-                                is_active: false,
-                            },
-                        });
+                        if (Platform.OS !== "web") {
+                            await fetchBackend({
+                                type: "PATCH",
+                                url: "auth/update_expo_token/" + user.id + "/",
+                                data: {
+                                    token: expoPushToken,
+                                    // eslint-disable-next-line camelcase
+                                    is_active: false,
+                                },
+                            });
+                        }
 
                         await AsyncStorage.removeItem("accessToken");
                         await AsyncStorage.removeItem("refreshToken");

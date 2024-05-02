@@ -14,6 +14,7 @@ import styles from "@/styles/global";
 export interface InputAutocompleteProps {
     readonly items: SelectItem[];
     readonly placeholder: string;
+    readonly searchPlaceholder: string;
     readonly onChange?: (value: SelectItem[]) => void;
     readonly readOnly?: boolean;
 }
@@ -33,6 +34,7 @@ const Item = ({ item, onPress }: ItemProps) => {
 const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     items,
     placeholder,
+    searchPlaceholder,
     onChange = () => {},
     readOnly = false,
 }) => {
@@ -61,7 +63,7 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
             return (
                 <TextInput
                     style={styles.inputField}
-                    placeholder={"Search a room"}
+                    placeholder={searchPlaceholder}
                     readOnly={readOnly}
                     autoFocus={true}
                     onChangeText={(text) => {
@@ -91,32 +93,40 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
 
     return (
         <ScrollView horizontal={true} scrollEnabled={false}>
-            <Pressable
-                onPress={() => {
-                    setFocus(!focus);
-                    setFilteredData(items);
-                }}
-            >
-                <SafeAreaView>
-                    <Text style={styles.inputField}>
-                        {selectedData.length > 0
-                            ? selectedData.map((item) => item.value).join(", ")
-                            : placeholder}
-                    </Text>
+            <SafeAreaView>
+                <Pressable
+                    onPress={() => {
+                        setFocus(!focus);
+                        setFilteredData(items);
+                    }}
+                >
+                    <SafeAreaView style={styles.inputField}>
+                        {selectedData.length > 0 ? (
+                            <Text style={styles.input}>
+                                {selectedData
+                                    .map((item) => item.value)
+                                    .join(", ")}
+                            </Text>
+                        ) : (
+                            <Text style={styles.placeholder}>
+                                {placeholder}
+                            </Text>
+                        )}
+                    </SafeAreaView>
+                </Pressable>
 
-                    {focus && (
-                        <View>
-                            <FlatList
-                                style={{ maxHeight: 200 }}
-                                data={filteredData}
-                                ListHeaderComponent={textInput()}
-                                renderItem={renderItem}
-                                keyExtractor={(item) => item.value}
-                            />
-                        </View>
-                    )}
-                </SafeAreaView>
-            </Pressable>
+                {focus && (
+                    <View>
+                        <FlatList
+                            style={{ maxHeight: 200 }}
+                            data={filteredData}
+                            ListHeaderComponent={textInput()}
+                            renderItem={renderItem}
+                            keyExtractor={(item) => item.value}
+                        />
+                    </View>
+                )}
+            </SafeAreaView>
         </ScrollView>
     );
 };

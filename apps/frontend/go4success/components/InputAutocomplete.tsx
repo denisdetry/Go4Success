@@ -74,28 +74,10 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     };
 
     return (
-        <ScrollView
-            horizontal={true}
-            scrollEnabled={false}
-            style={{ width: "100%" }}
-        >
-            <SafeAreaView style={{ width: "100%" }}>
+        <ScrollView horizontal={true} scrollEnabled={false}>
+            <SafeAreaView>
                 <SafeAreaView style={styles.inputField}>
                     {readOnly ? (
-                        <TextInput
-                            style={styles.input}
-                            placeholder={placeholder}
-                            placeholderTextColor={"grey"}
-                            onChangeText={(text) => {
-                                setFilteredData(filterData(text));
-                                setSelectedData({ key: text, value: text });
-                                onChange(selectedData);
-                            }}
-                            value={selectedData.value ?? ""}
-                            onFocus={() => setVisible(true)}
-                            onPressIn={() => setVisible(true)}
-                        />
-                    ) : (
                         <TouchableWithoutFeedback
                             style={styles.input}
                             onPressIn={() => setVisible(!visible)}
@@ -110,6 +92,20 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                                 </Text>
                             )}
                         </TouchableWithoutFeedback>
+                    ) : (
+                        <TextInput
+                            style={styles.input}
+                            placeholder={placeholder}
+                            placeholderTextColor={"grey"}
+                            onChangeText={(text) => {
+                                setFilteredData(filterData(text));
+                                setSelectedData({ key: text, value: text });
+                                onChange(selectedData);
+                            }}
+                            value={selectedData.value ?? ""}
+                            onFocus={() => setVisible(true)}
+                            onPressIn={() => setVisible(true)}
+                        />
                     )}
 
                     <Pressable

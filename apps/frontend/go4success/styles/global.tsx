@@ -7,6 +7,7 @@ export default StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         flexGrow: 1,
+        gap: 15,
     },
     titleContainer: {
         width: "90%",

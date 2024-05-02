@@ -104,6 +104,7 @@ export default function Register() {
                         render={({ field: { onChange, value } }) => (
                             <View style={styles.inputField}>
                                 <TextInput
+                                    autoCapitalize={"none"}
                                     style={styles.input}
                                     placeholder={t("translateRegister.email")}
                                     onChangeText={onChange}
@@ -127,6 +128,7 @@ export default function Register() {
                         render={({ field: { onChange, value } }) => (
                             <View style={styles.inputField}>
                                 <TextInput
+                                    autoCapitalize={"none"}
                                     style={styles.input}
                                     placeholder={t(
                                         "translateRegister.username",
@@ -154,6 +156,7 @@ export default function Register() {
                         render={({ field: { onChange, value } }) => (
                             <View style={styles.inputField}>
                                 <TextInput
+                                    autoCapitalize={"none"}
                                     style={styles.input}
                                     placeholder={t(
                                         "translateRegister.lastName",
@@ -181,6 +184,7 @@ export default function Register() {
                         render={({ field: { onChange, value } }) => (
                             <View style={styles.inputField}>
                                 <TextInput
+                                    autoCapitalize={"none"}
                                     style={styles.input}
                                     placeholder={t(
                                         "translateRegister.firstName",
@@ -207,6 +211,7 @@ export default function Register() {
                         render={({ field: { onChange, value } }) => (
                             <View style={styles.inputField}>
                                 <TextInput
+                                    autoCapitalize={"none"}
                                     style={styles.input}
                                     placeholder={t("translateRegister.noma")}
                                     onChangeText={onChange}

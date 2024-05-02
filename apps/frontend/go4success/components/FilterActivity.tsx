@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Modal, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Modal, StyleSheet, Text, TextInput, View } from "react-native";
 import Card from "./Card";
 import ButtonComponent from "./ButtonComponent";
 import Colors from "../constants/Colors";
@@ -175,7 +175,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 visible={modalVisible}
                 onRequestClose={toggleModal}
             >
-                <ScrollView contentContainerStyle={styles.centeredView}>
+                <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <TextInput
                             style={stylesGlobal.inputLittle}
@@ -271,7 +271,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                             />
                         </View>
                     </View>
-                </ScrollView>
+                </View>
             </Modal>
 
             {/* Cards views for registered activity or filtered */}

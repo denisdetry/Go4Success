@@ -1,5 +1,4 @@
-from database.models import User
-from django.contrib.auth import authenticate
+from database.models import User, ExpoToken
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -62,3 +61,9 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class ExpoTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExpoToken
+        fields = '__all__'

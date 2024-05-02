@@ -13,8 +13,8 @@ import { Image, Platform, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-
 import profilePicture from "@/assets/images/profile-picture.jpg";
+import useUser from "@/hooks/useUser";
 
 function CustomDrawerContent(props: any) {
     const router = useRouter();
@@ -53,6 +53,9 @@ function CustomDrawerContent(props: any) {
 
 export default function Layout() {
     const router = useRouter();
+
+    const { user } = useUser();
+
     const { t } = useTranslation();
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -187,8 +190,9 @@ export default function Layout() {
                     <Drawer.Screen
                         name="rolemanagement"
                         options={{
-                            drawerLabel: "Gestion des rôles",
-                            headerTitle: "Gestion des rôles",
+                            drawerItemStyle: { display: user?.is_superuser ? "flex" : "none" },
+                            drawerLabel: t("translationMenu.rolemanagement"),
+                            headerTitle: t("translationMenu.rolemanagement"),
                             drawerIcon: ({ size, color }) => (
                                 <Ionicons
                                     name="people"
@@ -209,6 +213,17 @@ export default function Layout() {
                                     size={size}
                                     color={color}
                                 />
+                            ),
+                        }}
+                    />
+
+                    <Drawer.Screen
+                        name="notifications"
+                        options={{
+                            drawerLabel: "Notifications",
+                            headerTitle: "Notifications",
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons name="notifications" size={size} color={color} />
                             ),
                         }}
                     />

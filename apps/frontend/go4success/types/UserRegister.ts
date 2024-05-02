@@ -3,6 +3,6 @@ export interface UserRegister {
     username: string;
     lastName: string;
     firstName: string;
-    noma: string;
+    noma?: string;
     password: string;
 }

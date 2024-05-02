@@ -4,12 +4,16 @@ from .models import User, Teacher, Give, Announcement, \
     Registered, Message, See, Site, Room, Activity, Attend, Course, \
     Language, Feedback, FeedbackAdditionalQuestions, \
     FeedbackStudent, FeedbackStudentAdditionalQuestions,  Questionnaire, \
-    Question, OpenAnswer, ChoiceAnswer, ChoiceAnswerInstance
+    Question, OpenAnswer, ChoiceAnswer, ChoiceAnswerInstance, ExpoToken
 
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'email', 'first_name',
-                    'last_name', 'noma', 'is_active')
+                    'last_name', 'noma', 'is_active', 'is_staff', 'is_superuser')
+
+
+class ExpoTokenAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'token', "is_active")
 
 
 class SiteAdmin(admin.ModelAdmin):
@@ -103,6 +107,7 @@ class ChoiceAnswerInstanceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(ExpoToken, ExpoTokenAdmin)
 admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(Give, GiveAdmin)
 admin.site.register(Announcement, AnnouncementAdmin)

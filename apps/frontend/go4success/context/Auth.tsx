@@ -15,8 +15,10 @@ import useUser from "@/hooks/useUser";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 function isListIncluded(mainList: any[][], searchList: any[]): boolean {
-    return mainList.some(subList =>
-        subList.length === searchList.length && subList.every((value, index) => value === searchList[index]),
+    return mainList.some(
+        (subList) =>
+            subList.length === searchList.length &&
+            subList.every((value, index) => value === searchList[index]),
     );
 }
 
@@ -51,6 +53,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
     const deniedRoutesForNonSuperUser = [
         ["(app)", "rolemanagement"],
+        ["(app)", "feedbacklist"],
+        ["(app)", "feedbackcreate"],
     ];
 
     const isNotSuperUser = !user?.is_superuser && user;
@@ -82,8 +86,14 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                             });
 
                             if (success) {
-                                await AsyncStorage.setItem("accessToken", success.access);
-                                await AsyncStorage.setItem("refreshToken", success.refresh);
+                                await AsyncStorage.setItem(
+                                    "accessToken",
+                                    success.access,
+                                );
+                                await AsyncStorage.setItem(
+                                    "refreshToken",
+                                    success.refresh,
+                                );
                                 await queryClient.invalidateQueries({
                                     queryKey: ["current_user"],
                                 });
@@ -97,7 +107,10 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         } catch (err) {
                             const error = err as fetchError;
                             if (error.responseError) {
-                                if (error.responseError.status === 401 || error.responseError.status === 400) {
+                                if (
+                                    error.responseError.status === 401 ||
+                                    error.responseError.status === 400
+                                ) {
                                     Toast.show({
                                         type: "error",
                                         text1: t("translateToast.ErrorText1"),
@@ -143,7 +156,10 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     } catch (err) {
                         const error = err as fetchError;
                         if (error.responseError) {
-                            if (error.responseError.status === 401 || error.responseError.status === 400) {
+                            if (
+                                error.responseError.status === 401 ||
+                                error.responseError.status === 400
+                            ) {
                                 Toast.show({
                                     type: "error",
                                     text1: t("translateToast.ErrorText1"),
@@ -190,8 +206,6 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         const err = error as fetchError;
                         console.log(err.responseError);
                     }
-
-
                 },
                 expoPushToken: expoPushToken,
                 notification: notification,

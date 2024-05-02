@@ -207,6 +207,9 @@ export default function Layout() {
                     <Drawer.Screen
                         name="feedbacklist"
                         options={{
+                            drawerItemStyle: {
+                                display: user?.is_superuser ? "flex" : "none",
+                            },
                             drawerLabel: t("translateFeedback.show"),
                             headerTitle: t("translateFeedback.show"),
                             drawerIcon: ({ size, color }) => (
@@ -221,6 +224,9 @@ export default function Layout() {
                     <Drawer.Screen
                         name="feedbackcreate"
                         options={{
+                            drawerItemStyle: {
+                                display: user?.is_superuser ? "flex" : "none",
+                            },
                             drawerLabel: t("translateFeedback.create"),
                             headerTitle: t("translateFeedback.create"),
                             drawerIcon: ({ size, color }) => (
@@ -230,6 +236,22 @@ export default function Layout() {
                                     color={color}
                                 />
                             ),
+                        }}
+                    />
+                    <Drawer.Screen
+                        name="feedbackanswer"
+                        options={{
+                            drawerItemStyle: {
+                                display: "none",
+                            },
+                        }}
+                    />
+                    <Drawer.Screen
+                        name="feedbacklistdetails"
+                        options={{
+                            drawerItemStyle: {
+                                display: "none",
+                            },
                         }}
                     />
                 </Drawer>

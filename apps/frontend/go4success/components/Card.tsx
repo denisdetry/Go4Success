@@ -36,6 +36,7 @@ interface CardProps {
     readonly description: string;
     readonly language: string;
     readonly dateEnd: string;
+    readonly attendOrActivity: string;
 }
 
 type FeedbackAnswerScreenNavigationProp = StackNavigationProp<
@@ -163,6 +164,7 @@ const Card: React.FC<CardProps> = ({
     description,
     language,
     dateEnd,
+    attendOrActivity,
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
@@ -284,7 +286,7 @@ const Card: React.FC<CardProps> = ({
                                     onPress={() => handleRegister.mutate()}
                                     buttonType={"primary"}
                                 />
-                            ) : (
+                            ) : attendOrActivity === "attend" ? (
                                 <ButtonComponent
                                     text={t("translateFeedback.feedback")}
                                     onPress={() => {
@@ -295,7 +297,7 @@ const Card: React.FC<CardProps> = ({
                                     }}
                                     buttonType={"secondary"}
                                 />
-                            )}
+                            ) : null}
                             <ButtonComponent
                                 text={t("translateRegisterActivity.closeButton")}
                                 onPress={() => setModalVisible(!modalVisible)}

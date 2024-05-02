@@ -113,6 +113,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 description={activity.description}
                 language={activity.language.name}
                 dateEnd={activity.date_end}
+                attendOrActivity={filterType}
             />
         );
     };

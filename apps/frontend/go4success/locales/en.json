@@ -46,6 +46,7 @@
         "lastName": "Lastname",
         "firstName": "Firstname",
         "noma": "Noma",
+        "nomaInfo": "Your noma is made up of 8 digits. It represents your student number. Here is an example: 20200584",
         "registerButton": "Sign up",
         "yupUsernameRequired": "Please enter a username",
         "yupUsernameMin": "The username must contain at least 3 characters",

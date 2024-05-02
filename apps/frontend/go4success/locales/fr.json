@@ -46,6 +46,7 @@
         "lastName": "Nom de famille",
         "firstName": "Prénom",
         "noma": "Noma",
+        "nomaInfo": "Votre noma est composé de 8 chiffres. Il représentre votre matricule étudiant. En voici un exemple : 20200584",
         "registerButton": "S'inscrire",
         "yupUsernameRequired": "Veuillez entrer un nom d'utilisateur",
         "yupUsernameMin": "Le nom d'utilisateur doit contenir au moins 3 caractères",

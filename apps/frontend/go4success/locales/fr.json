@@ -25,6 +25,7 @@
         "ClearFilter": "Effacer les filtres",
         "SelectSite": "Sélectionner un site",
         "SelectRoom": "Sélectionner une salle",
+        "SelectLanguage": "Sélectionner un language",
         "ClearDates": "Effacer les dates",
         "SearchTitleWorkshop": "Rechercher un atelier"
     },
@@ -103,8 +104,9 @@
         "RegisterActivitySuccessText2": "Vous êtes parfaitement inscrit à l'atelier :",
         "RegisterActivityErrorText2": "Une erreur s'est produire lors de l'inscription à l'atelier",
         "AlreadyRegisteredActivityText2": "Vous êtes déjà inscrit à cet atelier",
-        "SelectSatisfaction": "Veuillez sélectionner un niveau de satisfaction",
-        "SelectActivity": "Veuillez sélectionner une activitée"
+        "SelectSatisfaction": "Veuillez sélectionner un niveau d'évaluation",
+        "SelectActivity": "Veuillez sélectionner une activitée",
+        "AnswerAllQuestions": "Veuillez répondre à toutes les questions"
     },
     "translateRegisterActivity": {
         "registerButton": "S'inscrire",
@@ -138,7 +140,8 @@
         "enterQuestion": "Entrez votre question",
         "addQuestion": "Ajouter plus de questions",
         "dateEnd": "Date de fin",
-        "nofeedback": "Pas de feedback pour cette activité"
+        "nofeedback": "Pas de feedback pour cette activité",
+        "answerTo": "Répondre à la question "
     },
     "satisfactionLevels": {
         "verySatisfied": "Très satisfait",

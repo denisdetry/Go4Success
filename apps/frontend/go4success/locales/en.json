@@ -25,6 +25,7 @@
         "ClearFilter": "Clear filter",
         "SelectSite": "Select a site",
         "SelectRoom": "Select a room",
+        "SelectLanguage": "Select a language",
         "ClearDates": "Clear dates",
         "SearchTitleWorkshop": "Search title Workshop"
     },
@@ -103,7 +104,8 @@
         "RegisterActivityErrorText2": "An error occurred when registering for the workshop",
         "AlreadyRegisteredActivityText2": "You are already registered for this workshop",
         "SelectSatisfaction": "Please select a satisfaction level",
-        "SelectActivity": "Please select an activity"
+        "SelectActivity": "Please select an activity",
+        "AnswerAllQuestions": "Please answer all questions"
     },
     "translateRegisterActivity": {
         "registerButton": "Sign up",
@@ -138,7 +140,8 @@
         "enterQuestion": "Enter your question",
         "addQuestion": "Add more questions",
         "dateEnd": "Date end",
-        "nofeedback": "No feedback for this activity"
+        "nofeedback": "No feedback for this activity",
+        "answerTo": "Answer to question"
     },
     "satisfactionLevels": {
         "verySatisfied": "Very satisfied",

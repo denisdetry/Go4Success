@@ -58,6 +58,15 @@ export default function FeedbackAnswer({}: Readonly<FeedbackAnswerScreenProps>) 
         useFeedbackAdditionalQuestions(firstFeedbackId);
     const [responses, setResponses] = useState<{ [key: string]: string }>({});
 
+    const validateResponses = () => {
+        for (let question of feedbackAdditionalQuestions) {
+            if (!responses[question.id]) {
+                return false;
+            }
+        }
+        return true;
+    };
+
     const handleResponseChange = (questionId: string, newResponse: string) => {
         setResponses((prevResponses) => ({
             ...prevResponses,
@@ -71,6 +80,14 @@ export default function FeedbackAnswer({}: Readonly<FeedbackAnswerScreenProps>) 
                 type: "error",
                 text1: t("translateToast.ErrorText1"),
                 text2: t("translateToast.SelectSatisfaction"),
+            });
+            return;
+        }
+        if (!validateResponses()) {
+            Toast.show({
+                type: "error",
+                text1: t("translateToast.ErrorText1"),
+                text2: t("translateToast.AnswerAllQuestions"),
             });
             return;
         }
@@ -182,6 +199,7 @@ export default function FeedbackAnswer({}: Readonly<FeedbackAnswerScreenProps>) 
                     <View style={styles.feedbackFields}>
                         <Text style={stylesGlobal.label}>
                             {t("translateFeedback.evaluation")} :{" "}
+                            <Text style={{ color: "red" }}>*</Text>
                         </Text>
 
                         <View style={[stylesGlobal.inputLargeFieldWithoutBorder]}>
@@ -293,18 +311,22 @@ export default function FeedbackAnswer({}: Readonly<FeedbackAnswerScreenProps>) 
                 )}
 
                 {/* Additional questions */}
-                {firstFeedbackId &&
+                {Boolean(firstFeedbackId) &&
                     feedbackAdditionalQuestions.map((question, index) => (
                         <View style={styles.feedbackContainer} key={question.id}>
                             <View style={styles.feedbackFields}>
                                 <Text style={stylesGlobal.label}>
-                                    Question {index + 1}: {question.question}
+                                    Question {index + 1}: {question.question} :{" "}
+                                    <Text style={{ color: "red" }}>*</Text>
                                 </Text>
 
                                 <View style={[stylesGlobal.inputLargeField]}>
                                     <TextInput
                                         style={stylesGlobal.input}
-                                        placeholder={`Answer to question ${index + 1}`}
+                                        placeholder={
+                                            t("translateFeedback.answerTo") +
+                                            `${index + 1}`
+                                        }
                                         multiline={true}
                                         onChangeText={(text) =>
                                             handleResponseChange(question.id, text)

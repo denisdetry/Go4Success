@@ -1,15 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
 
-export default function useUser() {
-
-    const { isPending, data: user } = useQuery({
-        queryKey: ["current_user"],
+export default function useAllExpoTokens() {
+    const { isPending, data: allExpoTokens } = useQuery({
+        queryKey: ["all_expo_tokens"],
         queryFn: async () => {
             try {
                 const { data: response } = await fetchBackend({
                     type: "GET",
-                    url: "auth/current_user/",
+                    url: "auth/expo_token/",
                 });
                 return response;
             } catch (err) {
@@ -17,5 +16,5 @@ export default function useUser() {
             }
         },
     });
-    return { isPending, user };
+    return { isPending, allExpoTokens };
 }

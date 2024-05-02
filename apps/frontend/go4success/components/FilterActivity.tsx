@@ -263,6 +263,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                                 flexDirection: "row",
                                 justifyContent: "center",
                                 alignItems: "center",
+                                flexWrap: "wrap",
                             }}
                         >
                             <ButtonComponent

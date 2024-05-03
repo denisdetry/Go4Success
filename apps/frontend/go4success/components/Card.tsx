@@ -142,7 +142,6 @@ const Card: React.FC<CardProps> = ({
             return { data, error };
         },
         onSuccess: () => {
-            console.log("success");
             Toast.show({
                 type: "success",
                 text1: t("translateToast.SuccessText1"),

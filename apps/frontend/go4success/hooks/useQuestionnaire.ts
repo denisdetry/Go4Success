@@ -51,11 +51,7 @@ export function useCourses() {
 export function postQuestionnaire() {
     const backend_url = process.env.EXPO_PUBLIC_API_URL;
     let questionnaire: Questionnaire;
-    const {
-        isPending,
-        data: sites,
-        error,
-    } = useQuery<SelectItem[]>({
+    const { data: sites, error } = useQuery<SelectItem[]>({
         queryKey: ["getSites"],
         queryFn: async () => {
             const { data, error } = await fetchBackend({
@@ -80,5 +76,5 @@ export function postQuestionnaire() {
         },
     });
 
-    return { isPending, sites: sites ?? [], error };
+    return { sites: sites ?? [], error };
 }

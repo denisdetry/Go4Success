@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
+import { useState } from "react";
 
 export type Courses = {
     id: string;
@@ -48,33 +49,45 @@ export function useCourses() {
     return { isPending, sites: sites ?? [], error };
 }
 
-export function postQuestionnaire() {
-    const backend_url = process.env.EXPO_PUBLIC_API_URL;
-    let questionnaire: Questionnaire;
-    const { data: sites, error } = useQuery<SelectItem[]>({
-        queryKey: ["getSites"],
-        queryFn: async () => {
-            const { data, error } = await fetchBackend({
-                type: "POST",
-                url: "postquestionnaire/postquestionnaire",
-                data: {
-                    title: questionnaire.title,
-                    description: questionnaire.description,
-                    start_date: questionnaire.start_date,
-                    end_date: questionnaire.end_date,
-                    course: questionnaire.course,
-                },
-            });
+export function usePostQuestionnaire() {
+    const queryClient = useQueryClient();
+    const [error, setError] = useState(null);
 
-            if (typeof data === "object" && "error" in data) {
-                throw new Error(data.error);
-            }
+    const mutation = useMutation(
+        async (questionnaire) => {
+            try {
+                const response = await fetch(
+                    `${process.env.EXPO_PUBLIC_API_URL}/postquestionnaire/postquestionnaire`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(questionnaire),
+                    },
+                );
 
-            if (error) {
-                throw new Error(error);
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                const data = await response.json();
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                return data;
+            } catch (error) {
+                setError(error.message);
+                return null; // Return null in case of error
             }
         },
-    });
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(["getSites"]);
+            },
+        },
+    );
 
-    return { sites: sites ?? [], error };
+    return { mutate: mutation.mutate, error };
 }

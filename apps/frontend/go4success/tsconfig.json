@@ -1,12 +1,19 @@
 {
     "extends": "expo/tsconfig.base",
     "compilerOptions": {
+        "jsx": "react",
         "types": ["node"],
         "strict": true,
         "paths": {
             "@/*": ["./*"],
-            "assets/*": ["./assets/*"],
+            "assets/*": ["./assets/*"]
         }
     },
-    "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "app/(app)/__test__/rolemanagement.test.ts"]
+    "include": [
+        "**/*.ts",
+        "**/*.tsx",
+        ".expo/types/**/*.ts",
+        "expo-env.d.ts",
+        "app/(app)/__test__/rolemanagement.test.ts"
+    ]
 }

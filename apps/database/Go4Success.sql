@@ -7,6 +7,8 @@ create table ROOM (
 
 create table COURSE (
 	COURSE_CODE char(9) not null,
+	USER INT not null,
+	FOREIGN KEY (USER) REFERENCES USER(ID),
 	primary key (COURSE_CODE));
 
 CREATE TABLE LANGUAGE (

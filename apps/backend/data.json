@@ -1462,6 +1462,25 @@
     },
     {
         "model": "database.user",
+        "pk": 6,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
+            "username": "teacher2",
+            "email": "teacher2@student.uclouvain.com",
+            "first_name": "Fteacher",
+            "last_name": "Lteacher",
+            "noma": null,
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": false,
+            "date_join": "2024-04-12T15:08:14Z",
+            "last_login": null,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "database.user",
         "pk": 5,
         "fields": {
             "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
@@ -1482,12 +1501,16 @@
     {
         "model": "database.course",
         "pk": 1,
-        "fields": { "code": "TS1", "name": "Test1" }
+        "fields": { "code": "TS1", "name": "Test1", "user_id": 4 }
     },
     {
         "model": "database.course",
         "pk": 2,
-        "fields": { "code": "Info01", "name": "Informatique Introduction" }
+        "fields": {
+            "code": "Info01",
+            "name": "Informatique Introduction",
+            "user_id": 6
+        }
     },
     { "model": "database.site", "pk": 1, "fields": { "name": "Namur" } },
     { "model": "database.site", "pk": 2, "fields": { "name": "Charleroi" } },

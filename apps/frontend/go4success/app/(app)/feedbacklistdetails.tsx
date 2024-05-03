@@ -206,7 +206,7 @@ export default function FeedbackListDetails(
                                                         style={{ fontWeight: "bold" }}
                                                     >
                                                         {item.title}
-                                                    </Text>{" "}
+                                                    </Text>
                                                     : {item.value}
                                                 </Text>
                                             </View>
@@ -222,7 +222,7 @@ export default function FeedbackListDetails(
                                                         style={{ fontWeight: "bold" }}
                                                     >
                                                         {item.question.question}
-                                                    </Text>{" "}
+                                                    </Text>
                                                     : {item.answer}
                                                 </Text>
                                             </View>

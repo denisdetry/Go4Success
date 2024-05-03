@@ -193,7 +193,7 @@ export default function FeedbackAnswer(props: Readonly<FeedbackAnswerScreenProps
                 <Text
                     style={[stylesGlobal.title, { fontSize: 30, textAlign: "center" }]}
                 >
-                    {t("translateFeedback.for")}{" "}
+                    {t("translateFeedback.for")}
                     {activityInformations
                         .map((item) =>
                             "activity" in item
@@ -206,7 +206,7 @@ export default function FeedbackAnswer(props: Readonly<FeedbackAnswerScreenProps
                 <View style={styles.feedbackContainer}>
                     <View style={styles.feedbackFields}>
                         <Text style={stylesGlobal.label}>
-                            {t("translateFeedback.evaluation")} :{" "}
+                            {t("translateFeedback.evaluation")} :
                             <Text style={{ color: "red" }}>*</Text>
                         </Text>
 
@@ -237,7 +237,7 @@ export default function FeedbackAnswer(props: Readonly<FeedbackAnswerScreenProps
                     <View style={styles.feedbackContainer}>
                         <View style={styles.feedbackFields}>
                             <Text style={stylesGlobal.label}>
-                                {t("translateFeedback.positivePoint")} :{" "}
+                                {t("translateFeedback.positivePoint")} :
                             </Text>
 
                             <View style={[stylesGlobal.inputLargeField]}>
@@ -258,7 +258,7 @@ export default function FeedbackAnswer(props: Readonly<FeedbackAnswerScreenProps
                     <View style={styles.feedbackContainer}>
                         <View style={styles.feedbackFields}>
                             <Text style={stylesGlobal.label}>
-                                {t("translateFeedback.negativePoint")} :{" "}
+                                {t("translateFeedback.negativePoint")} :
                             </Text>
 
                             <View style={[stylesGlobal.inputLargeField]}>
@@ -279,7 +279,7 @@ export default function FeedbackAnswer(props: Readonly<FeedbackAnswerScreenProps
                     <View style={styles.feedbackContainer}>
                         <View style={styles.feedbackFields}>
                             <Text style={stylesGlobal.label}>
-                                {t("translateFeedback.suggestion")} :{" "}
+                                {t("translateFeedback.suggestion")} :
                             </Text>
 
                             <View style={[stylesGlobal.inputLargeField]}>
@@ -300,7 +300,7 @@ export default function FeedbackAnswer(props: Readonly<FeedbackAnswerScreenProps
                     <View style={styles.feedbackContainer}>
                         <View style={styles.feedbackFields}>
                             <Text style={stylesGlobal.label}>
-                                {t("translateFeedback.additionalComment")} :{" "}
+                                {t("translateFeedback.additionalComment")} :
                             </Text>
 
                             <View style={[stylesGlobal.inputLargeField]}>
@@ -324,7 +324,7 @@ export default function FeedbackAnswer(props: Readonly<FeedbackAnswerScreenProps
                         <View style={styles.feedbackContainer} key={question.id}>
                             <View style={styles.feedbackFields}>
                                 <Text style={stylesGlobal.label}>
-                                    Question {index + 1}: {question.question} :{" "}
+                                    Question {index + 1}: {question.question} :
                                     <Text style={{ color: "red" }}>*</Text>
                                 </Text>
 

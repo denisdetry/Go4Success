@@ -79,7 +79,7 @@ export default function Register() {
         >
             <View style={[styles.container, { shadowRadius: 0, backgroundColor: "" }]}>
                 <Text style={styles.title}>{t("translateRegister.title")}</Text>
-                {/*Email field*/}
+                {/* Email field */}
                 <View style={styles.form}>
                     <Controller
                         control={control}
@@ -98,11 +98,11 @@ export default function Register() {
                         name="email"
                         defaultValue=""
                     />
-                    {/*Error message for email field*/}
+                    {/* Error message for email field */}
                     {errors.email && (
                         <Text style={styles.errorMsg}>{errors.email.message}</Text>
                     )}
-                    {/*Username field*/}
+                    {/* Username field*/}
                     <Controller
                         control={control}
                         rules={{ required: true }}
@@ -121,12 +121,12 @@ export default function Register() {
                         defaultValue=""
                     />
 
-                    {/* Error message for username field*/}
+                    {/* Error message for username field */}
                     {errors.username && (
                         <Text style={styles.errorMsg}>{errors.username.message}</Text>
                     )}
 
-                    {/*Last Name field*/}
+                    {/* Last Name field */}
                     <Controller
                         control={control}
                         rules={{ required: true }}
@@ -145,12 +145,12 @@ export default function Register() {
                         defaultValue=""
                     />
 
-                    {/*Error message for lastname field*/}
+                    {/* Error message for lastname field */}
                     {errors.lastName && (
                         <Text style={styles.errorMsg}>{errors.lastName.message}</Text>
                     )}
 
-                    {/* firstname field*/}
+                    {/* firstname field */}
                     <Controller
                         control={control}
                         rules={{ required: true }}
@@ -168,12 +168,12 @@ export default function Register() {
                         name="firstName"
                         defaultValue=""
                     />
-                    {/*Error message for firstname field*/}
+                    {/* Error message for firstname field */}
                     {errors.firstName && (
                         <Text style={styles.errorMsg}>{errors.firstName.message}</Text>
                     )}
 
-                    {/*Noma field*/}
+                    {/* Noma field */}
                     <Controller
                         control={control}
                         rules={{ required: false }}
@@ -198,9 +198,10 @@ export default function Register() {
                             </View>
                         )}
                         name="noma"
+                        defaultValue={""}
                     />
 
-                    {/*Error message for noma field*/}
+                    {/* Error message for noma field */}
                     {errors.noma && (
                         <Text style={styles.errorMsg}>{errors.noma.message}</Text>
                     )}
@@ -230,11 +231,12 @@ export default function Register() {
                         name="password"
                         defaultValue=""
                     />
-                    {/*Error message for password field*/}
+                    {/* Error message for password field */}
                     {errors.password && (
                         <Text style={styles.errorMsg}>{errors.password.message}</Text>
                     )}
-                    {/*Password retype field*/}
+
+                    {/* Password retype field */}
                     <Controller
                         control={control}
                         rules={{ required: true }}
@@ -261,14 +263,15 @@ export default function Register() {
                         name="passwordRetype"
                         defaultValue=""
                     />
-                    {/*Error message for password retype field*/}
+
+                    {/* Error message for password retype field */}
                     {errors.passwordRetype && (
                         <Text style={styles.errorMsg}>
                             {errors.passwordRetype?.message?.toString()}
                         </Text>
                     )}
 
-                    {/*Submit button*/}
+                    {/* Submit button */}
                     <Button
                         text={t("translateRegister.registerButton")}
                         onPress={handleSubmit(onSubmit)}

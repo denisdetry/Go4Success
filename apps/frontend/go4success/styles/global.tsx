@@ -41,7 +41,7 @@ export default StyleSheet.create({
                             ? 710
                             : 1435
                 : 1435, // isDesktop for the last one
-        paddingBottom: 20,
+        // paddingBottom: 20,
     },
     container: {
         width: "90%",

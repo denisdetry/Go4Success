@@ -16,15 +16,15 @@ type ButtonComponentProps = {
 };
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({
-    text,
-    onPress,
-    buttonType,
-}) => {
+                                                             text,
+                                                             onPress,
+                                                             buttonType,
+                                                         }) => {
     const styles = StyleSheet.create({
         common: {
-            borderRadius: 20,
+            borderRadius: 10,
             padding: 8,
-            margin: 5,
+            margin: 4,
             fontWeight: "500",
             textAlign: "center",
             color: "white",
@@ -47,15 +47,16 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
         },
         filter: {
             backgroundColor: Colors.primaryColor,
-            borderRadius: 0,
-            padding: 2,
+            borderRadius: 10,
+            padding: 4,
             margin: 4,
+            marginLeft: 0,
             width: 160,
         },
         clear: {
             backgroundColor: Colors.primaryColor,
-            borderRadius: 0,
-            padding: 0,
+            borderRadius: 10,
+            padding: 4,
             margin: 10,
             marginTop: -25,
         },

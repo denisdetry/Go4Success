@@ -114,18 +114,15 @@ export const usePushNotifications = (user: User): PushNotificationState => {
                     try {
                         await fetchBackend({
                             type: "PATCH",
-                            url: "auth/update_expo_token/" + user?.id + "/",
+                            url: "auth/update_expo_token/" + user?.id + "/" + token + "/",
                             data: {
-                                token: token,
                                 // eslint-disable-next-line camelcase
                                 is_active: true,
                             },
                         });
                     } catch (e) {
                         const error = e as fetchError;
-                        if (error.responseError.status === 400) {
-                            console.log("PushNotif PATCH: ", error.responseError);
-                        }
+                        console.log(error);
                     }
                 }
 

@@ -237,6 +237,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                                 flex: 1,
                                 flexDirection: "column",
                                 alignItems: "flex-end",
+                                marginTop: 10,
                             }}
                         >
                             <View style={stylesGlobal.containerDatePicker}>

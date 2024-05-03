@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
     modalView: {
         backgroundColor: Colors.workshopLightColor,
         borderRadius: 20,
-        maxWidth: "95%",
+        width: "95%",
         alignItems: "center",
         shadowColor: "#000",
         shadowOpacity: 0.25,

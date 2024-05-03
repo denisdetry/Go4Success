@@ -2,7 +2,7 @@ import { Room } from "./useRooms";
 import { Language } from "./useLanguages";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
-
+import { useMutation } from "@tanstack/react-query";
 export interface Activity {
     id: string;
     name: string;

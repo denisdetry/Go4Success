@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useCourses, postQuestionnaire } from "@/hooks/useQuestionnaire";
+import { useCourses, usePostQuestionnaire } from "@/hooks/useQuestionnaire";
 import {
     StyleSheet,
     View,
@@ -15,23 +15,26 @@ import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from "dayjs";
 import Colors from "@/constants/Colors";
 export default function App() {
-    const { sites, error } = postQuestionnaire();
+    const { mutate, error } = usePostQuestionnaire();
     const [startdate, setStartDate] = useState(dayjs());
     const [enddate, setEndDate] = useState(dayjs());
     const [formData, setFormData] = useState({
+        course: "",
         title: "",
         description: "",
-        startDateDay: "",
-        startDateMonth: "",
-        startDateYear: "",
-        endDateDay: "",
-        endDateMonth: "",
-        endDateYear: "",
+        points_total: "",
+        date_start: startdate,
+        date_end: enddate,
         language: "",
     });
 
     const handleChange = (name, value) => {
         setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = () => {
+        const questionnaire = { formData };
+        mutate(questionnaire);
     };
 
     if (error) return <Text style={styles.errorText}>Error: {error.message}</Text>;
@@ -95,11 +98,7 @@ export default function App() {
                 <Picker.Item label="English" value="English" />
                 <Picker.Item label="French" value="French" />
             </Picker>
-            <Button
-                title="Next"
-                onPress={() => console.log("Submit", formData)}
-                color="#0066cc"
-            />
+            <Button title="Next" onPress={handleSubmit} color="#0066cc" />
         </View>
     );
 }

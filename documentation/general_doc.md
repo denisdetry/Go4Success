@@ -12,9 +12,7 @@ Django pour faire communiquer le serveur et le client.
 
 ### Front-end
 
-Du côté client, puisqu'il faisait partie des éxigences du projet que l'application tourne sur web et sur mobile, nous
-avons opté pour l'utilisation du framework JavaScript React Native. Tous nos fichiers de code source du front-end sont
-écrits en TypeScript.
+Du côté client, puisqu'il faisait partie des éxigences du projet que l'application tourne sur web et sur mobile, nous avons opté pour l'utilisation du framework JavaScript React Native. Tous nos fichiers de code source du front-end sont écrits en TypeScript.
 
 ### Base de donnée
 
@@ -30,7 +28,7 @@ votre disposition pour pouvoir visionner les schémas.
 
 ### Racine du projet
 
-- _.prettierrc_ : contient les règles utilisées par _Prettier_ pour formatter le code.
+-   _.prettierrc_ : contient les règles utilisées par _Prettier_ pour formatter le code.
 
 ### _apps/frontend/_
 
@@ -41,36 +39,36 @@ Docker.
 
 #### _go4success/_
 
-- **_app/_** contient le code source de l'application
-- **_assets/_** contient les images et autres éléments statiques affichés dans l'application.
-- **_components/_** contient tous les composants react que nous réutilisons à travers l'application.
-- **_constants/_** contient toutes constantes utilisées dans l'application. Notamment les couleurs, les tailles de
-  d'écran pour les différentes platformes, etc.
-- **_context/_** contient les contextes react que nous utilisons à travers toute l'application. Essentiellement pour
-  l'authentification de l'utilisateur, donc c'est **une partie centrale du code frontend.**
-- **_hooks/_** contient les différents hooks react utilisés dans l'application.
-- **_locales/_** contient les json pour les dictionnaires de traduction i18n pour les langues de l'application.
-- **_styles/_** contient les fichiers de style "css". Ici, nous avons essentiellement mis une fiche de style dites
-  global, réutilisé un peu partout dans l'application, car les fiches de style un peu plus locale sont directement dans
-  les fichiers de code .tsx
-- **_types/_** contient les différents types typescript utilisés à travers l'application.
-- **_utils/_** contient des fonctions utilitaires (pour faire des requetes au serveur django ou autre) que nous
-  détailleront plus en détails dans la doc technique, avec des
-  exemples d'utilisation.
+-   **_app/_** contient le code source de l'application
+-   **_assets/_** contient les images et autres éléments statiques affichés dans l'application.
+-   **_components/_** contient tous les composants react que nous réutilisons à travers l'application.
+-   **_constants/_** contient toutes constantes utilisées dans l'application. Notamment les couleurs, les tailles de
+    d'écran pour les différentes platformes, etc.
+-   **_context/_** contient les contextes react que nous utilisons à travers toute l'application. Essentiellement pour
+    l'authentification de l'utilisateur, donc c'est **une partie centrale du code frontend.**
+-   **_hooks/_** contient les différents hooks react utilisés dans l'application.
+-   **_locales/_** contient les json pour les dictionnaires de traduction i18n pour les langues de l'application.
+-   **_styles/_** contient les fichiers de style "css". Ici, nous avons essentiellement mis une fiche de style dites
+    global, réutilisé un peu partout dans l'application, car les fiches de style un peu plus locale sont directement dans
+    les fichiers de code .tsx
+-   **_types/_** contient les différents types typescript utilisés à travers l'application.
+-   **_utils/_** contient des fonctions utilitaires (pour faire des requetes au serveur django ou autre) que nous
+    détailleront plus en détails dans la doc technique, avec des
+    exemples d'utilisation.
 
 #### _go4success/app/_
 
 Ce dossier contient deux parties de l'application :
 
-- **_(auth)_** contient les pages permettant l'inscription et la connexion d'utilisateurs. **L'utilisateur pourra
-  accéder
-  à ces pages uniquement s'il n'est pas encore connecté à l'application.**
-- **_(app)_** contient le reste de l'application, **accessible uniquement si l'utilisateur est connecté**. Il est
-  important de noter que chaque fichier dans ce dossier
-  correspond à une page s'affichant dans le menu de l'application.
-- **Notes :** La gestion d'accès aux pages d'authentification et au reste de l'application, selon le statut de
-  l'utilisateur (connecté ou non) est géré par le contexte **Auth.tsx**, situé dans le dossier
-  **apps/frontend/go4success/context/**
+-   **_(auth)_** contient les pages permettant l'inscription et la connexion d'utilisateurs. **L'utilisateur pourra
+    accéder
+    à ces pages uniquement s'il n'est pas encore connecté à l'application.**
+-   **_(app)_** contient le reste de l'application, **accessible uniquement si l'utilisateur est connecté**. Il est
+    important de noter que chaque fichier dans ce dossier
+    correspond à une page s'affichant dans le menu de l'application.
+-   **Notes :** La gestion d'accès aux pages d'authentification et au reste de l'application, selon le statut de
+    l'utilisateur (connecté ou non) est géré par le contexte **Auth.tsx**, situé dans le dossier
+    **apps/frontend/go4success/context/**
 
 ### _apps/backend/_
 
@@ -81,17 +79,19 @@ Le backend possède plusieurs applications django (activities, authentication, d
 dossier backend, et portant un nom représentant la fonctionnaité, ormis le dossier **server**, qui gère l'application
 django et ses paramètres (avec le fichiers setting, urls, ...).
 
-- **apps/backend**
-    - **activities**
-        - (...) _# application django_
-    - **authentication**
-        - (...)
-    - **database**
-        - (...)
-    - **rolemanagement**
-        - (...)
-    - **server**
-        - (...) _# serveur django_
+-   **apps/backend**
+    -   **activities**
+        -   (...) _# application django_
+    -   **authentication**
+        -   (...)
+    -   **database**
+        -   (...)
+    -   **feedback**
+        -   (...)
+    -   **rolemanagement**
+        -   (...)
+    -   **server**
+        -   (...) _# serveur django_
 
 ## Applications django en détails
 
@@ -108,15 +108,26 @@ ateliers.
 
 #### Serializers (Activities)
 
-(à completer)
+Nous allons pas détailler les serializers, car ils sont très simples et sont utilisés pour la validation des données.
+Nous allons néanmoins les citer et les décrire brièvement.
+
+-   **RoomSerializer:** Ce serializer est utilisé
+-   **CourseSerializer:**
+-   **LanguageSerializer:**
+-   **ActivitySerializer:**
+-   **AttendSerializer:**
+-   **SiteSerializer:**
+-   **RegisterToActivitySerializer:**
 
 #### Urls (Activities)
 
-(à completer)
+Les différentes urls de l'application _activities_ sont définies dans le fichier _urls.py_. Elles sont en liens avec les vues décrites plus haut.
 
 #### Tests (Activities)
 
-(à completer)
+Conntient un ensemble de tests pour vérifier les éléments suivants :
+
+-   \*\*
 
 ### Authentication
 
@@ -128,19 +139,19 @@ notifications avec Expo Push Notification : https://docs.expo.dev/push-notificat
 Nous avons plusieurs vues essentiels aux fonctionnent de l'authentifications, que nous allors détailler ici. Elles sont
 de plusieurs sortes : APIView, ViewSet, etc.
 
-Nous vous mettons les liens de laa documentation des APIView et des ViewSet, pour plus d'information sur ces vues.
+Nous vous mettons les liens de la documentation des APIView et des ViewSet, pour plus d'information sur ces vues.
 
-- APIView : https://www.django-rest-framework.org/api-guide/views/
-- ViewSet : https://www.django-rest-framework.org/api-guide/viewsets/
-- ModelViewSet : https://www.django-rest-framework.org/api-guide/viewsets/#modelviewset
-- GenericAPIView : https://www.django-rest-framework.org/api-guide/generic-views/
-- UpdateAPIView : https://www.django-rest-framework.org/api-guide/generic-views/#updateapiview
-- DestroyAPIView : https://www.django-rest-framework.org/api-guide/generic-views/#destroyapiview
+-   APIView : https://www.django-rest-framework.org/api-guide/views/
+-   ViewSet : https://www.django-rest-framework.org/api-guide/viewsets/
+-   ModelViewSet : https://www.django-rest-framework.org/api-guide/viewsets/#modelviewset
+-   GenericAPIView : https://www.django-rest-framework.org/api-guide/generic-views/
+-   UpdateAPIView : https://www.django-rest-framework.org/api-guide/generic-views/#updateapiview
+-   DestroyAPIView : https://www.django-rest-framework.org/api-guide/generic-views/#destroyapiview
 
 Les vues sont les suivantes :
 
-- **_UserRegisterView_** : La vue qui s'occupe d'inscrire les utilisateurs. Elle reçoit les information de l'inscription
-  dans la requête POST.
+-   **_UserRegisterView_** : La vue qui s'occupe d'inscrire les utilisateurs. Elle reçoit les information de l'inscription
+    dans la requête POST.
 
 ```tsx
 // Exemple d'interaction de la vue UserRegisterView en frontend avec react
@@ -192,11 +203,11 @@ const signUp = async (userData: UserRegister) => {
 };
 ```
 
-- **_TokenObtainPairView_ (LoginView)** : Cette vue vient directement du framework **rest_framework_simple_jwt** et
-  s'occupe de
-  vérifier les credentials de l'utilisateur pour que celui-ci puisse se connecter. La vue fait des requetes POST, en
-  utilisant une username et un password, et renvoie un token d'authentification (access et refresh token) si les
-  credentials sont valides.
+-   **_TokenObtainPairView_ (LoginView)** : Cette vue vient directement du framework **rest_framework_simple_jwt** et
+    s'occupe de
+    vérifier les credentials de l'utilisateur pour que celui-ci puisse se connecter. La vue fait des requetes POST, en
+    utilisant une username et un password, et renvoie un token d'authentification (access et refresh token) si les
+    credentials sont valides.
 
 ```tsx
 // Exemple d'interaction de la vue TokenObtainPairView en frontend avec react
@@ -240,8 +251,8 @@ const signIn = async (userData: UserLogin) => {
 };
 ```
 
-- **_LogoutView_** : Il n'y pas de vue de déconnexion, car la déconnexion se fait automatiquement en supprimant le
-  token (access et refresh) de l'utilisateur. Cela se fait en frontend, en supprimant les tokens du local storage.
+-   **_LogoutView_** : Il n'y pas de vue de déconnexion, car la déconnexion se fait automatiquement en supprimant le
+    token (access et refresh) de l'utilisateur. Cela se fait en frontend, en supprimant les tokens du local storage.
 
 ```tsx
 // Exemple de déconnexion en frontend avec react
@@ -269,8 +280,8 @@ const signOut = async () => {
 };
 ```
 
-- **_CurrentUserView_** : fonctionne avec un GET uniquement. Renvoie les informations de l'utilisateur connecté dans la
-  session actuelle.
+-   **_CurrentUserView_** : fonctionne avec un GET uniquement. Renvoie les informations de l'utilisateur connecté dans la
+    session actuelle.
 
 ```tsx
 import { useQuery } from "@tanstack/react-query";
@@ -295,10 +306,10 @@ export default function useUser() {
 }
 ```
 
-- **_UpdateProfileView_** : Permet à l'utilisateur de mettre à jour son profil. La vue fait une requête PATCH avec les
-  nouvelles informations de l'utilisateur. Dans notre application, on utilise le PATCH pour mettre à jour seulement un
-  attribut de l'utilisateur (comme le prénom uniquement par exemple). Mais le PUT peut être utilisé pour mettre à jour
-  tout l'objet utilisateur.
+-   **_UpdateProfileView_** : Permet à l'utilisateur de mettre à jour son profil. La vue fait une requête PATCH avec les
+    nouvelles informations de l'utilisateur. Dans notre application, on utilise le PATCH pour mettre à jour seulement un
+    attribut de l'utilisateur (comme le prénom uniquement par exemple). Mais le PUT peut être utilisé pour mettre à jour
+    tout l'objet utilisateur.
 
 ```tsx
 // Exemple de mise à jour du profil en frontend avec react
@@ -335,8 +346,8 @@ const fetchData = useMutation({
 });
 ```
 
-- **_DeleteUserView_** : Permet à l'utilisateur de supprimer son compte. La vue fait une requête DELETE pour supprimer
-  l'utilisateur.
+-   **_DeleteUserView_** : Permet à l'utilisateur de supprimer son compte. La vue fait une requête DELETE pour supprimer
+    l'utilisateur.
 
 ```tsx
 // Exemple de suppression du profil en frontend avec react
@@ -366,8 +377,8 @@ const handleDeleteUser = useMutation({
 });
 ```
 
-- **_ChangePasswordView_** : Permet à l'utilisateur de changer son mot de passe. La vue fait une requête PUT pour
-  changer le mot de passe de l'utilisateur.
+-   **_ChangePasswordView_** : Permet à l'utilisateur de changer son mot de passe. La vue fait une requête PUT pour
+    changer le mot de passe de l'utilisateur.
 
 ```tsx
 // Exemple de changement de mot de passe en frontend avec react
@@ -415,10 +426,10 @@ veuillez consulter la section _locales_ du dossier _go4success_.
 Nous allons pas détailler les serializers, car ils sont très simples et sont utilisés pour la validation des données.
 Nous allons néanmoins les citer et les décrire brièvement.
 
-**UserRegistrationSerializer:** Ce serializer est utilisé pour valider les données d'inscription d'un utilisateur.
-**UserSerializer:** Ce serializer est utilisé pour valider les données de l'utilisateur.
-**UpdateUserSerializer:** Ce serializer est utilisé pour valider les données de mise à jour de l'utilisateur.
-**ChangePasswordSerializer:** Ce serializer est utilisé pour valider les données de changement de mot de passe.
+-   **UserRegistrationSerializer:** Ce serializer est utilisé pour valider les données d'inscription d'un utilisateur.
+-   **UserSerializer:** Ce serializer est utilisé pour valider les données de l'utilisateur.
+-   **UpdateUserSerializer:** Ce serializer est utilisé pour valider les données de mise à jour de l'utilisateur.
+-   **ChangePasswordSerializer:** Ce serializer est utilisé pour valider les données de changement de mot de passe.
 
 #### Validation (Authentication)
 
@@ -429,8 +440,7 @@ matricule étudiant).
 
 #### Urls (Authentication)
 
-Les différentes urls de l'application _authentication_ sont définies dans le fichier _urls.py_. Elles sont en liens avec
-les vues décrites plus haut.
+Les différentes urls de l'application _authentication_ sont définies dans le fichier _urls.py_. Elles sont en liens avec les vues décrites plus haut.
 
 ### Database
 
@@ -440,155 +450,197 @@ Comme son nom l'indique, cette application va gérer les base de données avec l
 
 Voici les différents modèles :
 
-- **User :** Ce modèle représente l'utilisateur de l'application. Nous avons pour créer un modèle d'user par dessus
-  celui
-  fourni par django, afin d'y ajouter notamment le noma (matricule étudiant) Il contient les attributs suivants :
+-   **User :** Ce modèle représente l'utilisateur de l'application. Nous avons pour créer un modèle d'user par dessus
+    celui
+    fourni par django, afin d'y ajouter notamment le noma (matricule étudiant) Il contient les attributs suivants :
 
-    - **id** : l'identifiant de l'utilisateur pour la base de données.
-    - **username** : Le nom d'utilisateur de l'utilisateur.
-    - **email** : L'email de l'utilisateur.
-    - **first_name** : Le prénom de l'utilisateur.
-    - **last_name** : Le nom de famille de l'utilisateur.
-    - **noma** : Le matricule de l'utilisateur.
-    - **is_active** : Un booléen qui indique si l'utilisateur est actif.
-    - **is_staff** : Un booléen qui indique si l'utilisateur est un membre du staff.
-    - **is_superuser** : Un booléen qui indique si l'utilisateur est un super utilisateur.
-    - **date_join** : La date à laquelle l'utilisateur s'est inscrit.
-    - **last_login** : La date à laquelle l'utilisateur s'est connecté pour la dernière fois.
+    -   **id** : l'identifiant de l'utilisateur pour la base de données.
+    -   **username** : Le nom d'utilisateur de l'utilisateur.
+    -   **email** : L'email de l'utilisateur.
+    -   **first_name** : Le prénom de l'utilisateur.
+    -   **last_name** : Le nom de famille de l'utilisateur.
+    -   **noma** : Le matricule de l'utilisateur.
+    -   **is_active** : Un booléen qui indique si l'utilisateur est actif.
+    -   **is_staff** : Un booléen qui indique si l'utilisateur est un membre du staff.
+    -   **is_superuser** : Un booléen qui indique si l'utilisateur est un super utilisateur.
+    -   **date_join** : La date à laquelle l'utilisateur s'est inscrit.
+    -   **last_login** : La date à laquelle l'utilisateur s'est connecté pour la dernière fois.
 
-- **Course :** Ce modèle représente un cours. Il contient les attributs suivants :
-    - **id** : l'identifiant du cours pour la base de données.
-    - **code** : La code du cours.
-    - **name** : Le nom du cours.
-    - **user** : Le professeur du cours.
+-   **Course :** Ce modèle représente un cours. Il contient les attributs suivants :
 
-- **Site :** Ce modèle représente un site. Un site est le nom du campus. Il contient les attributs suivants :
-    - **id** : l'identifiant du site pour la base de données.
-    - **name** : Le nom du site.
+    -   **id** : l'identifiant du cours pour la base de données.
+    -   **code** : La code du cours.
+    -   **name** : Le nom du cours.
+    -   **user** : Le professeur du cours.
 
-- **Room :** Ce modèle représente une classe/auditoire/amphithéatre. Il contient les attributs suivants :
-    - **id** : l'identifiant de la classe pour la base de données.
-    - **name** : Le nom de la classe.
-    - **site** : Le site où est situé la classe.
+-   **Site :** Ce modèle représente un site. Un site est le nom du campus. Il contient les attributs suivants :
 
-- **Language :** Ce modèle représente une langue. Il contient les attributs suivants :
-    - **id** : l'identifiant de la langue pour la base de données.
-    - **name** : Le nom de la langue (Exemple: Français)s.
-    - **code** : Le code de la langue (Exemple: FR).
+    -   **id** : l'identifiant du site pour la base de données.
+    -   **name** : Le nom du site.
 
-- **Activity :** Ce modèle représente une activité. Il contient les attributs suivants :
-    - **id** : l'identifiant de l'activité pour la base de données.
-    - **name** : Le nom de l'activité.
-    - **description** : La description de l'activité.
-    - **start_date** : La date de début de l'activité.
-    - **end_date** : La date de fin de l'activité.
-    - **course** : Le cours de l'activité.
-    - **room** : La classe de l'activité.
-    - **language** : La langue de l'activité.
+-   **Room :** Ce modèle représente une classe/auditoire/amphithéatre. Il contient les attributs suivants :
 
-- **Attend :**  Ce modèle représente la relation entre un utilisateur et une activité. Il permet de savoir quel
-  utilisateur est inscrit à quelle activité. Il contient les attributs :
-  suivants :
-    - **activity** : L'activité.
-    - **student** : L'étudiant.
+    -   **id** : l'identifiant de la classe pour la base de données.
+    -   **name** : Le nom de la classe.
+    -   **site** : Le site où est situé la classe.
 
-  **Notes :** Ici, l'identifiant pour la base de données est le tuple (activity, student) qui doit être unique.
+-   **Language :** Ce modèle représente une langue. Il contient les attributs suivants :
 
-- **Teacher :** Ce modèle représente un professeur. Il contient les attributs suivants :
-    - **user** : L'utilisateur.
-    - **is_tutor** : Un booléan qui permet de savoir si l'utilisateur est un tuteur.
-    - **is_professor**: Un booléan qui permet de savoir si l'utilisateur est un professeur.
-      **Notes:** Une contrainte est mise en place pour que l'utilisateur soit soit un tuteur, soit un professeur. Voir
-      plus en détail dans la méthode _clean()_ du modèle.
+    -   **id** : l'identifiant de la langue pour la base de données.
+    -   **name** : Le nom de la langue (Exemple: Français)s.
+    -   **code** : Le code de la langue (Exemple: FR).
 
-- **Give :** Ce modèle est une relation entre activité et professeur. Il permet de savoir quel professeur donne quel
-  cours. Il contient les attributs suivants :
-    - **activity** : L'activité.
-    - **teacher** : Le professeur.
+-   **Activity :** Ce modèle représente une activité. Il contient les attributs suivants :
 
-- **Annoucement :** Ce modèle représente une annonce. Les annonces sont donnés par les professeur envers tous les
-  étudiants. Il contient les attributs suivants :
-    - **id** : l'identifiant de l'annonce pour la base de données.
-    - **title** : Le titre de l'annonce.
-    - **description** : La description de l'annonce.
-    - **publication_date** : La date de publication de l'annonce.
-    - **teacher** : Le professeur qui a posté l'annonce.
+    -   **id** : l'identifiant de l'activité pour la base de données.
+    -   **name** : Le nom de l'activité.
+    -   **description** : La description de l'activité.
+    -   **start_date** : La date de début de l'activité.
+    -   **end_date** : La date de fin de l'activité.
+    -   **course** : Le cours de l'activité.
+    -   **room** : La classe de l'activité.
+    -   **language** : La langue de l'activité.
 
-- **Registered :** Ce modèle représente une relation entre un étudiant et un cours. Elle permet de savoir quel étudiant
-  est inscrit à quel cours. Il contient les attributs suivants :
-    - **student** : L'étudiant.
-    - **course** : Le cours.
+-   **Attend :** Ce modèle représente la relation entre un utilisateur et une activité. Il permet de savoir quel
+    utilisateur est inscrit à quelle activité. Il contient les attributs :
+    suivants :
 
-- **Message :** Ce modèle représente un message. Un message est émis entre deux étudiants. Il contient les attributs
-  suivants :
-    - **id** : l'identifiant du message pour la base de données.
-    - **content** : Le contenu du message.
-    - **date** : La date du message.
-    - **to_user** : L'envoyeur du message.
-    - **from_user** : Le receveur du message.
+    -   **activity** : L'activité.
+    -   **student** : L'étudiant.
 
-- **See :** Ce modèle représente une relation entre une annonce et un utilisateur. Il permet de savoir quel utilisateur
-  a
-  vu quel announce. Il contient les attributs suivants :
-    - **annoucement** : L'annonce émis par un professeur (modèle Teacher).
-    - **user** : L'utilisateur.
+    **Notes :** Ici, l'identifiant pour la base de données est le tuple (activity, student) qui doit être unique.
 
-- **FeedbackActivity :** Ce modèle represente un feedback d'un étudiant envers l'activité d'un professeur. Il contient
-  les attributs suivants :
+-   **Teacher :** Ce modèle représente un professeur. Il contient les attributs suivants :
 
-    - **id** : l'identifiant du feedback pour la base de données.
-    - **student** : L'étudiant qui a donné le feedback.
-    - **activity** : L'activité pour laquelle le feedback est donné.
-    - **evaluation** : L'évaluation de l'activité (échelle de 1 à 10).
-    - **positive_point** : Les points positifs de l'activité.
-    - **negative_point** : Les points négatifs de l'activité.
-    - **suggestion** : Les suggestions pour améliorer l'activité.
-    - **additional_comment** : Les commentaires additionnels.
-    - **date_submitted** : La date à laquelle le feedback a été soumis.
+    -   **user** : L'utilisateur.
+    -   **is_tutor** : Un booléan qui permet de savoir si l'utilisateur est un tuteur.
+    -   **is_professor**: Un booléan qui permet de savoir si l'utilisateur est un professeur.
+        **Notes:** Une contrainte est mise en place pour que l'utilisateur soit soit un tuteur, soit un professeur. Voir
+        plus en détail dans la méthode _clean()_ du modèle.
 
-- **Questionnaire :** Ce modèle représentaire un questionnaire qu'un profeseur peut créer pour tel cours. Il contient
-  les attributs suivants :
-    - **id** : l'identifiant du questionnaire pour la base de données.
-    - **course** : Le cours pour lequel le questionnaire est créé.
-    - **title** : Le titre du questionnaire.
-    - **description** : La description du questionnaire.
-    - **points_total** : Le nombre de points total du questionnaire.
-    - **date_start** : La date à laquelle le questionnaire a été créé.
-    - **date_end** : La date limite à laquelle le questionnaire prendra fin.
-    - **language** : La langue du questionnaire.
+-   **Give :** Ce modèle est une relation entre activité et professeur. Il permet de savoir quel professeur donne quel
+    cours. Il contient les attributs suivants :
 
-- **Question :** Ce modèle représente une question d'un questionnaire. Il contient les attributs suivants :
-    - **id** : l'identifiant de la question pour la base de données.
-    - **questionnaire** : Le questionnaire auquel la question appartient.
-    - **question** : La question (ouvert, choix multiple, etc...).
-    - **points** : Le nombre de points de la question.
+    -   **activity** : L'activité.
+    -   **teacher** : Le professeur.
 
-- **OpenAnswer** : Ce modèle représente une réponse ouverte à une question. Il contient les attributs suivants :
-    - **id** : l'identifiant de la réponse pour la base de données.
-    - **question** : La question à laquelle la réponse est donnée.
-    - **student** : L'étudiant qui a donné la réponse.
-    - **answer** : La réponse donnée par l'étudiant.
-    - **is_correct** : Un booléen qui indique si la réponse est correcte.
+-   **Annoucement :** Ce modèle représente une annonce. Les annonces sont donnés par les professeur envers tous les
+    étudiants. Il contient les attributs suivants :
 
-- **ChoiceAnswer :** Ce modèle représente une réponse à choix multiple à une question. Il contient les attributs
-  suivants
-  :
-    - **id** : l'identifiant de la réponse pour la base de données.
-    - **question** : La question à laquelle la réponse est donnée.
-    - **student** : L'étudiant qui a donné la réponse.
+    -   **id** : l'identifiant de l'annonce pour la base de données.
+    -   **title** : Le titre de l'annonce.
+    -   **description** : La description de l'annonce.
+    -   **publication_date** : La date de publication de l'annonce.
+    -   **teacher** : Le professeur qui a posté l'annonce.
 
-- **ChoiceAnswerInstance :** Ce modèle représente une instance de réponse à choix multiple. Il contient les attributs
-  suivants :
-    - **id** : l'identifiant de l'instance de réponse pour la base de données.
-    - **choice_answer** : La réponse à choix multiple.
-    - **choice** : Le choix de l'étudiant.
-    - **is_correct** : Un booléen qui indique si le choix est correct.
+-   **Registered :** Ce modèle représente une relation entre un étudiant et un cours. Elle permet de savoir quel étudiant
+    est inscrit à quel cours. Il contient les attributs suivants :
+
+    -   **student** : L'étudiant.
+    -   **course** : Le cours.
+
+-   **Message :** Ce modèle représente un message. Un message est émis entre deux étudiants. Il contient les attributs
+    suivants :
+
+    -   **id** : l'identifiant du message pour la base de données.
+    -   **content** : Le contenu du message.
+    -   **date** : La date du message.
+    -   **to_user** : L'envoyeur du message.
+    -   **from_user** : Le receveur du message.
+
+-   **See :** Ce modèle représente une relation entre une annonce et un utilisateur. Il permet de savoir quel utilisateur
+    a
+    vu quel announce. Il contient les attributs suivants :
+
+    -   **annoucement** : L'annonce émis par un professeur (modèle Teacher).
+    -   **user** : L'utilisateur.
+
+-   **FeedbackActivity :** Ce modèle represente un feedback d'un étudiant envers l'activité d'un professeur. Il contient
+    les attributs suivants :
+
+    -   **id** : l'identifiant du feedback pour la base de données.
+    -   **student** : L'étudiant qui a donné le feedback.
+    -   **activity** : L'activité pour laquelle le feedback est donné.
+    -   **evaluation** : L'évaluation de l'activité (échelle de 1 à 10).
+    -   **positive_point** : Les points positifs de l'activité.
+    -   **negative_point** : Les points négatifs de l'activité.
+    -   **suggestion** : Les suggestions pour améliorer l'activité.
+    -   **additional_comment** : Les commentaires additionnels.
+    -   **date_submitted** : La date à laquelle le feedback a été soumis.
+
+-   **Questionnaire :** Ce modèle représentaire un questionnaire qu'un profeseur peut créer pour tel cours. Il contient
+    les attributs suivants :
+
+    -   **id** : l'identifiant du questionnaire pour la base de données.
+    -   **course** : Le cours pour lequel le questionnaire est créé.
+    -   **title** : Le titre du questionnaire.
+    -   **description** : La description du questionnaire.
+    -   **points_total** : Le nombre de points total du questionnaire.
+    -   **date_start** : La date à laquelle le questionnaire a été créé.
+    -   **date_end** : La date limite à laquelle le questionnaire prendra fin.
+    -   **language** : La langue du questionnaire.
+
+-   **Question :** Ce modèle représente une question d'un questionnaire. Il contient les attributs suivants :
+
+    -   **id** : l'identifiant de la question pour la base de données.
+    -   **questionnaire** : Le questionnaire auquel la question appartient.
+    -   **question** : La question (ouvert, choix multiple, etc...).
+    -   **points** : Le nombre de points de la question.
+
+-   **OpenAnswer** : Ce modèle représente une réponse ouverte à une question. Il contient les attributs suivants :
+
+    -   **id** : l'identifiant de la réponse pour la base de données.
+    -   **question** : La question à laquelle la réponse est donnée.
+    -   **student** : L'étudiant qui a donné la réponse.
+    -   **answer** : La réponse donnée par l'étudiant.
+    -   **is_correct** : Un booléen qui indique si la réponse est correcte.
+
+-   **ChoiceAnswer :** Ce modèle représente une réponse à choix multiple à une question. Il contient les attributs
+    suivants
+    :
+
+    -   **id** : l'identifiant de la réponse pour la base de données.
+    -   **question** : La question à laquelle la réponse est donnée.
+    -   **student** : L'étudiant qui a donné la réponse.
+
+-   **ChoiceAnswerInstance :** Ce modèle représente une instance de réponse à choix multiple. Il contient les attributs
+    suivants :
+    -   **id** : l'identifiant de l'instance de réponse pour la base de données.
+    -   **choice_answer** : La réponse à choix multiple.
+    -   **choice** : Le choix de l'étudiant.
+    -   **is_correct** : Un booléen qui indique si le choix est correct.
 
 **Notes :** Pour plus d'informations sur les modèles, veuillez consulter les fichiers _models.py_ de l'application
 django _database_. De plus, un schéma de la base donnée, sous sa forme entité relation et relationnel, est disponible
 dans le dossier _database_. Ils portent les noms de _**g4s_ER.png**_ et _**g4s_rel_model.png**_. Un fichier .lun est
 aussi
 disponible, qui peut être ouvert avec le logiciel **DB-Main**, afin de modifier les schémas.
+
+### Feedback
+
+Cette application aura pour objectif de gérer les feedback pour diverses activités. À la fin d'une activité, les utilisateurs auront la possibilité de soumettre un feedback personnalisé.
+
+#### Serializers (Feedback)
+
+(à completer)
+
+#### Tests (Feedback)
+
+Conntient un ensemble de tests pour vérifier les éléments suivants :
+
+-   \*\*
+
+#### Urls (Feedback)
+
+Les différentes urls de l'application _feedback_ sont définies dans le fichier _urls.py_. Elles sont en liens avec les vues décrites plus bas.
+
+#### Validations (Feedback)
+
+Dans le fichier _validations.py_ de l'application _feedback_, nous avons des méthodes qui s'occupent de valider les différents data donnés par un utilisateur lorsqu'il remplit un feedback.
+
+#### Vues (Feedback)
+
+(à completer)
 
 ### Rolemanagement
 
@@ -606,7 +658,9 @@ l'autre et allouer certaines permissions à chaque role.
 
 #### Tests (Rolemanagement)
 
-(à completer)
+Conntient un ensemble de tests pour vérifier les éléments suivants :
+
+-   \*\*
 
 #### Urls (Rolemanagement)
 
@@ -759,51 +813,27 @@ urlpatterns = [
 ```
 
 [//]: # "### Vues Django"
-
 [//]: # "Les vues fonctionnent en utilisant l'APIView de l'API rest. Chaque vue possède une méthode _post_ et/ou _get_ qui sont"
-
 [//]: # "appelées quand la vue est appelée avec une requête HTTP GET ou POST."
-
 [//]: #
-
 [//]: # "- **UserRegisterView** : La vue qui s'occupe d'inscrire les utilisateurs. Elle reçoit les information de l'inscription"
-
 [//]: # "  dans la requête POST."
-
 [//]: #
-
 [//]: # "- **LoginView** : s'occupe de vérifier les credentials de l'utilisateur pour que celui-ci puisse se connecter. La vue"
-
 [//]: # "  fait appel aux méthodes _validate_username_ et _validate_password_ pour faire la validation des credentials."
-
 [//]: #
-
 [//]: # "- **LogoutView** : s'occupe de fermer la session de l'utilisateur."
-
 [//]: #
-
 [//]: # "- **CurrentUserView** : fonctionne avec un GET uniquement. Renvoie les informations de l'utilisateur connecté dans la"
-
 [//]: # "  session actuelle."
-
 [//]: #
-
 [//]: # "- **ActivityViewSet** :"
-
 [//]: #
-
 [//]: # "- **AttendViewSet** : renvoie toutes les _Activity_ auxquelles l'uilisateur est inscrit. Utilisée dans la page d'accueil"
-
 [//]: # "  et le calendrier."
-
 [//]: #
-
 [//]: # "- **RegisterToActivityView** : Permet d'inscrire un utilisateur à une activité."
-
 [//]: #
-
 [//]: # "### _validations.py_"
-
 [//]: #
-
 [//]: # "Ce fichier contient des méthodes qui s'occupe de valider les différents credentials donnés par un utilisateur."

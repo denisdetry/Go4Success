@@ -10,6 +10,13 @@ import {
     CheckBox,
 } from "react-native";
 
+interface Question {
+    questionnaire: string;
+    type: string;
+    points: number;
+    question: string;
+}
+
 const QuestionBox = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [openQuestions, setOpenQuestions] = useState([]);

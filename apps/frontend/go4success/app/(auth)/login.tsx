@@ -28,8 +28,8 @@ export default function Login() {
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            username: "uclouvainadmin",
-            password: "UCLadminpassword01@",
+            username: "",
+            password: "",
         },
     });
 

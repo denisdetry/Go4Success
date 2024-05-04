@@ -10,7 +10,6 @@ axiosConfig();
 export default function RoleManagement() {
     axiosConfig();
     const [userRole, setUserRole] = useState<UserRole[]>([]);
-    const [selectedValue, setSelectedValue] = useState("");
     const backendURL = process.env.EXPO_PUBLIC_API_URL;
 
     const [userInfo, setUserInfo] = useState([]);
@@ -242,10 +241,10 @@ const generateUsersInfoRole = (userInfo: any, userRole: any) => {
         const role = curr.is_professor
             ? "professor"
             : curr.is_tutor
-                ? "tutor"
-                : curr.is_superuser
-                    ? "superuser"
-                    : "student";
+            ? "tutor"
+            : curr.is_superuser
+            ? "superuser"
+            : "student";
         acc[curr.user] = role;
         return acc;
     }, {});

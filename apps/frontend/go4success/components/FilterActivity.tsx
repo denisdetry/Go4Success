@@ -157,15 +157,23 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         setRange({ startDate: null, endDate: null });
     };
 
+
     return (
         <>
-            <View style={{ width: "100%", justifyContent: "flex-start", marginTop: 10 }}>
+            <View style={styles.filterView}>
                 <ButtonComponent
                     text={t("translationButton.OpenFilter")}
                     onPress={toggleModal}
                     buttonType={"filter"}
                 />
+                <TextInput
+                    style={[stylesGlobal.inputLittle, { marginBottom: 0 }]}
+                    value={searchName}
+                    onChangeText={(text: string) => setSearchName(text)}
+                    placeholder={t("translationButton.SearchTitleWorkshop")}
+                />
             </View>
+
 
             {/* Modal view */}
             <Modal
@@ -182,8 +190,9 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                         }}>
                             <Ionicons name={"close"} color={Colors.primaryColor} size={24}></Ionicons>
                         </TouchableOpacity>
+
                         <TextInput
-                            style={stylesGlobal.inputLittle}
+                            style={[stylesGlobal.inputLittle]}
                             value={searchName}
                             onChangeText={(text: string) => setSearchName(text)}
                             placeholder={t("translationButton.SearchTitleWorkshop")}
@@ -310,6 +319,15 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 };
 
 const styles = StyleSheet.create({
+    filterView: {
+        flexWrap: "wrap",
+        flexDirection: "row",
+        gap: 10,
+        width: "100%",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        marginTop: 10,
+    },
     noDataText: {
         fontSize: 16,
         color: "gray",

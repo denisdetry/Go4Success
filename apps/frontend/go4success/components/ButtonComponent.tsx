@@ -13,12 +13,14 @@ type ButtonComponentProps = {
         | "close"
         | "clear"
         | "filter";
+    readonly style?: any;
 };
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({
                                                              text,
                                                              onPress,
                                                              buttonType,
+                                                             style = {},
                                                          }) => {
     const styles = StyleSheet.create({
         common: {
@@ -63,7 +65,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
     });
 
     return (
-        <TouchableOpacity style={[styles.common, styles[buttonType]]} onPress={onPress}>
+        <TouchableOpacity style={[styles.common, styles[buttonType], style]} onPress={onPress}>
             <Text style={styles.common}>{text}</Text>
         </TouchableOpacity>
     );

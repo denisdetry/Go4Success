@@ -24,7 +24,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
                                                          }) => {
     const styles = StyleSheet.create({
         common: {
-            borderRadius: 10,
+            borderRadius: 15,
             padding: 8,
             margin: 4,
             fontWeight: "500",
@@ -49,7 +49,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
         },
         filter: {
             backgroundColor: Colors.primaryColor,
-            borderRadius: 10,
+            borderRadius: 15,
             padding: 4,
             margin: 4,
             marginLeft: 0,
@@ -57,7 +57,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
         },
         clear: {
             backgroundColor: Colors.primaryColor,
-            borderRadius: 10,
+            borderRadius: 15,
             padding: 4,
             margin: 10,
             marginTop: -25,

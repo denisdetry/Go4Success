@@ -166,12 +166,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                     onPress={toggleModal}
                     buttonType={"filter"}
                 />
-                <TextInput
-                    style={[stylesGlobal.inputLittle, { marginBottom: 0 }]}
-                    value={searchName}
-                    onChangeText={(text: string) => setSearchName(text)}
-                    placeholder={t("translationButton.SearchTitleWorkshop")}
-                />
+                
             </View>
 
 

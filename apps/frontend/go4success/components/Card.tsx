@@ -180,7 +180,7 @@ const Card: React.FC<CardProps> = ({
     const ModalTextComponent: React.FC<ModalTextComponentProps> = ({ title, content, icon }) => {
         return (
             <View style={styles.modalTextView}>
-                {icon && (<Ionicons name={icon} size={24} color={Colors.primaryColor} />)}
+                {icon && <Ionicons name={icon} size={24} color={Colors.primaryColor} />}
                 <Text style={[styles.modalText, { fontWeight: "700" }]}>
                     {title} :
                     <Text style={[styles.modalText, { textAlign: "justify" }]}> {content}</Text>
@@ -212,10 +212,14 @@ const Card: React.FC<CardProps> = ({
                             </TouchableOpacity>
                         </View>
 
-                        <View style={[styleFunctions.getModalDataStyle(type), { flexWrap: "wrap" }]}>
+                        <View style={[styleFunctions.getModalDataStyle(type), {
+                            flexWrap: "wrap",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            alignContent: "center",
+                        }]}>
 
-                            <ModalTextComponent title={t("translateCard.date")} content={date}
-                                                icon={"calendar-number"} />
+                            <ModalTextComponent title={t("translateCard.date")} content={date} icon={"calendar"} />
                             <ModalTextComponent title={t("translateCard.hour")} content={hour} icon={"time"} />
                             <ModalTextComponent title={t("translateCard.place")} content={location} icon={"location"} />
                             <ModalTextComponent title={t("translateCard.type")} content={type} icon={"list"} />
@@ -345,7 +349,8 @@ const styles = StyleSheet.create({
     modalView: {
         backgroundColor: Colors.workshopLightColor,
         borderRadius: 20,
-        width: "95%",
+        width: Platform.OS !== "web" ? "95%" : undefined,
+        maxWidth: Platform.OS === "web" ? "95%" : undefined,
         alignItems: "center",
         shadowColor: "#000",
         shadowOpacity: 0.25,

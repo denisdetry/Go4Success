@@ -19,10 +19,6 @@ function isListIncluded(mainList: any[][], searchList: any[]): boolean {
         (subList) =>
             subList.length === searchList.length &&
             subList.every((value, index) => value === searchList[index]),
-    return mainList.some(
-        (subList) =>
-            subList.length === searchList.length &&
-            subList.every((value, index) => value === searchList[index]),
     );
 }
 

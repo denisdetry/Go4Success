@@ -241,14 +241,10 @@ export default function Layout() {
                                     size={size}
                                     color={color}
                                 />
-                                <Ionicons
-                                    name="notifications"
-                                    size={size}
-                                    color={color}
-                                />
                             ),
                         }}
                     />
+
                     <Drawer.Screen
                         name="feedbacklist"
                         options={{

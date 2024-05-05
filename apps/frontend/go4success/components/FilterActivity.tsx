@@ -9,12 +9,10 @@ import {
     View,
 } from "react-native";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
-import { ItemType } from "react-native-dropdown-picker";
 import { useTranslation } from "react-i18next";
 
 import Card from "./Card";
 import ButtonComponent from "./ButtonComponent";
-import SelectSearch, { SelectItem } from "./SelectSearch";
 import { convertDateToISO } from "@/utils/dateUtils";
 import RenderCarousel from "@/components/RenderCarousel";
 import { useSites } from "@/hooks/useSites";

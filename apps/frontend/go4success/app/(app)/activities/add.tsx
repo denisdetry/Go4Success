@@ -17,6 +17,7 @@ import { useRooms } from "@/hooks/useRooms";
 import InputAutocomplete from "@/components/InputAutocomplete";
 import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from "dayjs";
+import "dayjs/plugin/timezone";
 import { useLanguages } from "@/hooks/useLanguages";
 import * as yup from "yup";
 import { InferType } from "yup";
@@ -30,6 +31,7 @@ import { generateHourQuarterList } from "@/utils/generateHourQuarterList";
 const hourQuarterList = generateHourQuarterList();
 
 export default function Add() {
+    const timezoneOffset = dayjs().utcOffset() / 60;
     const { t } = useTranslation();
 
     const schema = yup.object().shape({
@@ -88,7 +90,7 @@ export default function Add() {
             // Check if the key as a number of endTime is greater than the key of beginTime (hour is greater)
             .test(
                 "is-greater",
-                "translationActivities.yupEndTimeGreater",
+                t("translationActivities.yupEndTimeGreater"),
                 function () {
                     const beginTime = this.parent.beginTime;
                     const endTime = this.parent.endTime;
@@ -166,20 +168,27 @@ export default function Add() {
 
     const createActivity: SubmitHandler<AddActivity> = async (data) => {
         const dates = data.activityDate.map((date) => {
-            return [
-                dayjs(date)
-                    .set("hour", Number(data.beginTime.value.split(":")[0]))
-                    .set("minute", Number(data.beginTime.value.split(":")[1]))
-                    .toJSON(),
-                dayjs(date)
-                    .set("hour", Number(data.endTime.value.split(":")[0]))
-                    .set("minute", Number(data.endTime.value.split(":")[1]))
-                    .toJSON(),
-            ];
+            const beginHour = dayjs(date)
+                .set(
+                    "hour",
+                    Number(data.beginTime.value.split(":")[0]) +
+                        Number(timezoneOffset),
+                )
+                .set("minute", Number(data.beginTime.value.split(":")[1]))
+                .toJSON();
+            const endHour = dayjs(date)
+                .set(
+                    "hour",
+                    Number(data.endTime.value.split(":")[0]) +
+                        Number(timezoneOffset),
+                )
+                .set("minute", Number(data.endTime.value.split(":")[1]))
+                .toJSON();
+
+            return [beginHour, endHour];
         });
         const errors = [];
         for (const date of dates) {
-            console.log(date[0], date[1]);
             const formattedData = {
                 type: "workshop",
                 title: data.title,
@@ -190,7 +199,6 @@ export default function Add() {
                 dateStart: date[0],
                 dateEnd: date[1],
             };
-            console.log(formattedData);
             try {
                 await fetchBackend({
                     type: "POST",

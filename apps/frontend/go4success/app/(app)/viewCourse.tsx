@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useCourses } from "@/hooks/useQuestionnaire";
+import { useNavigation } from "@react-navigation/native";
+import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack";
+import Questionnaire from "./questionnaire";
 import {
     StyleSheet,
     View,
@@ -8,6 +11,64 @@ import {
     TouchableOpacity,
     ActivityIndicator,
 } from "react-native";
+
+type StackNavigatorParams = {
+    Questionnaire: { courseCode: string; courseName: string };
+};
+
+const CoursesComponent = ({ createQuestionnaire }) => {
+    const { isPending, sites, error } = useCourses();
+    const Stack = createStackNavigator<StackNavigatorParams>();
+    const navigation =
+        useNavigation<StackNavigationProp<StackNavigatorParams, "Questionnaire">>();
+    if (isPending) {
+        return <ActivityIndicator size="large" color="#0000ff" />;
+    }
+
+    if (error) {
+        return <Text>Erreur : {error.message}</Text>;
+    }
+
+    return (
+        <FlatList
+            data={sites}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+                <View style={styles.listItem}>
+                    <View>
+                        <Text style={styles.listItemText}>{item.name}</Text>
+                        <Text style={styles.listItemCode}>{item.code}</Text>
+                    </View>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() =>
+                            navigation.navigate("Questionnaire", {
+                                courseCode: item.code,
+                                courseName: item.name,
+                            })
+                        }
+                    >
+                        <Text style={styles.buttonText}>Créer questionnaire</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
+        />
+    );
+};
+
+const ViewCourse = () => {
+    const createQuestionnaire = (courseId) => {
+        console.log("Créer questionnaire pour le cours:", courseId);
+    };
+
+    return (
+        <View style={styles.container}>
+            <CoursesComponent createQuestionnaire={createQuestionnaire} />
+        </View>
+    );
+};
+
+export default ViewCourse;
 
 const styles = StyleSheet.create({
     container: {
@@ -47,50 +108,3 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
 });
-
-const CoursesComponent = ({ createQuestionnaire }) => {
-    const { isPending, sites, error } = useCourses();
-
-    if (isPending) {
-        return <ActivityIndicator size="large" color="#0000ff" />;
-    }
-
-    if (error) {
-        return <Text>Erreur : {error.message}</Text>;
-    }
-
-    return (
-        <FlatList
-            data={sites}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-                <View style={styles.listItem}>
-                    <View>
-                        <Text style={styles.listItemText}>{item.name}</Text>
-                        <Text style={styles.listItemCode}>{item.code}</Text>
-                    </View>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => createQuestionnaire(item.id)}
-                    >
-                        <Text style={styles.buttonText}>Créer questionnaire</Text>
-                    </TouchableOpacity>
-                </View>
-            )}
-        />
-    );
-};
-
-const ViewCourse = () => {
-    const createQuestionnaire = (courseId) => {
-        console.log("Créer questionnaire pour le cours:", courseId);
-    };
-
-    return (
-        <View style={styles.container}>
-            <CoursesComponent createQuestionnaire={createQuestionnaire} />
-        </View>
-    );
-};
-
-export default ViewCourse;

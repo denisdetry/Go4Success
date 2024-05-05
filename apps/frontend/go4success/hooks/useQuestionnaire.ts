@@ -1,6 +1,7 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
 import { useState } from "react";
+
 export type Courses = {
     id: string;
     code: string;

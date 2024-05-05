@@ -126,6 +126,8 @@ export default function FeedbackAnswer(props: Readonly<FeedbackAnswerScreenProps
                 data: feedbackDataDefault,
             });
 
+            console.log("TEST 1");
+
             if (firstFeedbackId !== "") {
                 const customQuestions = feedbackAdditionalQuestions;
 
@@ -133,7 +135,7 @@ export default function FeedbackAnswer(props: Readonly<FeedbackAnswerScreenProps
                     const feedbackDataSuppQuestion = {
                         student_id: user.id,
                         feedback: firstFeedbackId,
-                        question: question.id,
+                        question_id: question.id,
                         answer: responses[question.id],
                     };
 

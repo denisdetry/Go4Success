@@ -283,7 +283,11 @@ const Card: React.FC<CardProps> = ({
 
                         <View
                             style={[
-                                styleFunctions.getModalDataStyle(type),
+                                styleFunctions.getModalDataStyle(
+                                    type,
+                                    newDateEnd,
+                                    currentDate,
+                                ),
                                 {
                                     flexWrap: "wrap",
                                     justifyContent: "center",

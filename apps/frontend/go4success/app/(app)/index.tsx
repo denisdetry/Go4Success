@@ -81,7 +81,9 @@ export default function Index() {
 
             {/* All Activities container */}
             <View style={styles.container}>
-                <Text style={styles.titleNoPadding}>Ateliers disponibles</Text>
+                <Text style={styles.titleNoPadding}>
+                    {t("translation.workshopAll")}
+                </Text>
                 <FilterActivity filterType={"activity"}></FilterActivity>
             </View>
 

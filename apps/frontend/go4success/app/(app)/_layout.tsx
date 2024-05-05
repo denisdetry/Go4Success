@@ -207,12 +207,12 @@ export default function Layout() {
                     <Drawer.Screen
                         name="feedbacklist"
                         options={{
-                            /*drawerItemStyle: {
+                            drawerItemStyle: {
                                 display:
                                     user?.is_superuser || user?.is_staff
                                         ? "flex"
                                         : "none",
-                            },*/
+                            },
                             drawerLabel: t("translateFeedback.show"),
                             headerTitle: t("translateFeedback.show"),
                             drawerIcon: ({ size, color }) => (

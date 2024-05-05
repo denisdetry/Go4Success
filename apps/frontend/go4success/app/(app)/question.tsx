@@ -9,8 +9,17 @@ import {
     ScrollView,
     CheckBox,
 } from "react-native";
+import Toast from "react-native-toast-message";
 
-interface Question {
+interface ClosedQuestion {
+    questionnaire: string;
+    type: string;
+    points: number;
+    question: string;
+    options: string[];
+}
+
+interface OpenQuestion {
     questionnaire: string;
     type: string;
     points: number;
@@ -35,13 +44,18 @@ const QuestionBox = () => {
         <View style={styles.container}>
             <ScrollView>
                 {openQuestions.map((_, index) => (
-                    <OpenQuestionBox key={index} id={index} />
+                    <OpenQuestionBox
+                        key={index}
+                        id={index}
+                        setOpenQuestions={setOpenQuestions}
+                    />
                 ))}
                 {closedQuestions.map((_, index) => (
                     <ClosedQuestionBox
                         key={index}
                         id={index}
                         style={styles.optionInput}
+                        setClosedQuestions={setClosedQuestions}
                     />
                 ))}
             </ScrollView>
@@ -81,8 +95,30 @@ const QuestionBox = () => {
     );
 };
 
-const OpenQuestionBox = ({ id }) => {
+const OpenQuestionBox = ({ id, setOpenQuestions }) => {
     const [question, setQuestion] = useState("");
+    const [points, setPoints] = useState(0);
+
+    const handleSaveQuestion = () => {
+        const newQuestion: OpenQuestion = {
+            questionnaire: "Some Questionnaire",
+            type: "open",
+            points: 10,
+            question: question,
+        };
+
+        setOpenQuestions((prevQuestions) => {
+            const updatedQuestions = [...prevQuestions];
+            updatedQuestions[id] = newQuestion; // replace the question at the correct index
+            return updatedQuestions;
+        });
+
+        Toast.show({
+            type: "success", // Utilisez 'success', 'error', etc., selon le thème
+            text1: "Succès",
+            text2: "question enregistrée",
+        });
+    };
 
     return (
         <View style={styles.openQuestionContainer}>
@@ -93,27 +129,39 @@ const OpenQuestionBox = ({ id }) => {
                 value={question}
                 placeholder="Ecrivez votre question ici..."
             />
+
+            <TextInput
+                style={styles.pointsInput}
+                onChangeText={(value) => setPoints(Number(value))}
+                value={String(points)}
+                placeholder="Entrez les points ici"
+                keyboardType="numeric"
+            />
+
+            <Button title="Sauvegarder question" onPress={handleSaveQuestion} />
         </View>
     );
 };
 
-const ClosedQuestionBox = ({ id }) => {
+const ClosedQuestionBox = ({ id, setClosedQuestions }) => {
     const [question, setQuestion] = useState("");
     const [options, setOptions] = useState([""]);
     const [isChecked, setIsChecked] = useState(false);
     const [checked, setChecked] = useState([{ text: "", isChecked: false }]);
+    const [points, setPoints] = useState(0);
 
     const handleCheck = (index) => {
-        setChecked((prevOptions) =>
-            prevOptions.map((option, optIndex) =>
-                optIndex === index
-                    ? { ...option, isChecked: !option.isChecked }
-                    : option,
+        setChecked((prevChecked) =>
+            prevChecked.map((check, checkIndex) =>
+                checkIndex === index
+                    ? { ...check, isChecked: !check.isChecked }
+                    : check,
             ),
         );
     };
     const handleAddOption = () => {
         setOptions((prevOptions) => [...prevOptions, ""]);
+        setChecked((prevChecked) => [...prevChecked, { text: "", isChecked: false }]);
     };
 
     const handleOptionChange = (text, index) => {
@@ -121,25 +169,61 @@ const ClosedQuestionBox = ({ id }) => {
         newOptions[index] = text;
         setOptions(newOptions);
     };
+    const handleSaveQuestion = () => {
+        const newQuestion: ClosedQuestion = {
+            questionnaire: "Some Questionnaire",
+            type: "closed",
+            points: 10,
+            question: question,
+            options: options,
+        };
 
+        setClosedQuestions((prevQuestions) => {
+            const updatedQuestions = [...prevQuestions];
+            updatedQuestions[id] = newQuestion; // replace the question at the correct index
+            return updatedQuestions;
+        });
+
+        Toast.show({
+            type: "success", // Utilisez 'success', 'error', etc., selon le thème
+            text1: "Succès",
+            text2: "question enregistrée",
+        });
+    };
     return (
         <View style={styles.closedQuestionContainer}>
             <Text style={styles.questionText}>Choix multiple #{id + 1}</Text>
+            <Text style={styles.optionText}>question : </Text>
+
+            <TextInput style={styles.optionInput} />
+
             {options.map((option, index) => (
                 <View key={index} style={styles.optionContainer}>
                     <Text style={styles.optionText}>Option #{index + 1}</Text>
-
                     <TextInput
                         style={styles.optionInput}
                         onChangeText={(text) => handleOptionChange(text, index)}
                         value={option}
                     />
-                    <CheckBox value={checked} onValueChange={handleCheck} />
+                    <CheckBox
+                        value={checked[index].isChecked}
+                        onValueChange={() => handleCheck(index)}
+                    />
                 </View>
             ))}
             <View style={styles.addButton}>
                 <Button title="Ajouter une option" onPress={handleAddOption} />
             </View>
+
+            <TextInput
+                style={styles.pointsInput}
+                onChangeText={(value) => setPoints(Number(value))}
+                value={String(points)}
+                placeholder="Entrez les points ici"
+                keyboardType="numeric"
+            />
+
+            <Button title="Sauvegarder question" onPress={handleSaveQuestion} />
         </View>
     );
 };
@@ -244,6 +328,14 @@ const styles = StyleSheet.create({
     addButton: {
         width: "40%", // adjust this value as needed
         // ... rest of your styles ...
+    },
+
+    pointsInput: {
+        height: 40,
+        borderColor: "gray",
+        borderWidth: 1,
+        marginBottom: 10,
+        paddingLeft: 10,
     },
 });
 

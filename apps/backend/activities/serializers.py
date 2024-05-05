@@ -2,7 +2,15 @@ from database.models import Activity, Attend, Give, Site, Room, Course, Language
 from rest_framework import serializers
 
 
+class SiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Site
+        fields = ('id', 'name')
+
+
 class RoomSerializer(serializers.ModelSerializer):
+    site = SiteSerializer(read_only=True)
+
     class Meta:
         model = Room
         fields = ('id', 'name', 'site')
@@ -44,18 +52,19 @@ class ActivitySerializer(serializers.ModelSerializer):
         return
 
 
+class ActivityCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Activity
+        fields = ('type', 'name', 'description', 'date_start',
+                  'date_end', 'room', 'course', 'language')
+
+
 class AttendSerializer(serializers.ModelSerializer):
     activity = ActivitySerializer(read_only=True)
 
     class Meta:
         model = Attend
         fields = ('activity', 'student')
-
-
-class SiteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Site
-        fields = ('id', 'name')
 
 
 class RegisterToActivitySerializer(serializers.ModelSerializer):

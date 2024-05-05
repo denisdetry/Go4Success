@@ -1,15 +1,20 @@
-import { SelectItem } from "@/components/SelectSearch";
+import { SelectItem } from "@/types/SelectItem";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { fetchBackend } from "@/utils/fetchBackend";
+import { Site } from "@/hooks/useSites";
+import { useTranslation } from "react-i18next";
 
 export type Room = {
     id: string;
     name: string;
-    site: string;
+    site: Site;
 };
 
-export function useRooms(siteId: string | undefined, sites: SelectItem[]) {
-    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+export function useRooms(
+    siteId: string | undefined,
+    allValues: boolean = false,
+) {
+    const { t } = useTranslation();
 
     const {
         isPending,
@@ -18,18 +23,42 @@ export function useRooms(siteId: string | undefined, sites: SelectItem[]) {
     } = useQuery<SelectItem[]>({
         queryKey: ["rooms", siteId],
         queryFn: async () => {
-            const response = await axios.get(
-                `${backend_url}/activities/rooms/` + (siteId ? `site/${siteId}/` : ""),
-            );
-            return response.data.map((room: Room) => ({
-                label:
-                    room.name +
-                    " - " +
-                    sites.find((site) => site.value === room.site)?.label,
-                value: room.id,
+            const { data, error } = await fetchBackend({
+                type: "GET",
+                url: "activities/rooms/" + (siteId ? `site/${siteId}/` : ""),
+            });
+
+            if (error) {
+                return [
+                    {
+                        key: "error",
+                        value: "Error fetching rooms",
+                    },
+                ];
+            }
+            const roomsList = data.map((room: Room) => ({
+                key: room.id,
+                value: room.name + " - " + room.site.name,
             }));
+
+            if (roomsList.length === 0) {
+                return [
+                    {
+                        key: "empty",
+                        value: t("translationHooks.NoRoomsFound"),
+                    },
+                ];
+            }
+
+            if (allValues) {
+                return [
+                    { key: "", value: t("translationHooks.AllValuesF") },
+                    ...roomsList,
+                ];
+            } else {
+                return roomsList;
+            }
         },
-        enabled: sites.length > 0,
     });
 
     return { isPending, rooms: rooms ?? [], error };

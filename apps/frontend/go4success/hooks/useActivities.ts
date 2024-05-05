@@ -29,8 +29,6 @@ export function useActivities(
     startDateISO: string | null,
     endDateISO: string | null,
 ) {
-    const backend_url = process.env.EXPO_PUBLIC_API_URL;
-
     const { isPending, data, error } = useQuery<Activity[]>({
         queryKey: [
             "activities",

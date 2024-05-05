@@ -19,6 +19,10 @@ function isListIncluded(mainList: any[][], searchList: any[]): boolean {
         (subList) =>
             subList.length === searchList.length &&
             subList.every((value, index) => value === searchList[index]),
+    return mainList.some(
+        (subList) =>
+            subList.length === searchList.length &&
+            subList.every((value, index) => value === searchList[index]),
     );
 }
 
@@ -51,26 +55,22 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         return <Redirect href={"/"} />;
     }
 
-    const deniedRoutesForNonSuperUser = [
-        ["(app)", "rolemanagement"],
-        //   ["(app)", "feedbacklist"],
-        //   ["(app)", "feedbackcreate"],
-    ];
+    const deniedRoutesForNonSuperUser = [["(app)", "rolemanagement"]];
 
-    const deniedRoutesForNonStaff = [
-        ["(app)", "rolemanagement"],
-        ["(app)", "feedbacklist"],
-        ["(app)", "feedbackcreate"],
-    ];
+    const deniedRoutesForNonStaff = [["(app)", "activities", "add"]];
 
-    const isNotSuperUser = !user?.is_superuser && user;
-    const isNotStaff = !user?.is_staff && user;
+    const isSuperUser = user?.is_superuser;
 
-    if (isNotSuperUser && isListIncluded(deniedRoutesForNonSuperUser, rootSegment)) {
+    const isStaff = user?.is_staff;
+
+    if (
+        !isSuperUser &&
+        isListIncluded(deniedRoutesForNonSuperUser, rootSegment)
+    ) {
         return <Redirect href={"/"} />;
     }
 
-    if (isNotStaff && isListIncluded(deniedRoutesForNonStaff, rootSegment)) {
+    if (!isStaff && isListIncluded(deniedRoutesForNonStaff, rootSegment)) {
         return <Redirect href={"/"} />;
     }
 
@@ -92,7 +92,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                     // eslint-disable-next-line camelcase
                                     first_name: userData.firstName,
                                     password: userData.password,
-                                    noma: userData.noma ? userData.noma : undefined,
+                                    noma: userData.noma
+                                        ? userData.noma
+                                        : undefined,
                                 },
                             });
 
@@ -112,7 +114,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 Toast.show({
                                     type: "success",
                                     text1: t("translateToast.SuccessText1"),
-                                    text2: t("translateToast.RegisterSuccessText2"),
+                                    text2: t(
+                                        "translateToast.RegisterSuccessText2",
+                                    ),
                                 });
                             }
                         } catch (err) {
@@ -131,7 +135,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                     Toast.show({
                                         type: "error",
                                         text1: t("translateToast.ErrorText1"),
-                                        text2: t("translateToast.ServerErrorText2"),
+                                        text2: t(
+                                            "translateToast.ServerErrorText2",
+                                        ),
                                     });
                                 }
                             }
@@ -151,8 +157,14 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         });
 
                         if (success) {
-                            await AsyncStorage.setItem("accessToken", success.access);
-                            await AsyncStorage.setItem("refreshToken", success.refresh);
+                            await AsyncStorage.setItem(
+                                "accessToken",
+                                success.access,
+                            );
+                            await AsyncStorage.setItem(
+                                "refreshToken",
+                                success.refresh,
+                            );
 
                             await queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
@@ -174,7 +186,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 Toast.show({
                                     type: "error",
                                     text1: t("translateToast.ErrorText1"),
-                                    text2: t("translateToast.LoginInfoErrorText2"),
+                                    text2: t(
+                                        "translateToast.LoginInfoErrorText2",
+                                    ),
                                 });
                             } else {
                                 Toast.show({

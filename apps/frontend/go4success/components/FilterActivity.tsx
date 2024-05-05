@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import {
     Modal,
+    SafeAreaView,
     StyleSheet,
     Text,
     TextInput,
@@ -20,6 +21,7 @@ import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
 import { Activity, useActivities } from "@/hooks/useActivities";
 import { useLanguages } from "@/hooks/useLanguages";
+import InputAutocomplete from "@/components/selectors/InputAutocomplete";
 import { Ionicons } from "@expo/vector-icons";
 
 import Colors from "../constants/Colors";
@@ -38,27 +40,24 @@ type ActivityOrAttend = Activity | Attend;
 
 const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const { t } = useTranslation();
-    const [siteOpen, setSiteOpen] = React.useState(false);
-    const [roomOpen, setRoomOpen] = React.useState(false);
-    const [languageOpen, setLanguageOpen] = React.useState(false);
     const [searchName, setSearchName] = useState("");
-    const [selectedRoom, setSelectedRoom] = useState<SelectItem>();
-    const [selectedSite, setSelectedSite] = useState<SelectItem>();
-    const [selectedLanguage, setSelectedLanguage] = useState<SelectItem>();
+    const [selectedRoomKey, setSelectedRoomKey] = useState<string>("");
+    const [selectedSiteKey, setSelectedSiteKey] = useState<string>("");
+    const [selectedLanguageKey, setSelectedLanguageKey] = useState<string>("");
 
-    const [range, setRange] = React.useState<{
+    const [range, setRange] = useState<{
         startDate: DateType;
         endDate: DateType;
     }>({ startDate: undefined, endDate: undefined });
 
-    const { sites, error: siteError } = useSites();
-    const allSites = [{ label: "All", value: "" }, ...sites];
+    const { sites, error: siteError } = useSites(undefined, true);
 
-    const { rooms, error: roomError } = useRooms(selectedSite?.value, sites);
-    const allRooms = [{ label: "All", value: "" }, ...rooms];
+    const { rooms, error: roomError } = useRooms(
+        selectedSiteKey ? selectedSiteKey : "",
+        true,
+    );
 
-    const { languages, error: languageError } = useLanguages();
-    const allLanguages = [{ label: "All", value: "" }, ...languages];
+    const { languages, error: languageError } = useLanguages(undefined, true);
 
     const onChange = useCallback(
         (range: { startDate: DateType; endDate: DateType }) => {
@@ -67,13 +66,34 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         [],
     );
 
+    const siteCallback = useCallback(
+        (siteKey: string) => {
+            setSelectedSiteKey(siteKey);
+        },
+        [setSelectedSiteKey],
+    );
+
+    const roomCallback = useCallback(
+        (roomKey: string) => {
+            setSelectedRoomKey(roomKey);
+        },
+        [setSelectedRoomKey],
+    );
+
+    const languageCallback = useCallback(
+        (languageKey: string) => {
+            setSelectedLanguageKey(languageKey);
+        },
+        [setSelectedLanguageKey],
+    );
+
     const { data: registeredActivities } = useActivities(
         "attends",
         "",
         searchName,
-        selectedRoom?.value,
-        selectedSite?.value,
-        selectedLanguage?.value,
+        selectedRoomKey,
+        selectedSiteKey,
+        selectedLanguageKey,
         convertDateToISO(range.startDate),
         convertDateToISO(range.endDate),
     );
@@ -82,16 +102,15 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         "activity",
         "",
         searchName,
-        selectedRoom?.value,
-        selectedSite?.value,
-        selectedLanguage?.value,
+        selectedRoomKey,
+        selectedSiteKey,
+        selectedLanguageKey,
         convertDateToISO(range.startDate),
         convertDateToISO(range.endDate),
     );
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         const activity = "activity" in item ? item.activity : item;
-        const siteName = sites.find((site) => site.value === activity.room.site)?.label;
 
         const activityDate = activity.date_start.split(" - ")[0];
         const activityHour =
@@ -103,7 +122,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
             <Card
                 id={activity.id}
                 title={activity.name}
-                location={activity.room.name + " - " + siteName}
+                location={activity.room.name + " - " + activity.room.site.name}
                 date={activityDate}
                 hour={activityHour}
                 type={activity.type}
@@ -151,9 +170,9 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
     const handleClearFilter = () => {
         setSearchName("");
-        setSelectedRoom(undefined);
-        setSelectedSite(undefined);
-        setSelectedLanguage(undefined);
+        setSelectedRoomKey("");
+        setSelectedSiteKey("");
+        setSelectedLanguageKey("");
         setRange({ startDate: null, endDate: null });
     };
 
@@ -188,56 +207,43 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                                 size={24}
                             ></Ionicons>
                         </TouchableOpacity>
+                        <SafeAreaView style={{ gap: 10 }}>
+                            <TextInput
+                                style={stylesGlobal.inputLittle}
+                                value={searchName}
+                                onChangeText={(text: string) =>
+                                    setSearchName(text)
+                                }
+                                placeholder={t(
+                                    "translationButton.SearchTitleWorkshop",
+                                )}
+                            />
 
-                        <TextInput
-                            style={[stylesGlobal.inputLittle]}
-                            value={searchName}
-                            onChangeText={(text: string) => setSearchName(text)}
-                            placeholder={t("translationButton.SearchTitleWorkshop")}
-                        />
+                            <InputAutocomplete
+                                items={sites}
+                                placeholder={t("translationButton.SelectSite")}
+                                toReturn={"key"}
+                                readOnly={true}
+                                onChange={siteCallback}
+                            />
 
-                        <SelectSearch
-                            zIndex={100}
-                            items={allSites}
-                            placeholder={t("translationButton.SelectSite")}
-                            searchable={true}
-                            onSelectItem={(item) => {
-                                setSelectedSite(item as Required<ItemType<string>>);
-                            }}
-                            open={siteOpen}
-                            setOpen={setSiteOpen}
-                            value={selectedSite?.value ?? null}
-                        />
+                            <InputAutocomplete
+                                items={rooms}
+                                placeholder={t("translationButton.SelectRoom")}
+                                toReturn={"key"}
+                                onChange={roomCallback}
+                            />
 
-                        <View style={{ height: 10 }} />
-
-                        <SelectSearch
-                            zIndex={99}
-                            items={allRooms}
-                            placeholder={t("translationButton.SelectRoom")}
-                            searchable={true}
-                            onSelectItem={(item) => {
-                                setSelectedRoom(item as Required<ItemType<string>>);
-                            }}
-                            open={roomOpen}
-                            setOpen={setRoomOpen}
-                            value={selectedRoom?.value ?? null}
-                        />
-
-                        <View style={{ height: 10 }} />
-
-                        <SelectSearch
-                            zIndex={98}
-                            items={allLanguages}
-                            placeholder={t("translationButton.SelectLanguage")}
-                            searchable={true}
-                            onSelectItem={(item) => {
-                                setSelectedLanguage(item as Required<ItemType<string>>);
-                            }}
-                            open={languageOpen}
-                            setOpen={setLanguageOpen}
-                            value={selectedLanguage?.value ?? null}
-                        />
+                            <InputAutocomplete
+                                items={languages}
+                                placeholder={t(
+                                    "translationButton.SelectLanguage",
+                                )}
+                                toReturn={"key"}
+                                readOnly={true}
+                                onChange={languageCallback}
+                            />
+                        </SafeAreaView>
 
                         <View
                             style={{
@@ -255,8 +261,12 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                                     endDate={range.endDate}
                                     onChange={onChange}
                                     selectedItemColor={Colors.primaryColor}
-                                    headerContainerStyle={{ backgroundColor: "white" }}
-                                    headerTextStyle={{ color: Colors.thirdColor }}
+                                    headerContainerStyle={{
+                                        backgroundColor: "white",
+                                    }}
+                                    headerTextStyle={{
+                                        color: Colors.thirdColor,
+                                    }}
                                 />
                             </View>
                             <ButtonComponent
@@ -306,7 +316,10 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
             {/* Cards views for all activity or filtered */}
             {filterType === "activity" &&
                 (allActivities !== undefined && allActivities.length > 0 ? (
-                    <RenderCarousel data={allActivities} renderItem={renderCards} />
+                    <RenderCarousel
+                        data={allActivities}
+                        renderItem={renderCards}
+                    />
                 ) : (
                     <Text style={stylesGlobal.text}>
                         {t("translation.noWorkshopAll")}

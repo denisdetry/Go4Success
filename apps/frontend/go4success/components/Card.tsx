@@ -44,7 +44,11 @@ type FeedbackAnswerScreenNavigationProp = StackNavigationProp<
 >;
 
 const styleFunctions = {
-    getModalViewTitleStyle: (type: string, newDateEnd: Date, currentDate: Date) => {
+    getModalViewTitleStyle: (
+        type: string,
+        newDateEnd: Date,
+        currentDate: Date,
+    ) => {
         if (newDateEnd > currentDate) {
             switch (type) {
                 case "Important":
@@ -236,7 +240,13 @@ const Card: React.FC<CardProps> = ({
     }) => {
         return (
             <View style={styles.modalTextView}>
-                {icon && <Ionicons name={icon} size={24} color={Colors.primaryColor} />}
+                {icon && (
+                    <Ionicons
+                        name={icon}
+                        size={24}
+                        color={Colors.primaryColor}
+                    />
+                )}
                 <Text style={[styles.modalText, { fontWeight: "700" }]}>
                     {title} :
                     <Text style={[styles.modalText, { textAlign: "justify" }]}>
@@ -332,7 +342,9 @@ const Card: React.FC<CardProps> = ({
                         <View style={styles.buttonContainer}>
                             {newDateEnd > currentDate ? (
                                 <ButtonComponent
-                                    text={t("translateRegisterActivity.registerButton")}
+                                    text={t(
+                                        "translateRegisterActivity.registerButton",
+                                    )}
                                     onPress={() => handleRegister.mutate()}
                                     buttonType={"primary"}
                                 />
@@ -349,7 +361,9 @@ const Card: React.FC<CardProps> = ({
                                 />
                             ) : null}
                             <ButtonComponent
-                                text={t("translateRegisterActivity.closeButton")}
+                                text={t(
+                                    "translateRegisterActivity.closeButton",
+                                )}
                                 onPress={() => setModalVisible(!modalVisible)}
                                 buttonType={"close"}
                             />
@@ -360,7 +374,11 @@ const Card: React.FC<CardProps> = ({
 
             {/* Card content */}
             <TouchableOpacity
-                style={styleFunctions.getCardStyle(type, newDateEnd, currentDate)}
+                style={styleFunctions.getCardStyle(
+                    type,
+                    newDateEnd,
+                    currentDate,
+                )}
                 onPress={() => setModalVisible(true)}
             >
                 <Text style={styles.title}>{title}</Text>

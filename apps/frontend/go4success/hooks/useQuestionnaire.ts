@@ -48,19 +48,25 @@ export function useCourses() {
 
     return { isPending, sites: sites ?? [], error };
 }
-
 export function usePostQuestionnaire() {
-    return useMutation(postQuestionnaire);
+    return useMutation({
+        mutationFn: postQuestionnaire,
+    });
 }
 
 async function postQuestionnaire(questionnaireData) {
-    const response = await fetch("/api/questionnaire", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
+    const response = await fetch(
+        `${backend_url}/postquestionnaire/postquestionnaire/`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(questionnaireData),
         },
-        body: JSON.stringify(questionnaireData),
-    });
+    );
 
     if (!response.ok) {
         throw new Error("Network response was not ok");

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useCourses, usePostQuestionnaire } from "@/hooks/useQuestionnaire";
+import { useRoute, RouteProp } from "@react-navigation/native";
+
 import {
     StyleSheet,
     View,
@@ -14,34 +16,55 @@ import { start } from "repl";
 import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from "dayjs";
 import Colors from "@/constants/Colors";
+
+type RouteParams = {
+    courseCode: number;
+    courseName: string;
+};
+type RootStackParamList = {
+    Questionnaire: RouteParams;
+};
+type QuestionnaireRouteProp = RouteProp<RootStackParamList, "Questionnaire">;
+
 export default function App() {
     const { mutate, error } = usePostQuestionnaire();
+    const route = useRoute<QuestionnaireRouteProp>();
     const [startdate, setStartDate] = useState(dayjs());
     const [enddate, setEndDate] = useState(dayjs());
+    const { courseCode, courseName } = route.params;
+    console.log(courseCode);
     const [formData, setFormData] = useState({
-        course: "",
+        course: courseCode,
         title: "",
         description: "",
-        points_total: "",
-        date_start: startdate,
-        date_end: enddate,
-        language: "",
+        points_total: 0,
+        date_start: startdate.format("YYYY-MM-DDTHH:mm:ss[Z]"),
+        date_end: enddate.format("YYYY-MM-DDTHH:mm:ss[Z]"),
+        language: 0,
     });
+
+    useEffect(() => {
+        setFormData((prev) => ({
+            ...prev,
+            date_start: startdate.format("YYYY-MM-DDTHH:mm:ss[Z]"),
+            date_end: enddate.format("YYYY-MM-DDTHH:mm:ss[Z]"),
+        }));
+    }, [startdate, enddate]);
 
     const handleChange = (name, value) => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = () => {
-        const questionnaire = { formData };
-        mutate(questionnaire);
+        console.log(startdate);
+        console.log(enddate);
+        mutate(formData);
     };
-
     if (error) return <Text style={styles.errorText}>Error: {error.message}</Text>;
 
     return (
-        <View>
-            <Text style={styles.title}>Create Questionnaire</Text>
+        <ScrollView>
+            <Text style={styles.title}>Create Questionnaire for {courseName}</Text>
             <TextInput
                 style={styles.input}
                 onChangeText={(text) => handleChange("title", text)}
@@ -55,37 +78,46 @@ export default function App() {
                 placeholder="Description"
                 multiline
             />
-            <View style={styles.labelContainer}>
-                <Text style={styles.label}>Start:</Text>
-                <DateTimePicker
-                    mode="single"
-                    locale="fr"
-                    date={startdate}
-                    onChange={(params) =>
-                        setStartDate(params.date ? dayjs(params.date) : dayjs())
-                    }
-                    selectedItemColor={Colors.primaryColor}
-                    headerContainerStyle={{
-                        backgroundColor: "white",
-                    }}
-                    headerTextStyle={{ color: Colors.thirdColor }}
-                />
-            </View>
-            <View style={styles.labelContainer}>
-                <Text style={styles.label}>end:</Text>
-                <DateTimePicker
-                    mode="single"
-                    locale="fr"
-                    date={enddate}
-                    onChange={(params) =>
-                        setEndDate(params.date ? dayjs(params.date) : dayjs())
-                    }
-                    selectedItemColor={Colors.primaryColor}
-                    headerContainerStyle={{
-                        backgroundColor: "white",
-                    }}
-                    headerTextStyle={{ color: Colors.thirdColor }}
-                />
+            <TextInput
+                style={styles.input}
+                onChangeText={(text) => handleChange("points_total", text)}
+                value={formData.points_total}
+                placeholder="Total points"
+                multiline
+            />
+            <View style={{ flexDirection: "row" }}>
+                <View style={styles.labelContainer}>
+                    <Text style={styles.label}>Start:</Text>
+                    <DateTimePicker
+                        mode="single"
+                        locale="fr"
+                        date={startdate}
+                        onChange={(params) =>
+                            setStartDate(params.date ? dayjs(params.date) : dayjs())
+                        }
+                        selectedItemColor={Colors.primaryColor}
+                        headerContainerStyle={{
+                            backgroundColor: "white",
+                        }}
+                        headerTextStyle={{ color: Colors.thirdColor }}
+                    />
+                </View>
+                <View style={[styles.labelContainer, { marginLeft: 80 }]}>
+                    <Text style={styles.label}>end:</Text>
+                    <DateTimePicker
+                        mode="single"
+                        locale="fr"
+                        date={enddate}
+                        onChange={(params) =>
+                            setEndDate(params.date ? dayjs(params.date) : dayjs())
+                        }
+                        selectedItemColor={Colors.primaryColor}
+                        headerContainerStyle={{
+                            backgroundColor: "white",
+                        }}
+                        headerTextStyle={{ color: Colors.thirdColor }}
+                    />
+                </View>
             </View>
             <Picker
                 style={styles.picker}
@@ -95,11 +127,11 @@ export default function App() {
                 }
             >
                 <Picker.Item label="Select Language" value="" />
-                <Picker.Item label="English" value="English" />
-                <Picker.Item label="French" value="French" />
+                <Picker.Item label="English" value="1" />
+                <Picker.Item label="French" value="2" />
             </Picker>
             <Button title="Next" onPress={handleSubmit} color="#0066cc" />
-        </View>
+        </ScrollView>
     );
 }
 

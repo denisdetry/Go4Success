@@ -13,7 +13,7 @@ import {
 } from "react-native";
 
 type StackNavigatorParams = {
-    Courses: undefined; // Ajoutez cette ligne
+    Courses: undefined;
     Questionnaire: { courseCode: string; courseName: string };
 };
 
@@ -46,7 +46,7 @@ const CoursesComponent = ({ createQuestionnaire } = {}) => {
                         style={styles.button}
                         onPress={() =>
                             navigation.navigate("Questionnaire", {
-                                courseCode: item.code,
+                                courseCode: item.id,
                                 courseName: item.name,
                             })
                         }

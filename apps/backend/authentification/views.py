@@ -2,6 +2,7 @@ from database.models import ExpoToken
 from database.models import User
 from django.http import JsonResponse
 from django.middleware import csrf
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status, generics
 from rest_framework import viewsets
@@ -68,9 +69,6 @@ class ExpoTokenView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     queryset = ExpoToken.objects.all()
     serializer_class = ExpoTokenSerializer
-
-
-from django.shortcuts import get_object_or_404
 
 
 class MultipleFieldLookupMixin(object):

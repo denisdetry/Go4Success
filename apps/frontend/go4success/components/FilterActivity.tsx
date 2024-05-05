@@ -183,7 +183,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                     onPress={toggleModal}
                     buttonType={"filter"}
                 />
-
             </View>
 
 
@@ -196,12 +195,12 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
+                        <TouchableOpacity style={styles.closeButton} onPress={() => {
+                            setModalVisible(!modalVisible);
+                        }}>
+                            <Ionicons name={"close"} color={Colors.primaryColor} size={24}></Ionicons>
+                        </TouchableOpacity>
                         <SafeAreaView style={{ gap: 10 }}>
-                            <TouchableOpacity style={styles.closeButton} onPress={() => {
-                                setModalVisible(!modalVisible);
-                            }}>
-                                <Ionicons name={"close"} color={Colors.primaryColor} size={24}></Ionicons>
-                            </TouchableOpacity>
                             <TextInput
                                 style={stylesGlobal.inputLittle}
                                 value={searchName}

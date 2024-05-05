@@ -223,6 +223,12 @@ export default function Layout() {
                     <Drawer.Screen
                         name="activities/add"
                         options={{
+                            drawerItemStyle: {
+                                display:
+                                    user?.is_superuser || user?.isStaff
+                                        ? "flex"
+                                        : "none",
+                            },
                             drawerLabel: t(
                                 "translationMenu.activityManagement",
                             ),

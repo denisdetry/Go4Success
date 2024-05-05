@@ -192,7 +192,12 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         if (Platform.OS !== "web") {
                             await fetchBackend({
                                 type: "PATCH",
-                                url: "auth/update_expo_token/" + user.id + "/" + expoPushToken + "/",
+                                url:
+                                    "auth/update_expo_token/" +
+                                    user.id +
+                                    "/" +
+                                    expoPushToken +
+                                    "/",
                                 data: {
                                     // eslint-disable-next-line camelcase
                                     is_active: false,

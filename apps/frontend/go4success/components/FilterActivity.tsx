@@ -5,11 +5,9 @@ import ButtonComponent from "./ButtonComponent";
 import Colors from "../constants/Colors";
 import stylesGlobal from "../styles/global";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
-import SelectSearch, { SelectItem } from "./SelectSearch";
 import dayjs from "dayjs";
 import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
-import { ItemType } from "react-native-dropdown-picker";
 import { Activity, useActivities } from "@/hooks/useActivities";
 import { useTranslation } from "react-i18next";
 import RenderCarousel from "@/components/RenderCarousel";
@@ -197,23 +195,13 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 onRequestClose={toggleModal}
             >
                 <View style={styles.centeredView}>
-
                     <View style={styles.modalView}>
-                        <TouchableOpacity style={styles.closeButton} onPress={() => {
-                            setModalVisible(!modalVisible);
-                        }}>
-                            <Ionicons name={"close"} color={Colors.primaryColor} size={24}></Ionicons>
-                        </TouchableOpacity>
-
-                        <TextInput
-                            style={[stylesGlobal.inputLittle]}
-                            value={searchName}
-                            onChangeText={(text: string) => setSearchName(text)}
-                            placeholder={t("translationButton.SearchTitleWorkshop")}
-                        />
-                <View style={filterStyles.centeredView}>
-                    <View style={filterStyles.modalView}>
                         <SafeAreaView style={{ gap: 10 }}>
+                            <TouchableOpacity style={styles.closeButton} onPress={() => {
+                                setModalVisible(!modalVisible);
+                            }}>
+                                <Ionicons name={"close"} color={Colors.primaryColor} size={24}></Ionicons>
+                            </TouchableOpacity>
                             <TextInput
                                 style={stylesGlobal.inputLittle}
                                 value={searchName}
@@ -335,6 +323,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     );
 };
 
+
 const styles = StyleSheet.create({
     filterView: {
         flexWrap: "wrap",
@@ -376,5 +365,6 @@ const styles = StyleSheet.create({
         right: 10,
     },
 });
+
 
 export default FilterActivity;

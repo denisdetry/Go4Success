@@ -31,8 +31,6 @@ export function useActivities(
 ) {
     const backend_url = process.env.EXPO_PUBLIC_API_URL;
 
-    // console.log("Called useActivities");
-
     const { isPending, data, error } = useQuery<Activity[]>({
         queryKey: [
             "activities",

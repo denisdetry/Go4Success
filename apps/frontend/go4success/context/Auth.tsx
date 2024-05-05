@@ -53,13 +53,24 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
     const deniedRoutesForNonSuperUser = [
         ["(app)", "rolemanagement"],
+        //   ["(app)", "feedbacklist"],
+        //   ["(app)", "feedbackcreate"],
+    ];
+
+    const deniedRoutesForNonStaff = [
+        ["(app)", "rolemanagement"],
         ["(app)", "feedbacklist"],
         ["(app)", "feedbackcreate"],
     ];
 
     const isNotSuperUser = !user?.is_superuser && user;
+    const isNotStaff = !user?.is_staff && user;
 
     if (isNotSuperUser && isListIncluded(deniedRoutesForNonSuperUser, rootSegment)) {
+        return <Redirect href={"/"} />;
+    }
+
+    if (isNotStaff && isListIncluded(deniedRoutesForNonStaff, rootSegment)) {
         return <Redirect href={"/"} />;
     }
 

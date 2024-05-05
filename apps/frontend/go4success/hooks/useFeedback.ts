@@ -8,9 +8,9 @@ import {
     FeedbackStudentAdditionalQuestions,
 } from "@/types/Feedback";
 
-export function useFeedback(feedbackId: string, activityId: string) {
+export function useFeedback(feedbackId: string, activityId: string, userId: string) {
     const { isPending, data, error } = useQuery<Feedback[]>({
-        queryKey: ["feedbacks", feedbackId, activityId],
+        queryKey: ["feedbacks", feedbackId, activityId, userId],
         queryFn: async () => {
             const { data } = await fetchBackend({
                 type: "GET",
@@ -18,6 +18,7 @@ export function useFeedback(feedbackId: string, activityId: string) {
                 params: {
                     id: feedbackId,
                     activity_id: activityId,
+                    user_id: userId,
                 },
             });
             return data;

@@ -6,7 +6,7 @@ serializers.py
 """
 
 from database.models import Feedback, FeedbackAdditionalQuestions, \
-    FeedbackStudent, FeedbackStudentAdditionalQuestions, Activity, User
+    FeedbackStudent, FeedbackStudentAdditionalQuestions, Activity, Teacher, User, Give
 from rest_framework import serializers
 
 

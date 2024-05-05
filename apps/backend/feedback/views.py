@@ -39,6 +39,8 @@ class FeedbackListView(viewsets.ModelViewSet):
         qs = filter_queryset(qs, 'id', self.request.query_params.get('id'))
         qs = filter_queryset(
             qs, 'activity_id', self.request.query_params.get('activity_id'))
+        qs = filter_queryset(
+            qs, 'user_id', self.request.query_params.get('user_id'))
         return qs
 
 

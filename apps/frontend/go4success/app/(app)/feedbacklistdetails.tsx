@@ -120,7 +120,8 @@ export default function FeedbackListDetails(
                     <ButtonComponent
                         icon="arrow-back-circle-outline"
                         text="Back"
-                        onPress={() => navigation.navigate({ name: "feedbacklist" })} //Affiche une erreur, mais fonctionne tkt
+                        // @ts-ignore
+                        onPress={() => navigation.navigate({ name: "feedbacklist" })}
                         buttonType={"primary"}
                     />
                 </View>

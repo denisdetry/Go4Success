@@ -18,6 +18,7 @@ import ButtonComponent from "@/components/ButtonComponent";
 import FeedbackTable from "@/components/FeedbackTable";
 
 import styles from "@/styles/global";
+import { useAuth } from "@/context/Auth";
 
 type RootStackParamList = {
     feedbacklistdetails: { feedbackId: string; activityName: string };
@@ -29,7 +30,12 @@ type FeedbackListDetailsScreenNavigationProp = StackNavigationProp<
 >;
 
 export default function FeedbackList() {
-    const { feedbacks, error: feedbackError } = useFeedback("", "");
+    const { user } = useAuth();
+    const { feedbacks, error: feedbackError } = useFeedback(
+        "",
+        "",
+        user?.is_superuser ? undefined : user?.id,
+    );
     const { t } = useTranslation();
     const navigation = useNavigation<FeedbackListDetailsScreenNavigationProp>();
 

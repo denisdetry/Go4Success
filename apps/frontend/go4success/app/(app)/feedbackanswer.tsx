@@ -60,7 +60,7 @@ export default function FeedbackAnswer(props: Readonly<FeedbackAnswerScreenProps
         { value: "1", label: t("satisfactionLevels.veryUnsatisfied") },
     ];
     const [evaluationOpen, setEvaluationOpen] = React.useState(false);
-    const { feedbacks } = useFeedback("", activityId);
+    const { feedbacks } = useFeedback("", activityId, "");
     const firstFeedbackId = feedbacks.length > 0 ? feedbacks[0].id : "";
     const { feedbackAdditionalQuestions } =
         useFeedbackAdditionalQuestions(firstFeedbackId);

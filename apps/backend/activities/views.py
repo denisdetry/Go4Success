@@ -1,10 +1,10 @@
-from database.models import Activity, Attend, Room, Site, Language
+from database.models import Activity, Attend, Give, Room, Site, Language
 from django.db.models import Q
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import SiteSerializer, ActivitySerializer, \
+from .serializers import GiveSerializer, SiteSerializer, ActivitySerializer, \
     AttendSerializer, RoomSerializer, RegisterToActivitySerializer, \
     LanguageSerializer
 
@@ -93,6 +93,22 @@ def filter_queryset(self, qs, param=""):
 
 class RegisterToActivityView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
-
     queryset = Attend.objects.all()
     serializer_class = RegisterToActivitySerializer
+
+
+class GiveViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Give.objects.all()
+    serializer_class = GiveSerializer
+
+    def get_queryset(self):
+        none = [None, 'undefined', 'null', '']
+        qs = super().get_queryset()
+        activity = self.request.query_params.get('activity', None)
+        teacher = self.request.query_params.get('teacher', None)
+        if activity not in none:
+            qs = qs.filter(activity_id=activity)
+        if teacher not in none:
+            qs = qs.filter(teacher_id=teacher)
+        return qs

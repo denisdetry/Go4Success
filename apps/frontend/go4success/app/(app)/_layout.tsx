@@ -207,9 +207,12 @@ export default function Layout() {
                     <Drawer.Screen
                         name="feedbacklist"
                         options={{
-                            drawerItemStyle: {
-                                display: user?.is_superuser ? "flex" : "none",
-                            },
+                            /*drawerItemStyle: {
+                                display:
+                                    user?.is_superuser || user?.is_staff
+                                        ? "flex"
+                                        : "none",
+                            },*/
                             drawerLabel: t("translateFeedback.show"),
                             headerTitle: t("translateFeedback.show"),
                             drawerIcon: ({ size, color }) => (
@@ -225,7 +228,10 @@ export default function Layout() {
                         name="feedbackcreate"
                         options={{
                             drawerItemStyle: {
-                                display: user?.is_superuser ? "flex" : "none",
+                                display:
+                                    user?.is_superuser || user?.is_staff
+                                        ? "flex"
+                                        : "none",
                             },
                             drawerLabel: t("translateFeedback.create"),
                             headerTitle: t("translateFeedback.create"),

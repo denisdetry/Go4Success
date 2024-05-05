@@ -1,13 +1,13 @@
 version: "3"
 
 services:
-    db:
-        image: postgres
-        volumes:
-            - ./data/db:/var/lib/postgresql/data
-        environment:
-            - POSTGRES_DB=${POSTGRES_DB:-Go4Successdatabase}
-            - POSTGRES_USER=${POSTGRES_USER:-PMUser}
-            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-UCpassword}
-        ports:
-            - "5432:5432"
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-Go4Successdatabase}
+      - POSTGRES_USER=${POSTGRES_USER:-PMUser}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-UCpassword}
+    ports:
+      - "5432:5432"

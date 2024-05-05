@@ -1,4 +1,4 @@
-import { ScrollView, Text, TextInput, View } from "react-native";
+import { Platform, ScrollView, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import styles from "@/styles/global";
 import Button from "@/components/ButtonComponent";
@@ -10,6 +10,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { UserLogin } from "@/types/UserLogin";
 import { useTranslation } from "react-i18next";
+import LanguagePicker from "@/components/LanguagePicker";
 
 export default function Login() {
     const { t } = useTranslation();
@@ -39,6 +40,9 @@ export default function Login() {
 
     return (
         <ScrollView contentContainerStyle={styles.mainContainer}>
+            <View style={{ position: "absolute", bottom: 0, left: 10 }}>
+                {Platform.OS === "web" && <LanguagePicker />}
+            </View>
             <View style={[styles.container, { shadowRadius: 0, backgroundColor: "" }]}>
                 <Text style={styles.title}>{t("translateLogin.title")}</Text>
                 <View style={styles.form}>

@@ -17,7 +17,6 @@ import { useRooms } from "@/hooks/useRooms";
 import InputAutocomplete from "@/components/InputAutocomplete";
 import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from "dayjs";
-import "dayjs/plugin/timezone";
 import { useLanguages } from "@/hooks/useLanguages";
 import * as yup from "yup";
 import { InferType } from "yup";
@@ -240,11 +239,12 @@ export default function Add() {
     };
 
     return (
-        <ScrollView>
+        <ScrollView contentContainerStyle={styles.mainContainer}>
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={styles.mainContainer}
+                style={[styles.container, { gap: 10 }]}
             >
+                <Text style={styles.title}>{t("translationActivities.addActivity")}</Text>
                 <Controller
                     control={control}
                     rules={{ required: true }}
@@ -274,6 +274,7 @@ export default function Add() {
                             placeholderTextColor={"grey"}
                             onChangeText={onChange}
                             value={value}
+                            multiline={true}
                         />
                     )}
                     name="description"
@@ -293,6 +294,7 @@ export default function Add() {
                             placeholder={t("translationActivities.site")}
                             readOnly={true}
                             onChange={onChange}
+                            icon={"location"}
                         />
                     )}
                     name={"site"}
@@ -305,6 +307,7 @@ export default function Add() {
                             items={rooms}
                             placeholder={t("translationActivities.room")}
                             onChange={onChange}
+                            icon={"location"}
                         />
                     )}
                     name={"room"}
@@ -324,6 +327,7 @@ export default function Add() {
                             readOnly={true}
                             placeholder={t("translationActivities.language")}
                             onChange={onChange}
+                            icon={"language"}
                         />
                     )}
                     name={"language"}
@@ -363,6 +367,7 @@ export default function Add() {
                             items={hourQuarterList}
                             placeholder={t("translationActivities.beginTime")}
                             onChange={onChange}
+                            icon={"calendar"}
                         />
                     )}
                     name={"beginTime"}
@@ -381,6 +386,7 @@ export default function Add() {
                             items={hourQuarterList}
                             placeholder={t("translationActivities.endTime")}
                             onChange={onChange}
+                            icon={"calendar"}
                         />
                     )}
                     name={"endTime"}
@@ -397,6 +403,7 @@ export default function Add() {
                         </Text>
                     )
                 )}
+
 
                 <Pressable
                     style={ownStyle.button}

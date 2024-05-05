@@ -55,7 +55,6 @@ export default function Index() {
                     />
                 ) : (
                     <Text style={styles.text}>
-                        {" "}
                         {t("translation.noMessage")}
                     </Text>
                 )}

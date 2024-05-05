@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
     Pressable,
     SafeAreaView,
@@ -16,8 +16,9 @@ import { AntDesign } from "@expo/vector-icons";
 export interface InputAutocompleteProps {
     readonly items: SelectItem[];
     readonly placeholder: string;
-    readonly onChange?: (value: SelectItem) => void;
+    readonly onChange?: (value: any) => void;
     readonly readOnly?: boolean;
+    readonly toReturn?: "key" | "value" | "all";
 }
 
 type ItemProps = {
@@ -37,6 +38,7 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     placeholder,
     onChange = () => {},
     readOnly = false,
+    toReturn = "all",
 }) => {
     const [visible, setVisible] = React.useState(false);
     const [filteredData, setFilteredData] = React.useState<SelectItem[]>(items);
@@ -52,10 +54,34 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
         });
     };
 
+    const handleChange = useCallback(
+        (item?: SelectItem) => {
+            if (item) {
+                onChange(
+                    toReturn === "key"
+                        ? item.key
+                        : toReturn === "value"
+                          ? item.value
+                          : item,
+                );
+            } else {
+                onChange(
+                    toReturn === "key"
+                        ? ""
+                        : toReturn === "value"
+                          ? ""
+                          : { key: "", value: "" },
+                );
+            }
+        },
+        [onChange, toReturn],
+    );
+
     useEffect(() => {
         setFilteredData(items);
-        setSelectedData({ key: "", value: "" });
-    }, [items]);
+        setSelectedData([]);
+        handleChange();
+    }, [handleChange, items]);
 
     const renderItem = ({ item }: { item: SelectItem }) => {
         if (visible) {
@@ -63,7 +89,7 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                 <Item
                     item={item}
                     onPress={() => {
-                        onChange(item);
+                        handleChange(item);
                         setSelectedData(item);
                         setVisible(false);
                     }}
@@ -82,7 +108,8 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                             style={styles.input}
                             onPressIn={() => setVisible(!visible)}
                         >
-                            {selectedData.value === "" ? (
+                            {!selectedData.value ||
+                            selectedData.value === "" ? (
                                 <Text style={styles.placeholder}>
                                     {placeholder}
                                 </Text>
@@ -100,7 +127,7 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                             onChangeText={(text) => {
                                 setFilteredData(filterData(text));
                                 setSelectedData({ key: text, value: text });
-                                onChange(selectedData);
+                                handleChange({ key: text, value: text });
                             }}
                             value={selectedData.value ?? ""}
                             onFocus={() => setVisible(true)}

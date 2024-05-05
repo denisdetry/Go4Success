@@ -24,6 +24,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { fetchBackend } from "@/utils/fetchBackend";
 import Toast from "react-native-toast-message";
 import { useTranslation } from "react-i18next";
+import { queryClient } from "@/app/_layout";
+import { generateHourQuarterList } from "@/utils/generateHourQuarterList";
+
+const hourQuarterList = generateHourQuarterList();
 
 export default function Add() {
     const { t } = useTranslation();
@@ -56,34 +60,46 @@ export default function Add() {
             .of(yup.string())
             .min(1, t("translationActivities.yupActivityDateRequired"))
             .required(),
-        beginTime: yup
-            .array()
-            .of(yup.string())
-            .min(1, t("translationActivities.yupBeginTimeRequired"))
-            .required()
-            .typeError(t("translationActivities.yupBeginTimeRequired")),
+        beginTime: yup.object().shape({
+            key: yup.string(),
+
+            value: yup
+                .string()
+                // Matches regex for hour:minutes format or empty string
+                .matches(
+                    /^(?:[01]\d|2[0-3]):[0-5]\d$|^$/,
+                    t("translationActivities.yupValidTimeFormat"),
+                )
+                .required(t("translationActivities.yupBeginTimeRequired")),
+        }),
+
         endTime: yup
-            .array()
-            .of(yup.string())
-            .min(1, t("translationActivities.yupEndTimeRequired"))
-            .required()
-            .typeError(t("translationActivities.yupEndTimeRequired")),
+            .object()
+            .shape({
+                key: yup.string(),
+                value: yup
+                    .string()
+                    .matches(
+                        /^(?:[01]\d|2[0-3]):[0-5]\d$|^$/,
+                        t("translationActivities.yupValidTimeFormat"),
+                    )
+                    .required(t("translationActivities.yupEndTimeRequired")),
+            })
+            // Check if the key as a number of endTime is greater than the key of beginTime (hour is greater)
+            .test(
+                "is-greater",
+                "translationActivities.yupEndTimeGreater",
+                function () {
+                    const beginTime = this.parent.beginTime;
+                    const endTime = this.parent.endTime;
+                    if (beginTime.key === "" || endTime.key === "") {
+                        return true;
+                    }
+                    return Number(endTime.key) > Number(beginTime.key);
+                },
+            ),
     });
-
     type AddActivity = InferType<typeof schema>;
-
-    const generateHourQuarterList = () => {
-        const list = [];
-        for (let hour = 0; hour < 24; hour++) {
-            for (let quarter = 0; quarter < 4; quarter++) {
-                const key = `${hour.toString().padStart(2, "0")}:${(quarter * 15).toString().padStart(2, "0")}`;
-                list.push({ key, value: key });
-            }
-        }
-        return list;
-    };
-
-    const hourQuarterList = generateHourQuarterList();
 
     const {
         control,
@@ -95,12 +111,12 @@ export default function Add() {
         defaultValues: {
             title: "",
             description: "",
-            site: undefined,
-            room: undefined,
-            language: undefined,
+            site: { key: "", value: "" },
+            room: { key: "", value: "" },
+            language: { key: "", value: "" },
             activityDate: [],
-            beginTime: [],
-            endTime: [],
+            beginTime: { key: "", value: "" },
+            endTime: { key: "", value: "" },
         },
     });
 
@@ -113,11 +129,19 @@ export default function Add() {
     const { languages } = useLanguages();
 
     if (siteError) {
-        return <View> Error: {siteError.message} </View>;
+        return (
+            <View>
+                <Text> Error: {siteError.message} </Text>
+            </View>
+        );
     }
 
     if (roomError) {
-        return <View> Error: {roomError.message} </View>;
+        return (
+            <View>
+                <Text> Error: {roomError.message} </Text>
+            </View>
+        );
     }
 
     if (sitePending) {
@@ -125,23 +149,31 @@ export default function Add() {
     }
 
     if (sites === undefined) {
-        return <View> Issue loading Sites </View>;
+        return (
+            <View>
+                <Text>Issue loading Sites </Text>
+            </View>
+        );
     }
 
     if (rooms === undefined) {
-        return <View> Issue loading Rooms </View>;
+        return (
+            <View>
+                <Text> Issue loading Rooms</Text>{" "}
+            </View>
+        );
     }
 
     const createActivity: SubmitHandler<AddActivity> = async (data) => {
         const dates = data.activityDate.map((date) => {
             return [
                 dayjs(date)
-                    .set("hour", Number(data.beginTime[0]))
-                    .set("minute", Number(data.beginTime[1]))
+                    .set("hour", Number(data.beginTime.value.split(":")[0]))
+                    .set("minute", Number(data.beginTime.value.split(":")[1]))
                     .toJSON(),
                 dayjs(date)
-                    .set("hour", Number(data.endTime[0]))
-                    .set("minute", Number(data.endTime[1]))
+                    .set("hour", Number(data.endTime.value.split(":")[0]))
+                    .set("minute", Number(data.endTime.value.split(":")[1]))
                     .toJSON(),
             ];
         });
@@ -158,6 +190,7 @@ export default function Add() {
                 dateStart: date[0],
                 dateEnd: date[1],
             };
+            console.log(formattedData);
             try {
                 await fetchBackend({
                     type: "POST",
@@ -169,15 +202,32 @@ export default function Add() {
             }
         }
         if (errors.length > 0) {
-            Toast.show({
-                type: "error",
-                text1: t("translationActivities.addError"),
-            });
+            if (dates.length === 1) {
+                Toast.show({
+                    type: "error",
+                    text1: t("translationActivities.addError"),
+                });
+            } else {
+                Toast.show({
+                    type: "error",
+                    text1: t("translationActivities.addErrorMultiple"),
+                });
+            }
         } else {
-            Toast.show({
-                type: "success",
-                text1: t("translationActivities.addSuccess"),
+            await queryClient.invalidateQueries({
+                queryKey: ["activities"],
             });
+            if (dates.length === 1) {
+                Toast.show({
+                    type: "success",
+                    text1: t("translationActivities.addSuccess"),
+                });
+            } else {
+                Toast.show({
+                    type: "success",
+                    text1: t("translationActivities.addSuccessMultiple"),
+                });
+            }
         }
     };
 
@@ -246,9 +296,7 @@ export default function Add() {
                         <InputAutocomplete
                             items={rooms}
                             placeholder={t("translationActivities.room")}
-                            onChange={(data) => {
-                                onChange(data);
-                            }}
+                            onChange={onChange}
                         />
                     )}
                     name={"room"}
@@ -306,9 +354,7 @@ export default function Add() {
                         <InputAutocomplete
                             items={hourQuarterList}
                             placeholder={t("translationActivities.beginTime")}
-                            onChange={(value) => {
-                                onChange(value.value.split(":"));
-                            }}
+                            onChange={onChange}
                         />
                     )}
                     name={"beginTime"}
@@ -316,7 +362,7 @@ export default function Add() {
 
                 {errors.beginTime && (
                     <Text style={styles.errorMsg}>
-                        {errors.beginTime.message}
+                        {errors.beginTime.value?.message}
                     </Text>
                 )}
 
@@ -326,18 +372,22 @@ export default function Add() {
                         <InputAutocomplete
                             items={hourQuarterList}
                             placeholder={t("translationActivities.endTime")}
-                            onChange={(value) => {
-                                onChange(value.value.split(":"));
-                            }}
+                            onChange={onChange}
                         />
                     )}
                     name={"endTime"}
                 />
 
-                {errors.endTime && (
+                {errors.endTime && errors.endTime.value ? (
                     <Text style={styles.errorMsg}>
-                        {errors.endTime.message}
+                        {errors.endTime.value.message}
                     </Text>
+                ) : (
+                    errors.endTime && (
+                        <Text style={styles.errorMsg}>
+                            {errors.endTime.message}
+                        </Text>
+                    )
                 )}
 
                 <Pressable

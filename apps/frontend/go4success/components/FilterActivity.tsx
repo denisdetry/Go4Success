@@ -80,8 +80,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         convertDateToISO(range.endDate),
     );
 
-    console.log("registeredActivities", registeredActivities);
-
     const { data: allActivities } = useActivities(
         "activity",
         searchName,
@@ -94,7 +92,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         const activity = "activity" in item ? item.activity : item;
-        const siteName = sites.find((site) => site.value === activity.room.site)?.label;
 
         const activityDate = activity.date_start.split(" - ")[0];
         const activityHour =
@@ -106,7 +103,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
             <Card
                 id={activity.id}
                 title={activity.name}
-                location={activity.room.name + " - " + siteName}
+                location={activity.room.name + " - " + activity.room.site.name}
                 date={activityDate}
                 hour={activityHour}
                 type={activity.type}
@@ -181,7 +178,9 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                             style={stylesGlobal.inputLittle}
                             value={searchName}
                             onChangeText={(text: string) => setSearchName(text)}
-                            placeholder={t("translationButton.SearchTitleWorkshop")}
+                            placeholder={t(
+                                "translationButton.SearchTitleWorkshop",
+                            )}
                         />
 
                         <SelectSearch
@@ -190,7 +189,9 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                             placeholder={t("translationButton.SelectSite")}
                             searchable={true}
                             onSelectItem={(item) => {
-                                setSelectedSite(item as Required<ItemType<string>>);
+                                setSelectedSite(
+                                    item as Required<ItemType<string>>,
+                                );
                             }}
                             open={siteOpen}
                             setOpen={setSiteOpen}
@@ -205,7 +206,9 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                             placeholder={t("translationButton.SelectRoom")}
                             searchable={true}
                             onSelectItem={(item) => {
-                                setSelectedRoom(item as Required<ItemType<string>>);
+                                setSelectedRoom(
+                                    item as Required<ItemType<string>>,
+                                );
                             }}
                             open={roomOpen}
                             setOpen={setRoomOpen}
@@ -220,7 +223,9 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                             placeholder={t("translationButton.SelectLanguage")}
                             searchable={true}
                             onSelectItem={(item) => {
-                                setSelectedLanguage(item as Required<ItemType<string>>);
+                                setSelectedLanguage(
+                                    item as Required<ItemType<string>>,
+                                );
                             }}
                             open={languageOpen}
                             setOpen={setLanguageOpen}
@@ -242,8 +247,12 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                                     endDate={range.endDate}
                                     onChange={onChange}
                                     selectedItemColor={Colors.primaryColor}
-                                    headerContainerStyle={{ backgroundColor: "white" }}
-                                    headerTextStyle={{ color: Colors.thirdColor }}
+                                    headerContainerStyle={{
+                                        backgroundColor: "white",
+                                    }}
+                                    headerTextStyle={{
+                                        color: Colors.thirdColor,
+                                    }}
                                 />
                             </View>
                             <ButtonComponent
@@ -291,7 +300,10 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
             {/* Cards views for all activity or filtered */}
             {filterType === "activity" &&
                 (allActivities !== undefined && allActivities.length > 0 ? (
-                    <RenderCarousel data={allActivities} renderItem={renderCards} />
+                    <RenderCarousel
+                        data={allActivities}
+                        renderItem={renderCards}
+                    />
                 ) : (
                     <Text style={stylesGlobal.text}>
                         {t("translation.noWorkshopAll")}

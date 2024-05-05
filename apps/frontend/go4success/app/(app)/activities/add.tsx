@@ -244,7 +244,9 @@ export default function Add() {
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
                 style={[styles.container, { gap: 10 }]}
             >
-                <Text style={styles.title}>{t("translationActivities.addActivity")}</Text>
+                <Text style={styles.title}>
+                    {t("translationActivities.addActivity")}
+                </Text>
                 <Controller
                     control={control}
                     rules={{ required: true }}
@@ -367,7 +369,7 @@ export default function Add() {
                             items={hourQuarterList}
                             placeholder={t("translationActivities.beginTime")}
                             onChange={onChange}
-                            icon={"calendar"}
+                            icon={"time-outline"}
                         />
                     )}
                     name={"beginTime"}
@@ -386,7 +388,7 @@ export default function Add() {
                             items={hourQuarterList}
                             placeholder={t("translationActivities.endTime")}
                             onChange={onChange}
-                            icon={"calendar"}
+                            icon={"time-outline"}
                         />
                     )}
                     name={"endTime"}
@@ -403,7 +405,6 @@ export default function Add() {
                         </Text>
                     )
                 )}
-
 
                 <Pressable
                     style={ownStyle.button}

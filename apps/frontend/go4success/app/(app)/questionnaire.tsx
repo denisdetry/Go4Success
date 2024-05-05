@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useCourses, usePostQuestionnaire } from "@/hooks/useQuestionnaire";
-import { useRoute, RouteProp } from "@react-navigation/native";
+import {
+    useRoute,
+    RouteProp,
+    useNavigation,
+    NavigationContainer,
+} from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
 import {
     StyleSheet,
@@ -26,13 +32,13 @@ type RootStackParamList = {
 };
 type QuestionnaireRouteProp = RouteProp<RootStackParamList, "Questionnaire">;
 
-export default function App() {
+const QuestionnaireComponent = () => {
     const { mutate, error } = usePostQuestionnaire();
     const route = useRoute<QuestionnaireRouteProp>();
     const [startdate, setStartDate] = useState(dayjs());
     const [enddate, setEndDate] = useState(dayjs());
     const { courseCode, courseName } = route.params;
-    console.log(courseCode);
+    const navigation = useNavigation();
     const [formData, setFormData] = useState({
         course: courseCode,
         title: "",
@@ -56,9 +62,8 @@ export default function App() {
     };
 
     const handleSubmit = () => {
-        console.log(startdate);
-        console.log(enddate);
         mutate(formData);
+        navigation.navigate("Question");
     };
     if (error) return <Text style={styles.errorText}>Error: {error.message}</Text>;
 
@@ -133,6 +138,11 @@ export default function App() {
             <Button title="Next" onPress={handleSubmit} color="#0066cc" />
         </ScrollView>
     );
+};
+const Stack = createStackNavigator();
+
+export default function App() {
+    return <QuestionnaireComponent />;
 }
 
 const styles = StyleSheet.create({

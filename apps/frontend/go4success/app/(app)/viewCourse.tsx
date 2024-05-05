@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useCourses } from "@/hooks/useQuestionnaire";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack";
 import Questionnaire from "./questionnaire";
 import {
@@ -61,10 +61,12 @@ const CoursesComponent = ({ createQuestionnaire } = {}) => {
 
 const ViewCourse = () => {
     return (
-        <Stack.Navigator>
-            <Stack.Screen name="Courses" component={CoursesComponent} />
-            <Stack.Screen name="Questionnaire" component={Questionnaire} />
-        </Stack.Navigator>
+        <NavigationContainer independent={true}>
+            <Stack.Navigator>
+                <Stack.Screen name="Courses" component={CoursesComponent} />
+                <Stack.Screen name="Questionnaire" component={Questionnaire} />
+            </Stack.Navigator>
+        </NavigationContainer>
     );
 };
 

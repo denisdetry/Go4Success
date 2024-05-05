@@ -59,7 +59,8 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
             // console.error("Error : ", await error.responseError.json());
             const errorResponse = await error.responseError.json();
             const errorMessages =
-                errorResponse[dataKey] || t("translationProfile.defaultErrorMessage");
+                errorResponse[dataKey] ||
+                t("translationProfile.defaultErrorMessage");
             Toast.show({
                 type: "error",
                 text1: t("translationProfile.error"),

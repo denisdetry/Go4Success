@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { SelectItem } from "@/components/SelectSearch";
+import { SelectItem } from "@/types/SelectItem";
 import { fetchBackend } from "@/utils/fetchBackend";
+import { useTranslation } from "react-i18next";
 
 export type Language = {
     id: string;
@@ -8,7 +9,9 @@ export type Language = {
     code: string;
 };
 
-export function useLanguages(languageId?: string) {
+export function useLanguages(languageId?: string, allValues: boolean = false) {
+    const { t } = useTranslation();
+
     const {
         isPending,
         data: languages,
@@ -31,10 +34,18 @@ export function useLanguages(languageId?: string) {
                 throw new Error(error);
             }
 
-            return data.map((language: { name: any; id: any }) => ({
-                label: language.name,
-                value: language.id,
+            const languagesList = data.map((language: Language) => ({
+                key: language.id,
+                value: language.name,
             }));
+            if (allValues) {
+                return [
+                    { key: "", value: t("translationHooks.AllValuesM") },
+                    ...languagesList,
+                ];
+            } else {
+                return languagesList;
+            }
         },
     });
 

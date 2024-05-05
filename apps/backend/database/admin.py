@@ -3,12 +3,16 @@ from django.contrib import admin
 from .models import User, Teacher, Give, Announcement, \
     Registered, Message, See, Site, Room, Activity, Attend, Course, \
     Language, FeedbackActivity, Questionnaire, Question, \
-    OpenAnswer, ChoiceAnswer, ChoiceAnswerInstance
+    OpenAnswer, ChoiceAnswer, ChoiceAnswerInstance, ExpoToken
 
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'email', 'first_name',
-                    'last_name', 'noma', 'is_active')
+                    'last_name', 'noma', 'is_active', 'is_staff', 'is_superuser')
+
+
+class ExpoTokenAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'token', "is_active")
 
 
 class SiteAdmin(admin.ModelAdmin):
@@ -33,7 +37,7 @@ class AttendAdmin(admin.ModelAdmin):
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'code', 'name')
+    list_display = ('id', 'code', 'name', 'user')
 
 
 class TeacherAdmin(admin.ModelAdmin):
@@ -89,6 +93,7 @@ class ChoiceAnswerInstanceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(ExpoToken, ExpoTokenAdmin)
 admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(Give, GiveAdmin)
 admin.site.register(Announcement, AnnouncementAdmin)

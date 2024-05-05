@@ -165,9 +165,8 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         if (Platform.OS !== "web") {
                             await fetchBackend({
                                 type: "PATCH",
-                                url: "auth/update_expo_token/" + user.id + "/",
+                                url: "auth/update_expo_token/" + user.id + "/" + expoPushToken + "/",
                                 data: {
-                                    token: expoPushToken,
                                     // eslint-disable-next-line camelcase
                                     is_active: false,
                                 },

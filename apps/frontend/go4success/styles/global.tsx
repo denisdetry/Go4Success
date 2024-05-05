@@ -7,6 +7,7 @@ export default StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         flexGrow: 1,
+        position: "relative",
         gap: 15,
     },
     titleContainer: {
@@ -42,7 +43,6 @@ export default StyleSheet.create({
                         ? 710
                         : 1435
                 : 1435, // isDesktop for the last one
-        paddingBottom: 20,
     },
     container: {
         width: "90%",

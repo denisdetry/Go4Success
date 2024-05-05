@@ -1,25 +1,21 @@
 import React, { useCallback, useState } from "react";
-import {
-    Modal,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
-} from "react-native";
+import { Modal, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Card from "./Card";
 import ButtonComponent from "./ButtonComponent";
 import Colors from "../constants/Colors";
 import stylesGlobal from "../styles/global";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
+import SelectSearch, { SelectItem } from "./SelectSearch";
 import dayjs from "dayjs";
 import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
+import { ItemType } from "react-native-dropdown-picker";
 import { Activity, useActivities } from "@/hooks/useActivities";
 import { useTranslation } from "react-i18next";
 import RenderCarousel from "@/components/RenderCarousel";
 import { useLanguages } from "@/hooks/useLanguages";
 import InputAutocomplete from "@/components/selectors/InputAutocomplete";
+import { Ionicons } from "@expo/vector-icons";
 
 interface Attend {
     activity: Activity;
@@ -180,15 +176,18 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         setRange({ startDate: null, endDate: null });
     };
 
+
     return (
         <>
-            <View style={{ width: "100%", justifyContent: "flex-start" }}>
+            <View style={styles.filterView}>
                 <ButtonComponent
                     text={t("translationButton.OpenFilter")}
                     onPress={toggleModal}
                     buttonType={"filter"}
                 />
+
             </View>
+
 
             {/* Modal view */}
             <Modal
@@ -197,6 +196,21 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 visible={modalVisible}
                 onRequestClose={toggleModal}
             >
+                <View style={styles.centeredView}>
+
+                    <View style={styles.modalView}>
+                        <TouchableOpacity style={styles.closeButton} onPress={() => {
+                            setModalVisible(!modalVisible);
+                        }}>
+                            <Ionicons name={"close"} color={Colors.primaryColor} size={24}></Ionicons>
+                        </TouchableOpacity>
+
+                        <TextInput
+                            style={[stylesGlobal.inputLittle]}
+                            value={searchName}
+                            onChangeText={(text: string) => setSearchName(text)}
+                            placeholder={t("translationButton.SearchTitleWorkshop")}
+                        />
                 <View style={filterStyles.centeredView}>
                     <View style={filterStyles.modalView}>
                         <SafeAreaView style={{ gap: 10 }}>
@@ -242,6 +256,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                                 flex: 1,
                                 flexDirection: "column",
                                 alignItems: "flex-end",
+                                marginTop: 10,
                             }}
                         >
                             <View style={stylesGlobal.containerDatePicker}>
@@ -270,7 +285,9 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                         <View
                             style={{
                                 flexDirection: "row",
-                                justifyContent: "space-between",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                flexWrap: "wrap",
                             }}
                         >
                             <ButtonComponent
@@ -318,17 +335,24 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     );
 };
 
-const filterStyles = StyleSheet.create({
+const styles = StyleSheet.create({
+    filterView: {
+        flexWrap: "wrap",
+        flexDirection: "row",
+        gap: 10,
+        width: "100%",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        marginTop: 10,
+    },
     noDataText: {
         fontSize: 16,
         color: "gray",
     },
     centeredView: {
-        // height: "100%",
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22,
         backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     modalView: {
@@ -345,6 +369,11 @@ const filterStyles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+    },
+    closeButton: {
+        position: "absolute",
+        top: 10,
+        right: 10,
     },
 });
 

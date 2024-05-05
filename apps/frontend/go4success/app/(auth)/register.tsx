@@ -12,6 +12,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { UserRegister } from "@/types/UserRegister";
 import { useTranslation } from "react-i18next";
+import LanguagePicker from "@/components/LanguagePicker";
 
 export default function Register() {
     const { t } = useTranslation();
@@ -77,6 +78,9 @@ export default function Register() {
         <ScrollView
             contentContainerStyle={[styles.mainContainer, { justifyContent: "center" }]}
         >
+            <View style={{ position: "absolute", bottom: 0, left: 10 }}>
+                {Platform.OS === "web" && <LanguagePicker />}
+            </View>
             <View style={[styles.container, { shadowRadius: 0, backgroundColor: "" }]}>
                 <Text style={styles.title}>{t("translateRegister.title")}</Text>
                 {/*Email field*/}
@@ -173,7 +177,7 @@ export default function Register() {
                         <Text style={styles.errorMsg}>{errors.firstName.message}</Text>
                     )}
 
-                    {/*Noma field*/}
+                    {/* Noma field */}
                     <Controller
                         control={control}
                         rules={{ required: false }}
@@ -198,6 +202,7 @@ export default function Register() {
                             </View>
                         )}
                         name="noma"
+                        defaultValue={""}
                     />
 
                     {/*Error message for noma field*/}

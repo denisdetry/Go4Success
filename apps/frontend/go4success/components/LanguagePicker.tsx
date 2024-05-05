@@ -23,7 +23,7 @@ export default function LanguagePicker() {
                     borderWidth: 1,
                     borderColor: Colors.primaryColor,
                     borderRadius: 4,
-                    color: "black",
+                    color: Colors.primaryColor,
                     paddingRight: 10,
                 },
                 inputAndroid: {
@@ -35,7 +35,7 @@ export default function LanguagePicker() {
                     borderWidth: 1,
                     borderColor: Colors.primaryColor,
                     borderRadius: 4,
-                    color: "black",
+                    color: Colors.primaryColor,
                     paddingRight: 10,
                 },
                 inputWeb: {
@@ -47,11 +47,12 @@ export default function LanguagePicker() {
                     borderWidth: 1,
                     borderColor: Colors.primaryColor,
                     borderRadius: 4,
-                    color: "black",
-                    paddingRight: 10,
+                    color: Colors.primaryColor,
+                    paddingRight: 4,
                 },
             }}
             placeholder={{}}
+            value={i18n.language}
             fixAndroidTouchableBug={true}
         />
     );

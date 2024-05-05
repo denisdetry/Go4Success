@@ -14,7 +14,7 @@ import styles from "@/styles/global";
 import React from "react";
 import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
-import InputAutocomplete from "@/components/InputAutocomplete";
+import InputAutocomplete from "@/components/selectors/InputAutocomplete";
 import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from "dayjs";
 import { useLanguages } from "@/hooks/useLanguages";

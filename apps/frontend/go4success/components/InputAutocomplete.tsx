@@ -21,7 +21,7 @@ export interface InputAutocompleteProps {
     readonly onChange?: (value: any) => void;
     readonly readOnly?: boolean;
     readonly toReturn?: "key" | "value" | "all";
-    readonly icon?: string;
+    readonly icon?: any;
 }
 
 type ItemProps = {
@@ -32,16 +32,14 @@ type ItemProps = {
 const Item = ({ item, onPress }: ItemProps) => {
     const [isHovered, setIsHovered] = useState(false);
 
-    const handleMouseEnter = () => {
-        setIsHovered(true);
-    };
-
-    const handleMouseLeave = () => {
-        setIsHovered(false);
-    };
     return (
-        <View style={[isHovered && { backgroundColor: "lightgray" }, { padding: 5 }]} onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+        <View
+            style={[
+                isHovered && { backgroundColor: "lightgray" },
+                { padding: 5 },
+            ]}
+            onPointerEnter={() => setIsHovered(true)}
+            onPointerLeave={() => setIsHovered(false)}
         >
             <TouchableOpacity onPress={onPress}>
                 <Text style={styles.text}>{item.value}</Text>
@@ -50,14 +48,13 @@ const Item = ({ item, onPress }: ItemProps) => {
     );
 };
 const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
-                                                                 items,
-                                                                 placeholder,
-                                                                 onChange = () => {
-                                                                 },
-                                                                 readOnly = false,
-                                                                 toReturn = "all",
-                                                                 icon,
-                                                             }) => {
+    items,
+    placeholder,
+    onChange = () => {},
+    readOnly = false,
+    toReturn = "all",
+    icon,
+}) => {
     const [visible, setVisible] = React.useState(false);
     const [filteredData, setFilteredData] = React.useState<SelectItem[]>(items);
 
@@ -79,16 +76,16 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                     toReturn === "key"
                         ? item.key
                         : toReturn === "value"
-                            ? item.value
-                            : item,
+                          ? item.value
+                          : item,
                 );
             } else {
                 onChange(
                     toReturn === "key"
                         ? ""
                         : toReturn === "value"
-                            ? ""
-                            : { key: "", value: "" },
+                          ? ""
+                          : { key: "", value: "" },
                 );
             }
         },
@@ -102,7 +99,6 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     }, [handleChange, items]);
 
     const renderItem = ({ item }: { item: SelectItem }) => {
-
         if (visible) {
             return (
                 <>
@@ -124,18 +120,22 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
         <ScrollView horizontal={true} scrollEnabled={false}>
             <SafeAreaView>
                 <SafeAreaView
-                    style={[styles.inputField, visible && {
-                        borderBottomEndRadius: 0,
-                        borderBottomStartRadius: 0,
-                    }]}>
-                    {icon &&
+                    style={[
+                        styles.inputField,
+                        visible && {
+                            borderBottomEndRadius: 0,
+                            borderBottomStartRadius: 0,
+                        },
+                    ]}
+                >
+                    {icon && (
                         <Ionicons
                             name={icon}
                             size={24}
                             color={Colors.primaryColor}
                             style={{ marginLeft: 5 }}
                         />
-                    }
+                    )}
                     {readOnly ? (
                         <TouchableWithoutFeedback
                             style={styles.input}
@@ -154,8 +154,6 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                         </TouchableWithoutFeedback>
                     ) : (
                         <>
-
-
                             <TextInput
                                 style={styles.input}
                                 placeholder={placeholder}
@@ -186,13 +184,16 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                     </Pressable>
                 </SafeAreaView>
 
-                <View style={visible && {
-                    borderWidth: 0.5,
-                    borderTopWidth: 0,
-                    borderBottomStartRadius: 10,
-                    borderBottomEndRadius: 10,
-                }}>
-
+                <View
+                    style={
+                        visible && {
+                            borderWidth: 0.5,
+                            borderTopWidth: 0,
+                            borderBottomStartRadius: 10,
+                            borderBottomEndRadius: 10,
+                        }
+                    }
+                >
                     <FlatList
                         style={{ maxHeight: 200 }}
                         data={filteredData}

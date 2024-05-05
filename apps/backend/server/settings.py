@@ -144,7 +144,7 @@ AUTH_USER_MODEL = "database.User"
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS").split(",") if os.getenv(
-    "CORS_ALLOWED_ORIGINS") else ["http://localhost:8081", "http://localhost:3000", "http://192.168.2.15:8000"]
+    "CORS_ALLOWED_ORIGINS") else ["http://localhost:8081", "http://localhost:3000"]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (

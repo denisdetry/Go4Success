@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import styles from "@/styles/global";
-import { SelectItem } from "@/components/select";
+import { SelectItem } from "@/types/SelectItem";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 

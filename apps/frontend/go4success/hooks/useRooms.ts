@@ -1,7 +1,8 @@
-import { SelectItem } from "@/components/SelectSearch";
+import { SelectItem } from "@/types/SelectItem";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { fetchBackend } from "@/utils/fetchBackend";
 import { Site } from "@/hooks/useSites";
+import { useTranslation } from "react-i18next";
 
 export type Room = {
     id: string;
@@ -9,8 +10,12 @@ export type Room = {
     site: Site;
 };
 
-export function useRooms(siteId: string | undefined) {
-    const backendUrl = process.env.EXPO_PUBLIC_API_URL;
+export function useRooms(
+    siteId: string | undefined,
+    allValues: boolean = false,
+) {
+    const { t } = useTranslation();
+
     const {
         isPending,
         data: rooms,
@@ -18,23 +23,30 @@ export function useRooms(siteId: string | undefined) {
     } = useQuery<SelectItem[]>({
         queryKey: ["rooms", siteId],
         queryFn: async () => {
-            try {
-                const response = await axios.get(
-                    `${backendUrl}/activities/rooms/` +
-                        (siteId ? `site/${siteId}/` : ""),
-                );
+            const { data, error } = await fetchBackend({
+                type: "GET",
+                url: "activities/rooms/" + (siteId ? `site/${siteId}/` : ""),
+            });
 
-                return response.data.map((room: Room) => ({
-                    key: room.id,
-                    value: room.name + " - " + room.site.name,
-                }));
-            } catch (error) {
+            if (error) {
                 return [
                     {
                         key: "error",
                         value: "Error fetching rooms",
                     },
                 ];
+            }
+            const roomsList = data.map((room: Room) => ({
+                key: room.id,
+                value: room.name + " - " + room.site.name,
+            }));
+            if (allValues) {
+                return [
+                    { key: "", value: t("translationHooks.AllValuesF") },
+                    ...roomsList,
+                ];
+            } else {
+                return roomsList;
             }
         },
     });

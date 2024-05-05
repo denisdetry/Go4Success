@@ -8,7 +8,7 @@ import {
     View,
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { SelectItem } from "@/components/select";
+import { SelectItem } from "@/types/SelectItem";
 import styles from "@/styles/global";
 
 export interface InputAutocompleteProps {

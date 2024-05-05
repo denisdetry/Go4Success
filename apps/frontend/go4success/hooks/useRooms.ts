@@ -40,6 +40,16 @@ export function useRooms(
                 key: room.id,
                 value: room.name + " - " + room.site.name,
             }));
+
+            if (roomsList.length === 0) {
+                return [
+                    {
+                        key: "empty",
+                        value: t("translationHooks.NoRoomsFound"),
+                    },
+                ];
+            }
+
             if (allValues) {
                 return [
                     { key: "", value: t("translationHooks.AllValuesF") },

@@ -100,18 +100,26 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
 
     const renderItem = ({ item }: { item: SelectItem }) => {
         if (visible) {
-            return (
-                <>
-                    <Item
-                        item={item}
-                        onPress={() => {
-                            handleChange(item);
-                            setSelectedData(item);
-                            setVisible(false);
-                        }}
-                    />
-                </>
-            );
+            if (item.key !== "empty" && item.key !== "error") {
+                return (
+                    <>
+                        <Item
+                            item={item}
+                            onPress={() => {
+                                handleChange(item);
+                                setSelectedData(item);
+                                setVisible(false);
+                            }}
+                        />
+                    </>
+                );
+            } else {
+                return (
+                    <View style={{ padding: 5 }}>
+                        <Text style={styles.text}>{item.value}</Text>
+                    </View>
+                );
+            }
         }
         return null;
     };

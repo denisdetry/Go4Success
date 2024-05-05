@@ -143,6 +143,7 @@
     },
     "translationHooks": {
         "AllValuesM": "All",
-        "AllValuesF": "All"
+        "AllValuesF": "All",
+        "NoRoomsFound": "No rooms found"
     }
 }

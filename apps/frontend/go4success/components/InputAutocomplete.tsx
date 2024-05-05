@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     Pressable,
     SafeAreaView,
@@ -7,11 +7,13 @@ import {
     TextInput,
     TouchableOpacity,
     TouchableWithoutFeedback,
+    View,
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import styles from "@/styles/global";
 import { SelectItem } from "@/components/select";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
 
 export interface InputAutocompleteProps {
     readonly items: SelectItem[];
@@ -19,6 +21,7 @@ export interface InputAutocompleteProps {
     readonly onChange?: (value: any) => void;
     readonly readOnly?: boolean;
     readonly toReturn?: "key" | "value" | "all";
+    readonly icon?: string;
 }
 
 type ItemProps = {
@@ -27,19 +30,34 @@ type ItemProps = {
 };
 
 const Item = ({ item, onPress }: ItemProps) => {
+    const [isHovered, setIsHovered] = useState(false);
+
+    const handleMouseEnter = () => {
+        setIsHovered(true);
+    };
+
+    const handleMouseLeave = () => {
+        setIsHovered(false);
+    };
     return (
-        <TouchableOpacity onPress={onPress}>
-            <Text style={styles.text}>{item.value}</Text>
-        </TouchableOpacity>
+        <View style={[isHovered && { backgroundColor: "lightgray" }, { padding: 5 }]} onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+        >
+            <TouchableOpacity onPress={onPress}>
+                <Text style={styles.text}>{item.value}</Text>
+            </TouchableOpacity>
+        </View>
     );
 };
 const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
-    items,
-    placeholder,
-    onChange = () => {},
-    readOnly = false,
-    toReturn = "all",
-}) => {
+                                                                 items,
+                                                                 placeholder,
+                                                                 onChange = () => {
+                                                                 },
+                                                                 readOnly = false,
+                                                                 toReturn = "all",
+                                                                 icon,
+                                                             }) => {
     const [visible, setVisible] = React.useState(false);
     const [filteredData, setFilteredData] = React.useState<SelectItem[]>(items);
 
@@ -61,16 +79,16 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                     toReturn === "key"
                         ? item.key
                         : toReturn === "value"
-                          ? item.value
-                          : item,
+                            ? item.value
+                            : item,
                 );
             } else {
                 onChange(
                     toReturn === "key"
                         ? ""
                         : toReturn === "value"
-                          ? ""
-                          : { key: "", value: "" },
+                            ? ""
+                            : { key: "", value: "" },
                 );
             }
         },
@@ -84,16 +102,19 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     }, [handleChange, items]);
 
     const renderItem = ({ item }: { item: SelectItem }) => {
+
         if (visible) {
             return (
-                <Item
-                    item={item}
-                    onPress={() => {
-                        handleChange(item);
-                        setSelectedData(item);
-                        setVisible(false);
-                    }}
-                />
+                <>
+                    <Item
+                        item={item}
+                        onPress={() => {
+                            handleChange(item);
+                            setSelectedData(item);
+                            setVisible(false);
+                        }}
+                    />
+                </>
             );
         }
         return null;
@@ -102,7 +123,19 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     return (
         <ScrollView horizontal={true} scrollEnabled={false}>
             <SafeAreaView>
-                <SafeAreaView style={styles.inputField}>
+                <SafeAreaView
+                    style={[styles.inputField, visible && {
+                        borderBottomEndRadius: 0,
+                        borderBottomStartRadius: 0,
+                    }]}>
+                    {icon &&
+                        <Ionicons
+                            name={icon}
+                            size={24}
+                            color={Colors.primaryColor}
+                            style={{ marginLeft: 5 }}
+                        />
+                    }
                     {readOnly ? (
                         <TouchableWithoutFeedback
                             style={styles.input}
@@ -120,40 +153,53 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                             )}
                         </TouchableWithoutFeedback>
                     ) : (
-                        <TextInput
-                            style={styles.input}
-                            placeholder={placeholder}
-                            placeholderTextColor={"grey"}
-                            onChangeText={(text) => {
-                                setFilteredData(filterData(text));
-                                setSelectedData({ key: text, value: text });
-                                handleChange({ key: text, value: text });
-                            }}
-                            value={selectedData.value ?? ""}
-                            onFocus={() => setVisible(true)}
-                            onPressIn={() => setVisible(true)}
-                        />
+                        <>
+
+
+                            <TextInput
+                                style={styles.input}
+                                placeholder={placeholder}
+                                placeholderTextColor={"grey"}
+                                onChangeText={(text) => {
+                                    setFilteredData(filterData(text));
+                                    setSelectedData({ key: text, value: text });
+                                    handleChange({ key: text, value: text });
+                                }}
+                                value={selectedData.value ?? ""}
+                                onFocus={() => setVisible(true)}
+                                onPressIn={() => setVisible(true)}
+                            />
+                        </>
                     )}
 
                     <Pressable
                         onPress={() => {
                             setVisible(!visible);
                         }}
+                        style={{ margin: 5 }}
                     >
                         <AntDesign
                             name={visible ? "up" : "down"}
-                            size={26}
-                            color={"#000000"}
+                            size={24}
+                            color={Colors.primaryColor}
                         />
                     </Pressable>
                 </SafeAreaView>
 
-                <FlatList
-                    style={{ maxHeight: 200 }}
-                    data={filteredData}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item.value}
-                />
+                <View style={visible && {
+                    borderWidth: 0.5,
+                    borderTopWidth: 0,
+                    borderBottomStartRadius: 10,
+                    borderBottomEndRadius: 10,
+                }}>
+
+                    <FlatList
+                        style={{ maxHeight: 200 }}
+                        data={filteredData}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.value}
+                    />
+                </View>
             </SafeAreaView>
         </ScrollView>
     );

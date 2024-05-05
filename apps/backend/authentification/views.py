@@ -77,11 +77,11 @@ class MultipleFieldLookupMixin(object):
     def get_object(self):
         queryset = self.get_queryset()
         queryset = self.filter_queryset(queryset)
-        filter = {}
+        _filter = {}
         for field in self.lookup_fields:
             if self.kwargs.get(field, None):
-                filter[field] = self.kwargs[field]
-        obj = get_object_or_404(queryset, **filter)  # Lookup the object
+                _filter[field] = self.kwargs[field]
+        obj = get_object_or_404(queryset, **_filter)  # Lookup the object
         self.check_object_permissions(self.request, obj)
         return obj
 

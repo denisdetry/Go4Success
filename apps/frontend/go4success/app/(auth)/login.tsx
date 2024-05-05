@@ -16,8 +16,12 @@ export default function Login() {
     const { t } = useTranslation();
 
     const schema = yup.object().shape({
-        username: yup.string().required(t("translateLogin.yupUsernameRequired")),
-        password: yup.string().required(t("translateLogin.yupPasswordRequired")),
+        username: yup
+            .string()
+            .required(t("translateLogin.yupUsernameRequired")),
+        password: yup
+            .string()
+            .required(t("translateLogin.yupPasswordRequired")),
     });
 
     const { signIn } = useAuth();
@@ -55,6 +59,7 @@ export default function Login() {
                                     autoCapitalize={"none"}
                                     style={styles.input}
                                     placeholder={t("translateLogin.username")}
+                                    placeholderTextColor={"grey"}
                                     onChangeText={onChange}
                                     value={value}
                                 />
@@ -65,7 +70,9 @@ export default function Login() {
                     />
 
                     {errors.username && (
-                        <Text style={styles.errorMsg}>{errors.username.message}</Text>
+                        <Text style={styles.errorMsg}>
+                            {errors.username.message}
+                        </Text>
                     )}
 
                     <Controller
@@ -76,6 +83,7 @@ export default function Login() {
                                 <TextInput
                                     style={styles.input}
                                     placeholder={t("translateLogin.password")}
+                                    placeholderTextColor={"grey"}
                                     onChangeText={onChange}
                                     value={value}
                                     secureTextEntry={!showPassword}
@@ -85,7 +93,9 @@ export default function Login() {
                                     name={showPassword ? "eye-off" : "eye"}
                                     size={24}
                                     color="black"
-                                    onPress={() => setShowPassword(!showPassword)}
+                                    onPress={() =>
+                                        setShowPassword(!showPassword)
+                                    }
                                 />
                             </View>
                         )}
@@ -94,7 +104,9 @@ export default function Login() {
                     />
 
                     {errors.password && (
-                        <Text style={styles.errorMsg}>{errors.password.message}</Text>
+                        <Text style={styles.errorMsg}>
+                            {errors.password.message}
+                        </Text>
                     )}
 
                     <Button

@@ -202,7 +202,9 @@ const Card: React.FC<CardProps> = ({
             >
                 <View style={styles.centeredViewModal}>
                     <View style={styles.modalView}>
-                        <View style={styleFunctions.getModalViewTitleStyle(type)}>
+                        <View
+                            style={styleFunctions.getModalViewTitleStyle(type)}
+                        >
                             <Text style={styles.modalTitle}>{title}</Text>
                             <TouchableOpacity
                                 style={styles.closeButton}
@@ -232,12 +234,16 @@ const Card: React.FC<CardProps> = ({
 
                         <View style={styles.buttonContainer}>
                             <ButtonComponent
-                                text={t("translateRegisterActivity.registerButton")}
+                                text={t(
+                                    "translateRegisterActivity.registerButton",
+                                )}
                                 onPress={() => handleRegister.mutate()}
                                 buttonType={"primary"}
                             />
                             <ButtonComponent
-                                text={t("translateRegisterActivity.closeButton")}
+                                text={t(
+                                    "translateRegisterActivity.closeButton",
+                                )}
                                 onPress={() => setModalVisible(!modalVisible)}
                                 buttonType={"close"}
                             />

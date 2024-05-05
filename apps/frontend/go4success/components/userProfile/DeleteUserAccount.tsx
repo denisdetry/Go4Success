@@ -8,7 +8,6 @@ import { useAuth } from "@/context/Auth";
 import { useState } from "react";
 import UserProfileModal from "@/components/modals/UserProfileModal";
 
-
 export const DeleteUserAccount = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const { t } = useTranslation();
@@ -17,7 +16,8 @@ export const DeleteUserAccount = () => {
     const handleDeleteUser = useMutation({
         mutationFn: async () => {
             await fetchBackend({
-                type: "DELETE", url: "auth/delete_user/" + user.id + "/",
+                type: "DELETE",
+                url: "auth/delete_user/" + user.id + "/",
             });
         },
         onSettled: () => {
@@ -36,7 +36,6 @@ export const DeleteUserAccount = () => {
                 text2: t("translationProfile.defaultErrorMessage"),
             });
         },
-
     });
 
     const handleCancel = () => {
@@ -49,7 +48,6 @@ export const DeleteUserAccount = () => {
         // router.replace("/login");
         setIsModalVisible(false);
     };
-
 
     return (
         <>

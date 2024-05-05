@@ -1,7 +1,8 @@
-from database.models import User, ExpoToken
+from database.models import ExpoToken
 from database.models import User
 from django.http import JsonResponse
 from django.middleware import csrf
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status, generics
 from rest_framework import viewsets
@@ -13,7 +14,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import UserRegistrationSerializer, UserSerializer, UpdateUserSerializer, \
     ChangePasswordSerializer, ExpoTokenSerializer
-from .validations import custom_validation, validate_username, validate_password
+from .validations import custom_validation
 
 
 class UserRegisterView(APIView):
@@ -70,11 +71,27 @@ class ExpoTokenView(generics.ListCreateAPIView):
     serializer_class = ExpoTokenSerializer
 
 
-class UpdateExpoTokenView(generics.UpdateAPIView):
+class MultipleFieldLookupMixin(object):
+    def get_object(self):
+        queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset)
+        _filter = {}
+        for field in self.lookup_fields:
+            if self.kwargs.get(field, None):
+                _filter[field] = self.kwargs[field]
+        obj = get_object_or_404(queryset, **_filter)  # Lookup the object
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+
+class UpdateExpoTokenView(MultipleFieldLookupMixin, generics.UpdateAPIView, generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = ExpoToken.objects.all()
     serializer_class = ExpoTokenSerializer
-    lookup_field = 'user'
+    lookup_fields = ['user', 'token']
+
+    def get_queryset(self):
+        return ExpoToken.objects.filter(user=self.kwargs['id'], token=self.kwargs['token'])
 
 
 @csrf_exempt

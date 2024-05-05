@@ -16,6 +16,7 @@ type ButtonComponentProps = {
         | "clear"
         | "filter"
         | "littlePrimary";
+    readonly style?: any;
 };
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({
@@ -23,12 +24,13 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
     text,
     onPress,
     buttonType,
+    style = {},
 }) => {
     const styles = StyleSheet.create({
         common: {
-            borderRadius: 20,
+            borderRadius: 15,
             padding: 8,
-            margin: 5,
+            margin: 4,
             fontWeight: "500",
             textAlign: "center",
             color: "white",
@@ -57,22 +59,26 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
         },
         filter: {
             backgroundColor: Colors.primaryColor,
-            borderRadius: 0,
-            padding: 2,
+            borderRadius: 15,
+            padding: 4,
             margin: 4,
+            marginLeft: 0,
             width: 160,
         },
         clear: {
             backgroundColor: Colors.primaryColor,
-            borderRadius: 0,
-            padding: 0,
+            borderRadius: 15,
+            padding: 4,
             margin: 10,
             marginTop: -25,
         },
     });
 
     return (
-        <TouchableOpacity style={[styles.common, styles[buttonType]]} onPress={onPress}>
+        <TouchableOpacity
+            style={[styles.common, styles[buttonType], style]}
+            onPress={onPress}
+        >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
                 {icon && <Ionicons name={icon} size={35} color="white" />}
                 <Text style={styles.common}>{text}</Text>

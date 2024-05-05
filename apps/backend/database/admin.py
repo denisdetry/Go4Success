@@ -38,7 +38,7 @@ class AttendAdmin(admin.ModelAdmin):
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'code', 'name')
+    list_display = ('id', 'code', 'name', 'user')
 
 
 class TeacherAdmin(admin.ModelAdmin):

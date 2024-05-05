@@ -60,7 +60,7 @@ export const timelineEvents: TimelineEventProps[] = [
 const INITIAL_TIME = { hour: 9, minutes: 0 };
 const EVENTS: TimelineEventProps[] = timelineEvents;
 
-async function GetAttendance() {
+function GetAttendance() {
     console.log("getAttendance called");
     //const attendance = fetchBackend({ type: "GET", url: "/activities/attends" });
 
@@ -80,13 +80,10 @@ async function GetAttendance() {
             }
         },
     });
-    while (isPending) {
-        console.log("fetching attendance");
-    }
     console.log("attendance fetched");
     console.log("attendance: ", data);
 
-    return data;
+    return { data: data ?? [], isPending, error };
 }
 
 class TimelineCalendarScreen extends Component {
@@ -167,17 +164,44 @@ class TimelineCalendarScreen extends Component {
     }
 }
 
+// async function withMyHook(Component: any) {
+//     return async function WrappedComponent(props: any) {
+//         const attendanceFetch = GetAttendance();
+
+//         var attendanceData;
+
+//         console.log("myHookValue (function): ", attendanceFetch);
+
+//         const exportComponent = <Component {...props} myHookValue={attendanceData} />;
+
+//         attendanceData = await attendanceFetch.then(async (data) => {
+//             console.log("myHookValue (function): ", data);
+//             return data;
+//         });
+
+//         return exportComponent;
+//     };
+// }
+
 function withMyHook(Component: any) {
     return function WrappedComponent(props: any) {
-        const attendanceFetch = null;
+        const { isPending, data } = GetAttendance();
 
-        // const attendanceData = attendanceFetch.then(async (data) => {
-        //     console.log("myHookValue (function): ", data);
-        //     return data;
-        // });
+        console.log("myHookValue (function): ", data);
+        // return isPending ? (
+        //     <p>Loading...</p>
+        // ) : (
+        //     (console.log("myHookValue (function DEUX): ", data),
 
-        console.log("myHookValue (function): ", attendanceFetch);
-        return <Component {...props} myHookValue={attendanceFetch} />;
+        //     (<Component {...props} myHookValue={data} />))
+        // );
+
+        const eventsByDate = groupBy(EVENTS, (e) =>
+            CalendarUtils.getCalendarDateString(e.start),
+        ) as {
+            [key: string]: TimelineEventProps[];
+        };
+        return <TimelineList events={eventsByDate} initialTime={INITIAL_TIME} />;
     };
 }
 

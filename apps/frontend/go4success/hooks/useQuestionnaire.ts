@@ -50,44 +50,21 @@ export function useCourses() {
 }
 
 export function usePostQuestionnaire() {
-    const queryClient = useQueryClient();
-    const [error, setError] = useState(null);
+    return useMutation(postQuestionnaire);
+}
 
-    const mutation = useMutation(
-        async (questionnaire) => {
-            try {
-                const response = await fetch(
-                    `${process.env.EXPO_PUBLIC_API_URL}/postquestionnaire/postquestionnaire`,
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(questionnaire),
-                    },
-                );
-
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-
-                const data = await response.json();
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-
-                return data;
-            } catch (error) {
-                setError(error.message);
-                return null; // Return null in case of error
-            }
+async function postQuestionnaire(questionnaireData) {
+    const response = await fetch("/api/questionnaire", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
         },
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(["getSites"]);
-            },
-        },
-    );
+        body: JSON.stringify(questionnaireData),
+    });
 
-    return { mutate: mutation.mutate, error };
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    }
+
+    return response.json();
 }

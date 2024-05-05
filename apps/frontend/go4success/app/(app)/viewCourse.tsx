@@ -13,14 +13,17 @@ import {
 } from "react-native";
 
 type StackNavigatorParams = {
+    Courses: undefined; // Ajoutez cette ligne
     Questionnaire: { courseCode: string; courseName: string };
 };
 
-const CoursesComponent = ({ createQuestionnaire }) => {
+const Stack = createStackNavigator<StackNavigatorParams>();
+
+const CoursesComponent = ({ createQuestionnaire } = {}) => {
     const { isPending, sites, error } = useCourses();
-    const Stack = createStackNavigator<StackNavigatorParams>();
     const navigation =
         useNavigation<StackNavigationProp<StackNavigatorParams, "Questionnaire">>();
+
     if (isPending) {
         return <ActivityIndicator size="large" color="#0000ff" />;
     }
@@ -48,7 +51,7 @@ const CoursesComponent = ({ createQuestionnaire }) => {
                             })
                         }
                     >
-                        <Text style={styles.buttonText}>Créer questionnaire</Text>
+                        <Text> Créer un questionnaire </Text>
                     </TouchableOpacity>
                 </View>
             )}
@@ -57,14 +60,11 @@ const CoursesComponent = ({ createQuestionnaire }) => {
 };
 
 const ViewCourse = () => {
-    const createQuestionnaire = (courseId) => {
-        console.log("Créer questionnaire pour le cours:", courseId);
-    };
-
     return (
-        <View style={styles.container}>
-            <CoursesComponent createQuestionnaire={createQuestionnaire} />
-        </View>
+        <Stack.Navigator>
+            <Stack.Screen name="Courses" component={CoursesComponent} />
+            <Stack.Screen name="Questionnaire" component={Questionnaire} />
+        </Stack.Navigator>
     );
 };
 

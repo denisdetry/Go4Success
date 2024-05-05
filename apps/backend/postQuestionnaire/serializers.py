@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate
-from database.models import Questionnaire, Question, OpenAnswer, ChoiceAnswer, ChoiceAnswerInstance, Course, Language
+from database.models import Questionnaire, Question, OpenAnswer, ChoiceAnswer, ChoiceAnswerInstance, Course, Language, OpenQuestion, ClosedQuestion
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -60,3 +60,18 @@ class ChoiceAnswerInstanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChoiceAnswerInstance
         fields = ["id", "choice_answer", "choice", "is_correct"]
+
+
+class OpenQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OpenQuestion
+        fields = ["id", "question", "question_text"]
+
+
+class ClosedQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClosedQuestion
+        fields = ["id",
+                  "question",
+                  "options",
+                  "checked"]

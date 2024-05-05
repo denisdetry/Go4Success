@@ -174,7 +174,7 @@ const Card: React.FC<CardProps> = ({
     interface ModalTextComponentProps {
         title: string;
         content: string;
-        icon?: string;
+        icon?: any;
     }
 
     const ModalTextComponent: React.FC<ModalTextComponentProps> = ({ title, content, icon }) => {

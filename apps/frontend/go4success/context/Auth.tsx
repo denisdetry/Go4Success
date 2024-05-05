@@ -55,9 +55,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
     const deniedRoutesForNonStaff = [["(app)", "activities", "add"]];
 
-    const isSuperUser = user.is_superuser;
+    const isSuperUser = user?.is_superuser;
 
-    const isStaff = user.is_staff;
+    const isStaff = user?.is_staff;
 
     if (
         !isSuperUser &&

@@ -92,7 +92,9 @@
         "accountConfirmModal": "compte",
         "cancelButtonModal": "Annuler",
         "confirmButtonModal": "Confirmer",
-        "successUserDelete": "Votre compte a été supprimé avec succès"
+        "successUserDelete": "Votre compte a été supprimé avec succès",
+        "passwordPlaceholder": "Veuillez entrer votre mot de passe",
+        "wrongPassword": "Le mot de passe est incorrect"
     },
     "translateToast": {
         "SuccessText1": "Félicitation ! \uD83C\uDF89",

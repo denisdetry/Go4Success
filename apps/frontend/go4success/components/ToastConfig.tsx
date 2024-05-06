@@ -1,9 +1,4 @@
-import {
-    ErrorToast,
-    InfoToast,
-    SuccessToast,
-    ToastConfigParams,
-} from "react-native-toast-message";
+import { ErrorToast, InfoToast, SuccessToast, ToastConfigParams } from "react-native-toast-message";
 import { Platform, StyleSheet } from "react-native";
 import Colors from "@/constants/Colors";
 

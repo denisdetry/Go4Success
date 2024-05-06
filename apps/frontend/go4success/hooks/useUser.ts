@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function useUser() {
     const { isPending, data: user } = useQuery({
@@ -12,6 +13,8 @@ export default function useUser() {
                 });
                 return response;
             } catch (err) {
+                await AsyncStorage.removeItem("accessToken");
+                await AsyncStorage.removeItem("refreshToken");
                 return null;
             }
         },

@@ -1,20 +1,15 @@
 import React from "react";
 
 import DataTable, { TableColumn } from "react-data-table-component";
-import { Feedback, FeedbackStudent } from "@/types/Feedback";
+import { Feedback } from "@/types/Feedback";
 import Colors from "@/constants/Colors";
 
 interface FeedbackTableProps {
-    feedbacks: Feedback[];
-    columns: TableColumn<Feedback>[];
+    readonly feedbacks: Feedback[];
+    readonly columns: TableColumn<Feedback>[];
 }
 
-interface FeedbackStudentTableProps {
-    feedbacks: FeedbackStudent[];
-    columns: TableColumn<FeedbackStudent>[];
-}
-
-const customStyles = {
+export const customStyles = {
     rows: {
         style: {
             minHeight: "72px",
@@ -55,20 +50,4 @@ export const FeedbackTable: React.FC<FeedbackTableProps> = ({
         />
     );
 };
-
-export const FeedbackStudentTable: React.FC<FeedbackStudentTableProps> = ({
-    feedbacks,
-    columns,
-}) => {
-    return (
-        <DataTable
-            columns={columns}
-            data={feedbacks}
-            pagination
-            highlightOnHover
-            customStyles={customStyles}
-        />
-    );
-};
-
 export default FeedbackTable;

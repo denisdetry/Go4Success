@@ -17,14 +17,14 @@ function LanguageSwitcher() {
                 onPress={() => switchLanguage("en")}
             >
                 <Image source={enFlag} style={styles.flag} />
-                <Text style={styles.buttonText}>En </Text>
+                <Text style={styles.buttonText}>EN </Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => switchLanguage("fr")}
             >
                 <Image source={frFlag} style={styles.flag} />
-                <Text style={styles.buttonText}>Fr</Text>
+                <Text style={styles.buttonText}>FR</Text>
             </TouchableOpacity>
         </View>
     );
@@ -39,10 +39,10 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "#DDDDDD",
         padding: 10,
-        margin: 10,
+        margin: 3,
     },
     buttonText: {
-        marginLeft: 10,
+        marginLeft: 0,
     },
     flag: {
         width: 20,

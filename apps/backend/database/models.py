@@ -110,7 +110,7 @@ class Room(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s - %s" % (self.site, self.name)
+        return self.name
 
     class Meta:
         unique_together = (('name', 'site'),)

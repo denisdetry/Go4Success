@@ -1,11 +1,5 @@
-/**
- * @file FeedbackTable.tsx
- * @author Allemeersch Maxime <max.allemeersch@gmail.com>
- * @date  02/05/2024
- * @description Enables  to create a feedback table
- */
-
 import React from "react";
+
 import DataTable, { TableColumn } from "react-data-table-component";
 import { Feedback, FeedbackStudent } from "@/types/Feedback";
 import Colors from "@/constants/Colors";
@@ -47,7 +41,10 @@ const customStyles = {
     },
 };
 
-export const FeedbackTable: React.FC<FeedbackTableProps> = ({ feedbacks, columns }) => {
+export const FeedbackTable: React.FC<FeedbackTableProps> = ({
+    feedbacks,
+    columns,
+}) => {
     return (
         <DataTable
             columns={columns}

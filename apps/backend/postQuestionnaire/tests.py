@@ -38,7 +38,7 @@ class QuestionnaireTestCase(APITestCase):
         data_course = {
             "id": 1,
             "code": "INFOB123",
-            "name": "super"
+                    "name": "super"
         }
 
         data_language = {
@@ -53,6 +53,8 @@ class QuestionnaireTestCase(APITestCase):
         force_authenticate(request_course, user=self.userCreation)
         view_course = CourseView.as_view({'post': 'create'})
         response_course = view_course(request_course)
+        self.assertEqual(response_course.status_code,
+                         status.HTTP_201_CREATED, "Failed to create Course")
 
         request_language = self.factory.post(
             '/postquestionnaire/viewlanguage/', data_language)
@@ -60,6 +62,8 @@ class QuestionnaireTestCase(APITestCase):
         force_authenticate(request_language, user=self.userCreation)
         view_language = LanguageView.as_view({'post': 'create'})
         response_language = view_language(request_language)
+        self.assertEqual(response_language.status_code,
+                         status.HTTP_201_CREATED, "Failed to create Language")
 
         request = self.factory.post(
             '/postquestionnaire/postquestionnaire/', data_questionnaire)
@@ -68,21 +72,22 @@ class QuestionnaireTestCase(APITestCase):
         response = view(request)
 
         self.assertEqual(response.status_code,
-                         status.HTTP_201_CREATED)
-    """  
+                         status.HTTP_201_CREATED, "Failed to create Questionnaire")
+        print(response.data)
+
     def test_create_empty_questionnaire(self):
         data = {
-            "course": 1,
+            "course": 2,
             "title": "",
             "description": "",
             "points_total": 0,
             "date_start": "",
-            "date_end": ""
+            "date_end": "",
+            "language": 2
         }
         request = self.factory.post(
             '/postquestionnaire/postquestionnaire', data)
         force_authenticate(request, user=self.userCreation)
         view = QuestionnaireView.as_view({'post': 'create'})
         response = view(request)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-    """
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

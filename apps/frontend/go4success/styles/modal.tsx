@@ -1,11 +1,11 @@
-import { Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import Colors from "@/constants/Colors";
 
 export default StyleSheet.create({
     centeredView: {
         flex: 1,
         justifyContent: "center",
-        alignItems: Platform.OS === "web" ? "center" : undefined,
+        alignItems: "center",
         backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     modalView: {

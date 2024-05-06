@@ -24,12 +24,15 @@ import { generateHourQuarterList } from "@/utils/generateHourQuarterList";
 import styles from "@/styles/global";
 import InputAutocomplete from "@/components/selectors/InputAutocomplete";
 import DateTimePicker from "react-native-ui-datepicker";
+import { sendNotificationsToAllUsers } from "@/utils/sendNotification";
+import useAllExpoTokens from "@/hooks/useAllExpoTokens";
 
 const hourQuarterList = generateHourQuarterList();
 
 export default function Add() {
     const timezoneOffset = dayjs().utcOffset() / 60;
     const { t } = useTranslation();
+    const { allExpoTokens } = useAllExpoTokens();
 
     const schema = yup.object().shape({
         title: yup
@@ -169,7 +172,7 @@ export default function Add() {
                 .set(
                     "hour",
                     Number(data.beginTime.value.split(":")[0]) +
-                        Number(timezoneOffset),
+                    Number(timezoneOffset),
                 )
                 .set("minute", Number(data.beginTime.value.split(":")[1]))
                 .toJSON();
@@ -177,7 +180,7 @@ export default function Add() {
                 .set(
                     "hour",
                     Number(data.endTime.value.split(":")[0]) +
-                        Number(timezoneOffset),
+                    Number(timezoneOffset),
                 )
                 .set("minute", Number(data.endTime.value.split(":")[1]))
                 .toJSON();
@@ -235,6 +238,7 @@ export default function Add() {
                     text2: t("translationActivities.addSuccessMultiple"),
                 });
             }
+            sendNotificationsToAllUsers(allExpoTokens, "Viens voir!", "Une nouvelle activité a été ajoutée! 📬", {});
         }
     };
 

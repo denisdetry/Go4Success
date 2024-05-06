@@ -1,8 +1,10 @@
 from database.models import Activity, Attend, Room, Site, Language
 from django.db.models import Q
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+import json
+from rest_framework.views import APIView
 
 from .serializers import SiteSerializer, ActivitySerializer, \
     AttendSerializer, RoomSerializer, RegisterToActivitySerializer, \
@@ -93,3 +95,19 @@ class RegisterToActivityView(viewsets.ModelViewSet):
 
     queryset = Attend.objects.all()
     serializer_class = RegisterToActivitySerializer
+
+
+class UnregisterFromActivityView(APIView):
+    def post(self, request):
+        try:
+            data = json.loads(request.body)
+            activity = int(data.get('activity'))
+            student = int(data.get('student'))
+            attends = Attend.objects.get(activity=activity, student=student)
+            attends.delete()
+            return Response({'message': 'Successfully unregistered from activity'}, status=status.HTTP_200_OK)
+        except Attend.DoesNotExist:
+            return Response({'message': 'You are not registered to this activity'}, status=status.HTTP_400_BAD_REQUEST)
+
+        except json.JSONDecodeError:
+            return Response({'message': 'Invalid JSON'}, status=status.HTTP_400_BAD_REQUEST)

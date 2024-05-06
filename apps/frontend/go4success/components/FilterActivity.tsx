@@ -110,6 +110,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 type={activity.type}
                 description={activity.description}
                 language={activity.language.name}
+                isAttend={filterType === "attend"}
             />
         );
     };

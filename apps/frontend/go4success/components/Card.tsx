@@ -123,32 +123,6 @@ const styleFunctions = {
     },
 };
 
-async function isRegistered(id: any, user: any) {
-    const { isPending, isError, data, error } = useQuery({
-        queryKey: ["attendance", id],
-        queryFn: async () => {
-            const { data } = await fetchBackend({
-                type: "GET",
-                url: "activities/attends/",
-                data: {
-                    activity: id,
-                    student: user.id,
-                },
-            });
-            console.log("attendace data: " + data);
-            return data;
-        },
-    });
-    if (isPending) {
-        console.log("isPending");
-    }
-    if (isError) {
-        console.log("isError");
-    }
-
-    return data;
-}
-
 const Card: React.FC<CardProps> = ({
     id,
     title,
@@ -279,9 +253,6 @@ const Card: React.FC<CardProps> = ({
             setModalVisible(!modalVisible);
         },
     });
-
-    const test = isRegistered(id, user);
-    console.log("test: " + test);
 
     var registerButtonText: string;
     var registerButtonOnPress: any;

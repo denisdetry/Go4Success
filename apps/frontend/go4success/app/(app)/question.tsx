@@ -35,7 +35,7 @@ const QuestionBox = ({ questionnaireId }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [openQuestions, setOpenQuestions] = useState([]);
     const [closedQuestions, setClosedQuestions] = useState<
-        { questionnaire: string; type: string; points: number; question: string }[]
+        { type: string; points: number; question: string }[]
     >([]);
     const { mutate, error } = usePostQuestion();
 
@@ -49,19 +49,9 @@ const QuestionBox = ({ questionnaireId }) => {
     };
 
     const handleSaveOpenQuestions = () => {
-        // Parcourir chaque question ouverte et l'envoyer au backend
         openQuestions.forEach((question) => {
             // Ajouter questionnaireId à chaque question
             const questionWithId = { ...question, questionnaireId };
-
-            closedQuestions.forEach((question) => {
-                mutate({
-                    questionnaire: question.questionnaire,
-                    type: question.type,
-                    points: question.points,
-                    question: question.question,
-                });
-            });
 
             mutate(questionWithId, {
                 onSuccess: () => {
@@ -79,6 +69,18 @@ const QuestionBox = ({ questionnaireId }) => {
                     });
                 },
             });
+        });
+
+        closedQuestions.forEach((question) => {
+            const { type, points, question: questionText } = question;
+            const questionWithId = {
+                questionnaire: questionnaireId,
+                question: questionText,
+                type,
+                points,
+            };
+
+            mutate(questionWithId);
         });
     };
     return (
@@ -215,7 +217,7 @@ const ClosedQuestionBox = ({ id, setClosedQuestions, questionnaireId }) => {
     const handleSaveQuestion = () => {
         const newQuestion: ClosedQuestion = {
             questionnaire: questionnaireId,
-            type: "closed",
+            type: "multiple_choice",
             points: points,
             question: question,
             options: options,

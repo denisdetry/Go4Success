@@ -15,8 +15,10 @@ import useUser from "@/hooks/useUser";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 function isListIncluded(mainList: any[][], searchList: any[]): boolean {
-    return mainList.some(subList =>
-        subList.length === searchList.length && subList.every((value, index) => value === searchList[index]),
+    return mainList.some(
+        (subList) =>
+            subList.length === searchList.length &&
+            subList.every((value, index) => value === searchList[index]),
     );
 }
 
@@ -49,13 +51,22 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
         return <Redirect href={"/"} />;
     }
 
-    const deniedRoutesForNonSuperUser = [
-        ["(app)", "rolemanagement"],
-    ];
+    const deniedRoutesForNonSuperUser = [["(app)", "rolemanagement"]];
 
-    const isNotSuperUser = !user?.is_superuser && user;
+    const deniedRoutesForNonStaff = [["(app)", "activities", "add"]];
 
-    if (isNotSuperUser && isListIncluded(deniedRoutesForNonSuperUser, rootSegment)) {
+    const isSuperUser = user?.is_superuser;
+
+    const isStaff = user?.is_staff;
+
+    if (
+        !isSuperUser &&
+        isListIncluded(deniedRoutesForNonSuperUser, rootSegment)
+    ) {
+        return <Redirect href={"/"} />;
+    }
+
+    if (!isStaff && isListIncluded(deniedRoutesForNonStaff, rootSegment)) {
         return <Redirect href={"/"} />;
     }
 
@@ -77,13 +88,21 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                     // eslint-disable-next-line camelcase
                                     first_name: userData.firstName,
                                     password: userData.password,
-                                    noma: userData.noma ? userData.noma : undefined,
+                                    noma: userData.noma
+                                        ? userData.noma
+                                        : undefined,
                                 },
                             });
 
                             if (success) {
-                                await AsyncStorage.setItem("accessToken", success.access);
-                                await AsyncStorage.setItem("refreshToken", success.refresh);
+                                await AsyncStorage.setItem(
+                                    "accessToken",
+                                    success.access,
+                                );
+                                await AsyncStorage.setItem(
+                                    "refreshToken",
+                                    success.refresh,
+                                );
                                 await queryClient.invalidateQueries({
                                     queryKey: ["current_user"],
                                 });
@@ -91,13 +110,18 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                 Toast.show({
                                     type: "success",
                                     text1: t("translateToast.SuccessText1"),
-                                    text2: t("translateToast.RegisterSuccessText2"),
+                                    text2: t(
+                                        "translateToast.RegisterSuccessText2",
+                                    ),
                                 });
                             }
                         } catch (err) {
                             const error = err as fetchError;
                             if (error.responseError) {
-                                if (error.responseError.status === 401 || error.responseError.status === 400) {
+                                if (
+                                    error.responseError.status === 401 ||
+                                    error.responseError.status === 400
+                                ) {
                                     Toast.show({
                                         type: "error",
                                         text1: t("translateToast.ErrorText1"),
@@ -107,7 +131,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                                     Toast.show({
                                         type: "error",
                                         text1: t("translateToast.ErrorText1"),
-                                        text2: t("translateToast.ServerErrorText2"),
+                                        text2: t(
+                                            "translateToast.ServerErrorText2",
+                                        ),
                                     });
                                 }
                             }
@@ -127,8 +153,14 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         });
 
                         if (success) {
-                            await AsyncStorage.setItem("accessToken", success.access);
-                            await AsyncStorage.setItem("refreshToken", success.refresh);
+                            await AsyncStorage.setItem(
+                                "accessToken",
+                                success.access,
+                            );
+                            await AsyncStorage.setItem(
+                                "refreshToken",
+                                success.refresh,
+                            );
 
                             await queryClient.invalidateQueries({
                                 queryKey: ["current_user"],
@@ -143,11 +175,16 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                     } catch (err) {
                         const error = err as fetchError;
                         if (error.responseError) {
-                            if (error.responseError.status === 401 || error.responseError.status === 400) {
+                            if (
+                                error.responseError.status === 401 ||
+                                error.responseError.status === 400
+                            ) {
                                 Toast.show({
                                     type: "error",
                                     text1: t("translateToast.ErrorText1"),
-                                    text2: t("translateToast.LoginInfoErrorText2"),
+                                    text2: t(
+                                        "translateToast.LoginInfoErrorText2",
+                                    ),
                                 });
                             } else {
                                 Toast.show({
@@ -165,9 +202,13 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         if (Platform.OS !== "web") {
                             await fetchBackend({
                                 type: "PATCH",
-                                url: "auth/update_expo_token/" + user.id + "/",
+                                url:
+                                    "auth/update_expo_token/" +
+                                    user.id +
+                                    "/" +
+                                    expoPushToken +
+                                    "/",
                                 data: {
-                                    token: expoPushToken,
                                     // eslint-disable-next-line camelcase
                                     is_active: false,
                                 },
@@ -190,8 +231,6 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
                         const err = error as fetchError;
                         console.log(err.responseError);
                     }
-
-
                 },
                 expoPushToken: expoPushToken,
                 notification: notification,

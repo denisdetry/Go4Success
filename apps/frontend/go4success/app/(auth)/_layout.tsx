@@ -19,7 +19,11 @@ export default function Layout() {
                     options={{
                         title: t("translateLogin.title"),
                         tabBarIcon: ({ size, color }) => (
-                            <FontAwesome5 name="users" size={size} color={color} />
+                            <FontAwesome5
+                                name="users"
+                                size={size}
+                                color={color}
+                            />
                         ),
                     }}
                 />
@@ -28,7 +32,11 @@ export default function Layout() {
                     options={{
                         title: t("translateRegister.title"),
                         tabBarIcon: ({ size, color }) => (
-                            <FontAwesome6 name="pen-fancy" size={size} color={color} />
+                            <FontAwesome6
+                                name="pen-fancy"
+                                size={size}
+                                color={color}
+                            />
                         ),
                     }}
                 />

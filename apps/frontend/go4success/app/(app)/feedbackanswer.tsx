@@ -8,7 +8,6 @@ import {
     StyleSheet,
     Platform,
 } from "react-native";
-import { useTranslation } from "react-i18next";
 import { StackScreenProps } from "@react-navigation/stack";
 import { useRoute, RouteProp } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
@@ -25,6 +24,7 @@ import {
     useFeedbackAdditionalQuestions,
 } from "@/hooks/useFeedback";
 import { useNavigation } from "expo-router";
+import { t } from "i18next";
 
 type RootStackParamList = {
     feedbackanswer: { activityId: string };
@@ -35,14 +35,21 @@ type FeedbackAnswerScreenProps = StackScreenProps<
     "feedbackanswer"
 >;
 
+const satisfactionLevels = [
+    { key: "5", value: t("satisfactionLevels.verySatisfied") },
+    { key: "4", value: t("satisfactionLevels.satisfied") },
+    { key: "3", value: t("satisfactionLevels.neutral") },
+    { key: "2", value: t("satisfactionLevels.unsatisfied") },
+    { key: "1", value: t("satisfactionLevels.veryUnsatisfied") },
+];
+
 export default function FeedbackAnswer(
     props: Readonly<FeedbackAnswerScreenProps>,
 ) {
     const route = useRoute<RouteProp<RootStackParamList, "feedbackanswer">>();
     const navigation = useNavigation();
     const activityId = route?.params?.activityId ?? "not id present";
-    const { t } = useTranslation();
-    const [evaluation, setEvaluation] = useState<string>("");
+    const [evaluation, setEvaluation] = useState<String>("");
     const [positivePoint, setPositivePoint] = useState("");
     const [negativePoint, setNegativePoint] = useState("");
     const [suggestion, setSuggestion] = useState("");
@@ -60,13 +67,6 @@ export default function FeedbackAnswer(
         null,
     );
 
-    const satisfactionLevels = [
-        { key: "5", value: t("satisfactionLevels.verySatisfied") },
-        { key: "4", value: t("satisfactionLevels.satisfied") },
-        { key: "3", value: t("satisfactionLevels.neutral") },
-        { key: "2", value: t("satisfactionLevels.unsatisfied") },
-        { key: "1", value: t("satisfactionLevels.veryUnsatisfied") },
-    ];
     const { feedbacks } = useFeedback("", activityId, "");
     const firstFeedbackId = feedbacks.length > 0 ? feedbacks[0].id : "";
     const { feedbackAdditionalQuestions } =
@@ -234,10 +234,7 @@ export default function FeedbackAnswer(
                                 ]}
                             >
                                 <InputAutocomplete
-                                    items={satisfactionLevels.map((level) => ({
-                                        key: level.key,
-                                        value: level.value,
-                                    }))}
+                                    items={satisfactionLevels}
                                     placeholder={t(
                                         "translateFeedback.selectSatisfaction",
                                     )}

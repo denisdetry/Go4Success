@@ -174,9 +174,9 @@ const Card: React.FC<CardProps> = ({
     const { t } = useTranslation();
     const navigation = useNavigation<FeedbackAnswerScreenNavigationProp>();
     const currentDate = new Date();
-    const [datePart, timePart] = dateEnd.split(" - ");
-    const [day, month, year] = datePart.split("-");
-    const [partHour, partMinute] = timePart.split(":");
+    const [datePart, timePart] = dateEnd?.split(" - ") || [];
+    const [day, month, year] = datePart?.split("-") || [];
+    const [partHour, partMinute] = timePart?.split(":") || [];
     const newDateEnd = new Date(
         parseInt(year),
         parseInt(month) - 1,

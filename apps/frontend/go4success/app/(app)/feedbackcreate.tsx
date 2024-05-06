@@ -76,6 +76,7 @@ export default function FeedbackCreate() {
                     !feedbackActivityIds.includes(activity.key) && // @ts-ignore
                     givesActivityIds.includes(activity.key),
             );
+            console.log(newFilteredActivities);
             setFilteredActivities(newFilteredActivities);
         } else {
             setSelectedActivity("");
@@ -205,12 +206,12 @@ export default function FeedbackCreate() {
                         <View
                             style={[stylesGlobal.inputLargeFieldWithoutBorder]}
                         >
-                            <InputAutocomplete
+                            {/*<InputAutocomplete
                                 items={filteredActivities}
                                 placeholder={"Activites"}
                                 toReturn={"key"}
                                 onChange={activityCallback}
-                            />
+                />*/}
                         </View>
                     </View>
                 </View>

@@ -1,30 +1,44 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+    FlatList,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Toast from "react-native-toast-message";
-import { useUserInfo, useUserRole, usePostSite } from "@/hooks/useRoleManagement";
-import { useMutation } from "@tanstack/react-query";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useInfo, useUserRoles, useEditRole } from "@/hooks/useRoleManagement";
+
+interface User {
+    selectedRole: string;
+    id: number;
+    first_name: string;
+    last_name: string;
+    role: string;
+}
+
+interface UserRole {
+    user: number;
+    is_professor: boolean;
+    is_tutor: boolean;
+}
 
 export default function RoleManagement() {
     const [selectedValue, setSelectedValue] = useState("");
     const backendURL = process.env.EXPO_PUBLIC_API_URL;
+    const { isPending, sites, error } = useInfo();
+    const [userRole, setUserRole] = useState<UserRole[]>([]);
+    const [userInfo, setUserInfo] = useState([]);
+    const { isPendings, roles, errors } = useUserRoles();
 
-    const { mutatePostSite, isError, error, data } = usePostSite();
+    useEffect(() => {
+        setUserInfo(sites);
+    }, [sites]);
 
-    interface User {
-        selectedRole: string;
-        id: number;
-        first_name: string;
-        last_name: string;
-        role: string;
-    }
-
-    interface UserRole {
-        user: number;
-        is_professor: boolean;
-        is_tutor: boolean;
-    }
+    useEffect(() => {
+        setUserRole(roles);
+    }, [roles]);
 
     function editRolePatch(id: any, isTutor: any, isProfessor: any) {}
 
@@ -69,7 +83,10 @@ export default function RoleManagement() {
         // Ajout d'un état pour suivre la valeur sélectionnée de chaque liste déroulante
         // Initialiser chaque élément avec son rôle actuel
         const [users, setUsers] = useState(
-            usersInfoRole.map((user: User) => ({ ...user, selectedRole: user.role })),
+            usersInfoRole.map((user: User) => ({
+                ...user,
+                selectedRole: user.role,
+            })),
         );
 
         const handleValueChange = (itemValue: any, itemId: any) => {
@@ -112,7 +129,9 @@ export default function RoleManagement() {
                             style={styles.saveButton}
                             id="saveChange"
                         >
-                            <Text style={{ color: "#fff", textAlign: "center" }}>
+                            <Text
+                                style={{ color: "#fff", textAlign: "center" }}
+                            >
                                 Save
                             </Text>
                         </TouchableOpacity>

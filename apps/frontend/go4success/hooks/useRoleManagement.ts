@@ -2,85 +2,185 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchBackend } from "@/utils/fetchBackend";
 import { useMutation } from "@tanstack/react-query";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Toast from "react-native-toast-message";
 
-export function useUserInfo() {
-    const backendURL = process.env.EXPO_PUBLIC_API_URL;
-    const {
-        data: userInfo,
-        error,
-        isFetching,
-    } = useQuery(["getUserInfo"], async () => {
-        const { data, error } = await fetchBackend({
-            type: "GET",
-            url: `${backendURL}/rolemanagement/rolemanagement/`,
-        });
+export type UserInfo = {
+    id: number;
+    first_name: string;
+    last_name: string;
+    is_superuser: boolean;
+};
 
-        if (error) {
-            throw new Error(error);
-        }
+export type UserRole = {
+    user: number;
+    is_professor: boolean;
+    is_tutor: boolean;
+};
 
-        return data;
-    });
-
-    return { userInfo, error, isFetching };
-}
-
-export function useUserRole() {
-    const backendURL = process.env.EXPO_PUBLIC_API_URL;
+export function useInfo() {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
 
     const {
-        data: userRole,
+        isFetching: isPending,
+        data: sites,
         error,
-        isFetching,
-    } = useQuery(["getUserRole"], async () => {
-        const { data, error } = await fetchBackend({
-            type: "GET",
-            url: `${backendURL}/rolemanagement/editRole/`,
-        });
+    } = useQuery<UserInfo[]>({
+        queryKey: "getUserInfo",
+        queryFn: async () => {
+            const response = await fetchBackend({
+                type: "GET",
+                url: `/rolemanagement/rolemanagement/`,
+            });
 
-        if (error) {
-            throw new Error(error);
-        }
+            if (response.error) {
+                throw new Error(response.error);
+            }
 
-        return data; // Ajustez en fonction du format attendu
+            return response.data.map((site: UserInfo) => ({
+                id: site.id,
+                first_name: site.first_name,
+                last_name: site.last_name,
+                is_superuser: site.is_superuser,
+            }));
+        },
     });
 
-    return { userRole, error, isFetching };
+    return { isPending, sites: sites ?? [], error };
 }
 
-export function usePostSite(endpoint: string, newSiteData: any) {
-    const { mutate, isError, error, data } = useMutation({
-        mutationFn: async () => {
-            const { data, error } = await fetchBackend({
-                type: "POST",
-                url: `/rolemanagement/${endpoint}/`,
-                data: JSON.stringify(newSiteData),
-            });
-            return { data, error };
-        },
-        onSuccess: () => {
-            // Affiche un toast en cas de succès
-            Toast.show({
-                type: "success",
-                text1: "Succès",
-                text2: "Les informations ont bien été envoyées.",
-            });
-        },
-        onError: (error) => {
-            // Affiche un toast en cas d'erreur
-            Toast.show({
-                type: "error",
-                text1: "Erreur",
-                text2: error.message || "Une erreur est survenue.",
-            });
+export function useUserRoles() {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
+    const {
+        isFetching: isPendings,
+        data: roles,
+        error: errors,
+    } = useQuery<UserRole[]>({
+        queryKey: "getUserRoles",
+        queryFn: async () => {
+            const response = await fetch(
+                `${backend_url}/rolemanagement/editRole/`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                },
+            );
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const data = await response.json();
+
+            return data.map((role: UserRole) => ({
+                user: role.user,
+                is_professor: role.is_professor,
+                is_tutor: role.is_tutor,
+            }));
         },
     });
 
-    return {
-        mutatePostSite: mutate,
-        isError,
-        error,
-        data,
-    };
+    return { isPendings, roles: roles ?? [], errors };
+}
+
+export function useEditRole() {
+    return useMutation({
+        mutationFn: editRole,
+    });
+}
+
+async function editRole(editRoleData) {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
+    const response = await fetch(`${backend_url}/rolemanagement/editRole/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editRoleData),
+    });
+
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    }
+
+    return response.json();
+}
+
+export function useDeleteRole() {
+    return useMutation({
+        mutationFn: deleteRole,
+    });
+}
+
+async function deleteRole(roleId) {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
+    const response = await fetch(
+        `${backend_url}/rolemanagement/editRole/${roleId}`,
+        {
+            method: "DELETE",
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    }
+
+    return response.json();
+}
+
+export function usePatchRole() {
+    return useMutation({
+        mutationFn: patchRole,
+    });
+}
+
+async function patchRole({ roleId, roleData }) {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
+    const response = await fetch(
+        `${backend_url}/rolemanagement/editRole/${roleId}`,
+        {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(roleData),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    }
+
+    return response.json();
+}
+
+export function usePatchUser() {
+    return useMutation({
+        mutationFn: patchUser,
+    });
+}
+
+async function patchUser({ userId, userData }) {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
+    const response = await fetch(
+        `${backend_url}/rolemanagement/rolemanagement/${userId}`,
+        {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    }
+
+    return response.json();
 }

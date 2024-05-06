@@ -108,6 +108,30 @@ async function editRole(editRoleData) {
     return response.json();
 }
 
+export function useEditRolePatch() {
+    return useMutation({
+        mutationFn: editRolePatch,
+    });
+}
+
+async function editRolePatch(editRoleData) {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
+    const response = await fetch(`${backend_url}/rolemanagement/editRole/`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editRoleData),
+    });
+
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    }
+
+    return response.json();
+}
+
 export function useDeleteRole() {
     return useMutation({
         mutationFn: deleteRole,
@@ -118,7 +142,7 @@ async function deleteRole(roleId) {
     const backend_url = process.env.EXPO_PUBLIC_API_URL;
 
     const response = await fetch(
-        `${backend_url}/rolemanagement/editRole/${roleId}`,
+        `${backend_url}/rolemanagement/editRole/${roleId}/`,
         {
             method: "DELETE",
         },
@@ -141,7 +165,7 @@ async function patchRole({ roleId, roleData }) {
     const backend_url = process.env.EXPO_PUBLIC_API_URL;
 
     const response = await fetch(
-        `${backend_url}/rolemanagement/editRole/${roleId}`,
+        `${backend_url}/rolemanagement/editRole/${roleId}/`,
         {
             method: "PATCH",
             headers: {
@@ -168,7 +192,7 @@ async function patchUser({ userId, userData }) {
     const backend_url = process.env.EXPO_PUBLIC_API_URL;
 
     const response = await fetch(
-        `${backend_url}/rolemanagement/rolemanagement/${userId}`,
+        `${backend_url}/rolemanagement/rolemanagement/${userId}/`,
         {
             method: "PATCH",
             headers: {

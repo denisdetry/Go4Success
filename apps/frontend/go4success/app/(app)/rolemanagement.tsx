@@ -8,7 +8,14 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Toast from "react-native-toast-message";
-import { useInfo, useUserRoles, useEditRole } from "@/hooks/useRoleManagement";
+import {
+    useInfo,
+    useUserRoles,
+    useEditRole,
+    useDeleteRole,
+    usePatchUser,
+    usePatchRole,
+} from "@/hooks/useRoleManagement";
 
 interface User {
     selectedRole: string;
@@ -30,7 +37,48 @@ export default function RoleManagement() {
     const { isPending, sites, error } = useInfo();
     const [userRole, setUserRole] = useState<UserRole[]>([]);
     const [userInfo, setUserInfo] = useState([]);
-    const { isPendings, roles, errors } = useUserRoles();
+    const { isPendings, roles } = useUserRoles();
+    const { mutateAsync: deleteRoleMutation, error: deleteRoleError } =
+        useDeleteRole();
+    const { mutateAsync: editRoleMutation, error: editUserError } =
+        useEditRole();
+    const { mutateAsync: editPatchMutation, error: editPatchError } =
+        usePatchRole();
+    const { mutateAsync: patchUserMutation, error: patchUserError } =
+        usePatchUser();
+
+    const handleEditRole = async (editRoleData) => {
+        try {
+            const result = await editRoleMutation(editRoleData);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleEditRolePatch = async (user, editRoleData) => {
+        try {
+            console.log(user);
+            const result = await editPatchMutation(user, editRoleData);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleDeleteRole = async (roleId) => {
+        try {
+            const result = await deleteRoleMutation(roleId);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handlePatchUser = async (user, userData) => {
+        try {
+            const result = await patchUserMutation(user, userData);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
         setUserInfo(sites);
@@ -40,16 +88,27 @@ export default function RoleManagement() {
         setUserRole(roles);
     }, [roles]);
 
-    function editRolePatch(id: any, isTutor: any, isProfessor: any) {}
+    function editRolePatch(user: number, is_tutor: any, is_professor: any) {
+        handleEditRolePatch({
+            roleId: user,
+            roleData: { is_tutor, is_professor },
+        });
+    }
 
-    function editRoleDelete(id: any) {}
+    function editRoleDelete(user: any) {
+        handleDeleteRole(user);
+    }
 
-    function rolemanagementPatch(id: any, isSuperUser: any) {}
-
+    function rolemanagementPatch(id: any, is_superuser: any) {
+        handlePatchUser({ userId: id, userData: { is_superuser } });
+    }
+    function editRolePost(user: any, is_tutor: any, is_professor: any) {
+        handleEditRole({ user, is_tutor, is_professor });
+    }
     const usersInfoRole = generateUsersInfoRole(userInfo, userRole);
 
     const MyListComponent = () => {
-        const handlePress = (userId: any) => {
+        const handlePress = async (userId: any) => {
             const user = users.find((u: any) => u.id === userId);
             if (!user) {
                 console.error("Utilisateur non trouvé");
@@ -69,13 +128,13 @@ export default function RoleManagement() {
                 }
             } else if (user.selectedRole === "tutor") {
                 if (!userRole.some((element) => element.user === userId)) {
-                    editRolePost(userId, false, true);
-                    rolemanagementPatch(userId, false);
+                    editRolePost(user.id, false, true);
+                    rolemanagementPatch(user.id, false);
                 } else {
-                    rolemanagementPatch(userId, false);
+                    rolemanagementPatch(user.id, false);
                     editRolePatch(user.id, true, false);
                 }
-            } else {
+            } else if (user.selectedRole === "superuser") {
                 rolemanagementPatch(user.id, true);
             }
         };

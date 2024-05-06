@@ -72,7 +72,7 @@
             "user": 1,
             "content_type": 20,
             "object_id": "1",
-            "object_repr": "Fran■ais",
+            "object_repr": "Français",
             "action_flag": 1,
             "change_message": "[{\"added\": {}}]"
         }
@@ -124,7 +124,7 @@
             "user": 1,
             "content_type": 15,
             "object_id": "1",
-            "object_repr": "(1) Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ?",
+            "object_repr": "(1) Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
             "action_flag": 1,
             "change_message": "[{\"added\": {}}]"
         }
@@ -189,7 +189,7 @@
             "user": 1,
             "content_type": 26,
             "object_id": "1",
-            "object_repr": "allmaxou ( )  attends (1) Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ?",
+            "object_repr": "allmaxou ( )  attends (1) Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
             "action_flag": 1,
             "change_message": "[{\"added\": {}}]"
         }
@@ -202,7 +202,7 @@
             "user": 1,
             "content_type": 26,
             "object_id": "2",
-            "object_repr": "Student (FStudent LStudent)  attends (1) Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ?",
+            "object_repr": "Student (FStudent LStudent)  attends (1) Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
             "action_flag": 1,
             "change_message": "[{\"added\": {}}]"
         }
@@ -254,7 +254,7 @@
             "user": 1,
             "content_type": 15,
             "object_id": "1",
-            "object_repr": "(1) Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ?",
+            "object_repr": "(1) Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
             "action_flag": 2,
             "change_message": "[{\"changed\": {\"fields\": [\"Date end\"]}}]"
         }
@@ -267,7 +267,7 @@
             "user": 1,
             "content_type": 15,
             "object_id": "1",
-            "object_repr": "(1) Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ?",
+            "object_repr": "(1) Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
             "action_flag": 2,
             "change_message": "[{\"changed\": {\"fields\": [\"Date end\"]}}]"
         }
@@ -280,7 +280,7 @@
             "user": 1,
             "content_type": 26,
             "object_id": "1",
-            "object_repr": "allmaxou ( )  attends (1) Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ?",
+            "object_repr": "allmaxou ( )  attends (1) Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
             "action_flag": 3,
             "change_message": ""
         }
@@ -293,7 +293,7 @@
             "user": 1,
             "content_type": 18,
             "object_id": "1",
-            "object_repr": "Feedback answer for Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ? by student",
+            "object_repr": "Feedback answer for Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ? by student",
             "action_flag": 3,
             "change_message": ""
         }
@@ -319,7 +319,7 @@
             "user": 1,
             "content_type": 18,
             "object_id": "2",
-            "object_repr": "Feedback answer for Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ? by student",
+            "object_repr": "Feedback answer for Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ? by student",
             "action_flag": 3,
             "change_message": ""
         }
@@ -332,7 +332,7 @@
             "user": 1,
             "content_type": 18,
             "object_id": "3",
-            "object_repr": "Feedback answer for Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ? by student",
+            "object_repr": "Feedback answer for Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ? by student",
             "action_flag": 3,
             "change_message": ""
         }
@@ -345,7 +345,7 @@
             "user": 1,
             "content_type": 18,
             "object_id": "4",
-            "object_repr": "Feedback answer for Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ? by student",
+            "object_repr": "Feedback answer for Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ? by student",
             "action_flag": 3,
             "change_message": ""
         }
@@ -358,7 +358,7 @@
             "user": 1,
             "content_type": 18,
             "object_id": "5",
-            "object_repr": "Feedback answer for Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ? by student",
+            "object_repr": "Feedback answer for Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ? by student",
             "action_flag": 3,
             "change_message": ""
         }
@@ -371,7 +371,7 @@
             "user": 1,
             "content_type": 18,
             "object_id": "6",
-            "object_repr": "Feedback answer for Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ? by student",
+            "object_repr": "Feedback answer for Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ? by student",
             "action_flag": 3,
             "change_message": ""
         }
@@ -384,7 +384,7 @@
             "user": 1,
             "content_type": 18,
             "object_id": "7",
-            "object_repr": "Feedback answer for Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ? by student",
+            "object_repr": "Feedback answer for Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ? by student",
             "action_flag": 3,
             "change_message": ""
         }
@@ -410,7 +410,7 @@
             "user": 1,
             "content_type": 18,
             "object_id": "8",
-            "object_repr": "Feedback answer for Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ? by student",
+            "object_repr": "Feedback answer for Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ? by student",
             "action_flag": 3,
             "change_message": ""
         }
@@ -426,6 +426,45 @@
             "object_repr": "uclouvainadmin (Admin UCLouvain) ",
             "action_flag": 1,
             "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 34,
+        "fields": {
+            "action_time": "2024-05-05T23:32:25.261Z",
+            "user": 1,
+            "content_type": 18,
+            "object_id": "9",
+            "object_repr": "Feedback answer for Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ? by student",
+            "action_flag": 3,
+            "change_message": ""
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 35,
+        "fields": {
+            "action_time": "2024-05-06T00:20:40.227Z",
+            "user": 1,
+            "content_type": 16,
+            "object_id": "2",
+            "object_repr": "Feedback for Atelier planning #FR by uclouvainadmin",
+            "action_flag": 3,
+            "change_message": ""
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 36,
+        "fields": {
+            "action_time": "2024-05-06T12:20:53.901Z",
+            "user": 1,
+            "content_type": 16,
+            "object_id": "3",
+            "object_repr": "Feedback for RemÚdiation by uclouvainadmin",
+            "action_flag": 3,
+            "change_message": ""
         }
     },
     {
@@ -1734,7 +1773,7 @@
     {
         "model": "database.language",
         "pk": 1,
-        "fields": { "name": "Fran■ais", "code": "FR" }
+        "fields": { "name": "Français", "code": "FR" }
     },
     {
         "model": "database.language",
@@ -1746,7 +1785,7 @@
         "pk": 1,
         "fields": {
             "type": "workshop",
-            "name": "Comment concilier l'┌tude et les loisirs et construire un bon planning hebdomadaire ?",
+            "name": "Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
             "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
             "date_start": "2024-04-23T12:42:08Z",
             "date_end": "2024-04-23T16:42:15Z",
@@ -1797,6 +1836,34 @@
             "language": 2
         }
     },
+    {
+        "model": "database.activity",
+        "pk": 5,
+        "fields": {
+            "type": "workshop",
+            "name": "RemÚdiation",
+            "description": "Lorem ipsum",
+            "date_start": "2024-05-09T12:00:00Z",
+            "date_end": "2024-05-09T15:15:00Z",
+            "room": 1,
+            "course": null,
+            "language": 1
+        }
+    },
+    {
+        "model": "database.activity",
+        "pk": 6,
+        "fields": {
+            "type": "workshop",
+            "name": "RemÚdiation",
+            "description": "Lorem ipsum",
+            "date_start": "2024-05-10T12:00:00Z",
+            "date_end": "2024-05-10T15:15:00Z",
+            "room": 1,
+            "course": null,
+            "language": 1
+        }
+    },
     { "model": "database.attend", "pk": 2, "fields": { "activity": 1, "student": 2 } },
     {
         "model": "database.teacher",
@@ -1830,16 +1897,16 @@
     },
     {
         "model": "database.feedbackstudent",
-        "pk": 9,
+        "pk": 10,
         "fields": {
             "student": 2,
             "feedback": 1,
             "evaluation": 4,
-            "positive_point": "good",
-            "negative_point": "aucun",
-            "suggestion": "rien",
+            "positive_point": "trÞs chouette",
+            "negative_point": "rien Ó dire",
+            "suggestion": "",
             "additional_comment": null,
-            "date_submitted": "2024-05-05"
+            "date_submitted": "2024-05-06"
         }
     },
     {
@@ -1856,5 +1923,25 @@
         "model": "database.feedbackstudentadditionalquestions",
         "pk": 4,
         "fields": { "student": 2, "feedback": 1, "question": 2, "answer": "yep" }
+    },
+    {
+        "model": "database.feedbackstudentadditionalquestions",
+        "pk": 5,
+        "fields": {
+            "student": 2,
+            "feedback": 1,
+            "question": 1,
+            "answer": "Bonne question"
+        }
+    },
+    {
+        "model": "database.feedbackstudentadditionalquestions",
+        "pk": 6,
+        "fields": {
+            "student": 2,
+            "feedback": 1,
+            "question": 2,
+            "answer": "C'est correct"
+        }
     }
 ]

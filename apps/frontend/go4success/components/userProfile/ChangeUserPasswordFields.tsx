@@ -53,15 +53,15 @@ export const ChangeUserPasswordFields = () => {
             });
         },
 
-        onSuccess: () => {
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["current_user"] });
             Toast.show({
                 type: "success",
                 text1: t("translateToast.SuccessText1"),
                 text2: t("translationProfile.successPasswordChange"),
             });
-            void queryClient.invalidateQueries({ queryKey: ["current_user"] });
-            signIn({ username: user.username, password: newPassword });
             clearFields();
+            switchEdit();
         },
 
         onError: async (error: fetchError) => {
@@ -149,9 +149,7 @@ export const ChangeUserPasswordFields = () => {
                 isVisible={isModalVisible}
                 onCancel={handleCancel}
                 onConfirm={handleConfirm}
-                dataLabelName={t(
-                    "translationProfile.passwordTitle",
-                ).toLowerCase()}
+                dataLabelName={t("translationProfile.passwordTitle").toLowerCase()}
             />
 
             {passwordFields(

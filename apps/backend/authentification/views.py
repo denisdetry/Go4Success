@@ -56,6 +56,15 @@ class DeleteUserView(generics.DestroyAPIView):
     serializer_class = UserSerializer
     lookup_field = 'id'
 
+    def delete(self, request, *args, **kwargs):
+        user = self.get_object()
+        password = request.data.get('password')
+        if not user.check_password(password):
+            return Response({'error': 'Mot de passe incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.delete()
+        return Response({"User deleted"}, status=status.HTTP_200_OK)
+
 
 class ChangePasswordView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]

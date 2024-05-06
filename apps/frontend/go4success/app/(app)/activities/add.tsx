@@ -1,7 +1,5 @@
 import {
     ActivityIndicator,
-    KeyboardAvoidingView,
-    Platform,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -10,12 +8,9 @@ import {
     View,
 } from "react-native";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import styles from "@/styles/global";
 import React from "react";
 import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
-import InputAutocomplete from "@/components/selectors/InputAutocomplete";
-import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from "dayjs";
 import { useLanguages } from "@/hooks/useLanguages";
 import * as yup from "yup";
@@ -26,6 +21,9 @@ import Toast from "react-native-toast-message";
 import { useTranslation } from "react-i18next";
 import { queryClient } from "@/app/_layout";
 import { generateHourQuarterList } from "@/utils/generateHourQuarterList";
+import styles from "@/styles/global";
+import InputAutocomplete from "@/components/selectors/InputAutocomplete";
+import DateTimePicker from "react-native-ui-datepicker";
 
 const hourQuarterList = generateHourQuarterList();
 
@@ -227,12 +225,14 @@ export default function Add() {
             if (dates.length === 1) {
                 Toast.show({
                     type: "success",
-                    text1: t("translationActivities.addSuccess"),
+                    text1: t("translateToast.SuccessText1"),
+                    text2: t("translationActivities.addSuccess"),
                 });
             } else {
                 Toast.show({
                     type: "success",
-                    text1: t("translationActivities.addSuccessMultiple"),
+                    text1: t("translateToast.SuccessText1"),
+                    text2: t("translationActivities.addSuccessMultiple"),
                 });
             }
         }
@@ -240,181 +240,208 @@ export default function Add() {
 
     return (
         <ScrollView contentContainerStyle={styles.mainContainer}>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={[styles.container, { gap: 10 }]}
-            >
+            <View style={[styles.container, { alignItems: undefined }]}>
+                {/* Add activity page title */}
                 <Text style={styles.title}>
                     {t("translationActivities.addActivity")}
                 </Text>
-                <Controller
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field: { onChange, value } }) => (
-                        <TextInput
-                            style={styles.inputField}
-                            placeholder={t("translationActivities.title")}
-                            placeholderTextColor={"grey"}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                    )}
-                    name="title"
-                />
 
-                {errors.title && (
-                    <Text style={styles.errorMsg}>{errors.title.message}</Text>
-                )}
-
-                <Controller
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field: { onChange, value } }) => (
-                        <TextInput
-                            style={styles.inputField}
-                            placeholder={t("translationActivities.description")}
-                            placeholderTextColor={"grey"}
-                            onChangeText={onChange}
-                            value={value}
-                            multiline={true}
-                        />
-                    )}
-                    name="description"
-                />
-
-                {errors.description && (
-                    <Text style={styles.errorMsg}>
-                        {errors.description.message}
-                    </Text>
-                )}
-
-                <Controller
-                    control={control}
-                    render={({ field: { onChange } }) => (
-                        <InputAutocomplete
-                            items={sites}
-                            placeholder={t("translationActivities.site")}
-                            readOnly={true}
-                            onChange={onChange}
-                            icon={"location"}
-                        />
-                    )}
-                    name={"site"}
-                />
-
-                <Controller
-                    control={control}
-                    render={({ field: { onChange } }) => (
-                        <InputAutocomplete
-                            items={rooms}
-                            placeholder={t("translationActivities.room")}
-                            onChange={onChange}
-                            icon={"location"}
-                        />
-                    )}
-                    name={"room"}
-                />
-
-                {errors.room && (
-                    <Text style={styles.errorMsg}>
-                        {errors.room.key?.message}
-                    </Text>
-                )}
-
-                <Controller
-                    control={control}
-                    render={({ field: { onChange } }) => (
-                        <InputAutocomplete
-                            items={languages}
-                            readOnly={true}
-                            placeholder={t("translationActivities.language")}
-                            onChange={onChange}
-                            icon={"language"}
-                        />
-                    )}
-                    name={"language"}
-                />
-
-                {errors.language && (
-                    <Text style={styles.errorMsg}>
-                        {errors.language.key?.message}
-                    </Text>
-                )}
-
-                <Controller
-                    control={control}
-                    render={({ field: { value, onChange } }) => {
-                        return (
-                            <DateTimePicker
-                                mode={"multiple"}
-                                dates={value}
-                                onChange={(params) => {
-                                    onChange(params.dates);
-                                }}
+                {/* Activity title input */}
+                <View style={{ gap: 10 }}>
+                    <Controller
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field: { onChange, value } }) => (
+                            <TextInput
+                                style={styles.inputField}
+                                placeholder={t("translationActivities.title")}
+                                placeholderTextColor={"grey"}
+                                onChangeText={onChange}
+                                value={value}
                             />
-                        );
-                    }}
-                    name={"activityDate"}
-                    defaultValue={[]}
-                />
-                {errors.activityDate && (
-                    <Text style={styles.errorMsg}>
-                        {errors.activityDate.message}
-                    </Text>
-                )}
-                <Controller
-                    control={control}
-                    render={({ field: { onChange } }) => (
-                        <InputAutocomplete
-                            items={hourQuarterList}
-                            placeholder={t("translationActivities.beginTime")}
-                            onChange={onChange}
-                            icon={"time-outline"}
-                        />
-                    )}
-                    name={"beginTime"}
-                />
+                        )}
+                        name="title"
+                    />
 
-                {errors.beginTime && (
-                    <Text style={styles.errorMsg}>
-                        {errors.beginTime.value?.message}
-                    </Text>
-                )}
-
-                <Controller
-                    control={control}
-                    render={({ field: { onChange } }) => (
-                        <InputAutocomplete
-                            items={hourQuarterList}
-                            placeholder={t("translationActivities.endTime")}
-                            onChange={onChange}
-                            icon={"time-outline"}
-                        />
-                    )}
-                    name={"endTime"}
-                />
-
-                {errors.endTime && errors.endTime.value ? (
-                    <Text style={styles.errorMsg}>
-                        {errors.endTime.value.message}
-                    </Text>
-                ) : (
-                    errors.endTime && (
+                    {/* Error message for title */}
+                    {errors.title && (
                         <Text style={styles.errorMsg}>
-                            {errors.endTime.message}
+                            {errors.title.message}
                         </Text>
-                    )
-                )}
+                    )}
 
-                <Pressable
-                    style={ownStyle.button}
-                    onPress={handleSubmit(createActivity)}
-                >
-                    <Text style={ownStyle.text}>
-                        {t("translationActivities.addButton")}
-                    </Text>
-                </Pressable>
-            </KeyboardAvoidingView>
+                    {/* Activity description input */}
+                    <Controller
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field: { onChange, value } }) => (
+                            <TextInput
+                                style={styles.inputField}
+                                placeholder={t(
+                                    "translationActivities.description",
+                                )}
+                                placeholderTextColor={"grey"}
+                                onChangeText={onChange}
+                                value={value}
+                                multiline={true}
+                            />
+                        )}
+                        name="description"
+                    />
+
+                    {/* Error message for description */}
+                    {errors.description && (
+                        <Text style={styles.errorMsg}>
+                            {errors.description.message}
+                        </Text>
+                    )}
+
+                    {/* Site input */}
+                    <Controller
+                        control={control}
+                        render={({ field: { onChange } }) => (
+                            <InputAutocomplete
+                                items={sites}
+                                placeholder={t("translationActivities.site")}
+                                readOnly={true}
+                                onChange={onChange}
+                                icon={"location"}
+                            />
+                        )}
+                        name={"site"}
+                    />
+
+                    {/* Room input */}
+                    <Controller
+                        control={control}
+                        render={({ field: { onChange } }) => (
+                            <InputAutocomplete
+                                items={rooms}
+                                placeholder={t("translationActivities.room")}
+                                onChange={onChange}
+                                icon={"location"}
+                            />
+                        )}
+                        name={"room"}
+                    />
+
+                    {/* Error message for room */}
+                    {errors.room && (
+                        <Text style={styles.errorMsg}>
+                            {errors.room.key?.message}
+                        </Text>
+                    )}
+
+                    {/* Language input */}
+                    <Controller
+                        control={control}
+                        render={({ field: { onChange } }) => (
+                            <InputAutocomplete
+                                items={languages}
+                                readOnly={true}
+                                placeholder={t(
+                                    "translationActivities.language",
+                                )}
+                                onChange={onChange}
+                                icon={"language"}
+                            />
+                        )}
+                        name={"language"}
+                    />
+
+                    {/* Error message for language */}
+                    {errors.language && (
+                        <Text style={styles.errorMsg}>
+                            {errors.language.key?.message}
+                        </Text>
+                    )}
+
+                    {/* Activity date input */}
+                    <Controller
+                        control={control}
+                        render={({ field: { value, onChange } }) => {
+                            return (
+                                <DateTimePicker
+                                    mode={"multiple"}
+                                    dates={value}
+                                    onChange={(params) => {
+                                        onChange(params.dates);
+                                    }}
+                                />
+                            );
+                        }}
+                        name={"activityDate"}
+                        defaultValue={[]}
+                    />
+
+                    {/* Error message for activity date */}
+                    {errors.activityDate && (
+                        <Text style={styles.errorMsg}>
+                            {errors.activityDate.message}
+                        </Text>
+                    )}
+
+                    {/* Begin time input */}
+                    <Controller
+                        control={control}
+                        render={({ field: { onChange } }) => (
+                            <InputAutocomplete
+                                items={hourQuarterList}
+                                placeholder={t(
+                                    "translationActivities.beginTime",
+                                )}
+                                onChange={onChange}
+                                icon={"time-outline"}
+                            />
+                        )}
+                        name={"beginTime"}
+                    />
+
+                    {/* Error message for begin time */}
+                    {errors.beginTime && (
+                        <Text style={styles.errorMsg}>
+                            {errors.beginTime.value?.message}
+                        </Text>
+                    )}
+
+                    {/* End time input */}
+                    <Controller
+                        control={control}
+                        render={({ field: { onChange } }) => (
+                            <InputAutocomplete
+                                items={hourQuarterList}
+                                placeholder={t("translationActivities.endTime")}
+                                onChange={onChange}
+                                icon={"time-outline"}
+                            />
+                        )}
+                        name={"endTime"}
+                    />
+
+                    {/* Error message for end time */}
+                    {errors.endTime && errors.endTime.value ? (
+                        <Text style={styles.errorMsg}>
+                            {errors.endTime.value.message}
+                        </Text>
+                    ) : (
+                        errors.endTime && (
+                            <Text style={styles.errorMsg}>
+                                {errors.endTime.message}
+                            </Text>
+                        )
+                    )}
+
+                    {/* Add activity button */}
+                    <Pressable
+                        style={ownStyle.button}
+                        onPress={handleSubmit(createActivity)}
+                    >
+                        <Text style={ownStyle.text}>
+                            {t("translationActivities.addButton")}
+                        </Text>
+                    </Pressable>
+                </View>
+            </View>
         </ScrollView>
     );
 }

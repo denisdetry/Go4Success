@@ -74,7 +74,7 @@ export default StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         padding: 10,
-        minWidth: 300,
+        minWidth: isMobile ? 280 : 300,
     },
 
     inputLargeField: {
@@ -125,7 +125,6 @@ export default StyleSheet.create({
         marginBottom: 10,
     },
     containerDatePicker: {
-        flex: 1,
         backgroundColor: "#F5FCFF",
     },
     picker: {

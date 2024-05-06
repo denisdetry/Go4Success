@@ -1,5 +1,13 @@
 // import Button from "@/components/Button";
-import { Alert, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+    Alert,
+    Platform,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import Button from "@/components/ButtonComponent";
 import React, { useState } from "react";
 import styles from "@/styles/global";
@@ -49,12 +57,10 @@ export default function Register() {
         firstName: yup
             .string()
             .required(t("translateRegister.yupFirstNameRequired")),
-        noma: yup
-            .string()
-            .matches(/^[0-9]{8}$/, {
-                message: t("translateRegister.yupNomaConstraint"),
-                excludeEmptyString: true,
-            }),
+        noma: yup.string().matches(/^[0-9]{8}$/, {
+            message: t("translateRegister.yupNomaConstraint"),
+            excludeEmptyString: true,
+        }),
     });
 
     const { signUp } = useAuth();
@@ -91,7 +97,12 @@ export default function Register() {
             <View style={{ position: "absolute", bottom: 0, left: 10 }}>
                 {Platform.OS === "web" && <LanguagePicker />}
             </View>
-            <View style={[styles.container, { shadowRadius: 0, backgroundColor: "" }]}>
+            <View
+                style={[
+                    styles.container,
+                    { shadowRadius: 0, backgroundColor: "" },
+                ]}
+            >
                 <Text style={styles.title}>{t("translateRegister.title")}</Text>
                 {/* Email field */}
                 <View style={styles.form}>
@@ -214,14 +225,25 @@ export default function Register() {
                                     onChangeText={onChange}
                                     value={value?.toString()}
                                 />
-                                <TouchableOpacity onPress={() => {
-                                    if (Platform.OS === "web") {
-                                        alert(t("translateRegister.nomaInfo"));
-                                    } else {
-                                        Alert.alert("Info", t("translateRegister.nomaInfo"));
-                                    }
-                                }}>
-                                    <Ionicons name={"information-circle"} size={24} color="black" />
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        if (Platform.OS === "web") {
+                                            alert(
+                                                t("translateRegister.nomaInfo"),
+                                            );
+                                        } else {
+                                            Alert.alert(
+                                                "Info",
+                                                t("translateRegister.nomaInfo"),
+                                            );
+                                        }
+                                    }}
+                                >
+                                    <Ionicons
+                                        name={"information-circle"}
+                                        size={24}
+                                        color="black"
+                                    />
                                 </TouchableOpacity>
                             </View>
                         )}

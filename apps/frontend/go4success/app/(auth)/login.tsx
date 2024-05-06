@@ -47,7 +47,12 @@ export default function Login() {
             <View style={{ position: "absolute", bottom: 0, left: 10 }}>
                 {Platform.OS === "web" && <LanguagePicker />}
             </View>
-            <View style={[styles.container, { shadowRadius: 0, backgroundColor: "" }]}>
+            <View
+                style={[
+                    styles.container,
+                    { shadowRadius: 0, backgroundColor: "" },
+                ]}
+            >
                 <Text style={styles.title}>{t("translateLogin.title")}</Text>
                 <View style={styles.form}>
                     <Controller

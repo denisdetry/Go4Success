@@ -206,21 +206,6 @@ export default function Layout() {
                     />
 
                     <Drawer.Screen
-                        name="notifications"
-                        options={{
-                            drawerLabel: "Notifications",
-                            headerTitle: "Notifications",
-                            drawerIcon: ({ size, color }) => (
-                                <Ionicons
-                                    name="notifications"
-                                    size={size}
-                                    color={color}
-                                />
-                            ),
-                        }}
-                    />
-
-                    <Drawer.Screen
                         name="activities/add"
                         options={{
                             drawerItemStyle: {

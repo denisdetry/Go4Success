@@ -9,6 +9,8 @@ export default StyleSheet.create({
         backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     modalView: {
+        position: "relative",
+        margin: "auto",
         backgroundColor: Colors.lightBackgroundColor,
         padding: 20,
         borderRadius: 10,
@@ -20,5 +22,10 @@ export default StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         marginTop: 20,
+    },
+    closeButton: {
+        position: "absolute",
+        top: 10,
+        right: 10,
     },
 });

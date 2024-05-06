@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import {
+    FlatList,
+    Modal,
+    Pressable,
     ScrollView,
     Text,
-    Modal,
     View,
-    Pressable,
-    FlatList,
 } from "react-native";
 import { TableColumn } from "react-data-table-component";
 import { useTranslation } from "react-i18next";
 import { StackScreenProps } from "@react-navigation/stack";
-import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 
 import {
     useFeedbackStudent,
@@ -18,7 +18,7 @@ import {
 } from "@/hooks/useFeedback";
 import { FeedbackStudent } from "@/types/Feedback";
 import ButtonComponent from "@/components/ButtonComponent";
-import { FeedbackStudentTable } from "@/components/FeedbackTable";
+import { FeedbackStudentTable } from "@/components/FeedbackStudentTable";
 
 import styles from "@/styles/global";
 import Colors from "@/constants/Colors";
@@ -122,7 +122,7 @@ export default function FeedbackListDetails(
                         icon="arrow-back-circle-outline"
                         text="Back"
                         onPress={() => {
-                            // @ts-ignore
+                            // @ts-ignore navigation type
                             navigation.navigate({ name: "feedbacklist" });
                         }}
                         buttonType={"primary"}

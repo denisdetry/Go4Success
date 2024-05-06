@@ -1,14 +1,15 @@
+from datetime import datetime
+
 from database.models import Activity, Attend, Room, Site, Language
 from django.db.models import Q
+from django.utils import timezone
 from rest_framework import viewsets, permissions, status
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-import json
-from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from .serializers import SiteSerializer, ActivitySerializer, \
     AttendSerializer, RoomSerializer, RegisterToActivitySerializer, \
-    LanguageSerializer
+    LanguageSerializer, ActivityCreateSerializer
 
 
 class RoomViewSet(viewsets.ReadOnlyModelViewSet):
@@ -46,6 +47,23 @@ class ActivityViewSet(viewsets.ModelViewSet):
             id__in=[attendance.activity.id for attendance in registered_attendances]
         )
         return filter_queryset(self, activities_without_registration)
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        data['name'] = data['title'].title()
+        data['room'] = data['room']['key']
+
+        # Get the language id
+        data['language'] = data['language']['key']
+
+        # Get time and date and convert to local time
+        data['date_start'] = timezone.localtime(datetime.fromisoformat(data['dateStart']))
+        data['date_end'] = timezone.localtime(datetime.fromisoformat(data['dateEnd']))
+
+        serializer = ActivityCreateSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class AttendViewSet(viewsets.ModelViewSet):

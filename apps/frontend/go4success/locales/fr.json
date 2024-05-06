@@ -13,10 +13,11 @@
     },
     "translationMenu": {
         "home": "Accueil",
-        "profil": "Mon profil",
+        "profile": "Mon profil",
         "calendar": "Mon calendrier",
         "disconnect": "Se déconnecter",
-        "rolemanagement": "Gestion des rôles"
+        "roleManagement": "Gestion des rôles",
+        "activityManagement": "Gestion des activités"
     },
     "translationButton": {
         "OpenFilter": "Ouvrir filtre",
@@ -117,5 +118,34 @@
         "place": "Lieu",
         "type": "Type",
         "language": "Langue"
+    },
+    "translationActivities": {
+        "addActivity": "Ajouter des activités",
+        "yupTitleRequired": "Veuillez entrer un titre",
+        "yupDescriptionRequired": "Veuillez entrer une description",
+        "yupRoomRequired": "Veuillez sélectionner une salle",
+        "yupLanguageRequired": "Veuillez sélectionner une langue",
+        "yupActivityDateRequired": "Veuillez sélectionner une date",
+        "yupBeginTimeRequired": "Veuillez sélectionner une heure de début",
+        "yupEndTimeRequired": "Veuillez sélectionner une heure de fin",
+        "yupValidTimeFormat": "Veuillez entrer une heure valide (ex: 14:30)",
+        "yupEndTimeGreater": "L'heure de fin doit être supérieure à l'heure de début",
+        "addError": "Une erreur s'est produite lors de l'ajout de l'activité",
+        "addErrorMultiple": "Une erreur s'est produite lors de l'ajout des activités",
+        "addSuccess": "L'activité a été ajoutée avec succès \uD83C\uDF89",
+        "addSuccessMultiple": "Les activités ont été ajoutées avec succès \uD83C\uDF89",
+        "title": "Titre",
+        "description": "Description",
+        "site": "Site",
+        "room": "Salle",
+        "language": "Langue",
+        "beginTime": "Heure de début",
+        "endTime": "Heure de fin",
+        "addButton": "Ajouter"
+    },
+    "translationHooks": {
+        "AllValuesM": "Tous",
+        "AllValuesF": "Toutes",
+        "NoRoomsFound": "Aucune salle trouvée"
     }
 }

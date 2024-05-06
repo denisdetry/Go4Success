@@ -4,7 +4,11 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { AuthProvider, useAuth } from "@/context/Auth";
 import Colors from "@/constants/Colors";
-import { DrawerContentScrollView, DrawerItem, DrawerItemList } from "@react-navigation/drawer";
+import {
+    DrawerContentScrollView,
+    DrawerItem,
+    DrawerItemList,
+} from "@react-navigation/drawer";
 import { Image, Platform, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -37,7 +41,10 @@ function CustomDrawerContent(props: any) {
                     />
                 </TouchableOpacity>
                 <DrawerItemList {...props} />
-                <DrawerItem label={t("translationMenu.disconnect")} onPress={signOut} />
+                <DrawerItem
+                    label={t("translationMenu.disconnect")}
+                    onPress={signOut}
+                />
             </DrawerContentScrollView>
             {Platform.OS === "web" && <LanguageSwitcher />}
         </>
@@ -82,7 +89,11 @@ export default function Layout() {
                                             router.push("/");
                                         }}
                                     >
-                                        <Ionicons name="home" size={24} color="#fff" />
+                                        <Ionicons
+                                            name="home"
+                                            size={24}
+                                            color="#fff"
+                                        />
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
@@ -149,8 +160,8 @@ export default function Layout() {
                     <Drawer.Screen
                         name="profile"
                         options={{
-                            drawerLabel: t("translationMenu.profil"),
-                            headerTitle: t("translationMenu.profil"),
+                            drawerLabel: t("translationMenu.profile"),
+                            headerTitle: t("translationMenu.profile"),
                             drawerIcon: ({ size, color }) => (
                                 <FontAwesome
                                     name="user-circle"
@@ -167,7 +178,11 @@ export default function Layout() {
                             drawerLabel: t("translationMenu.calendar"),
                             headerTitle: t("translationMenu.calendar"),
                             drawerIcon: ({ size, color }) => (
-                                <Ionicons name="calendar" size={size} color={color} />
+                                <Ionicons
+                                    name="calendar"
+                                    size={size}
+                                    color={color}
+                                />
                             ),
                         }}
                     />
@@ -175,11 +190,17 @@ export default function Layout() {
                     <Drawer.Screen
                         name="rolemanagement"
                         options={{
-                            drawerItemStyle: { display: user?.is_superuser ? "flex" : "none" },
-                            drawerLabel: t("translationMenu.rolemanagement"),
-                            headerTitle: t("translationMenu.rolemanagement"),
+                            drawerItemStyle: {
+                                display: user?.is_superuser ? "flex" : "none",
+                            },
+                            drawerLabel: t("translationMenu.roleManagement"),
+                            headerTitle: t("translationMenu.roleManagement"),
                             drawerIcon: ({ size, color }) => (
-                                <Ionicons name="people" size={size} color={color} />
+                                <Ionicons
+                                    name="people"
+                                    size={size}
+                                    color={color}
+                                />
                             ),
                         }}
                     />
@@ -190,7 +211,36 @@ export default function Layout() {
                             drawerLabel: "Notifications",
                             headerTitle: "Notifications",
                             drawerIcon: ({ size, color }) => (
-                                <Ionicons name="notifications" size={size} color={color} />
+                                <Ionicons
+                                    name="notifications"
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
+
+                    <Drawer.Screen
+                        name="activities/add"
+                        options={{
+                            drawerItemStyle: {
+                                display:
+                                    user?.is_superuser || user?.isStaff
+                                        ? "flex"
+                                        : "none",
+                            },
+                            drawerLabel: t(
+                                "translationMenu.activityManagement",
+                            ),
+                            headerTitle: t(
+                                "translationMenu.activityManagement",
+                            ),
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name="school"
+                                    size={size}
+                                    color={color}
+                                />
                             ),
                         }}
                     />

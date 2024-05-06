@@ -257,7 +257,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
                         <View
                             style={{
-                                // flex: 1,
                                 flexDirection: "column",
                                 alignItems: "flex-end",
                                 marginTop: 10,

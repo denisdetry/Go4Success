@@ -10,6 +10,11 @@ import {
     CheckBox,
 } from "react-native";
 import Toast from "react-native-toast-message";
+import {
+    useLastQuestionnaire,
+    usePostOpenQuestion,
+    usePostQuestion,
+} from "@/hooks/useQuestionnaire";
 
 interface ClosedQuestion {
     questionnaire: string;
@@ -20,16 +25,17 @@ interface ClosedQuestion {
 }
 
 interface OpenQuestion {
-    questionnaire: string;
+    questionnaire: number;
+    question: string;
     type: string;
     points: number;
-    question: string;
 }
 
-const QuestionBox = () => {
+const QuestionBox = ({ questionnaireId }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [openQuestions, setOpenQuestions] = useState([]);
     const [closedQuestions, setClosedQuestions] = useState([]);
+    const { mutate, error } = usePostQuestion();
 
     const handleOpenQuestion = () => {
         setOpenQuestions((prevQuestions) => [...prevQuestions, {}]);
@@ -40,6 +46,30 @@ const QuestionBox = () => {
         setClosedQuestions((prevQuestions) => [...prevQuestions, {}]);
     };
 
+    const handleSaveOpenQuestions = () => {
+        // Parcourir chaque question ouverte et l'envoyer au backend
+        openQuestions.forEach((question) => {
+            // Ajouter questionnaireId à chaque question
+            const questionWithId = { ...question, questionnaireId };
+
+            mutate(questionWithId, {
+                onSuccess: () => {
+                    Toast.show({
+                        type: "success",
+                        text1: "Success",
+                        text2: "Open question has been posted successfully",
+                    });
+                },
+                onError: (error) => {
+                    Toast.show({
+                        type: "error",
+                        text1: "Error",
+                        text2: error.message,
+                    });
+                },
+            });
+        });
+    };
     return (
         <View style={styles.container}>
             <ScrollView>
@@ -48,6 +78,7 @@ const QuestionBox = () => {
                         key={index}
                         id={index}
                         setOpenQuestions={setOpenQuestions}
+                        questionnaireId={questionnaireId}
                     />
                 ))}
                 {closedQuestions.map((_, index) => (
@@ -65,9 +96,7 @@ const QuestionBox = () => {
             <View style={styles.saveButtonContainer}>
                 <Button
                     title="Sauvegarder le questionnaire"
-                    onPress={() => {
-                        // Logique pour sauvegarder le questionnaire
-                    }}
+                    onPress={handleSaveOpenQuestions}
                 />
             </View>
             <Modal
@@ -95,13 +124,13 @@ const QuestionBox = () => {
     );
 };
 
-const OpenQuestionBox = ({ id, setOpenQuestions }) => {
+const OpenQuestionBox = ({ id, setOpenQuestions, questionnaireId }) => {
     const [question, setQuestion] = useState("");
     const [points, setPoints] = useState(0);
 
     const handleSaveQuestion = () => {
         const newQuestion: OpenQuestion = {
-            questionnaire: "Some Questionnaire",
+            questionnaire: questionnaireId,
             type: "open",
             points: 10,
             question: question,
@@ -190,6 +219,7 @@ const ClosedQuestionBox = ({ id, setClosedQuestions }) => {
             text2: "question enregistrée",
         });
     };
+    console.log(options);
     return (
         <View style={styles.closedQuestionContainer}>
             <Text style={styles.questionText}>Choix multiple #{id + 1}</Text>
@@ -231,7 +261,8 @@ const ClosedQuestionBox = ({ id, setClosedQuestions }) => {
 const Question = () => {
     const [closedQuestionVisible, setClosedQuestionVisible] = useState(false);
     const [questionCount, setQuestionCount] = useState(0);
-
+    const { data: questionnaire, error, isLoading } = useLastQuestionnaire();
+    console.log(questionnaire);
     const handleAddQuestion = () => {
         setQuestionCount(questionCount + 1);
         setClosedQuestionVisible(true);
@@ -239,7 +270,7 @@ const Question = () => {
 
     return (
         <View style={styles.container}>
-            <QuestionBox />
+            <QuestionBox questionnaireId={questionnaire?.id} />
             {closedQuestionVisible && <ClosedQuestionBox id={questionCount} />}
         </View>
     );

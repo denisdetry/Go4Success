@@ -54,6 +54,38 @@ export function usePostQuestionnaire() {
     });
 }
 
+export function usePostQuestion() {
+    return useMutation({
+        mutationFn: postQuestion,
+    });
+}
+
+export function useLastQuestionnaire() {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+    const { data, error, isLoading } = useQuery({
+        queryKey: "lastQuestionnaire",
+        queryFn: async () => {
+            const response = await fetchBackend({
+                type: "GET",
+                url: "postquestionnaire/postquestionnaire",
+            });
+
+            if (typeof response.data === "object" && "error" in response.data) {
+                throw new Error(response.data.error);
+            }
+
+            if (response.error) {
+                throw new Error(response.error);
+            }
+
+            // Supposons que les questionnaires sont renvoyés dans un tableau et que le dernier questionnaire est à la fin du tableau
+            return response.data[response.data.length - 1];
+        },
+    });
+
+    // Renvoyer les valeurs
+    return { data, error, isLoading };
+}
 async function postQuestionnaire(questionnaireData) {
     const backend_url = process.env.EXPO_PUBLIC_API_URL;
 
@@ -67,6 +99,60 @@ async function postQuestionnaire(questionnaireData) {
             body: JSON.stringify(questionnaireData),
         },
     );
+
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    }
+
+    return response.json();
+}
+
+async function postQuestion(questionData) {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
+    const response = await fetch(`${backend_url}/postquestionnaire/postquestion/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(questionData),
+    });
+
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    }
+
+    return response.json();
+}
+
+async function usePostOpenQuestion(questionOpenData) {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
+    const response = await fetch(`${backend_url}/postquestionnaire/openquestion/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(questionOpenData),
+    });
+
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    }
+
+    return response.json();
+}
+
+async function usePostClosedQuestion(questionClosedData) {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
+    const response = await fetch(`${backend_url}/postquestionnaire/closedquestion/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(questionClosedData),
+    });
 
     if (!response.ok) {
         throw new Error("Network response was not ok");

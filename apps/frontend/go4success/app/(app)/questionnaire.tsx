@@ -7,6 +7,7 @@ import {
     NavigationContainer,
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import Toast from "react-native-toast-message";
 
 import Question from "./question";
 
@@ -34,7 +35,14 @@ type RootStackParamList = {
 };
 type QuestionnaireRouteProp = RouteProp<RootStackParamList, "Questionnaire">;
 
-const QuestionnaireComponent = () => {
+type QuestionnaireComponentProps = {
+    onNext: () => void;
+};
+
+const QuestionnaireComponent: React.FC<QuestionnaireComponentProps> = ({
+    onNext,
+    ...props
+}) => {
     const { mutate, error } = usePostQuestionnaire();
     const route = useRoute<QuestionnaireRouteProp>();
     const [startdate, setStartDate] = useState(dayjs());
@@ -65,7 +73,12 @@ const QuestionnaireComponent = () => {
 
     const handleSubmit = () => {
         mutate(formData);
-        navigation.navigate("Question");
+        Toast.show({
+            type: "success",
+            text1: "Success",
+            text2: "Questionnaire created successfully!",
+        });
+        onNext();
     };
     if (error) return <Text style={styles.errorText}>Error: {error.message}</Text>;
 
@@ -144,10 +157,14 @@ const QuestionnaireComponent = () => {
 const Stack = createStackNavigator();
 
 export default function App() {
+    const [showQuestion, setShowQuestion] = useState(false);
+
     return (
         <>
-            <QuestionnaireComponent />
-            <Question />
+            {!showQuestion && (
+                <QuestionnaireComponent onNext={() => setShowQuestion(true)} />
+            )}
+            {showQuestion && <Question />}
         </>
     );
 }

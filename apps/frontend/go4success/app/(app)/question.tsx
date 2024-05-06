@@ -34,7 +34,9 @@ interface OpenQuestion {
 const QuestionBox = ({ questionnaireId }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [openQuestions, setOpenQuestions] = useState([]);
-    const [closedQuestions, setClosedQuestions] = useState([]);
+    const [closedQuestions, setClosedQuestions] = useState<
+        { questionnaire: string; type: string; points: number; question: string }[]
+    >([]);
     const { mutate, error } = usePostQuestion();
 
     const handleOpenQuestion = () => {
@@ -51,6 +53,15 @@ const QuestionBox = ({ questionnaireId }) => {
         openQuestions.forEach((question) => {
             // Ajouter questionnaireId à chaque question
             const questionWithId = { ...question, questionnaireId };
+
+            closedQuestions.forEach((question) => {
+                mutate({
+                    questionnaire: question.questionnaire,
+                    type: question.type,
+                    points: question.points,
+                    question: question.question,
+                });
+            });
 
             mutate(questionWithId, {
                 onSuccess: () => {
@@ -132,7 +143,7 @@ const OpenQuestionBox = ({ id, setOpenQuestions, questionnaireId }) => {
         const newQuestion: OpenQuestion = {
             questionnaire: questionnaireId,
             type: "open",
-            points: 10,
+            points: points,
             question: question,
         };
 
@@ -180,30 +191,24 @@ const ClosedQuestionBox = ({ id, setClosedQuestions, questionnaireId }) => {
     const [points, setPoints] = useState(0);
 
     const handleCheck = (index) => {
-        setChecked((prevChecked) =>
-            prevChecked.map((check, checkIndex) =>
-                checkIndex === index
-                    ? { ...check, isChecked: !check.isChecked }
-                    : check,
-            ),
-        );
-
         setOptions((prevOptions) => {
             const newOptions = [...prevOptions];
-            newOptions[index] = [newOptions[index][0], !newOptions[index][1]];
+            newOptions[index] = [newOptions[index][0], !newOptions[index][1]] as [
+                string,
+                boolean,
+            ];
             return newOptions;
         });
     };
-    const handleAddOption = () => {
-        setOptions((prevOptions) => [...prevOptions, ["", false]]);
 
-        setChecked((prevChecked) => [...prevChecked, { text: "", isChecked: false }]);
+    const handleAddOption = () => {
+        setOptions((prevOptions) => [...prevOptions, ["", false] as [string, boolean]]);
     };
 
     const handleOptionChange = (text, index) => {
         setOptions((prevOptions) => {
             const newOptions = [...prevOptions];
-            newOptions[index] = [text, newOptions[index][1]];
+            newOptions[index] = [text, newOptions[index][1]] as [string, boolean];
             return newOptions;
         });
     };
@@ -211,7 +216,7 @@ const ClosedQuestionBox = ({ id, setClosedQuestions, questionnaireId }) => {
         const newQuestion: ClosedQuestion = {
             questionnaire: questionnaireId,
             type: "closed",
-            points: 10,
+            points: points,
             question: question,
             options: options,
         };
@@ -234,7 +239,11 @@ const ClosedQuestionBox = ({ id, setClosedQuestions, questionnaireId }) => {
             <Text style={styles.questionText}>Choix multiple #{id + 1}</Text>
             <Text style={styles.optionText}>question : </Text>
 
-            <TextInput style={styles.optionInput} />
+            <TextInput
+                style={styles.optionInput}
+                onChangeText={(text) => setQuestion(text)}
+                value={question}
+            />
 
             {options.map((option, index) => (
                 <View key={index} style={styles.optionContainer}>
@@ -245,7 +254,7 @@ const ClosedQuestionBox = ({ id, setClosedQuestions, questionnaireId }) => {
                         value={option[0]}
                     />
                     <CheckBox
-                        value={checked[index].isChecked}
+                        value={option[1]}
                         onValueChange={() => handleCheck(index)}
                     />
                 </View>

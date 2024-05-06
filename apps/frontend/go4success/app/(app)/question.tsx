@@ -17,11 +17,11 @@ import {
 } from "@/hooks/useQuestionnaire";
 
 interface ClosedQuestion {
-    questionnaire: string;
+    questionnaire: number;
     type: string;
     points: number;
     question: string;
-    options: string[];
+    options: [string, boolean][];
 }
 
 interface OpenQuestion {
@@ -172,9 +172,9 @@ const OpenQuestionBox = ({ id, setOpenQuestions, questionnaireId }) => {
     );
 };
 
-const ClosedQuestionBox = ({ id, setClosedQuestions }) => {
+const ClosedQuestionBox = ({ id, setClosedQuestions, questionnaireId }) => {
     const [question, setQuestion] = useState("");
-    const [options, setOptions] = useState([""]);
+    const [options, setOptions] = useState<(string | boolean)[][]>([]);
     const [isChecked, setIsChecked] = useState(false);
     const [checked, setChecked] = useState([{ text: "", isChecked: false }]);
     const [points, setPoints] = useState(0);
@@ -187,20 +187,29 @@ const ClosedQuestionBox = ({ id, setClosedQuestions }) => {
                     : check,
             ),
         );
+
+        setOptions((prevOptions) => {
+            const newOptions = [...prevOptions];
+            newOptions[index] = [newOptions[index][0], !newOptions[index][1]];
+            return newOptions;
+        });
     };
     const handleAddOption = () => {
-        setOptions((prevOptions) => [...prevOptions, ""]);
+        setOptions((prevOptions) => [...prevOptions, ["", false]]);
+
         setChecked((prevChecked) => [...prevChecked, { text: "", isChecked: false }]);
     };
 
     const handleOptionChange = (text, index) => {
-        const newOptions = [...options];
-        newOptions[index] = text;
-        setOptions(newOptions);
+        setOptions((prevOptions) => {
+            const newOptions = [...prevOptions];
+            newOptions[index] = [text, newOptions[index][1]];
+            return newOptions;
+        });
     };
     const handleSaveQuestion = () => {
         const newQuestion: ClosedQuestion = {
-            questionnaire: "Some Questionnaire",
+            questionnaire: questionnaireId,
             type: "closed",
             points: 10,
             question: question,
@@ -233,7 +242,7 @@ const ClosedQuestionBox = ({ id, setClosedQuestions }) => {
                     <TextInput
                         style={styles.optionInput}
                         onChangeText={(text) => handleOptionChange(text, index)}
-                        value={option}
+                        value={option[0]}
                     />
                     <CheckBox
                         value={checked[index].isChecked}
@@ -271,7 +280,12 @@ const Question = () => {
     return (
         <View style={styles.container}>
             <QuestionBox questionnaireId={questionnaire?.id} />
-            {closedQuestionVisible && <ClosedQuestionBox id={questionCount} />}
+            {closedQuestionVisible && (
+                <ClosedQuestionBox
+                    id={questionCount}
+                    questionnaireId={questionnaire?.id}
+                />
+            )}
         </View>
     );
 };

@@ -58,12 +58,10 @@ const QuestionBox = ({ questionnaireId }) => {
                 id: question.id,
                 question: question.question,
             }));
-
-            console.log(questionsData);
         }
     }, [closedQuestionsProcessed, questions]);
 
-    const handleSaveOpenQuestions = () => {
+    const handleSaveOpenQuestions = async () => {
         openQuestions.forEach((question) => {
             // Ajouter questionnaireId à chaque question
             const questionWithId = { ...question, questionnaireId };
@@ -86,7 +84,7 @@ const QuestionBox = ({ questionnaireId }) => {
             });
         });
 
-        closedQuestions.forEach((question) => {
+        const closedQuestionPromises = closedQuestions.map((question) => {
             const { type, points, question: questionText } = question;
             const questionWithId = {
                 questionnaire: questionnaireId,
@@ -95,14 +93,31 @@ const QuestionBox = ({ questionnaireId }) => {
                 points,
             };
 
-            mutate(questionWithId);
+            return new Promise((resolve, reject) => {
+                mutate(questionWithId, {
+                    onSuccess: () => {
+                        resolve(null);
+                    },
+                    onError: (error) => {
+                        Toast.show({
+                            type: "error",
+                            text1: "Error",
+                            text2: error.message,
+                        });
+                        reject(error);
+                    },
+                });
+            });
         });
-        setClosedQuestionsProcessed(true);
 
-        const questionsData = questions?.map((question) => ({
-            id: question.id,
-            question: question.question,
-        }));
+        try {
+            await Promise.all(closedQuestionPromises);
+            setClosedQuestionsProcessed(true);
+        } catch (error) {
+            console.error("Error posting closed questions:", error);
+        }
+
+        console.log(questions);
     };
     return (
         <View style={styles.container}>

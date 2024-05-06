@@ -196,12 +196,13 @@ export default function FeedbackCreate() {
                 </Text>
 
                 {/* Activites select */}
-                <Text style={stylesGlobal.titleH2NoPadding}>
-                    {t("translateFeedback.activity")}
-                </Text>
-
                 <View style={styles.feedbackContainer}>
                     <View style={styles.feedbackFields}>
+                        <Text style={stylesGlobal.label}>
+                            {t("translateFeedback.activity")} :
+                            <Text style={{ color: "red" }}>*</Text>
+                        </Text>
+
                         <View
                             style={[stylesGlobal.inputLargeFieldWithoutBorder]}
                         >

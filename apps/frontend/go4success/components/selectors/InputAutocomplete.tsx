@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Pressable, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
 import styles from "@/styles/global";
 import { SelectItem } from "@/types/SelectItem";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
@@ -193,12 +192,10 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                     }
                 }
             >
-                <FlatList
-                    style={{ maxHeight: 200 }}
-                    data={filteredData}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item.value}
-                />
+
+                {
+                    filteredData.map((item) => renderItem({ item }))
+                }
             </View>
         </View>
     );

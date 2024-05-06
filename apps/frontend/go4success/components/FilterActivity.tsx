@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { ScrollView } from "react-native-virtualized-view";
+import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Card from "./Card";
 import ButtonComponent from "./ButtonComponent";
 import stylesGlobal from "../styles/global";
@@ -196,7 +195,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 onRequestClose={toggleModal}
             >
                 <View style={modalStyle.centeredView}>
-
                     <ScrollView contentContainerStyle={[modalStyle.modalView, { padding: 35 }]}>
                         <TouchableOpacity style={modalStyle.closeButton} onPress={() => {
                             setModalVisible(!modalVisible);

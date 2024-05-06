@@ -25,7 +25,7 @@ export default StyleSheet.create({
     },
     closeButton: {
         position: "absolute",
-        top: -25,
-        right: -25,
+        top: 10,
+        right: 10,
     },
 });

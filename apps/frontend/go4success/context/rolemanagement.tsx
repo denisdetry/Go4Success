@@ -10,25 +10,17 @@ axios.defaults.withCredentials = true;
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
-
-
 const ManagementContext = React.createContext<any>(null);
-
-
 
 export function useRole() {
     return React.useContext(RoleManagement);
 }
 
-
-
 export function ManagementProvider({ children }: React.PropsWithChildren) {
-
     const rootSegment = useSegments()[0];
     const router = useRouter();
     const [role, setRole] = React.useState<string | undefined>("");
     const [user, setUser] = React.useState<string | undefined>("");
-
 
     React.useEffect(() => {
         axios
@@ -41,8 +33,6 @@ export function ManagementProvider({ children }: React.PropsWithChildren) {
             });
     }, []);
 
-
-
     React.useEffect(() => {
         axios
             .get("http://localhost:8000/rolemanagement/")
@@ -54,7 +44,6 @@ export function ManagementProvider({ children }: React.PropsWithChildren) {
             });
     }, []);
 
-
     React.useEffect(() => {
         if (role === undefined) return;
 
@@ -65,7 +54,6 @@ export function ManagementProvider({ children }: React.PropsWithChildren) {
         }
     }, [role, rootSegment]);
 
-
     return (
         <RoleManagement.Provider
             value={{
@@ -73,17 +61,16 @@ export function ManagementProvider({ children }: React.PropsWithChildren) {
                 manageRole: (
                     user_id: string,
                     is_tutor: string,
-                    is_professor : string,
-                    is_superuser : string,
+                    is_professor: string,
+                    is_superuser: string,
                 ) => {
                     {
                         axios
                             .post("http://localhost:8000/rolemanagement/", {
-                   
                                 user_id: user_id,
                                 is_tutor: is_tutor,
-                                is_professor : is_professor,
-                                is_superuser : is_superuser,
+                                is_professor: is_professor,
+                                is_superuser: is_superuser,
                             })
                             .then((res) => {
                                 console.log(res.data);
@@ -103,13 +90,9 @@ export function ManagementProvider({ children }: React.PropsWithChildren) {
                             });
                     }
                 },
-
-
-
             }}
         >
             {children}
         </RoleManagement.Provider>
     );
-
 }

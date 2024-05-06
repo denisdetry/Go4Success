@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+    FlatList,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import axiosConfig from "@/constants/axiosConfig";
@@ -177,7 +183,10 @@ export default function RoleManagement() {
         // Ajout d'un état pour suivre la valeur sélectionnée de chaque liste déroulante
         // Initialiser chaque élément avec son rôle actuel
         const [users, setUsers] = useState(
-            usersInfoRole.map((user: User) => ({ ...user, selectedRole: user.role })),
+            usersInfoRole.map((user: User) => ({
+                ...user,
+                selectedRole: user.role,
+            })),
         );
 
         const handleValueChange = (itemValue: any, itemId: any) => {
@@ -220,7 +229,9 @@ export default function RoleManagement() {
                             style={styles.saveButton}
                             id="saveChange"
                         >
-                            <Text style={{ color: "#fff", textAlign: "center" }}>
+                            <Text
+                                style={{ color: "#fff", textAlign: "center" }}
+                            >
                                 Save
                             </Text>
                         </TouchableOpacity>
@@ -242,10 +253,10 @@ const generateUsersInfoRole = (userInfo: any, userRole: any) => {
         const role = curr.is_professor
             ? "professor"
             : curr.is_tutor
-                ? "tutor"
-                : curr.is_superuser
-                    ? "superuser"
-                    : "student";
+              ? "tutor"
+              : curr.is_superuser
+                ? "superuser"
+                : "student";
         acc[curr.user] = role;
         return acc;
     }, {});

@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     View,
     Text,
@@ -14,6 +14,7 @@ import {
     useLastQuestionnaire,
     usePostOpenQuestion,
     usePostQuestion,
+    useGetQuestions,
 } from "@/hooks/useQuestionnaire";
 
 interface ClosedQuestion {
@@ -37,6 +38,9 @@ const QuestionBox = ({ questionnaireId }) => {
     const [closedQuestions, setClosedQuestions] = useState<
         { type: string; points: number; question: string }[]
     >([]);
+    const [closedQuestionsProcessed, setClosedQuestionsProcessed] = useState(false);
+    const { data: questions, errors, isLoadings } = useGetQuestions();
+
     const { mutate, error } = usePostQuestion();
 
     const handleOpenQuestion = () => {
@@ -47,6 +51,17 @@ const QuestionBox = ({ questionnaireId }) => {
     const handleAddClosedQuestion = () => {
         setClosedQuestions((prevQuestions) => [...prevQuestions, {}]);
     };
+
+    useEffect(() => {
+        if (closedQuestionsProcessed) {
+            const questionsData = questions?.map((question) => ({
+                id: question.id,
+                question: question.question,
+            }));
+
+            console.log(questionsData);
+        }
+    }, [closedQuestionsProcessed, questions]);
 
     const handleSaveOpenQuestions = () => {
         openQuestions.forEach((question) => {
@@ -82,6 +97,12 @@ const QuestionBox = ({ questionnaireId }) => {
 
             mutate(questionWithId);
         });
+        setClosedQuestionsProcessed(true);
+
+        const questionsData = questions?.map((question) => ({
+            id: question.id,
+            question: question.question,
+        }));
     };
     return (
         <View style={styles.container}>
@@ -282,7 +303,7 @@ const Question = () => {
     const [closedQuestionVisible, setClosedQuestionVisible] = useState(false);
     const [questionCount, setQuestionCount] = useState(0);
     const { data: questionnaire, error, isLoading } = useLastQuestionnaire();
-    console.log(questionnaire);
+
     const handleAddQuestion = () => {
         setQuestionCount(questionCount + 1);
         setClosedQuestionVisible(true);

@@ -160,3 +160,29 @@ async function usePostClosedQuestion(questionClosedData) {
 
     return response.json();
 }
+
+export function useGetQuestions() {
+    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+
+    const { data, error, isLoading } = useQuery({
+        queryKey: "getQuestions",
+        queryFn: async () => {
+            const response = await fetchBackend({
+                type: "GET",
+                url: "postquestionnaire/postquestion/",
+            });
+
+            if (typeof response.data === "object" && "error" in response.data) {
+                throw new Error(response.data.error);
+            }
+
+            if (response.error) {
+                throw new Error(response.error);
+            }
+
+            return response.data;
+        },
+    });
+
+    return { data, error, isLoading };
+}

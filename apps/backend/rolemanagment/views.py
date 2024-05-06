@@ -15,7 +15,7 @@ class UserView(viewsets.ModelViewSet, APIView):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.AllowAny, IsSuperUser,)
 
     serializer_class = UserSerializer
 
@@ -35,7 +35,7 @@ class UserView(viewsets.ModelViewSet, APIView):
 
 class EditRoleView(viewsets.ModelViewSet, APIView):
 
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.AllowAny, IsSuperUser,)
 
     serializer_class = EditRoleSerializer
 

@@ -92,7 +92,9 @@
         "accountConfirmModal": "compte",
         "cancelButtonModal": "Annuler",
         "confirmButtonModal": "Confirmer",
-        "successUserDelete": "Votre compte a été supprimé avec succès"
+        "successUserDelete": "Votre compte a été supprimé avec succès",
+        "passwordPlaceholder": "Veuillez entrer votre mot de passe",
+        "wrongPassword": "Le mot de passe est incorrect"
     },
     "translateToast": {
         "SuccessText1": "Félicitation ! \uD83C\uDF89",
@@ -132,8 +134,8 @@
         "yupEndTimeGreater": "L'heure de fin doit être supérieure à l'heure de début",
         "addError": "Une erreur s'est produite lors de l'ajout de l'activité",
         "addErrorMultiple": "Une erreur s'est produite lors de l'ajout des activités",
-        "addSuccess": "L'activité a été ajoutée avec succès \uD83C\uDF89",
-        "addSuccessMultiple": "Les activités ont été ajoutées avec succès \uD83C\uDF89",
+        "addSuccess": "L'activité a été ajoutée avec succès",
+        "addSuccessMultiple": "Les activités ont été ajoutées avec succès",
         "title": "Titre",
         "description": "Description",
         "site": "Site",

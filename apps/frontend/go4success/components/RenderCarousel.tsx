@@ -11,7 +11,6 @@ interface CarouselProps {
 }
 
 const RenderCarousel: React.FC<CarouselProps> = ({ data, renderItem }) => {
-
     return Platform.OS === "web" ? (
         <ScrollView horizontal={true} style={styles.containerCard}>
             <FlatList

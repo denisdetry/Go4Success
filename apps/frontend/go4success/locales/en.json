@@ -91,7 +91,9 @@
         "deleteUserButton": "Delete account",
         "cancelButtonModal": "Cancel",
         "confirmButtonModal": "Confirm",
-        "successUserDelete": "Your account has been successfully deleted"
+        "successUserDelete": "Your account has been successfully deleted",
+        "passwordPlaceholder": "Please enter your password",
+        "wrongPassword": "The password is incorrect"
     },
     "translateToast": {
         "SuccessText1": "Congratulation ! \uD83C\uDF89",

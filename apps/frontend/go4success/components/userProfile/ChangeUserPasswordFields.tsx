@@ -17,7 +17,7 @@ export const ChangeUserPasswordFields = () => {
     const { t } = useTranslation();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editable, setEditable] = useState(false);
-    const { user, signIn } = useAuth();
+    const { user } = useAuth();
 
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -53,15 +53,15 @@ export const ChangeUserPasswordFields = () => {
             });
         },
 
-        onSuccess: () => {
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["current_user"] });
             Toast.show({
                 type: "success",
                 text1: t("translateToast.SuccessText1"),
                 text2: t("translationProfile.successPasswordChange"),
             });
-            void queryClient.invalidateQueries({ queryKey: ["current_user"] });
-            signIn({ username: user.username, password: newPassword });
             clearFields();
+            switchEdit();
         },
 
         onError: async (error: fetchError) => {

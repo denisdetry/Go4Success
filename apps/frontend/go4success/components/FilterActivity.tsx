@@ -1,8 +1,15 @@
 import React, { useCallback, useState } from "react";
-import { Modal, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+    Modal,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import { ScrollView } from "react-native-virtualized-view";
 import Card from "./Card";
 import ButtonComponent from "./ButtonComponent";
-import Colors from "../constants/Colors";
 import stylesGlobal from "../styles/global";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 import dayjs from "dayjs";
@@ -12,8 +19,10 @@ import { Activity, useActivities } from "@/hooks/useActivities";
 import { useTranslation } from "react-i18next";
 import RenderCarousel from "@/components/RenderCarousel";
 import { useLanguages } from "@/hooks/useLanguages";
-import InputAutocomplete from "@/components/selectors/InputAutocomplete";
+import modalStyle from "@/styles/modal";
 import { Ionicons } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
+import InputAutocomplete from "@/components/selectors/InputAutocomplete";
 
 interface Attend {
     activity: Activity;
@@ -175,7 +184,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         setRange({ startDate: null, endDate: null });
     };
 
-
     return (
         <>
             <View style={styles.filterView}>
@@ -186,7 +194,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 />
             </View>
 
-
             {/* Modal view */}
             <Modal
                 animationType="fade"
@@ -194,25 +201,35 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 visible={modalVisible}
                 onRequestClose={toggleModal}
             >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <TouchableOpacity style={styles.closeButton} onPress={() => {
-                            setModalVisible(!modalVisible);
-                        }}>
-                            <Ionicons name={"close"} color={Colors.primaryColor} size={24}></Ionicons>
+                <View style={modalStyle.centeredView}>
+                    <ScrollView
+                        contentContainerStyle={[
+                            modalStyle.modalView,
+                            { padding: 35 },
+                        ]}
+                    >
+                        <TouchableOpacity
+                            style={modalStyle.closeButton}
+                            onPress={() => {
+                                setModalVisible(!modalVisible);
+                            }}
+                        >
+                            <Ionicons
+                                name={"close"}
+                                color={Colors.primaryColor}
+                                size={24}
+                            ></Ionicons>
                         </TouchableOpacity>
-                        <SafeAreaView style={{ gap: 10 }}>
-                            <TextInput
-                                style={stylesGlobal.inputLittle}
-                                value={searchName}
-                                onChangeText={(text: string) =>
-                                    setSearchName(text)
-                                }
-                                placeholder={t(
-                                    "translationButton.SearchTitleWorkshop",
-                                )}
-                            />
+                        <TextInput
+                            style={stylesGlobal.inputLittle}
+                            value={searchName}
+                            onChangeText={(text: string) => setSearchName(text)}
+                            placeholder={t(
+                                "translationButton.SearchTitleWorkshop",
+                            )}
+                        />
 
+                        <View style={{ gap: 10 }}>
                             <InputAutocomplete
                                 items={sites}
                                 placeholder={t("translationButton.SelectSite")}
@@ -237,11 +254,10 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                                 readOnly={true}
                                 onChange={languageCallback}
                             />
-                        </SafeAreaView>
+                        </View>
 
                         <View
                             style={{
-                                flex: 1,
                                 flexDirection: "column",
                                 alignItems: "flex-end",
                                 marginTop: 10,
@@ -289,7 +305,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                                 buttonType={"secondary"}
                             />
                         </View>
-                    </View>
+                    </ScrollView>
                 </View>
             </Modal>
 
@@ -323,7 +339,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     );
 };
 
-
 const styles = StyleSheet.create({
     filterView: {
         flexWrap: "wrap",
@@ -339,13 +354,14 @@ const styles = StyleSheet.create({
         color: "gray",
     },
     centeredView: {
-        flex: 1,
+        position: "relative",
+        height: "100%",
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     modalView: {
-        margin: 20,
+        margin: "auto",
         backgroundColor: "white",
         borderRadius: 20,
         padding: 35,
@@ -365,6 +381,5 @@ const styles = StyleSheet.create({
         right: 10,
     },
 });
-
 
 export default FilterActivity;

@@ -1,4 +1,12 @@
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+    ActivityIndicator,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from "react-native";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import React from "react";
 import { useSites } from "@/hooks/useSites";
@@ -80,7 +88,7 @@ export default function Add() {
             .test(
                 "is-greater",
                 t("translationActivities.yupEndTimeGreater"),
-                function() {
+                function () {
                     const beginTime = this.parent.beginTime;
                     const endTime = this.parent.endTime;
                     if (beginTime.key === "" || endTime.key === "") {
@@ -161,7 +169,7 @@ export default function Add() {
                 .set(
                     "hour",
                     Number(data.beginTime.value.split(":")[0]) +
-                    Number(timezoneOffset),
+                        Number(timezoneOffset),
                 )
                 .set("minute", Number(data.beginTime.value.split(":")[1]))
                 .toJSON();
@@ -169,7 +177,7 @@ export default function Add() {
                 .set(
                     "hour",
                     Number(data.endTime.value.split(":")[0]) +
-                    Number(timezoneOffset),
+                        Number(timezoneOffset),
                 )
                 .set("minute", Number(data.endTime.value.split(":")[1]))
                 .toJSON();
@@ -238,7 +246,6 @@ export default function Add() {
                     {t("translationActivities.addActivity")}
                 </Text>
 
-
                 {/* Activity title input */}
                 <View style={{ gap: 10 }}>
                     <Controller
@@ -258,7 +265,9 @@ export default function Add() {
 
                     {/* Error message for title */}
                     {errors.title && (
-                        <Text style={styles.errorMsg}>{errors.title.message}</Text>
+                        <Text style={styles.errorMsg}>
+                            {errors.title.message}
+                        </Text>
                     )}
 
                     {/* Activity description input */}
@@ -268,7 +277,9 @@ export default function Add() {
                         render={({ field: { onChange, value } }) => (
                             <TextInput
                                 style={styles.inputField}
-                                placeholder={t("translationActivities.description")}
+                                placeholder={t(
+                                    "translationActivities.description",
+                                )}
                                 placeholderTextColor={"grey"}
                                 onChangeText={onChange}
                                 value={value}
@@ -328,7 +339,9 @@ export default function Add() {
                             <InputAutocomplete
                                 items={languages}
                                 readOnly={true}
-                                placeholder={t("translationActivities.language")}
+                                placeholder={t(
+                                    "translationActivities.language",
+                                )}
                                 onChange={onChange}
                                 icon={"language"}
                             />
@@ -374,7 +387,9 @@ export default function Add() {
                         render={({ field: { onChange } }) => (
                             <InputAutocomplete
                                 items={hourQuarterList}
-                                placeholder={t("translationActivities.beginTime")}
+                                placeholder={t(
+                                    "translationActivities.beginTime",
+                                )}
                                 onChange={onChange}
                                 icon={"time-outline"}
                             />
@@ -425,11 +440,7 @@ export default function Add() {
                             {t("translationActivities.addButton")}
                         </Text>
                     </Pressable>
-
-
                 </View>
-
-
             </View>
         </ScrollView>
     );

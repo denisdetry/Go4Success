@@ -1,305 +1,305 @@
 [
-  {
-    "model": "database.user",
-    "pk": 1,
-    "fields": {
-      "password": "pbkdf2_sha256$720000$3pc9akh2ajbCuUvJ3AR07M$V5ZKmrRi+rUDvYK9VU1o8TRQgqn4zgjJ+5gd2303b3M=",
-      "username": "uclouvainadmin",
-      "email": "admin@uclouvain.be",
-      "first_name": "Admin",
-      "last_name": "UCLouvain",
-      "noma": null,
-      "is_active": true,
-      "is_staff": true,
-      "is_superuser": true,
-      "date_join": "2024-04-13T09:31:26.314Z",
-      "last_login": "2024-04-13T09:31:49.929Z",
-      "groups": [],
-      "user_permissions": []
+    {
+        "model": "database.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$3pc9akh2ajbCuUvJ3AR07M$V5ZKmrRi+rUDvYK9VU1o8TRQgqn4zgjJ+5gd2303b3M=",
+            "username": "uclouvainadmin",
+            "email": "admin@uclouvain.be",
+            "first_name": "Admin",
+            "last_name": "UCLouvain",
+            "noma": null,
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "date_join": "2024-04-13T09:31:26.314Z",
+            "last_login": "2024-04-13T09:31:49.929Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "database.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
+            "username": "superuser",
+            "email": "superuser@gmail.com",
+            "first_name": "FName",
+            "last_name": "LName",
+            "noma": "11111111",
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "date_join": "2024-04-12T14:59:30Z",
+            "last_login": null,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "database.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
+            "username": "student",
+            "email": "student@student.uclouvain.com",
+            "first_name": "FStudent",
+            "last_name": "LStudent",
+            "noma": "12345678",
+            "is_active": true,
+            "is_staff": false,
+            "is_superuser": false,
+            "date_join": "2024-04-12T15:06:31Z",
+            "last_login": null,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "database.user",
+        "pk": 4,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
+            "username": "teacher",
+            "email": "teacher@student.uclouvain.com",
+            "first_name": "Fteacher",
+            "last_name": "Lteacher",
+            "noma": null,
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": false,
+            "date_join": "2024-04-12T15:08:14Z",
+            "last_login": null,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "database.user",
+        "pk": 6,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
+            "username": "teacher2",
+            "email": "teacher2@student.uclouvain.com",
+            "first_name": "Fteacher",
+            "last_name": "Lteacher",
+            "noma": null,
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": false,
+            "date_join": "2024-04-12T15:08:14Z",
+            "last_login": null,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "database.user",
+        "pk": 5,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
+            "username": "student2",
+            "email": "student2@gmail.com",
+            "first_name": "Fstudent2",
+            "last_name": "Lstudent2",
+            "noma": "87654321",
+            "is_active": true,
+            "is_staff": false,
+            "is_superuser": false,
+            "date_join": "2024-04-10T15:12:08Z",
+            "last_login": null,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "database.course",
+        "pk": 1,
+        "fields": {
+            "code": "TS1",
+            "name": "Test1",
+            "user": 4
+        }
+    },
+    {
+        "model": "database.course",
+        "pk": 2,
+        "fields": {
+            "code": "Info01",
+            "name": "Informatique Introduction",
+            "user": 6
+        }
+    },
+    {
+        "model": "database.site",
+        "pk": 1,
+        "fields": {
+            "name": "Namur"
+        }
+    },
+    {
+        "model": "database.site",
+        "pk": 2,
+        "fields": {
+            "name": "Charleroi"
+        }
+    },
+    {
+        "model": "database.site",
+        "pk": 3,
+        "fields": {
+            "name": "Louvain"
+        }
+    },
+    {
+        "model": "database.room",
+        "pk": 1,
+        "fields": {
+            "name": "I32",
+            "site": 1
+        }
+    },
+    {
+        "model": "database.room",
+        "pk": 2,
+        "fields": {
+            "name": "I21",
+            "site": 2
+        }
+    },
+    {
+        "model": "database.room",
+        "pk": 3,
+        "fields": {
+            "name": "I25",
+            "site": 1
+        }
+    },
+    {
+        "model": "database.language",
+        "pk": 1,
+        "fields": {
+            "name": "English",
+            "code": "EN"
+        }
+    },
+    {
+        "model": "database.language",
+        "pk": 2,
+        "fields": {
+            "name": "Français",
+            "code": "FR"
+        }
+    },
+    {
+        "model": "database.activity",
+        "pk": 1,
+        "fields": {
+            "type": "workshop",
+            "name": "Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
+            "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+            "date_start": "2024-04-12T15:02:17Z",
+            "date_end": "2024-04-12T18:02:18Z",
+            "room": 1,
+            "course": 1,
+            "language": 2
+        }
+    },
+    {
+        "model": "database.activity",
+        "pk": 2,
+        "fields": {
+            "type": "workshop",
+            "name": "Comment se préparer au blocus et aux examens ?",
+            "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here',",
+            "date_start": "2024-06-01T15:03:16Z",
+            "date_end": "2024-06-01T18:03:19Z",
+            "room": 2,
+            "course": null,
+            "language": 2
+        }
+    },
+    {
+        "model": "database.activity",
+        "pk": 3,
+        "fields": {
+            "type": "workshop",
+            "name": "Atelier planning #FR",
+            "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
+            "date_start": "2024-05-05T15:04:06Z",
+            "date_end": "2024-05-05T16:04:11Z",
+            "room": 1,
+            "course": null,
+            "language": 2
+        }
+    },
+    {
+        "model": "database.activity",
+        "pk": 4,
+        "fields": {
+            "type": "workshop",
+            "name": "Atelier planning #EN",
+            "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
+            "date_start": "2024-05-05T15:04:45Z",
+            "date_end": "2024-05-05T16:04:48Z",
+            "room": 3,
+            "course": null,
+            "language": 1
+        }
+    },
+    {
+        "model": "database.attend",
+        "pk": 1,
+        "fields": {
+            "activity": 1,
+            "student": 3
+        }
+    },
+    {
+        "model": "database.attend",
+        "pk": 2,
+        "fields": {
+            "activity": 1,
+            "student": 2
+        }
+    },
+    {
+        "model": "database.teacher",
+        "pk": 4,
+        "fields": {
+            "is_tutor": false,
+            "is_professor": true
+        }
+    },
+    {
+        "model": "database.give",
+        "pk": 1,
+        "fields": {
+            "activity": 2,
+            "teacher": 4
+        }
+    },
+    {
+        "model": "database.registered",
+        "pk": 1,
+        "fields": {
+            "student": 3,
+            "course": 2
+        }
+    },
+    {
+        "model": "database.feedbackactivity",
+        "pk": 1,
+        "fields": {
+            "student": 2,
+            "activity": 1,
+            "evaluation": 3,
+            "positive_point": "Bien",
+            "negative_point": "Non",
+            "suggestion": "Suggestion ici",
+            "additional_comment": "Ok",
+            "date_submitted": "2024-04-12"
+        }
     }
-  },
-  {
-    "model": "database.user",
-    "pk": 2,
-    "fields": {
-      "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
-      "username": "superuser",
-      "email": "superuser@gmail.com",
-      "first_name": "FName",
-      "last_name": "LName",
-      "noma": "11111111",
-      "is_active": true,
-      "is_staff": true,
-      "is_superuser": true,
-      "date_join": "2024-04-12T14:59:30Z",
-      "last_login": null,
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "database.user",
-    "pk": 3,
-    "fields": {
-      "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
-      "username": "student",
-      "email": "student@student.uclouvain.com",
-      "first_name": "FStudent",
-      "last_name": "LStudent",
-      "noma": "12345678",
-      "is_active": true,
-      "is_staff": false,
-      "is_superuser": false,
-      "date_join": "2024-04-12T15:06:31Z",
-      "last_login": null,
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "database.user",
-    "pk": 4,
-    "fields": {
-      "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
-      "username": "teacher",
-      "email": "teacher@student.uclouvain.com",
-      "first_name": "Fteacher",
-      "last_name": "Lteacher",
-      "noma": null,
-      "is_active": true,
-      "is_staff": true,
-      "is_superuser": false,
-      "date_join": "2024-04-12T15:08:14Z",
-      "last_login": null,
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "database.user",
-    "pk": 6,
-    "fields": {
-      "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
-      "username": "teacher2",
-      "email": "teacher2@student.uclouvain.com",
-      "first_name": "Fteacher",
-      "last_name": "Lteacher",
-      "noma": null,
-      "is_active": true,
-      "is_staff": true,
-      "is_superuser": false,
-      "date_join": "2024-04-12T15:08:14Z",
-      "last_login": null,
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "database.user",
-    "pk": 5,
-    "fields": {
-      "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
-      "username": "student2",
-      "email": "student2@gmail.com",
-      "first_name": "Fstudent2",
-      "last_name": "Lstudent2",
-      "noma": "87654321",
-      "is_active": true,
-      "is_staff": false,
-      "is_superuser": false,
-      "date_join": "2024-04-10T15:12:08Z",
-      "last_login": null,
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "database.course",
-    "pk": 1,
-    "fields": {
-      "code": "TS1",
-      "name": "Test1",
-      "user": 4
-    }
-  },
-  {
-    "model": "database.course",
-    "pk": 2,
-    "fields": {
-      "code": "Info01",
-      "name": "Informatique Introduction",
-      "user": 6
-    }
-  },
-  {
-    "model": "database.site",
-    "pk": 1,
-    "fields": {
-      "name": "Namur"
-    }
-  },
-  {
-    "model": "database.site",
-    "pk": 2,
-    "fields": {
-      "name": "Charleroi"
-    }
-  },
-  {
-    "model": "database.site",
-    "pk": 3,
-    "fields": {
-      "name": "Louvain"
-    }
-  },
-  {
-    "model": "database.room",
-    "pk": 1,
-    "fields": {
-      "name": "I32",
-      "site": 1
-    }
-  },
-  {
-    "model": "database.room",
-    "pk": 2,
-    "fields": {
-      "name": "I21",
-      "site": 2
-    }
-  },
-  {
-    "model": "database.room",
-    "pk": 3,
-    "fields": {
-      "name": "I25",
-      "site": 1
-    }
-  },
-  {
-    "model": "database.language",
-    "pk": 1,
-    "fields": {
-      "name": "English",
-      "code": "EN"
-    }
-  },
-  {
-    "model": "database.language",
-    "pk": 2,
-    "fields": {
-      "name": "Français",
-      "code": "FR"
-    }
-  },
-  {
-    "model": "database.activity",
-    "pk": 1,
-    "fields": {
-      "type": "workshop",
-      "name": "Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
-      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      "date_start": "2024-04-12T15:02:17Z",
-      "date_end": "2024-04-12T18:02:18Z",
-      "room": 1,
-      "course": 1,
-      "language": 2
-    }
-  },
-  {
-    "model": "database.activity",
-    "pk": 2,
-    "fields": {
-      "type": "workshop",
-      "name": "Comment se préparer au blocus et aux examens ?",
-      "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here',",
-      "date_start": "2024-06-01T15:03:16Z",
-      "date_end": "2024-06-01T18:03:19Z",
-      "room": 2,
-      "course": null,
-      "language": 2
-    }
-  },
-  {
-    "model": "database.activity",
-    "pk": 3,
-    "fields": {
-      "type": "workshop",
-      "name": "Atelier planning #FR",
-      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-      "date_start": "2024-05-05T15:04:06Z",
-      "date_end": "2024-05-05T16:04:11Z",
-      "room": 1,
-      "course": null,
-      "language": 2
-    }
-  },
-  {
-    "model": "database.activity",
-    "pk": 4,
-    "fields": {
-      "type": "workshop",
-      "name": "Atelier planning #EN",
-      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-      "date_start": "2024-05-05T15:04:45Z",
-      "date_end": "2024-05-05T16:04:48Z",
-      "room": 3,
-      "course": null,
-      "language": 1
-    }
-  },
-  {
-    "model": "database.attend",
-    "pk": 1,
-    "fields": {
-      "activity": 1,
-      "student": 3
-    }
-  },
-  {
-    "model": "database.attend",
-    "pk": 2,
-    "fields": {
-      "activity": 1,
-      "student": 2
-    }
-  },
-  {
-    "model": "database.teacher",
-    "pk": 4,
-    "fields": {
-      "is_tutor": false,
-      "is_professor": true
-    }
-  },
-  {
-    "model": "database.give",
-    "pk": 1,
-    "fields": {
-      "activity": 2,
-      "teacher": 4
-    }
-  },
-  {
-    "model": "database.registered",
-    "pk": 1,
-    "fields": {
-      "student": 3,
-      "course": 2
-    }
-  },
-  {
-    "model": "database.feedbackactivity",
-    "pk": 1,
-    "fields": {
-      "student": 2,
-      "activity": 1,
-      "evaluation": 3,
-      "positive_point": "Bien",
-      "negative_point": "Non",
-      "suggestion": "Suggestion ici",
-      "additional_comment": "Ok",
-      "date_submitted": "2024-04-12"
-    }
-  }
 ]

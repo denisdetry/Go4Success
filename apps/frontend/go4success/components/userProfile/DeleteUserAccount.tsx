@@ -42,7 +42,9 @@ export const DeleteUserAccount = () => {
             if (error.responseError.status === 400) {
                 setPasswordErrorMessage(t("translationProfile.wrongPassword"));
             } else {
-                setPasswordErrorMessage(t("translationProfile.defaultErrorMessage"));
+                setPasswordErrorMessage(
+                    t("translationProfile.defaultErrorMessage"),
+                );
             }
         },
     });
@@ -74,16 +76,23 @@ export const DeleteUserAccount = () => {
                             </Text>
                             {/* Modal asking password field */}
                             <View style={styles.inputField}>
-                                <TextInput style={styles.input}
-                                           placeholder={t("translationProfile.passwordPlaceholder")}
-                                           secureTextEntry={!showPassword}
-                                           value={passwordValue}
-                                           onChangeText={(text) => {
-                                               setPasswordValue(text);
-                                               setPasswordErrorMessage("");
-                                           }}
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder={t(
+                                        "translationProfile.passwordPlaceholder",
+                                    )}
+                                    secureTextEntry={!showPassword}
+                                    value={passwordValue}
+                                    onChangeText={(text) => {
+                                        setPasswordValue(text);
+                                        setPasswordErrorMessage("");
+                                    }}
                                 />
-                                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                                <TouchableOpacity
+                                    onPress={() =>
+                                        setShowPassword(!showPassword)
+                                    }
+                                >
                                     <MaterialCommunityIcons
                                         name={!showPassword ? "eye" : "eye-off"}
                                         size={24}
@@ -91,7 +100,9 @@ export const DeleteUserAccount = () => {
                                     />
                                 </TouchableOpacity>
                             </View>
-                            <Text style={styles.errorMsg}>{passwordErrorMessage}</Text>
+                            <Text style={styles.errorMsg}>
+                                {passwordErrorMessage}
+                            </Text>
                         </View>
 
                         {/* Modal Buttons section */}
@@ -102,7 +113,9 @@ export const DeleteUserAccount = () => {
                                 buttonType={"close"}
                             />
                             <ButtonComponent
-                                text={t("translationProfile.confirmButtonModal")}
+                                text={t(
+                                    "translationProfile.confirmButtonModal",
+                                )}
                                 onPress={handleConfirm}
                                 buttonType={"primary"}
                             />
@@ -122,5 +135,3 @@ export const DeleteUserAccount = () => {
         </>
     );
 };
-
-

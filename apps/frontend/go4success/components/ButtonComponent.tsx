@@ -17,11 +17,11 @@ type ButtonComponentProps = {
 };
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({
-                                                             text,
-                                                             onPress,
-                                                             buttonType,
-                                                             style = {},
-                                                         }) => {
+    text,
+    onPress,
+    buttonType,
+    style = {},
+}) => {
     const styles = StyleSheet.create({
         common: {
             borderRadius: 15,
@@ -65,7 +65,10 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
     });
 
     return (
-        <TouchableOpacity style={[styles.common, styles[buttonType], style]} onPress={onPress}>
+        <TouchableOpacity
+            style={[styles.common, styles[buttonType], style]}
+            onPress={onPress}
+        >
             <Text style={styles.common}>{text}</Text>
         </TouchableOpacity>
     );

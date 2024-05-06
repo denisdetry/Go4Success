@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Pressable, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import {
+    Pressable,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View,
+} from "react-native";
 import styles from "@/styles/global";
 import { SelectItem } from "@/types/SelectItem";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
@@ -21,7 +28,6 @@ type ItemProps = {
 
 const Item = ({ item, onPress }: ItemProps) => {
     const [isHovered, setIsHovered] = useState(false);
-
     return (
         <View
             style={[
@@ -38,14 +44,14 @@ const Item = ({ item, onPress }: ItemProps) => {
     );
 };
 const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
-                                                                 items,
-                                                                 placeholder,
-                                                                 onChange = () => {
-                                                                 },
-                                                                 readOnly = false,
-                                                                 toReturn = "all",
-                                                                 icon,
-                                                             }) => {
+    items,
+    placeholder,
+    onChange = () => {},
+    readOnly = false,
+    toReturn = "all",
+    icon,
+}) => {
+    console.log(items);
     const [visible, setVisible] = React.useState(false);
     const [filteredData, setFilteredData] = React.useState<SelectItem[]>(items);
 
@@ -67,16 +73,16 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                     toReturn === "key"
                         ? item.key
                         : toReturn === "value"
-                            ? item.value
-                            : item,
+                          ? item.value
+                          : item,
                 );
             } else {
                 onChange(
                     toReturn === "key"
                         ? ""
                         : toReturn === "value"
-                            ? ""
-                            : { key: "", value: "" },
+                          ? ""
+                          : { key: "", value: "" },
                 );
             }
         },
@@ -93,20 +99,19 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
         if (visible) {
             if (item.key !== "empty" && item.key !== "error") {
                 return (
-                    <>
-                        <Item
-                            item={item}
-                            onPress={() => {
-                                handleChange(item);
-                                setSelectedData(item);
-                                setVisible(false);
-                            }}
-                        />
-                    </>
+                    <Item
+                        key={item.key}
+                        item={item}
+                        onPress={() => {
+                            handleChange(item);
+                            setSelectedData(item);
+                            setVisible(false);
+                        }}
+                    />
                 );
             } else {
                 return (
-                    <View style={{ padding: 5 }}>
+                    <View style={{ padding: 5 }} key={item.key}>
                         <Text style={styles.text}>{item.value}</Text>
                     </View>
                 );
@@ -139,8 +144,7 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                         style={styles.input}
                         onPressIn={() => setVisible(!visible)}
                     >
-                        {!selectedData.value ||
-                        selectedData.value === "" ? (
+                        {!selectedData.value || selectedData.value === "" ? (
                             <Text style={styles.placeholder}>
                                 {placeholder}
                             </Text>
@@ -151,21 +155,19 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                         )}
                     </TouchableWithoutFeedback>
                 ) : (
-                    <>
-                        <TextInput
-                            style={styles.input}
-                            placeholder={placeholder}
-                            placeholderTextColor={"grey"}
-                            onChangeText={(text) => {
-                                setFilteredData(filterData(text));
-                                setSelectedData({ key: text, value: text });
-                                handleChange({ key: text, value: text });
-                            }}
-                            value={selectedData.value ?? ""}
-                            onFocus={() => setVisible(true)}
-                            onPressIn={() => setVisible(true)}
-                        />
-                    </>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={placeholder}
+                        placeholderTextColor={"grey"}
+                        onChangeText={(text) => {
+                            setFilteredData(filterData(text));
+                            setSelectedData({ key: text, value: text });
+                            handleChange({ key: text, value: text });
+                        }}
+                        value={selectedData.value ?? ""}
+                        onFocus={() => setVisible(true)}
+                        onPressIn={() => setVisible(true)}
+                    />
                 )}
 
                 <Pressable
@@ -192,10 +194,7 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
                     }
                 }
             >
-
-                {
-                    filteredData.map((item) => renderItem({ item }))
-                }
+                {filteredData.map((item) => renderItem({ item }))}
             </View>
         </View>
     );

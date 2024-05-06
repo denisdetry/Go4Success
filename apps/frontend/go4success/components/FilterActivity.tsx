@@ -1,5 +1,13 @@
 import React, { useCallback, useState } from "react";
-import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+    Modal,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import { ScrollView } from "react-native-virtualized-view";
 import Card from "./Card";
 import ButtonComponent from "./ButtonComponent";
 import stylesGlobal from "../styles/global";
@@ -175,7 +183,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         setRange({ startDate: null, endDate: null });
     };
 
-
     return (
         <>
             <View style={styles.filterView}>
@@ -186,7 +193,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 />
             </View>
 
-
             {/* Modal view */}
             <Modal
                 animationType="fade"
@@ -195,21 +201,31 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 onRequestClose={toggleModal}
             >
                 <View style={modalStyle.centeredView}>
-                    <ScrollView contentContainerStyle={[modalStyle.modalView, { padding: 35 }]}>
-                        <TouchableOpacity style={modalStyle.closeButton} onPress={() => {
-                            setModalVisible(!modalVisible);
-                        }}>
-                            <Ionicons name={"close"} color={Colors.primaryColor} size={24}></Ionicons>
+                    <ScrollView
+                        contentContainerStyle={[
+                            modalStyle.modalView,
+                            { padding: 35 },
+                        ]}
+                    >
+                        <TouchableOpacity
+                            style={modalStyle.closeButton}
+                            onPress={() => {
+                                setModalVisible(!modalVisible);
+                            }}
+                        >
+                            <Ionicons
+                                name={"close"}
+                                color={Colors.primaryColor}
+                                size={24}
+                            ></Ionicons>
                         </TouchableOpacity>
                         <TextInput
                             style={stylesGlobal.inputLittle}
                             value={searchName}
-                            onChangeText={(text: string) =>
-                                setSearchName(text)
-                            }
-                            placeholder={
-                                t("translationButton.SearchTitleWorkshop")
-                            }
+                            onChangeText={(text: string) => setSearchName(text)}
+                            placeholder={t(
+                                "translationButton.SearchTitleWorkshop",
+                            )}
                         />
 
                         <View style={{ gap: 10 }}>
@@ -220,7 +236,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                                 readOnly={true}
                                 onChange={siteCallback}
                             />
-
 
                             <InputAutocomplete
                                 items={rooms}
@@ -292,7 +307,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                         </View>
                     </ScrollView>
                 </View>
-
             </Modal>
 
             {/* Cards views for registered activity or filtered */}
@@ -324,7 +338,6 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         </>
     );
 };
-
 
 const styles = StyleSheet.create({
     filterView: {
@@ -368,6 +381,5 @@ const styles = StyleSheet.create({
         right: 10,
     },
 });
-
 
 export default FilterActivity;

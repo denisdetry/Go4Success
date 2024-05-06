@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -18,9 +17,8 @@ urlpatterns = [
     path('delete_user/<int:id>/', views.DeleteUserView.as_view(), name='delete_user'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('expo_token/', views.ExpoTokenView.as_view(), name='expo_token'),
+    path('update_expo_token/<int:id>/<str:token>/',
+         views.UpdateExpoTokenView.as_view(), name='update_expo_token'),
     path("", include(router.urls)),
 ]
-
-admin.site.site_title = "Go4success administration"
-admin.site.site_header = "Go4success administration"
-admin.site.index_title = "Go4success"

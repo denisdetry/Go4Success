@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Modal, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+    Modal,
+    Platform,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
 import { useAuth } from "@/context/Auth";
@@ -116,15 +123,15 @@ const styleFunctions = {
 };
 
 const Card: React.FC<CardProps> = ({
-                                       id,
-                                       title,
-                                       location,
-                                       date,
-                                       hour,
-                                       type,
-                                       description,
-                                       language,
-                                   }) => {
+    id,
+    title,
+    location,
+    date,
+    hour,
+    type,
+    description,
+    language,
+}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
     const { t } = useTranslation();
@@ -142,7 +149,6 @@ const Card: React.FC<CardProps> = ({
             return { data, error };
         },
         onSuccess: () => {
-            console.log("success");
             Toast.show({
                 type: "success",
                 text1: t("translateToast.SuccessText1"),
@@ -172,6 +178,37 @@ const Card: React.FC<CardProps> = ({
         },
     });
 
+    interface ModalTextComponentProps {
+        title: string;
+        content: string;
+        icon?: any;
+    }
+
+    const ModalTextComponent: React.FC<ModalTextComponentProps> = ({
+        title,
+        content,
+        icon,
+    }) => {
+        return (
+            <View style={styles.modalTextView}>
+                {icon && (
+                    <Ionicons
+                        name={icon}
+                        size={24}
+                        color={Colors.primaryColor}
+                    />
+                )}
+                <Text style={[styles.modalText, { fontWeight: "700" }]}>
+                    {title} :
+                    <Text style={[styles.modalText, { textAlign: "justify" }]}>
+                        {" "}
+                        {content}
+                    </Text>
+                </Text>
+            </View>
+        );
+    };
+
     return (
         <View style={styles.centeredView}>
             {/* Modal content */}
@@ -185,44 +222,78 @@ const Card: React.FC<CardProps> = ({
             >
                 <View style={styles.centeredViewModal}>
                     <View style={styles.modalView}>
-                        <View style={styleFunctions.getModalViewTitleStyle(type)}>
+                        <View
+                            style={styleFunctions.getModalViewTitleStyle(type)}
+                        >
                             <Text style={styles.modalTitle}>{title}</Text>
-                            <Pressable
+                            <TouchableOpacity
                                 style={styles.closeButton}
                                 onPress={() => setModalVisible(!modalVisible)}
                             >
-                                <Text style={styles.closeButtonText}>✖</Text>
-                            </Pressable>
+                                <Ionicons
+                                    name={"close"}
+                                    color={"white"}
+                                    size={24}
+                                ></Ionicons>
+                            </TouchableOpacity>
                         </View>
 
-                        <View style={styleFunctions.getModalDataStyle(type)}>
-                            <Text style={styles.modalText}>
-                                {t("translateCard.date")} : {date}
-                            </Text>
-                            <Text style={styles.modalText}>
-                                {t("translateCard.hour")} : {hour}
-                            </Text>
-                            <Text style={styles.modalText}>
-                                {t("translateCard.place")} : {location}
-                            </Text>
-                            <Text style={styles.modalText}>
-                                {t("translateCard.type")} : {type}
-                            </Text>
-                            <Text style={styles.modalText}>
-                                {t("translateCard.language")}: {language}
-                            </Text>
+                        <View
+                            style={[
+                                styleFunctions.getModalDataStyle(type),
+                                {
+                                    flexWrap: "wrap",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    alignContent: "center",
+                                },
+                            ]}
+                        >
+                            <ModalTextComponent
+                                title={t("translateCard.date")}
+                                content={date}
+                                icon={"calendar"}
+                            />
+                            <ModalTextComponent
+                                title={t("translateCard.hour")}
+                                content={hour}
+                                icon={"time"}
+                            />
+                            <ModalTextComponent
+                                title={t("translateCard.place")}
+                                content={location}
+                                icon={"location"}
+                            />
+                            <ModalTextComponent
+                                title={t("translateCard.type")}
+                                content={type}
+                                icon={"list"}
+                            />
+                            <ModalTextComponent
+                                title={t("translateCard.language")}
+                                content={language}
+                                icon={"language"}
+                            />
+
                             <View style={styles.separator} />
-                            <Text style={styles.modalText}>{description}</Text>
+                            <ModalTextComponent
+                                title={"Description"}
+                                content={description}
+                            />
                         </View>
 
                         <View style={styles.buttonContainer}>
                             <ButtonComponent
-                                text={t("translateRegisterActivity.registerButton")}
+                                text={t(
+                                    "translateRegisterActivity.registerButton",
+                                )}
                                 onPress={() => handleRegister.mutate()}
                                 buttonType={"primary"}
                             />
                             <ButtonComponent
-                                text={t("translateRegisterActivity.closeButton")}
+                                text={t(
+                                    "translateRegisterActivity.closeButton",
+                                )}
                                 onPress={() => setModalVisible(!modalVisible)}
                                 buttonType={"close"}
                             />
@@ -240,7 +311,11 @@ const Card: React.FC<CardProps> = ({
                 <View style={styles.bottomRow}>
                     <View style={styles.bottomRowLocation}>
                         <View style={{ flexDirection: "row", gap: 3 }}>
-                            <Ionicons name={"location-outline"} size={20} color={"white"} />
+                            <Ionicons
+                                name={"location-outline"}
+                                size={20}
+                                color={"white"}
+                            />
                             <Text style={styles.text}>{location}</Text>
                         </View>
                     </View>
@@ -280,9 +355,19 @@ const styles = StyleSheet.create({
         padding: 20,
         width: "100%",
     },
-    modalText: {
+    modalTextView: {
+        alignSelf: "center",
+        alignContent: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+        gap: 5,
         marginBottom: 15,
+    },
+    modalText: {
+        fontSize: 16,
+        alignSelf: "flex-end",
         textAlign: "center",
+        fontWeight: "normal",
     },
     card: {
         borderRadius: 10,
@@ -311,20 +396,21 @@ const styles = StyleSheet.create({
     },
 
     centeredView: {
-        marginTop: 22,
         justifyContent: "center",
         alignItems: "center",
+        marginTop: 10,
     },
     centeredViewModal: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22,
         backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     modalView: {
         backgroundColor: Colors.workshopLightColor,
         borderRadius: 20,
+        width: Platform.OS !== "web" ? "95%" : undefined,
+        maxWidth: Platform.OS === "web" ? "95%" : undefined,
         alignItems: "center",
         shadowColor: "#000",
         shadowOpacity: 0.25,
@@ -353,7 +439,7 @@ const styles = StyleSheet.create({
     text: {
         alignSelf: "flex-end",
         alignItems: "stretch",
-        fontSize: isMobile ? 13 : 16,
+        fontSize: isMobile ? 14 : 16,
         color: "white",
     },
 });

@@ -1,19 +1,20 @@
+from database.models import ExpoToken
 from database.models import User
-from django.contrib.auth import login, logout
 from django.http import JsonResponse
 from django.middleware import csrf
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import status, permissions, generics
+from rest_framework import status, generics
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import UserRegistrationSerializer, UserSerializer, UpdateUserSerializer, \
-    ChangePasswordSerializer
-from .validations import custom_validation, validate_username, validate_password
+    ChangePasswordSerializer, ExpoTokenSerializer
+from .validations import custom_validation
 
 
 class UserRegisterView(APIView):
@@ -32,17 +33,6 @@ class UserRegisterView(APIView):
             return Response({'refresh': str(refresh),
                              'access': str(refresh.access_token)}, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-class LoginView(APIView):
-    permission_classes = (AllowAny,)
-    authentication_classes = [JWTAuthentication]
-
-    def post(self, request):
-        data = request.data
-        assert validate_username(data)
-        assert validate_password(data)
-        return Response(status=status.HTTP_200_OK)
 
 
 class CurrentUserView(APIView):
@@ -66,12 +56,51 @@ class DeleteUserView(generics.DestroyAPIView):
     serializer_class = UserSerializer
     lookup_field = 'id'
 
+    def delete(self, request, *args, **kwargs):
+        user = self.get_object()
+        password = request.data.get('password')
+        if not user.check_password(password):
+            return Response({'error': 'Mot de passe incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.delete()
+        return Response({"User deleted"}, status=status.HTTP_200_OK)
+
 
 class ChangePasswordView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = ChangePasswordSerializer
     lookup_field = 'id'
+
+
+class ExpoTokenView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    queryset = ExpoToken.objects.all()
+    serializer_class = ExpoTokenSerializer
+
+
+class MultipleFieldLookupMixin(object):
+    def get_object(self):
+        queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset)
+        _filter = {}
+        for field in self.lookup_fields:
+            if self.kwargs.get(field, None):
+                _filter[field] = self.kwargs[field]
+        obj = get_object_or_404(queryset, **_filter)  # Lookup the object
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+
+class UpdateExpoTokenView(MultipleFieldLookupMixin, generics.UpdateAPIView, generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = ExpoToken.objects.all()
+    serializer_class = ExpoTokenSerializer
+    lookup_fields = ['user', 'token']
+
+    def get_queryset(self):
+        return ExpoToken.objects.filter(user=self.kwargs['id'], token=self.kwargs['token'])
 
 
 @csrf_exempt

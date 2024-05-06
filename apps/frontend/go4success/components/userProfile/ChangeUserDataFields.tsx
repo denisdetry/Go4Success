@@ -19,10 +19,10 @@ interface ChangeUserDataFieldsProps {
 }
 
 const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
-                                                                       data,
-                                                                       label,
-                                                                       dataKey,
-                                                                   }) => {
+    data,
+    label,
+    dataKey,
+}) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editable, setEditable] = useState(false);
     const [newData, setNewData] = useState(data);
@@ -44,6 +44,8 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
             });
         },
         onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["current_user"] });
+            switchEdit();
             Toast.show({
                 type: "success",
                 text1: t("translateToast.SuccessText1"),
@@ -52,14 +54,12 @@ const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
                     label.toLowerCase() +
                     t("translationProfile.changeUserInfoSuccessPart2"),
             });
-            await queryClient.invalidateQueries({ queryKey: ["current_user"] });
-            switchEdit();
         },
         onError: async (error: fetchError) => {
-            // console.error("Error : ", await error.responseError.json());
             const errorResponse = await error.responseError.json();
             const errorMessages =
-                errorResponse[dataKey] || t("translationProfile.defaultErrorMessage");
+                errorResponse[dataKey] ||
+                t("translationProfile.defaultErrorMessage");
             Toast.show({
                 type: "error",
                 text1: t("translationProfile.error"),

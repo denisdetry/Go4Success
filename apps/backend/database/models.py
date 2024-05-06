@@ -22,7 +22,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         extra_fields.setdefault("is_active", True)
-        extra_fields.setdefault("noma", "")
+        extra_fields.setdefault("noma", None)
         return self._create_user(username, email, password, **extra_fields)
 
     def create_superuser(self, email=None, username=None, password=None, **extra_fields):
@@ -41,7 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         "unique": "Cette adresse mail est déjà utilisée."})
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    noma = models.CharField(max_length=8, blank=True, null=True, unique=True,
+    noma = models.CharField(max_length=8, blank=True, null=True, unique=True, default=None,
                             error_messages={"unique": "Ce noma est déjà utilisé."})
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -70,10 +70,24 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.first_name
 
 
+class ExpoToken(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "User %s - %s" % (self.user, self.token)
+
+    class Meta:
+        unique_together = (('user', 'token'),)
+
+
 class Course(models.Model):
     id = models.AutoField(primary_key=True)
     code = models.CharField(max_length=63)
     name = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return "%s - %s" % (self.code, self.name)
@@ -96,7 +110,7 @@ class Room(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s - %s" % (self.site, self.name)
+        return self.name
 
     class Meta:
         unique_together = (('name', 'site'),)
@@ -300,3 +314,22 @@ class ChoiceAnswerInstance(models.Model):
 
     def __str__(self):
         return f"{self.choice_answer.student.username} - {self.choice_answer.question.question} - {self.choice.choice}"
+
+
+class OpenQuestion(models.Model):
+    id = models.AutoField(primary_key=True)
+    question = models.OneToOneField(Question, on_delete=models.CASCADE)
+    question_text = models.TextField()
+
+    def __str__(self):
+        return f"{self.question.question} - Open Question Text: {self.question_text}"
+
+
+class ClosedQuestion(models.Model):
+    id = models.AutoField(primary_key=True)
+    question = models.OneToOneField(Question, on_delete=models.CASCADE)
+    options = models.TextField()
+    checked = models.BooleanField()
+
+    def __str__(self):
+        return f"{self.question.question} - Options: {self.options} - Checked: {self.checked}"

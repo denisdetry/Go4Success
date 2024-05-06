@@ -1,19 +1,28 @@
 import React, { useCallback, useState } from "react";
-import { Modal, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+    Modal,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import { ScrollView } from "react-native-virtualized-view";
 import Card from "./Card";
 import ButtonComponent from "./ButtonComponent";
-import Colors from "../constants/Colors";
 import stylesGlobal from "../styles/global";
 import DateTimePicker, { DateType } from "react-native-ui-datepicker";
-import SelectSearch, { SelectItem } from "./SelectSearch";
 import dayjs from "dayjs";
 import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
-import { ItemType } from "react-native-dropdown-picker";
 import { Activity, useActivities } from "@/hooks/useActivities";
 import { useTranslation } from "react-i18next";
 import RenderCarousel from "@/components/RenderCarousel";
 import { useLanguages } from "@/hooks/useLanguages";
+import modalStyle from "@/styles/modal";
+import { Ionicons } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
+import InputAutocomplete from "@/components/selectors/InputAutocomplete";
 
 interface Attend {
     activity: Activity;
@@ -28,27 +37,24 @@ type ActivityOrAttend = Activity | Attend;
 
 const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const { t } = useTranslation();
-    const [siteOpen, setSiteOpen] = React.useState(false);
-    const [roomOpen, setRoomOpen] = React.useState(false);
-    const [languageOpen, setLanguageOpen] = React.useState(false);
     const [searchName, setSearchName] = useState("");
-    const [selectedRoom, setSelectedRoom] = useState<SelectItem>();
-    const [selectedSite, setSelectedSite] = useState<SelectItem>();
-    const [selectedLanguage, setSelectedLanguage] = useState<SelectItem>();
+    const [selectedRoomKey, setSelectedRoomKey] = useState<string>("");
+    const [selectedSiteKey, setSelectedSiteKey] = useState<string>("");
+    const [selectedLanguageKey, setSelectedLanguageKey] = useState<string>("");
 
-    const [range, setRange] = React.useState<{
+    const [range, setRange] = useState<{
         startDate: DateType;
         endDate: DateType;
     }>({ startDate: undefined, endDate: undefined });
 
-    const { sites, error: siteError } = useSites();
-    const allSites = [{ label: "All", value: "" }, ...sites];
+    const { sites, error: siteError } = useSites(undefined, true);
 
-    const { rooms, error: roomError } = useRooms(selectedSite?.value, sites);
-    const allRooms = [{ label: "All", value: "" }, ...rooms];
+    const { rooms, error: roomError } = useRooms(
+        selectedSiteKey ? selectedSiteKey : "",
+        true,
+    );
 
-    const { languages, error: languageError } = useLanguages();
-    const allLanguages = [{ label: "All", value: "" }, ...languages];
+    const { languages, error: languageError } = useLanguages(undefined, true);
 
     const onChange = useCallback(
         (range: { startDate: DateType; endDate: DateType }) => {
@@ -56,6 +62,28 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         },
         [],
     );
+
+    const siteCallback = useCallback(
+        (siteKey: string) => {
+            setSelectedSiteKey(siteKey);
+        },
+        [setSelectedSiteKey],
+    );
+
+    const roomCallback = useCallback(
+        (roomKey: string) => {
+            setSelectedRoomKey(roomKey);
+        },
+        [setSelectedRoomKey],
+    );
+
+    const languageCallback = useCallback(
+        (languageKey: string) => {
+            setSelectedLanguageKey(languageKey);
+        },
+        [setSelectedLanguageKey],
+    );
+
     const convertDateToISO = (date: DateType): string | null => {
         if (date instanceof Date) {
             return date.toISOString().split("T")[0];
@@ -73,9 +101,9 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const { data: registeredActivities } = useActivities(
         "attends",
         searchName,
-        selectedRoom?.value,
-        selectedSite?.value,
-        selectedLanguage?.value,
+        selectedRoomKey,
+        selectedSiteKey,
+        selectedLanguageKey,
         convertDateToISO(range.startDate),
         convertDateToISO(range.endDate),
     );
@@ -83,16 +111,15 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const { data: allActivities } = useActivities(
         "activity",
         searchName,
-        selectedRoom?.value,
-        selectedSite?.value,
-        selectedLanguage?.value,
+        selectedRoomKey,
+        selectedSiteKey,
+        selectedLanguageKey,
         convertDateToISO(range.startDate),
         convertDateToISO(range.endDate),
     );
 
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         const activity = "activity" in item ? item.activity : item;
-        const siteName = sites.find((site) => site.value === activity.room.site)?.label;
 
         const activityDate = activity.date_start.split(" - ")[0];
         const activityHour =
@@ -104,7 +131,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
             <Card
                 id={activity.id}
                 title={activity.name}
-                location={activity.room.name + " - " + siteName}
+                location={activity.room.name + " - " + activity.room.site.name}
                 date={activityDate}
                 hour={activityHour}
                 type={activity.type}
@@ -150,15 +177,15 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
     const handleClearFilter = () => {
         setSearchName("");
-        setSelectedRoom(undefined);
-        setSelectedSite(undefined);
-        setSelectedLanguage(undefined);
+        setSelectedRoomKey("");
+        setSelectedSiteKey("");
+        setSelectedLanguageKey("");
         setRange({ startDate: null, endDate: null });
     };
 
     return (
         <>
-            <View style={{ width: "100%", justifyContent: "flex-start" }}>
+            <View style={styles.filterView}>
                 <ButtonComponent
                     text={t("translationButton.OpenFilter")}
                     onPress={toggleModal}
@@ -173,63 +200,66 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 visible={modalVisible}
                 onRequestClose={toggleModal}
             >
-                <ScrollView contentContainerStyle={styles.centeredView}>
-                    <View style={styles.modalView}>
+                <View style={modalStyle.centeredView}>
+                    <ScrollView
+                        contentContainerStyle={[
+                            modalStyle.modalView,
+                            { padding: 35 },
+                        ]}
+                    >
+                        <TouchableOpacity
+                            style={modalStyle.closeButton}
+                            onPress={() => {
+                                setModalVisible(!modalVisible);
+                            }}
+                        >
+                            <Ionicons
+                                name={"close"}
+                                color={Colors.primaryColor}
+                                size={24}
+                            ></Ionicons>
+                        </TouchableOpacity>
                         <TextInput
                             style={stylesGlobal.inputLittle}
                             value={searchName}
                             onChangeText={(text: string) => setSearchName(text)}
-                            placeholder={t("translationButton.SearchTitleWorkshop")}
+                            placeholder={t(
+                                "translationButton.SearchTitleWorkshop",
+                            )}
                         />
 
-                        <SelectSearch
-                            zIndex={100}
-                            items={allSites}
-                            placeholder={t("translationButton.SelectSite")}
-                            searchable={true}
-                            onSelectItem={(item) => {
-                                setSelectedSite(item as Required<ItemType<string>>);
-                            }}
-                            open={siteOpen}
-                            setOpen={setSiteOpen}
-                            value={selectedSite?.value ?? null}
-                        />
+                        <View style={{ gap: 10 }}>
+                            <InputAutocomplete
+                                items={sites}
+                                placeholder={t("translationButton.SelectSite")}
+                                toReturn={"key"}
+                                readOnly={true}
+                                onChange={siteCallback}
+                            />
 
-                        <View style={{ height: 10 }} />
+                            <InputAutocomplete
+                                items={rooms}
+                                placeholder={t("translationButton.SelectRoom")}
+                                toReturn={"key"}
+                                onChange={roomCallback}
+                            />
 
-                        <SelectSearch
-                            zIndex={99}
-                            items={allRooms}
-                            placeholder={t("translationButton.SelectRoom")}
-                            searchable={true}
-                            onSelectItem={(item) => {
-                                setSelectedRoom(item as Required<ItemType<string>>);
-                            }}
-                            open={roomOpen}
-                            setOpen={setRoomOpen}
-                            value={selectedRoom?.value ?? null}
-                        />
-
-                        <View style={{ height: 10 }} />
-
-                        <SelectSearch
-                            zIndex={98}
-                            items={allLanguages}
-                            placeholder={t("translationButton.SelectLanguage")}
-                            searchable={true}
-                            onSelectItem={(item) => {
-                                setSelectedLanguage(item as Required<ItemType<string>>);
-                            }}
-                            open={languageOpen}
-                            setOpen={setLanguageOpen}
-                            value={selectedLanguage?.value ?? null}
-                        />
+                            <InputAutocomplete
+                                items={languages}
+                                placeholder={t(
+                                    "translationButton.SelectLanguage",
+                                )}
+                                toReturn={"key"}
+                                readOnly={true}
+                                onChange={languageCallback}
+                            />
+                        </View>
 
                         <View
                             style={{
-                                flex: 1,
                                 flexDirection: "column",
                                 alignItems: "flex-end",
+                                marginTop: 10,
                             }}
                         >
                             <View style={stylesGlobal.containerDatePicker}>
@@ -240,8 +270,12 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                                     endDate={range.endDate}
                                     onChange={onChange}
                                     selectedItemColor={Colors.primaryColor}
-                                    headerContainerStyle={{ backgroundColor: "white" }}
-                                    headerTextStyle={{ color: Colors.thirdColor }}
+                                    headerContainerStyle={{
+                                        backgroundColor: "white",
+                                    }}
+                                    headerTextStyle={{
+                                        color: Colors.thirdColor,
+                                    }}
                                 />
                             </View>
                             <ButtonComponent
@@ -254,7 +288,9 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                         <View
                             style={{
                                 flexDirection: "row",
-                                justifyContent: "space-between",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                flexWrap: "wrap",
                             }}
                         >
                             <ButtonComponent
@@ -268,8 +304,8 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                                 buttonType={"secondary"}
                             />
                         </View>
-                    </View>
-                </ScrollView>
+                    </ScrollView>
+                </View>
             </Modal>
 
             {/* Cards views for registered activity or filtered */}
@@ -289,7 +325,10 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
             {/* Cards views for all activity or filtered */}
             {filterType === "activity" &&
                 (allActivities !== undefined && allActivities.length > 0 ? (
-                    <RenderCarousel data={allActivities} renderItem={renderCards} />
+                    <RenderCarousel
+                        data={allActivities}
+                        renderItem={renderCards}
+                    />
                 ) : (
                     <Text style={stylesGlobal.text}>
                         {t("translation.noWorkshopAll")}
@@ -300,20 +339,28 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 };
 
 const styles = StyleSheet.create({
+    filterView: {
+        flexWrap: "wrap",
+        flexDirection: "row",
+        gap: 10,
+        width: "100%",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        marginTop: 10,
+    },
     noDataText: {
         fontSize: 16,
         color: "gray",
     },
     centeredView: {
-        // height: "100%",
-        flex: 1,
+        position: "relative",
+        height: "100%",
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22,
         backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     modalView: {
-        margin: 20,
+        margin: "auto",
         backgroundColor: "white",
         borderRadius: 20,
         padding: 35,
@@ -326,6 +373,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+    },
+    closeButton: {
+        position: "absolute",
+        top: 10,
+        right: 10,
     },
 });
 

@@ -80,6 +80,7 @@ dossier backend, et portant un nom représentant la fonctionnaité, ormis le dos
 django et ses paramètres (avec le fichiers setting, urls, ...).
 
 -   **apps/backend**
+
     -   **activities**
         -   (...) _# application django_
     -   **authentication**
@@ -89,7 +90,23 @@ django et ses paramètres (avec le fichiers setting, urls, ...).
     -   **feedback**
         -   (...)
     -   **rolemanagement**
-        -   (...)
+
+        -   rolemanagement gére la gestion des rôles dans le projet, elle sert à changer l'état d'un utlisateur (etudiant,tuteur,professeur,superuser)
+
+        -   view :
+
+        'UserView' : permet de faire des requêtes GET/PATCH/POST sur le serializer 'UserSerializer'
+
+        'EditRoleView' : permet de faire des requêtes GET/PATCH/POST sur le serializer 'EditRoleSerializer'
+
+        -   serializers : afin de gérer les rôles nous avons besoin de trois class 'UserSerializer' : qui permet de récupérer les données de l'utilisateur et son rôle
+
+        'TeacherSerializer' : Permet de récupérer le rôle de l'utilisateur, s'il est proffeseur ou tuteur.
+
+        'EditRoleSerializer' : permet d'editer le rôle d'un utiliateur.
+
+        -   permissions : Afin d'éviter que les utilisateurs non superuser change le rôles des utilisateurs, la class 'IsSuperUser' permet de vérifier que l'utilisateur courant est un superuser
+
     -   **server**
         -   (...) _# serveur django_
 

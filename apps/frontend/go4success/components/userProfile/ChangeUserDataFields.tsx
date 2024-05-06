@@ -19,10 +19,10 @@ interface ChangeUserDataFieldsProps {
 }
 
 const ChangeUserDataFields: React.FC<ChangeUserDataFieldsProps> = ({
-                                                                       data,
-                                                                       label,
-                                                                       dataKey,
-                                                                   }) => {
+    data,
+    label,
+    dataKey,
+}) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editable, setEditable] = useState(false);
     const [newData, setNewData] = useState(data);

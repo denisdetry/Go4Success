@@ -17,7 +17,7 @@ export const ChangeUserPasswordFields = () => {
     const { t } = useTranslation();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editable, setEditable] = useState(false);
-    const { user, signIn } = useAuth();
+    const { user } = useAuth();
 
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -149,7 +149,9 @@ export const ChangeUserPasswordFields = () => {
                 isVisible={isModalVisible}
                 onCancel={handleCancel}
                 onConfirm={handleConfirm}
-                dataLabelName={t("translationProfile.passwordTitle").toLowerCase()}
+                dataLabelName={t(
+                    "translationProfile.passwordTitle",
+                ).toLowerCase()}
             />
 
             {passwordFields(

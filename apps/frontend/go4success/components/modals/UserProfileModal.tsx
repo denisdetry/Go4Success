@@ -6,11 +6,11 @@ import { useTranslation } from "react-i18next";
 import modalStyles from "@/styles/modal";
 
 const UserProfileModal = ({
-                              isVisible,
-                              onCancel,
-                              onConfirm,
-                              dataLabelName,
-                          }: {
+    isVisible,
+    onCancel,
+    onConfirm,
+    dataLabelName,
+}: {
     readonly isVisible: boolean;
     readonly onCancel: any;
     readonly onConfirm: any;

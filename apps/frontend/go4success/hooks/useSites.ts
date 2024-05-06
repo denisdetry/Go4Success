@@ -8,6 +8,11 @@ export type Site = {
     name: string;
 };
 
+/**
+ * Fetch sites from the backend and return the response
+ * @param siteId Site ID to fetch sites from if not provided fetch all sites
+ * @param allValues Boolean to include a value for "all" sites in the response (no key, and value is "All")
+ */
 export function useSites(siteId?: string, allValues: boolean = false) {
     const { t } = useTranslation();
 

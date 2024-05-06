@@ -10,6 +10,11 @@ export type Room = {
     site: Site;
 };
 
+/**
+ * Fetch rooms from the backend and return the response
+ * @param siteId Site ID to fetch rooms from if not provided fetch all rooms from all sites
+ * @param allValues Boolean to include a value for "all" rooms in the response (no key, and value is "All")
+ */
 export function useRooms(
     siteId: string | undefined,
     allValues: boolean = false,

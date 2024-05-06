@@ -1,3 +1,4 @@
+/** Generate a list of hours and quarters */
 export const generateHourQuarterList = () => {
     const list = [];
     for (let hour = 0; hour < 24; hour++) {

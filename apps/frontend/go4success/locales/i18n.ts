@@ -15,6 +15,7 @@ const resources = {
     },
 };
 
+// Define the language detector and language code based on the platform
 let languageDetector = null;
 let languageCode = undefined;
 
@@ -30,6 +31,7 @@ if (languageDetector) {
     i18n.use(languageDetector);
 }
 
+// Initialize i18n with the resources and set the language based on the platform
 void i18n.init({
     compatibilityJSON: "v3",
     debug: false,

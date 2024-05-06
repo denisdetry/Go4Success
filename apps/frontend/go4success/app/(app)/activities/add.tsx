@@ -27,8 +27,15 @@ import DateTimePicker from "react-native-ui-datepicker";
 import { sendNotificationsToAllUsers } from "@/utils/sendNotification";
 import useAllExpoTokens from "@/hooks/useAllExpoTokens";
 
+// List of hours and quarters for the begin and end time (proposed values)
 const hourQuarterList = generateHourQuarterList();
 
+/**
+ * Function to add an activity with a form to fill in:
+ * the title, description, site, room, language,
+ * activity date, begin time and end time
+ * @returns {JSX.Element} - Add activity form
+ */
 export default function Add() {
     const timezoneOffset = dayjs().utcOffset() / 60;
     const { t } = useTranslation();
@@ -172,7 +179,7 @@ export default function Add() {
                 .set(
                     "hour",
                     Number(data.beginTime.value.split(":")[0]) +
-                    Number(timezoneOffset),
+                        Number(timezoneOffset),
                 )
                 .set("minute", Number(data.beginTime.value.split(":")[1]))
                 .toJSON();
@@ -180,7 +187,7 @@ export default function Add() {
                 .set(
                     "hour",
                     Number(data.endTime.value.split(":")[0]) +
-                    Number(timezoneOffset),
+                        Number(timezoneOffset),
                 )
                 .set("minute", Number(data.endTime.value.split(":")[1]))
                 .toJSON();
@@ -238,7 +245,12 @@ export default function Add() {
                     text2: t("translationActivities.addSuccessMultiple"),
                 });
             }
-            sendNotificationsToAllUsers(allExpoTokens, "Viens voir!", "Une nouvelle activité a été ajoutée! 📬", {});
+            sendNotificationsToAllUsers(
+                allExpoTokens,
+                "Viens voir!",
+                "Une nouvelle activité a été ajoutée! 📬",
+                {},
+            );
         }
     };
 

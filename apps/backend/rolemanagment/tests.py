@@ -1,10 +1,15 @@
 from django.test import TestCase
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
 from database.models import Teacher, User
-from .serializers import *
-from rest_framework import *
-from .views import *
+from .serializers import UserSerializer, TeacherSerializer, EditRoleSerializer
+from rest_framework import status
+from .views import UserView, EditRoleView
 from django.core.exceptions import ValidationError
+
+
+PASSWORD = '$LbR#2Yq7'
+DATE_JOIN = '2024-03-30 12:07:52.031 +0100'
+PATH = '/rolemanagement/editRole/'
 
 
 class RoleManagementTest(APITestCase):
@@ -12,7 +17,7 @@ class RoleManagementTest(APITestCase):
 
         self.factory = APIRequestFactory()
         self.userCreation = User.objects.create(
-            password='$LbR#2Yq7',
+            password=PASSWORD,
             id=1,
             username='Le G',
             email='gerryL@gmail.com',
@@ -22,10 +27,10 @@ class RoleManagementTest(APITestCase):
             is_active=True,
             is_staff=True,
             is_superuser=False,
-            date_join='2024-03-30 12:07:52.031 +0100')
+            date_join=DATE_JOIN)
 
         self.superuserCreation = User.objects.create(
-            password='$LbR#2YqZ7',
+            password=PASSWORD,
             id=2,
             username='superUser',
             email='super@gmail.com',
@@ -35,7 +40,7 @@ class RoleManagementTest(APITestCase):
             is_active=True,
             is_staff=True,
             is_superuser=True,
-            date_join='2024-03-30 12:07:52.031 +0100')
+            date_join=DATE_JOIN)
         self.user = User.objects.get(username='Le G')
         self.superUser = User.objects.get(username='superUser')
         self.view = UserView.as_view({'get': 'list'})
@@ -63,7 +68,7 @@ class RoleManagementTest(APITestCase):
     def test_is_tutor(self):
 
         request = self.factory.post(
-            '/rolemanagement/editRole/', {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
+            PATH, {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
         force_authenticate(request, user=self.superUser)
         response = self.view_edit(request)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -71,17 +76,17 @@ class RoleManagementTest(APITestCase):
     def test_is_professor(self):
 
         request = self.factory.post(
-            '/rolemanagement/editRole/', {'user': 1, 'is_professor': True, 'is_tutor': False}, format='json')
+            PATH, {'user': 1, 'is_professor': True, 'is_tutor': False}, format='json')
         force_authenticate(request, user=self.superUser)
         response = self.view_edit(request)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_cant_be_professor_and_tutor(self):
         request = self.factory.post(
-            '/rolemanagement/editRole/', {'user': 1, 'is_professor': True, 'is_tutor': True}, format='json')
+            PATH, {'user': 1, 'is_professor': True, 'is_tutor': True}, format='json')
         force_authenticate(request, user=self.superUser)
         with self.assertRaises(ValidationError) as context:
-            response = self.view_edit(request)
+            self.view_edit(request)
 
         expected_error_message = '["A Teacher can\'t be a tutor and a professor at the same time!"]'
         self.assertEqual(str(context.exception), expected_error_message)
@@ -89,10 +94,10 @@ class RoleManagementTest(APITestCase):
     def test_must_have_responsibilities(self):
 
         request = self.factory.post(
-            '/rolemanagement/editRole/', {'user': 1, 'is_professor': False, 'is_tutor': False}, format='json')
+            PATH, {'user': 1, 'is_professor': False, 'is_tutor': False}, format='json')
         force_authenticate(request, user=self.superUser)
         with self.assertRaises(ValidationError) as context:
-            response = self.view_edit(request)
+            self.view_edit(request)
 
         expected_error_message = "['A Teacher has to be a tutor or a professor!']"
         self.assertEqual(str(context.exception), expected_error_message)
@@ -100,7 +105,7 @@ class RoleManagementTest(APITestCase):
     def test_user_does_not_exists(self):
 
         request = self.factory.post(
-            '/rolemanagement/editRole/', {'user': 40, 'is_professor': False, 'is_tutor': False}, format='json')
+            PATH, {'user': 40, 'is_professor': False, 'is_tutor': False}, format='json')
         force_authenticate(request, user=self.superUser)
 
         response = self.view_edit(request)
@@ -112,7 +117,7 @@ class RoleManagementTest(APITestCase):
         user_id = 1
 
         request_post = self.factory.post(
-            '/rolemanagement/editRole/', {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
+            PATH, {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
         force_authenticate(request_post, user=self.superUser)
 
         request_patch = self.factory.patch(
@@ -129,7 +134,7 @@ class RoleManagementTest(APITestCase):
         user_id = 1
 
         request_post = self.factory.post(
-            '/rolemanagement/editRole/', {'user': 1, 'is_professor': True, 'is_tutor': False}, format='json')
+            PATH, {'user': 1, 'is_professor': True, 'is_tutor': False}, format='json')
         force_authenticate(request_post, user=self.superUser)
 
         request_patch = self.factory.patch(
@@ -147,7 +152,7 @@ class RoleManagementTest(APITestCase):
         user_id = 1
 
         request = self.factory.post(
-            '/rolemanagement/editRole/', {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
+            PATH, {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
         force_authenticate(request, user=self.superUser)
 
         request_patch = self.factory.patch(
@@ -156,7 +161,7 @@ class RoleManagementTest(APITestCase):
         force_authenticate(request_patch, user=self.superUser)
         with self.assertRaises(ValidationError) as context:
             self.view_edit(request)
-            response = self.view_patch(request_patch, pk=user_id)
+            self.view_patch(request_patch, pk=user_id)
 
         expected_error_message = '["A Teacher can\'t be a tutor and a professor at the same time!"]'
         self.assertEqual(str(context.exception), expected_error_message)
@@ -165,7 +170,7 @@ class RoleManagementTest(APITestCase):
         user_id = 1
 
         request = self.factory.post(
-            '/rolemanagement/editRole/', {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
+            PATH, {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
         force_authenticate(request, user=self.superUser)
 
         request_patch = self.factory.patch(
@@ -174,7 +179,7 @@ class RoleManagementTest(APITestCase):
 
         with self.assertRaises(ValidationError) as context:
             self.view_edit(request)
-            response = self.view_patch(request_patch, pk=user_id)
+            self.view_patch(request_patch, pk=user_id)
 
         expected_error_message = "['A Teacher has to be a tutor or a professor!']"
         self.assertEqual(str(context.exception), expected_error_message)
@@ -182,7 +187,7 @@ class RoleManagementTest(APITestCase):
     def test_delete_role(self):
         user_id = 1
         request = self.factory.post(
-            '/rolemanagement/editRole/', {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
+            PATH, {'user': 1, 'is_professor': False, 'is_tutor': True}, format='json')
         force_authenticate(request, user=self.superUser)
 
         self.view_edit(request)
@@ -210,19 +215,19 @@ class RoleManagementTest(APITestCase):
     def test_only_super_user_on_rolemanagement(self):
         request = self.factory.get('/rolemanagement/rolemanagement/')
         response = self.view(request)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_only_super_user_on_editrole(self):
         request = self.factory.get('/rolemanagement/editRole/')
         response = self.view(request)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
 class SuperUserCreationDeletion(APITestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.userCreation = User.objects.create(
-            password='$LbR#2Yq7',
+            password=PASSWORD,
             id=1,
             username='Le G',
             email='gerryL@gmail.com',
@@ -232,10 +237,10 @@ class SuperUserCreationDeletion(APITestCase):
             is_active=True,
             is_staff=True,
             is_superuser=False,
-            date_join='2024-03-30 12:07:52.031 +0100')
+            date_join=DATE_JOIN)
 
         self.superuserCreation = User.objects.create(
-            password='$LbR#2YqZ7',
+            password=PASSWORD,
             id=2,
             username='superUser',
             email='super@gmail.com',
@@ -245,10 +250,10 @@ class SuperUserCreationDeletion(APITestCase):
             is_active=True,
             is_staff=True,
             is_superuser=True,
-            date_join='2024-03-30 12:07:52.031 +0100')
+            date_join=DATE_JOIN)
 
         self.superuserCreationSecond = User.objects.create(
-            password='$LbR#2YqZ7',
+            password=PASSWORD,
             id=3,
             username='superUser2',
             email='super2@gmail.com',
@@ -258,7 +263,7 @@ class SuperUserCreationDeletion(APITestCase):
             is_active=True,
             is_staff=True,
             is_superuser=True,
-            date_join='2024-03-30 12:07:52.031 +0100')
+            date_join=DATE_JOIN)
 
         self.view = UserView.as_view({'get': 'list'})
         self.view_patch = UserView.as_view({'patch': 'partial_update'})

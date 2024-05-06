@@ -253,10 +253,10 @@ const generateUsersInfoRole = (userInfo: any, userRole: any) => {
         const role = curr.is_professor
             ? "professor"
             : curr.is_tutor
-              ? "tutor"
-              : curr.is_superuser
-                ? "superuser"
-                : "student";
+            ? "tutor"
+            : curr.is_superuser
+            ? "superuser"
+            : "student";
         acc[curr.user] = role;
         return acc;
     }, {});

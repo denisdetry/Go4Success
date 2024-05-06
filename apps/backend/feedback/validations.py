@@ -1,10 +1,3 @@
-"""
-validations.py
-@author: Allemeersch Maxime <max.allemeersch@gmail.com>
-@date: 02/05/2024
-@description: This file is used to validate data
-"""
-
 from database.models import Attend, FeedbackStudent
 from django.utils import timezone
 from django.core.exceptions import ValidationError

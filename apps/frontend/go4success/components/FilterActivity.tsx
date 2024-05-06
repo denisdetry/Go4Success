@@ -50,10 +50,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
     const { sites, error: siteError } = useSites(undefined, true);
 
-    const { rooms, error: roomError } = useRooms(
-        selectedSiteKey ? selectedSiteKey : "",
-        true,
-    );
+    const { rooms, error: roomError } = useRooms(selectedSiteKey || "", true);
 
     const { languages, error: languageError } = useLanguages(undefined, true);
 
@@ -110,22 +107,33 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         const activity = "activity" in item ? item.activity : item;
 
-        const activityDate = activity.date_start.split(" - ")[0];
-        const activityHour =
-            activity.date_start.split(" - ")[1] +
-            " - " +
-            activity.date_end.split(" - ")[1];
+        let activityDate = "";
+        let activityHour = "";
+
+        if (activity.date_start && activity.date_end) {
+            activityDate = activity.date_start.split(" - ")[0];
+            activityHour =
+                activity.date_start.split(" - ")[1] +
+                " - " +
+                activity.date_end.split(" - ")[1];
+        }
 
         return (
             <Card
                 id={activity.id}
                 title={activity.name}
-                location={activity.room.name + " - " + activity.room.site.name}
+                location={
+                    (activity.room ? activity.room.name : "") +
+                    " - " +
+                    (activity.room && activity.room.site
+                        ? activity.room.site.name
+                        : "")
+                }
                 date={activityDate}
                 hour={activityHour}
                 type={activity.type}
                 description={activity.description}
-                language={activity.language.name}
+                language={activity.language ? activity.language.name : ""}
                 dateEnd={activity.date_end}
                 attendOrActivity={filterType}
             />

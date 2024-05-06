@@ -1,10 +1,3 @@
-/**
- * @file feedbacklist.tsx
- * @author Allemeersch Maxime <max.allemeersch@gmail.com>
- * @date 02/05/2024
- * @description This page displays a table of all feedback created and select them
- */
-
 import React from "react";
 import { ScrollView, Text, View } from "react-native";
 import { TableColumn } from "react-data-table-component";

@@ -1,14 +1,13 @@
-/**
- * @file feedbackcreate.tsx
- * @author Allemeersch Maxime <max.allemeersch@gmail.com>
- * @date 02/05/2024
- * @description This page can create feedback for an activity or course
- */
-
-import React, { useEffect, useState } from "react";
-import { ScrollView, Text, TextInput, View, StyleSheet, Platform } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+    ScrollView,
+    Text,
+    TextInput,
+    View,
+    StyleSheet,
+    Platform,
+} from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { ItemType } from "react-native-dropdown-picker";
 import { useTranslation } from "react-i18next";
 import Toast from "react-native-toast-message";
 import DateTimePicker from "react-native-ui-datepicker";
@@ -20,39 +19,44 @@ import { fetchBackend } from "@/utils/fetchBackend";
 import { convertDateToISO } from "@/utils/dateUtils";
 import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
 import ButtonComponent from "@/components/ButtonComponent";
-import SelectSearch, { SelectItem } from "@/components/SelectSearch";
+import InputAutocomplete from "@/components/selectors/InputAutocomplete";
 
 import stylesGlobal from "@/styles/global";
 import Colors from "@/constants/Colors";
-import { Activity, useActivities } from "@/hooks/useActivities";
+import { useActivitiesSelect } from "@/hooks/useActivities";
 import { useFeedback } from "@/hooks/useFeedback";
 import { useGives } from "@/hooks/useGives";
+import { SelectItem } from "@/types/SelectItem";
 
 export default function FeedbackCreate() {
     const { t } = useTranslation();
     const navigation = useNavigation();
     const { user } = useAuth();
-    const [viewHeight, setViewHeight] = useState(10);
     const [isCheckedPositivePoint, setIsCheckedPositivePoint] = useState(true);
     const [isCheckedNegativePoint, setIsCheckedNegativePoint] = useState(true);
     const [isCheckedSuggestion, setIsCheckedSuggestion] = useState(true);
-    const [isCheckedAdditionalComment, setIsCheckedAdditionalComment] = useState(true);
+    const [isCheckedAdditionalComment, setIsCheckedAdditionalComment] =
+        useState(true);
     const [customQuestions, setCustomQuestions] = useState<string[]>([]);
     const [date, setDate] = useState(dayjs());
-    const [activityOpen, setActivityOpen] = React.useState(false);
-    const [selectedActivity, setSelectedActivity] = useState<SelectItem>();
-    const { feedbacks: allFeedbacks, error: feedbackError } = useFeedback("", "", "");
+    const [selectedActivity, setSelectedActivity] = useState<string>("");
+    const { feedbacks: allFeedbacks, error: feedbackError } = useFeedback(
+        "",
+        "",
+        "",
+    );
+    const [filteredActivities, setFilteredActivities] = useState<SelectItem[]>(
+        [],
+    );
     const { gives: allGives, error: givesError } = useGives("", user?.id);
-    const [allActivities, setAllActivities] = useState<Activity[]>([]);
-    const { data: allActivitiesData, error: activityError } = useActivities(
-        "activity",
-        "",
-        "",
-        "",
-        "",
-        "",
-        null,
-        null,
+    const { data: allActivitiesData, error: activityError } =
+        useActivitiesSelect("activity", "", "", "", "", "", null, null, false);
+
+    const activityCallback = useCallback(
+        (activityKey: string) => {
+            setSelectedActivity(activityKey);
+        },
+        [setSelectedActivity],
     );
 
     useEffect(() => {
@@ -62,20 +66,19 @@ export default function FeedbackCreate() {
             );
 
             const givesActivityIds = user?.is_superuser
-                ? allActivitiesData.map((activity) => activity.id)
+                ? allActivitiesData.map((activity) => activity.key)
                 : allGives
                       .filter((give) => give.teacher === user?.id)
                       .map((give) => give.activity);
 
-            const filteredActivities = allActivitiesData.filter(
+            const newFilteredActivities = allActivitiesData.filter(
                 (activity) =>
-                    !feedbackActivityIds.includes(activity.id) && // @ts-ignore
-                    givesActivityIds.includes(activity.id),
+                    !feedbackActivityIds.includes(activity.key) && // @ts-ignore
+                    givesActivityIds.includes(activity.key),
             );
-
-            setAllActivities(filteredActivities);
+            setFilteredActivities(newFilteredActivities);
         } else {
-            setAllActivities(allActivitiesData || []);
+            setSelectedActivity("");
         }
     }, [allFeedbacks, allActivitiesData, allGives, user?.is_superuser]);
 
@@ -91,7 +94,7 @@ export default function FeedbackCreate() {
 
         const feedbackDataDefault = {
             user_id: user.id,
-            activity_id: selectedActivity.value,
+            activity_id: selectedActivity,
             positive_point: isCheckedPositivePoint,
             negative_point: isCheckedNegativePoint,
             suggestion: isCheckedSuggestion,
@@ -156,6 +159,22 @@ export default function FeedbackCreate() {
         );
     }
 
+    if (feedbackError) {
+        return (
+            <View>
+                <Text> Error: {feedbackError.message} </Text>
+            </View>
+        );
+    }
+
+    if (givesError) {
+        return (
+            <View>
+                <Text> Error: {givesError.message} </Text>
+            </View>
+        );
+    }
+
     return (
         <ScrollView contentContainerStyle={stylesGlobal.mainContainer}>
             <View style={stylesGlobal.container}>
@@ -168,7 +187,10 @@ export default function FeedbackCreate() {
                     />
                 </View>
                 <Text
-                    style={[stylesGlobal.title, { fontSize: 30, textAlign: "center" }]}
+                    style={[
+                        stylesGlobal.title,
+                        { fontSize: 30, textAlign: "center" },
+                    ]}
                 >
                     {t("translateFeedback.create")}
                 </Text>
@@ -180,32 +202,18 @@ export default function FeedbackCreate() {
 
                 <View style={styles.feedbackContainer}>
                     <View style={styles.feedbackFields}>
-                        <View style={[stylesGlobal.inputLargeFieldWithoutBorder]}>
-                            <SelectSearch
-                                zIndex={100}
-                                items={allActivities.map((activity) => ({
-                                    label: activity.name,
-                                    value: activity.id,
-                                }))}
+                        <View
+                            style={[stylesGlobal.inputLargeFieldWithoutBorder]}
+                        >
+                            <InputAutocomplete
+                                items={filteredActivities}
                                 placeholder={"Activites"}
-                                searchable={true}
-                                onSelectItem={(item) => {
-                                    setSelectedActivity(
-                                        item as Required<ItemType<string>>,
-                                    );
-                                }}
-                                open={activityOpen}
-                                setOpen={(isOpen) => {
-                                    setActivityOpen(isOpen);
-                                    setViewHeight(isOpen ? 200 : 10);
-                                }}
-                                value={selectedActivity?.value ?? null}
+                                toReturn={"key"}
+                                onChange={activityCallback}
                             />
                         </View>
                     </View>
                 </View>
-
-                <View style={{ height: viewHeight }} />
                 <Text style={styles.lineStyle}> ────────────────────────</Text>
 
                 <Text style={stylesGlobal.titleH2NoPadding}>
@@ -326,8 +334,12 @@ export default function FeedbackCreate() {
                                     key={index}
                                     style={stylesGlobal.input}
                                     value={question}
-                                    onChangeText={(text) => updateQuestion(text, index)}
-                                    placeholder={t("translateFeedback.enterQuestion")}
+                                    onChangeText={(text) =>
+                                        updateQuestion(text, index)
+                                    }
+                                    placeholder={t(
+                                        "translateFeedback.enterQuestion",
+                                    )}
                                     multiline={true}
                                 />
                             </View>

@@ -1,12 +1,12 @@
-/**
- * @file feedbacklistdetails.tsx
- * @author Allemeersch Maxime <max.allemeersch@gmail.com>
- * @date  02/05/2024
- * @description This page displays the various feedbacks for the previously selected activity.
- */
-
 import React, { useState } from "react";
-import { ScrollView, Text, Modal, View, Pressable, FlatList } from "react-native";
+import {
+    ScrollView,
+    Text,
+    Modal,
+    View,
+    Pressable,
+    FlatList,
+} from "react-native";
 import { TableColumn } from "react-data-table-component";
 import { useTranslation } from "react-i18next";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -37,15 +37,16 @@ export default function FeedbackListDetails(
 ) {
     const { t } = useTranslation();
     const navigation = useNavigation();
-    const route = useRoute<RouteProp<RootStackParamList, "feedbacklistdetails">>();
+    const route =
+        useRoute<RouteProp<RootStackParamList, "feedbacklistdetails">>();
     const feedbackId = route?.params?.feedbackId ?? "not id present";
     const activityName = route?.params?.activityName ?? "not name present";
-    const { feedbackStudent, error: feedbackError } = useFeedbackStudent(feedbackId);
+    const { feedbackStudent, error: feedbackError } =
+        useFeedbackStudent(feedbackId);
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [selectedFeedback, setSelectedFeedback] = useState<FeedbackStudent | null>(
-        null,
-    );
+    const [selectedFeedback, setSelectedFeedback] =
+        useState<FeedbackStudent | null>(null);
     const satisfactionLevels = [
         { value: "5", label: t("satisfactionLevels.verySatisfied") },
         { value: "4", label: t("satisfactionLevels.satisfied") },
@@ -120,13 +121,18 @@ export default function FeedbackListDetails(
                     <ButtonComponent
                         icon="arrow-back-circle-outline"
                         text="Back"
-                        // @ts-ignore
-                        onPress={() => navigation.navigate({ name: "feedbacklist" })}
+                        onPress={() => {
+                            // @ts-ignore
+                            navigation.navigate({ name: "feedbacklist" });
+                        }}
                         buttonType={"primary"}
                     />
                 </View>
                 <Text style={styles.title}>Feedback : {activityName}</Text>
-                <FeedbackStudentTable feedbacks={feedbackStudent} columns={columns} />
+                <FeedbackStudentTable
+                    feedbacks={feedbackStudent}
+                    columns={columns}
+                />
                 {selectedFeedback && (
                     <Modal
                         animationType="fade"
@@ -141,15 +147,22 @@ export default function FeedbackListDetails(
                                 <View
                                     style={[
                                         styles.modalViewTitle,
-                                        { backgroundColor: Colors.workshopColor },
+                                        {
+                                            backgroundColor:
+                                                Colors.workshopColor,
+                                        },
                                     ]}
                                 >
                                     <Text style={styles.modalTitle}>Modal</Text>
                                     <Pressable
                                         style={styles.closeButton}
-                                        onPress={() => setModalVisible(!modalVisible)}
+                                        onPress={() =>
+                                            setModalVisible(!modalVisible)
+                                        }
                                     >
-                                        <Text style={styles.closeButtonText}>✖</Text>
+                                        <Text style={styles.closeButtonText}>
+                                            ✖
+                                        </Text>
                                     </Pressable>
                                 </View>
 
@@ -157,7 +170,9 @@ export default function FeedbackListDetails(
                                     <FlatList
                                         data={[
                                             {
-                                                title: t("translateFeedback.student"),
+                                                title: t(
+                                                    "translateFeedback.student",
+                                                ),
                                                 value: `${selectedFeedback.student.first_name} ${selectedFeedback.student.last_name} (${selectedFeedback.student.noma})`,
                                             },
                                             {
@@ -199,12 +214,16 @@ export default function FeedbackListDetails(
                                                 value: selectedFeedback.date_submitted,
                                             },
                                         ]}
-                                        keyExtractor={(_, index) => index.toString()}
+                                        keyExtractor={(_, index) =>
+                                            index.toString()
+                                        }
                                         renderItem={({ item }) => (
                                             <View style={styles.modalData}>
                                                 <Text>
                                                     <Text
-                                                        style={{ fontWeight: "bold" }}
+                                                        style={{
+                                                            fontWeight: "bold",
+                                                        }}
                                                     >
                                                         {item.title}
                                                     </Text>
@@ -214,13 +233,19 @@ export default function FeedbackListDetails(
                                         )}
                                     />
                                     <FlatList
-                                        data={feedbackstudentadditionnalquestions}
-                                        keyExtractor={(item, index) => index.toString()}
+                                        data={
+                                            feedbackstudentadditionnalquestions
+                                        }
+                                        keyExtractor={(item, index) =>
+                                            index.toString()
+                                        }
                                         renderItem={({ item }) => (
                                             <View style={styles.modalData}>
                                                 <Text>
                                                     <Text
-                                                        style={{ fontWeight: "bold" }}
+                                                        style={{
+                                                            fontWeight: "bold",
+                                                        }}
                                                     >
                                                         {item.question.question}
                                                     </Text>
@@ -236,7 +261,9 @@ export default function FeedbackListDetails(
                                         text={t(
                                             "translateRegisterActivity.closeButton",
                                         )}
-                                        onPress={() => setModalVisible(!modalVisible)}
+                                        onPress={() =>
+                                            setModalVisible(!modalVisible)
+                                        }
                                         buttonType={"close"}
                                     />
                                 </View>

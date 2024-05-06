@@ -225,7 +225,7 @@ export default function Layout() {
                         options={{
                             drawerItemStyle: {
                                 display:
-                                    user?.is_superuser || user?.isStaff
+                                    user?.is_superuser || user?.is_staff
                                         ? "flex"
                                         : "none",
                             },

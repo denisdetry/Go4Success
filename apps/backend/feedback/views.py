@@ -1,10 +1,3 @@
-"""
-views.py
-@author: Allemeersch Maxime <max.allemeersch@gmail.com>
-@date: 02/05/2024
-@description: This file includes the viewsets for Feedback models with validations and filter.
-"""
-
 from database.models import Feedback, FeedbackAdditionalQuestions, \
     FeedbackStudent, FeedbackStudentAdditionalQuestions
 from django.forms import ValidationError

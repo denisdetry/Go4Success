@@ -1,10 +1,3 @@
-"""
-serializers.py
-@author: Allemeersch Maxime <max.allemeersch@gmail.com>
-@date: 02/05/2024
-@description: This file includes the serializer for Feedback models.
-"""
-
 from database.models import Feedback, FeedbackAdditionalQuestions, \
     FeedbackStudent, FeedbackStudentAdditionalQuestions, Activity, Teacher, User, Give
 from rest_framework import serializers

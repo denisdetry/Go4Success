@@ -164,14 +164,15 @@
         "dateSubmitted": "Date submitted",
         "open": "Open",
         "send": "Send",
-        "for": "Feedback for",
+        "for": "Feedback for ",
         "defaultSelect": "Default select",
         "moreQuestions": "Additional questions",
         "enterQuestion": "Enter your question",
         "addQuestion": "Add more questions",
         "dateEnd": "Date end",
         "nofeedback": "No feedback for this activity",
-        "answerTo": "Answer to question"
+        "answerTo": "Answer to question",
+        "selectSatisfaction": "Select a satisfaction level"
     },
     "satisfactionLevels": {
         "verySatisfied": "Very satisfied",

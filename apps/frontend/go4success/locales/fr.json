@@ -165,14 +165,15 @@
         "dateSubmitted": "Date de soumission",
         "open": "Ouvrir",
         "send": "Envoyer",
-        "for": "Feedback pour",
+        "for": "Feedback pour ",
         "defaultSelect": "Sélection par défaut",
         "moreQuestions": "Questions supplémentaires",
         "enterQuestion": "Entrez votre question",
         "addQuestion": "Ajouter plus de questions",
         "dateEnd": "Date de fin",
         "nofeedback": "Pas de feedback pour cette activité",
-        "answerTo": "Répondre à la question "
+        "answerTo": "Répondre à la question ",
+        "selectSatisfaction": "Sélectionnez un niveau de satisfaction"
     },
     "satisfactionLevels": {
         "verySatisfied": "Très satisfait",

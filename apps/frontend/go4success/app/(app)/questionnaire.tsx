@@ -8,6 +8,8 @@ import {
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
+import Question from "./question";
+
 import {
     StyleSheet,
     View,
@@ -142,7 +144,12 @@ const QuestionnaireComponent = () => {
 const Stack = createStackNavigator();
 
 export default function App() {
-    return <QuestionnaireComponent />;
+    return (
+        <>
+            <QuestionnaireComponent />
+            <Question />
+        </>
+    );
 }
 
 const styles = StyleSheet.create({

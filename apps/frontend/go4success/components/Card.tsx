@@ -7,14 +7,6 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import {
-    Modal,
-    Platform,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
 import Colors from "../constants/Colors";
 import ButtonComponent from "./ButtonComponent";
 import { useAuth } from "@/context/Auth";
@@ -342,11 +334,7 @@ const Card: React.FC<CardProps> = ({
 
                             <View style={styles.separator} />
                             <ModalTextComponent
-                                title={"Description"}
-                                content={description}
-                            />
-                            <ModalTextComponent
-                                title={"Description"}
+                                title={t("translateCard.description")}
                                 content={description}
                             />
                         </View>

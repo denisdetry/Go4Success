@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import {
     Modal,
     SafeAreaView,
+    ScrollView,
     StyleSheet,
     Text,
     TextInput,
@@ -20,8 +21,6 @@ import { useRooms } from "@/hooks/useRooms";
 import { Activity, useActivities } from "@/hooks/useActivities";
 import { useLanguages } from "@/hooks/useLanguages";
 import modalStyle from "@/styles/modal";
-import { Ionicons } from "@expo/vector-icons";
-import Colors from "@/constants/Colors";
 import InputAutocomplete from "@/components/selectors/InputAutocomplete";
 import { Ionicons } from "@expo/vector-icons";
 

@@ -120,7 +120,8 @@
         "hour": "Hour",
         "place": "Place",
         "type": "Type",
-        "language": "Language"
+        "language": "Language",
+        "description": "Description"
     },
     "translationActivities": {
         "addActivity": "Add an activity",

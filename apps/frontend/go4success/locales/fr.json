@@ -121,7 +121,8 @@
         "hour": "Heure",
         "place": "Lieu",
         "type": "Type",
-        "language": "Langue"
+        "language": "Langue",
+        "description": "Description"
     },
     "translationActivities": {
         "addActivity": "Ajouter des activités",

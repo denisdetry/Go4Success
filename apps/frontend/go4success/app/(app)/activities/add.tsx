@@ -1,8 +1,7 @@
 import {
     ActivityIndicator,
-    KeyboardAvoidingView,
-    Platform,
     Pressable,
+    SafeAreaView,
     ScrollView,
     StyleSheet,
     Text,
@@ -90,7 +89,7 @@ export default function Add() {
             .test(
                 "is-greater",
                 t("translationActivities.yupEndTimeGreater"),
-                function () {
+                function() {
                     const beginTime = this.parent.beginTime;
                     const endTime = this.parent.endTime;
                     if (beginTime.key === "" || endTime.key === "") {
@@ -171,7 +170,7 @@ export default function Add() {
                 .set(
                     "hour",
                     Number(data.beginTime.value.split(":")[0]) +
-                        Number(timezoneOffset),
+                    Number(timezoneOffset),
                 )
                 .set("minute", Number(data.beginTime.value.split(":")[1]))
                 .toJSON();
@@ -179,7 +178,7 @@ export default function Add() {
                 .set(
                     "hour",
                     Number(data.endTime.value.split(":")[0]) +
-                        Number(timezoneOffset),
+                    Number(timezoneOffset),
                 )
                 .set("minute", Number(data.endTime.value.split(":")[1]))
                 .toJSON();
@@ -227,12 +226,14 @@ export default function Add() {
             if (dates.length === 1) {
                 Toast.show({
                     type: "success",
-                    text1: t("translationActivities.addSuccess"),
+                    text1: t("translateToast.SuccessText1"),
+                    text2: t("translationActivities.addSuccess"),
                 });
             } else {
                 Toast.show({
                     type: "success",
-                    text1: t("translationActivities.addSuccessMultiple"),
+                    text1: t("translateToast.SuccessText1"),
+                    text2: t("translationActivities.addSuccessMultiple"),
                 });
             }
         }
@@ -240,10 +241,7 @@ export default function Add() {
 
     return (
         <ScrollView contentContainerStyle={styles.mainContainer}>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={[styles.container, { gap: 10 }]}
-            >
+            <SafeAreaView style={[styles.container, { gap: 10, padding: 20 }]}>
                 <Text style={styles.title}>
                     {t("translationActivities.addActivity")}
                 </Text>
@@ -414,7 +412,7 @@ export default function Add() {
                         {t("translationActivities.addButton")}
                     </Text>
                 </Pressable>
-            </KeyboardAvoidingView>
+            </SafeAreaView>
         </ScrollView>
     );
 }

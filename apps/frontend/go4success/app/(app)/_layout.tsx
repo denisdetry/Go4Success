@@ -4,11 +4,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { AuthProvider, useAuth } from "@/context/Auth";
 import Colors from "@/constants/Colors";
-import {
-    DrawerContentScrollView,
-    DrawerItem,
-    DrawerItemList,
-} from "@react-navigation/drawer";
+import { DrawerContentScrollView, DrawerItem, DrawerItemList } from "@react-navigation/drawer";
 import { Image, Platform, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -198,21 +194,6 @@ export default function Layout() {
                             drawerIcon: ({ size, color }) => (
                                 <Ionicons
                                     name="people"
-                                    size={size}
-                                    color={color}
-                                />
-                            ),
-                        }}
-                    />
-
-                    <Drawer.Screen
-                        name="notifications"
-                        options={{
-                            drawerLabel: "Notifications",
-                            headerTitle: "Notifications",
-                            drawerIcon: ({ size, color }) => (
-                                <Ionicons
-                                    name="notifications"
                                     size={size}
                                     color={color}
                                 />

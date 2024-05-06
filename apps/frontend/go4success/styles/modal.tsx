@@ -1,14 +1,16 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import Colors from "@/constants/Colors";
 
 export default StyleSheet.create({
     centeredView: {
         flex: 1,
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: Platform.OS === "web" ? "center" : undefined,
         backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     modalView: {
+        position: "relative",
+        margin: "auto",
         backgroundColor: Colors.lightBackgroundColor,
         padding: 20,
         borderRadius: 10,
@@ -20,5 +22,10 @@ export default StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         marginTop: 20,
+    },
+    closeButton: {
+        position: "absolute",
+        top: -25,
+        right: -25,
     },
 });

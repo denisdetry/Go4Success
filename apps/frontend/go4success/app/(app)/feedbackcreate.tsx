@@ -178,14 +178,6 @@ export default function FeedbackCreate() {
     return (
         <ScrollView contentContainerStyle={stylesGlobal.mainContainer}>
             <View style={stylesGlobal.container}>
-                <View style={{ alignSelf: "flex-start" }}>
-                    <ButtonComponent
-                        icon="arrow-back-circle-outline"
-                        text="Back"
-                        onPress={() => navigation.goBack()}
-                        buttonType={"primary"}
-                    />
-                </View>
                 <Text
                     style={[
                         stylesGlobal.title,
@@ -330,7 +322,7 @@ export default function FeedbackCreate() {
                 {customQuestions.map((question, index) => (
                     <View style={styles.feedbackContainer}>
                         <View style={styles.feedbackFields}>
-                            <View style={[stylesGlobal.inputLargeField]}>
+                            <View style={[stylesGlobal.inputField]}>
                                 <TextInput
                                     key={index}
                                     style={stylesGlobal.input}

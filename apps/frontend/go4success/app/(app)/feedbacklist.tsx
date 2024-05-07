@@ -75,14 +75,6 @@ export default function FeedbackList() {
     return (
         <ScrollView contentContainerStyle={styles.mainContainer}>
             <View style={styles.container}>
-                <View style={{ alignSelf: "flex-start" }}>
-                    <ButtonComponent
-                        icon="arrow-back-circle-outline"
-                        text="Back"
-                        onPress={() => navigation.goBack()}
-                        buttonType={"primary"}
-                    />
-                </View>
                 <Text style={styles.title}>Feedback</Text>
                 <FeedbackTable feedbacks={feedbacks} columns={columns} />
             </View>

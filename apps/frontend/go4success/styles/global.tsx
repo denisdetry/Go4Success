@@ -1,6 +1,11 @@
 import { Platform, StyleSheet } from "react-native";
 import Colors from "@/constants/Colors";
-import { isMobile, isTablet, isTabletMini, width } from "@/constants/screensWidth";
+import {
+    isMobile,
+    isTablet,
+    isTabletMini,
+    width,
+} from "@/constants/screensWidth";
 
 export default StyleSheet.create({
     mainContainer: {
@@ -77,6 +82,13 @@ export default StyleSheet.create({
         minWidth: isMobile ? 280 : 300,
     },
 
+    inputFieldWithoutBorder: {
+        flexDirection: "row",
+        alignItems: "center",
+        padding: 10,
+        minWidth: isMobile ? 280 : 300,
+    },
+
     inputLargeField: {
         borderWidth: 0.5,
         borderColor: Colors.primaryColor,
@@ -90,7 +102,7 @@ export default StyleSheet.create({
         borderRadius: 10,
         flexDirection: "row",
         alignItems: "center",
-        padding: 0,
+        padding: 10,
         minWidth: Platform.select({ ios: 300, android: 300, default: 600 }),
     },
 

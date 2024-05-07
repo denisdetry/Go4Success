@@ -179,7 +179,9 @@ export default function FeedbackAnswer(
     if (feedbacks.length === 0) {
         return (
             <ScrollView contentContainerStyle={stylesGlobal.mainContainer}>
-                <View style={stylesGlobal.container}>
+                <View
+                    style={[stylesGlobal.container, { alignItems: undefined }]}
+                >
                     <Text
                         style={[
                             stylesGlobal.title,
@@ -195,11 +197,10 @@ export default function FeedbackAnswer(
 
     return (
         <ScrollView contentContainerStyle={stylesGlobal.mainContainer}>
-            <View style={stylesGlobal.container}>
+            <View style={[stylesGlobal.container, { alignItems: undefined }]}>
                 <View style={{ alignSelf: "flex-start" }}>
                     <ButtonComponent
                         icon="arrow-back-circle-outline"
-                        text="Back"
                         onPress={() => navigation.goBack()}
                         buttonType={"primary"}
                     />
@@ -229,9 +230,7 @@ export default function FeedbackAnswer(
                             </Text>
 
                             <View
-                                style={[
-                                    stylesGlobal.inputLargeFieldWithoutBorder,
-                                ]}
+                                style={[stylesGlobal.inputFieldWithoutBorder]}
                             >
                                 <InputAutocomplete
                                     items={satisfactionLevels}
@@ -254,7 +253,7 @@ export default function FeedbackAnswer(
                                 {t("translateFeedback.positivePoint")} :
                             </Text>
 
-                            <View style={[stylesGlobal.inputLargeField]}>
+                            <View style={[stylesGlobal.inputField]}>
                                 <TextInput
                                     style={stylesGlobal.input}
                                     value={positivePoint}
@@ -277,7 +276,7 @@ export default function FeedbackAnswer(
                                 {t("translateFeedback.negativePoint")} :
                             </Text>
 
-                            <View style={[stylesGlobal.inputLargeField]}>
+                            <View style={[stylesGlobal.inputField]}>
                                 <TextInput
                                     style={stylesGlobal.input}
                                     value={negativePoint}
@@ -300,7 +299,7 @@ export default function FeedbackAnswer(
                                 {t("translateFeedback.suggestion")} :
                             </Text>
 
-                            <View style={[stylesGlobal.inputLargeField]}>
+                            <View style={[stylesGlobal.inputField]}>
                                 <TextInput
                                     style={stylesGlobal.input}
                                     value={suggestion}
@@ -323,7 +322,7 @@ export default function FeedbackAnswer(
                                 {t("translateFeedback.additionalComment")} :
                             </Text>
 
-                            <View style={[stylesGlobal.inputLargeField]}>
+                            <View style={[stylesGlobal.inputField]}>
                                 <TextInput
                                     style={stylesGlobal.input}
                                     value={additionalComment}
@@ -351,7 +350,7 @@ export default function FeedbackAnswer(
                                     <Text style={{ color: "red" }}>*</Text>
                                 </Text>
 
-                                <View style={[stylesGlobal.inputLargeField]}>
+                                <View style={[stylesGlobal.inputField]}>
                                     <TextInput
                                         style={stylesGlobal.input}
                                         placeholder={

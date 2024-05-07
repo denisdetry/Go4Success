@@ -120,7 +120,6 @@ export default function FeedbackListDetails(
                 <View style={{ alignSelf: "flex-start" }}>
                     <ButtonComponent
                         icon="arrow-back-circle-outline"
-                        text="Back"
                         onPress={() => {
                             // @ts-ignore navigation type
                             navigation.navigate({ name: "feedbacklist" });

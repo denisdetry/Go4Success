@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import Colors from "../constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -79,10 +79,8 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
             style={[styles.common, styles[buttonType], style]}
             onPress={onPress}
         >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-                {icon && <Ionicons name={icon} size={35} color="white" />}
-                <Text style={styles.common}>{text}</Text>
-            </View>
+            {icon && <Ionicons name={icon} size={35} color="white" />}
+            <Text style={styles.common}>{text}</Text>
         </TouchableOpacity>
     );
 };

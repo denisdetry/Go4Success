@@ -66,7 +66,7 @@ const QuestionBox = ({ questionnaireId }) => {
     const queryClient = useQueryClient();
 
     const { mutate, error } = usePostQuestion();
-    const { mutateOption: mutate, errorOption: error } =
+    const { mutateAsync: mutateOption, error: errorOption } =
         usePostClosedQuestion();
     const handleOpenQuestion = () => {
         setOpenQuestions((prevQuestions) => [...prevQuestions, {}]);
@@ -178,7 +178,9 @@ const QuestionBox = ({ questionnaireId }) => {
                 }));
             });
 
-        console.log("closedQuestionsToSend", closedQuestionsToSend);
+        for (const closedQuestion of closedQuestionsToSend) {
+            mutateOption(closedQuestion);
+        }
     };
     return (
         <View style={styles.container}>

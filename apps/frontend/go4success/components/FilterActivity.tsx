@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from "react";
 import {
     Modal,
+    ScrollView,
     StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
     View,
 } from "react-native";
-import { ScrollView } from "react-native-virtualized-view";
 import Card from "./Card";
 import ButtonComponent from "./ButtonComponent";
 import stylesGlobal from "../styles/global";
@@ -200,13 +200,8 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 visible={modalVisible}
                 onRequestClose={toggleModal}
             >
-                <View style={modalStyle.centeredView}>
-                    <ScrollView
-                        contentContainerStyle={[
-                            modalStyle.modalView,
-                            { padding: 35 },
-                        ]}
-                    >
+                <ScrollView contentContainerStyle={modalStyle.centeredView}>
+                    <View style={[modalStyle.modalView, { padding: 35 }]}>
                         <TouchableOpacity
                             style={modalStyle.closeButton}
                             onPress={() => {
@@ -304,8 +299,8 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                                 buttonType={"secondary"}
                             />
                         </View>
-                    </ScrollView>
-                </View>
+                    </View>
+                </ScrollView>
             </Modal>
 
             {/* Cards views for registered activity or filtered */}

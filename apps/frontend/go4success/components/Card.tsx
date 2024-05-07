@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import { fetchBackend } from "@/utils/fetchBackend";
 import Toast from "react-native-toast-message";
 import { queryClient } from "@/app/_layout";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { fetchError } from "@/utils/fetchError";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -28,6 +28,7 @@ interface CardProps {
     readonly type: string;
     readonly description: string;
     readonly language: string;
+    readonly isAttend: boolean;
 }
 
 const styleFunctions = {
@@ -131,6 +132,7 @@ const Card: React.FC<CardProps> = ({
     type,
     description,
     language,
+    isAttend,
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
@@ -209,6 +211,59 @@ const Card: React.FC<CardProps> = ({
         );
     };
 
+    const handleUnregister = useMutation({
+        mutationFn: async () => {
+            const { data, error } = await fetchBackend({
+                type: "POST",
+                url: "activities/unregister_activity/",
+                data: {
+                    activity: id,
+                    student: user.id,
+                },
+            });
+            return { data, error };
+        },
+        onSuccess: () => {
+            Toast.show({
+                type: "success",
+                text1: t("translateToast.SuccessText1"),
+                text2:
+                    t("translateToast.UnregisterActivitySuccessText2") + title,
+            });
+            void queryClient.invalidateQueries({
+                queryKey: ["activities"],
+            });
+            setModalVisible(!modalVisible);
+        },
+        onError: (error: fetchError) => {
+            if (error.responseError.status === 400) {
+                Toast.show({
+                    type: "error",
+                    text1: t("translateToast.ErrorText1"),
+                    text2: t("translateToast.AlreadyUnregisteredActivityText2"),
+                });
+            } else {
+                Toast.show({
+                    type: "error",
+                    text1: t("translateToast.ErrorText1"),
+                    text2: t("translateToast.UnregisterActivityErrorText2"),
+                });
+            }
+
+            setModalVisible(!modalVisible);
+        },
+    });
+
+    var registerButtonText: string;
+    var registerButtonOnPress: any;
+    if (isAttend) {
+        registerButtonText = t("translateRegisterActivity.unregisterButton");
+        registerButtonOnPress = handleUnregister.mutate;
+    } else {
+        registerButtonText = t("translateRegisterActivity.registerButton");
+        registerButtonOnPress = handleRegister.mutate;
+    }
+
     return (
         <View style={styles.centeredView}>
             {/* Modal content */}
@@ -284,10 +339,8 @@ const Card: React.FC<CardProps> = ({
 
                         <View style={styles.buttonContainer}>
                             <ButtonComponent
-                                text={t(
-                                    "translateRegisterActivity.registerButton",
-                                )}
-                                onPress={() => handleRegister.mutate()}
+                                text={registerButtonText}
+                                onPress={registerButtonOnPress}
                                 buttonType={"primary"}
                             />
                             <ButtonComponent

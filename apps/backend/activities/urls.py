@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .views import ActivityViewSet, SiteViewSet, AttendViewSet, RoomViewSet, RegisterToActivityView, LanguageViewSet
+from .views import ActivityViewSet, SiteViewSet, AttendViewSet, RoomViewSet, RegisterToActivityView, LanguageViewSet, UnregisterFromActivityView
 
 router = DefaultRouter()
 
@@ -18,4 +18,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('rooms/site/<int:site_id>/',
          RoomViewSet.as_view({'get': 'get_rooms_by_site'}), name='rooms-by-site'),
+    path('unregister_activity/', UnregisterFromActivityView.as_view(),
+         name='unregister-activity'),
 ]

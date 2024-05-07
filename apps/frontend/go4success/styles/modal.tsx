@@ -10,7 +10,6 @@ export default StyleSheet.create({
     },
     modalView: {
         position: "relative",
-        margin: "auto",
         backgroundColor: Colors.lightBackgroundColor,
         padding: 20,
         borderRadius: 10,

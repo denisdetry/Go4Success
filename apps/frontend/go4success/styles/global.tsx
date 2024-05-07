@@ -117,7 +117,6 @@ export default StyleSheet.create({
     },
     inputLittle: {
         height: 50,
-        width: "100%",
         backgroundColor: "#fafafa",
         borderColor: "gray",
         borderWidth: 1,

@@ -76,6 +76,7 @@ export function useActivitiesSelect(
     startDateISO: string | null,
     endDateISO: string | null,
     allValues: boolean = false,
+    otherkey?: string | null,
 ) {
     const { t } = useTranslation();
 
@@ -90,6 +91,7 @@ export function useActivitiesSelect(
             selectedLanguage,
             startDateISO,
             endDateISO,
+            otherkey,
         ],
         queryFn: async () => {
             const { data, error } = await fetchBackend({

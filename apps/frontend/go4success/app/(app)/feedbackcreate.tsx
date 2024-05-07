@@ -50,7 +50,18 @@ export default function FeedbackCreate() {
     );
     const { gives: allGives, error: givesError } = useGives("", user?.id);
     const { data: allActivitiesData, error: activityError } =
-        useActivitiesSelect("activity", "", "", "", "", "", null, null, false);
+        useActivitiesSelect(
+            "activity",
+            "",
+            "",
+            "",
+            "",
+            "",
+            null,
+            null,
+            false,
+            "fix",
+        );
 
     const activityCallback = useCallback(
         (activityKey: string) => {

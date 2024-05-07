@@ -144,7 +144,7 @@
         "fields": {
             "type": "workshop",
             "name": "Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+            "description": "Trouver un équilibre entre les études et les loisirs est crucial pour maintenir une vie épanouissante et productive.",
             "date_start": "2024-04-23T12:42:08Z",
             "date_end": "2024-04-23T16:42:15Z",
             "room": 1,
@@ -273,7 +273,7 @@
         "pk": 1,
         "fields": {
             "feedback": 1,
-            "question": "Que pense tu de la 1er question ?"
+            "question": "Que penses-tu des cours cette année ?"
         }
     },
     {
@@ -281,61 +281,7 @@
         "pk": 2,
         "fields": {
             "feedback": 1,
-            "question": "La version mobile est correct ?"
-        }
-    },
-    {
-        "model": "database.feedbackstudent",
-        "pk": 10,
-        "fields": {
-            "student": 2,
-            "feedback": 1,
-            "evaluation": 4,
-            "positive_point": "trÞs chouette",
-            "negative_point": "rien Ó dire",
-            "suggestion": "",
-            "additional_comment": null,
-            "date_submitted": "2024-05-06"
-        }
-    },
-    {
-        "model": "database.feedbackstudentadditionalquestions",
-        "pk": 3,
-        "fields": {
-            "student": 2,
-            "feedback": 1,
-            "question": 1,
-            "answer": "Super question je trouve"
-        }
-    },
-    {
-        "model": "database.feedbackstudentadditionalquestions",
-        "pk": 4,
-        "fields": {
-            "student": 2,
-            "feedback": 1,
-            "question": 2,
-            "answer": "yep"
-        }
-    },
-    {
-        "model": "database.feedbackstudentadditionalquestions",
-        "pk": 5,
-        "fields": {
-            "student": 2,
-            "feedback": 1,
-            "question": 1,
-            "answer": "Bonne question"
-        }
-    },
-    {
-        "model": "database.feedbackstudentadditionalquestions",
-        "pk": 6,
-        "fields": {
-            "student": 2,
-            "feedback": 1,
-            "question": 2,
-            "answer": "C'est correct"
+            "question": "Disposez-vous de loisirs ?"
         }
     }
 ]

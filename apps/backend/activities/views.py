@@ -65,11 +65,11 @@ class ActivityViewSet(viewsets.ModelViewSet):
         serializer = ActivityCreateSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-
-        created_instance = serializer.instance
+        created_instance = serializer.save()
+        print("ID of instance : " + str(created_instance.id))
 
         give_serializer = GiveSerializer(data={
-            'activity': created_instance.id,
+            'activity': created_instance.id,    
             'teacher': data['user']
         })
         give_serializer.is_valid(raise_exception=True)

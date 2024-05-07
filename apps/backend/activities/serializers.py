@@ -53,8 +53,6 @@ class ActivitySerializer(serializers.ModelSerializer):
 
 
 class GiveSerializer(serializers.ModelSerializer):
-    activity = ActivitySerializer(read_only=True)
-
     class Meta:
         model = Give
         fields = ('activity', 'teacher')

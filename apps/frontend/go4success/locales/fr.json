@@ -17,7 +17,8 @@
         "calendar": "Mon calendrier",
         "disconnect": "Se déconnecter",
         "roleManagement": "Gestion des rôles",
-        "activityManagement": "Gestion des activités"
+        "activityManagement": "Gestion des activités",
+        "viewCourse": "Création de questionnaire"
     },
     "translationButton": {
         "OpenFilter": "Ouvrir filtre",

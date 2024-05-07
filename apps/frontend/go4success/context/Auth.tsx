@@ -61,6 +61,9 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
             "feedbackcreate",
             "feedbacklistdetails",
             "feedbacklist",
+            "viewCourse",
+            "questionnaire",
+            "question",
         ],
     ];
 

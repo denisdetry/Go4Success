@@ -103,14 +103,21 @@
         "LoginSuccessText2": "Connexion réussie ! Bienvenue sur Go4Success",
         "LoginInfoErrorText2": "Nom d'utilisateur ou mot de passe incorrect",
         "RegisterSuccessText2": "Inscription reussie ! Bienvenue sur Go4Success",
+        "RegisterErrorText2": "Une erreur s'est produire lors de l'inscription",
+        "AlreadyUnregisteredActivityText2": "Vous n'êtes pas inscrit à cet atelier",
+        "UnregisterActivitySuccessText2": "Vous avez été désinscrit de l'atelier",
         "LogoutSuccessText1": "Déconnexion réussie",
         "LogoutSuccessText2": "A bientôt sur Go4Success ! \uD83D\uDE0A",
         "RegisterActivitySuccessText2": "Vous êtes parfaitement inscrit à l'atelier :",
         "RegisterActivityErrorText2": "Une erreur s'est produire lors de l'inscription à l'atelier",
-        "AlreadyRegisteredActivityText2": "Vous êtes déjà inscrit à cet atelier"
+        "AlreadyRegisteredActivityText2": "Vous êtes déjà inscrit à cet atelier",
+        "SelectSatisfaction": "Veuillez sélectionner un niveau d'évaluation",
+        "SelectActivity": "Veuillez sélectionner une activitée",
+        "AnswerAllQuestions": "Veuillez répondre à toutes les questions"
     },
     "translateRegisterActivity": {
         "registerButton": "S'inscrire",
+        "unregisterButton": "Se désinscrire",
         "closeButton": "Fermer"
     },
     "translateCard": {
@@ -118,7 +125,8 @@
         "hour": "Heure",
         "place": "Lieu",
         "type": "Type",
-        "language": "Langue"
+        "language": "Langue",
+        "description": "Description"
     },
     "translationActivities": {
         "addActivity": "Ajouter des activités",
@@ -133,8 +141,8 @@
         "yupEndTimeGreater": "L'heure de fin doit être supérieure à l'heure de début",
         "addError": "Une erreur s'est produite lors de l'ajout de l'activité",
         "addErrorMultiple": "Une erreur s'est produite lors de l'ajout des activités",
-        "addSuccess": "L'activité a été ajoutée avec succès",
-        "addSuccessMultiple": "Les activités ont été ajoutées avec succès",
+        "addSuccess": "L'activité a été ajoutée avec succès \uD83C\uDF89",
+        "addSuccessMultiple": "Les activités ont été ajoutées avec succès \uD83C\uDF89",
         "title": "Titre",
         "description": "Description",
         "site": "Site",
@@ -148,5 +156,37 @@
         "AllValuesM": "Tous",
         "AllValuesF": "Toutes",
         "NoRoomsFound": "Aucune salle trouvée"
+    },
+    "translateFeedback": {
+        "feedback": "Feedback",
+        "create": "Création d'un feedback",
+        "show": "Voir les feedbacks",
+        "student": "Etudiant",
+        "activity": "Activité",
+        "course": "Cours",
+        "evaluation": "Evaluation",
+        "positivePoint": "Point positif",
+        "negativePoint": "Point negatif",
+        "suggestion": "Suggestion",
+        "additionalComment": "Commentaire supplémentaire",
+        "dateSubmitted": "Date de soumission",
+        "open": "Ouvrir",
+        "send": "Envoyer",
+        "for": "Feedback pour ",
+        "defaultSelect": "Sélection par défaut",
+        "moreQuestions": "Questions supplémentaires",
+        "enterQuestion": "Entrez votre question",
+        "addQuestion": "Ajouter plus de question",
+        "dateEnd": "Date de fin",
+        "nofeedback": "Pas de feedback pour cette activité",
+        "answerTo": "Répondre à la question ",
+        "selectSatisfaction": "Sélectionnez un niveau de satisfaction"
+    },
+    "satisfactionLevels": {
+        "verySatisfied": "Très satisfait",
+        "satisfied": "Satisfait",
+        "neutral": "Neutre",
+        "unsatisfied": "Insatisfait",
+        "veryUnsatisfied": "Très insatisfait"
     }
 }

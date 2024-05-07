@@ -2,8 +2,9 @@ from django.contrib import admin
 
 from .models import User, Teacher, Give, Announcement, \
     Registered, Message, See, Site, Room, Activity, Attend, Course, \
-    Language, FeedbackActivity, Questionnaire, Question, \
-    OpenAnswer, ChoiceAnswer, ChoiceAnswerInstance, ExpoToken
+    Language, Feedback, FeedbackAdditionalQuestions, \
+    FeedbackStudent, FeedbackStudentAdditionalQuestions,  Questionnaire, \
+    Question, OpenAnswer, ChoiceAnswer, ChoiceAnswerInstance, ExpoToken
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -66,9 +67,22 @@ class SeeAdmin(admin.ModelAdmin):
     list_display = ("announcement", "user")
 
 
-class FeedbackActivityAdmin(admin.ModelAdmin):
-    list_display = ("id", "student", "activity", "evaluation", "positive_point",
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "activity", "positive_point",
+                    "negative_point", "suggestion", "additional_comment", "date_start", "date_end")
+
+
+class FeedbackAdditionalQuestionsAdmin(admin.ModelAdmin):
+    list_display = ("id", "feedback", "question")
+
+
+class FeedbackStudentAdmin(admin.ModelAdmin):
+    list_display = ("id", "student", "feedback", "evaluation", "positive_point",
                     "negative_point", "suggestion", "additional_comment", "date_submitted")
+
+
+class FeedbackStudentAdditionalQuestionsAdmin(admin.ModelAdmin):
+    list_display = ("id", "student", "feedback", "question", "answer")
 
 
 class QuestionnaireAdmin(admin.ModelAdmin):
@@ -106,7 +120,12 @@ admin.site.register(Language, LanguageAdmin)
 admin.site.register(Activity, ActivityAdmin)
 admin.site.register(Attend, AttendAdmin)
 admin.site.register(Course, CourseAdmin)
-admin.site.register(FeedbackActivity, FeedbackActivityAdmin)
+admin.site.register(Feedback, FeedbackAdmin)
+admin.site.register(FeedbackAdditionalQuestions,
+                    FeedbackAdditionalQuestionsAdmin)
+admin.site.register(FeedbackStudent, FeedbackStudentAdmin)
+admin.site.register(FeedbackStudentAdditionalQuestions,
+                    FeedbackStudentAdditionalQuestionsAdmin)
 admin.site.register(Questionnaire, QuestionnaireAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(OpenAnswer, OpenAnswerAdmin)

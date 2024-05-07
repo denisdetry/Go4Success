@@ -1,6 +1,11 @@
 import { Platform, StyleSheet } from "react-native";
 import Colors from "@/constants/Colors";
-import { isMobile, isTablet, isTabletMini } from "@/constants/screensWidth";
+import {
+    isMobile,
+    isTablet,
+    isTabletMini,
+    width,
+} from "@/constants/screensWidth";
 
 export default StyleSheet.create({
     mainContainer: {
@@ -24,6 +29,10 @@ export default StyleSheet.create({
     },
     titleNoPadding: {
         fontSize: 28,
+        fontWeight: "500",
+    },
+    titleH2NoPadding: {
+        fontSize: 22,
         fontWeight: "500",
     },
     text: {
@@ -73,6 +82,30 @@ export default StyleSheet.create({
         minWidth: isMobile ? 280 : 300,
     },
 
+    inputFieldWithoutBorder: {
+        flexDirection: "row",
+        alignItems: "center",
+        padding: 10,
+        minWidth: isMobile ? 280 : 300,
+    },
+
+    inputLargeField: {
+        borderWidth: 0.5,
+        borderColor: Colors.primaryColor,
+        borderRadius: 10,
+        flexDirection: "row",
+        alignItems: "center",
+        padding: 10,
+        minWidth: Platform.select({ ios: 300, android: 300, default: 600 }),
+    },
+    inputLargeFieldWithoutBorder: {
+        borderRadius: 10,
+        flexDirection: "row",
+        alignItems: "center",
+        padding: 10,
+        minWidth: Platform.select({ ios: 300, android: 300, default: 600 }),
+    },
+
     input: {
         flex: 1,
         color: "#333",
@@ -117,12 +150,78 @@ export default StyleSheet.create({
     },
     inputLittle: {
         height: 50,
-        width: "100%",
         backgroundColor: "#fafafa",
         borderColor: "gray",
         borderWidth: 1,
         borderRadius: 4,
         marginBottom: 10,
         padding: 10,
+    },
+    modalViewTitle: {
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
+        width: "100%",
+        padding: 10,
+    },
+    centeredViewModal: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22,
+        backgroundColor: "rgba(0, 0, 0, 0.3)",
+    },
+    modalView: {
+        backgroundColor: Colors.workshopLightColor,
+        borderRadius: 20,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    modalTitle: {
+        fontSize: 24,
+        fontWeight: "bold",
+        color: "white",
+        padding: 20,
+        width: "100%",
+    },
+    modalData: {
+        padding: 20,
+        width: "100%",
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center",
+    },
+    buttonContainer: {
+        paddingTop: 15,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        padding: 20,
+    },
+    closeButton: {
+        position: "absolute",
+        top: 10,
+        right: 10,
+    },
+    closeButtonText: {
+        color: "white",
+        fontSize: 20,
+    },
+    separator: {
+        borderBottomColor: "#000",
+        borderBottomWidth: 1,
+        marginVertical: 10,
+    },
+    card: {
+        borderRadius: 10,
+        padding: 12,
+        height: 180,
+        width: Platform.OS === "web" ? (isMobile ? 280 : 350) : width - 80,
+    },
+    label: {
+        fontSize: 16,
+        fontWeight: "bold",
     },
 });

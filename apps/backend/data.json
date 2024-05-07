@@ -3,17 +3,17 @@
         "model": "database.user",
         "pk": 1,
         "fields": {
-            "password": "pbkdf2_sha256$720000$3pc9akh2ajbCuUvJ3AR07M$V5ZKmrRi+rUDvYK9VU1o8TRQgqn4zgjJ+5gd2303b3M=",
-            "username": "uclouvainadmin",
-            "email": "admin@uclouvain.be",
-            "first_name": "Admin",
-            "last_name": "UCLouvain",
+            "password": "pbkdf2_sha256$720000$2L1EpiCnU19qG7xtzDkgpb$F80d6t5MwiS+XMlQbdu9rg4e9wW8i9VeIiVMpDiMcpE=",
+            "username": "allmaxou",
+            "email": "max@gmail.com",
+            "first_name": "",
+            "last_name": "",
             "noma": null,
             "is_active": true,
             "is_staff": true,
             "is_superuser": true,
-            "date_join": "2024-04-13T09:31:26.314Z",
-            "last_login": "2024-04-13T09:31:49.929Z",
+            "date_join": "2024-05-05T20:37:20.975Z",
+            "last_login": "2024-05-05T20:38:36.041Z",
             "groups": [],
             "user_permissions": []
         }
@@ -22,16 +22,16 @@
         "model": "database.user",
         "pk": 2,
         "fields": {
-            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
-            "username": "superuser",
-            "email": "superuser@gmail.com",
-            "first_name": "FName",
-            "last_name": "LName",
-            "noma": "11111111",
+            "password": "pbkdf2_sha256$720000$2L1EpiCnU19qG7xtzDkgpb$F80d6t5MwiS+XMlQbdu9rg4e9wW8i9VeIiVMpDiMcpE=",
+            "username": "student",
+            "email": "student@gmail.com",
+            "first_name": "FStudent",
+            "last_name": "LStudent",
+            "noma": "12345678",
             "is_active": true,
-            "is_staff": true,
-            "is_superuser": true,
-            "date_join": "2024-04-12T14:59:30Z",
+            "is_staff": false,
+            "is_superuser": false,
+            "date_join": "2024-05-05T20:40:23Z",
             "last_login": null,
             "groups": [],
             "user_permissions": []
@@ -41,16 +41,16 @@
         "model": "database.user",
         "pk": 3,
         "fields": {
-            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
-            "username": "student",
-            "email": "student@student.uclouvain.com",
-            "first_name": "FStudent",
-            "last_name": "LStudent",
-            "noma": "12345678",
+            "password": "pbkdf2_sha256$720000$2L1EpiCnU19qG7xtzDkgpb$F80d6t5MwiS+XMlQbdu9rg4e9wW8i9VeIiVMpDiMcpE=",
+            "username": "teacher",
+            "email": "teacher@gmail.com",
+            "first_name": "FTeacher",
+            "last_name": "LTeacher",
+            "noma": null,
             "is_active": true,
-            "is_staff": false,
+            "is_staff": true,
             "is_superuser": false,
-            "date_join": "2024-04-12T15:06:31Z",
+            "date_join": "2024-05-05T20:40:45Z",
             "last_login": null,
             "groups": [],
             "user_permissions": []
@@ -60,54 +60,16 @@
         "model": "database.user",
         "pk": 4,
         "fields": {
-            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
-            "username": "teacher",
-            "email": "teacher@student.uclouvain.com",
-            "first_name": "Fteacher",
-            "last_name": "Lteacher",
+            "password": "pbkdf2_sha256$720000$3pc9akh2ajbCuUvJ3AR07M$V5ZKmrRi+rUDvYK9VU1o8TRQgqn4zgjJ+5gd2303b3M=",
+            "username": "uclouvainadmin",
+            "email": "admin@uclouvain.be",
+            "first_name": "Admin",
+            "last_name": "UCLouvain",
             "noma": null,
             "is_active": true,
             "is_staff": true,
-            "is_superuser": false,
-            "date_join": "2024-04-12T15:08:14Z",
-            "last_login": null,
-            "groups": [],
-            "user_permissions": []
-        }
-    },
-    {
-        "model": "database.user",
-        "pk": 6,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
-            "username": "teacher2",
-            "email": "teacher2@student.uclouvain.com",
-            "first_name": "Fteacher",
-            "last_name": "Lteacher",
-            "noma": null,
-            "is_active": true,
-            "is_staff": true,
-            "is_superuser": false,
-            "date_join": "2024-04-12T15:08:14Z",
-            "last_login": null,
-            "groups": [],
-            "user_permissions": []
-        }
-    },
-    {
-        "model": "database.user",
-        "pk": 5,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$CvEX7ybiNRa92XZ9HyRfYK$LRVk5ckI6ecmFEnfc2jRrjUdS4GsogG9yh0G5tnkPHA=",
-            "username": "student2",
-            "email": "student2@gmail.com",
-            "first_name": "Fstudent2",
-            "last_name": "Lstudent2",
-            "noma": "87654321",
-            "is_active": true,
-            "is_staff": false,
-            "is_superuser": false,
-            "date_join": "2024-04-10T15:12:08Z",
+            "is_superuser": true,
+            "date_join": "2024-05-05T21:21:13Z",
             "last_login": null,
             "groups": [],
             "user_permissions": []
@@ -117,18 +79,9 @@
         "model": "database.course",
         "pk": 1,
         "fields": {
-            "code": "TS1",
-            "name": "Test1",
-            "user": 4
-        }
-    },
-    {
-        "model": "database.course",
-        "pk": 2,
-        "fields": {
-            "code": "Info01",
-            "name": "Informatique Introduction",
-            "user": 6
+            "code": "M01",
+            "name": "Math",
+            "user": 3
         }
     },
     {
@@ -146,13 +99,6 @@
         }
     },
     {
-        "model": "database.site",
-        "pk": 3,
-        "fields": {
-            "name": "Louvain"
-        }
-    },
-    {
         "model": "database.room",
         "pk": 1,
         "fields": {
@@ -164,7 +110,7 @@
         "model": "database.room",
         "pk": 2,
         "fields": {
-            "name": "I21",
+            "name": "I32",
             "site": 2
         }
     },
@@ -172,7 +118,7 @@
         "model": "database.room",
         "pk": 3,
         "fields": {
-            "name": "I25",
+            "name": "I24",
             "site": 1
         }
     },
@@ -180,16 +126,16 @@
         "model": "database.language",
         "pk": 1,
         "fields": {
-            "name": "English",
-            "code": "EN"
+            "name": "Français",
+            "code": "FR"
         }
     },
     {
         "model": "database.language",
         "pk": 2,
         "fields": {
-            "name": "Français",
-            "code": "FR"
+            "name": "English",
+            "code": "EN"
         }
     },
     {
@@ -198,12 +144,12 @@
         "fields": {
             "type": "workshop",
             "name": "Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
-            "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-            "date_start": "2024-04-12T15:02:17Z",
-            "date_end": "2024-04-12T18:02:18Z",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+            "date_start": "2024-04-23T12:42:08Z",
+            "date_end": "2024-04-23T16:42:15Z",
             "room": 1,
-            "course": 1,
-            "language": 2
+            "course": null,
+            "language": 1
         }
     },
     {
@@ -211,13 +157,13 @@
         "pk": 2,
         "fields": {
             "type": "workshop",
-            "name": "Comment se préparer au blocus et aux examens ?",
-            "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here',",
-            "date_start": "2024-06-01T15:03:16Z",
-            "date_end": "2024-06-01T18:03:19Z",
+            "name": "Math recap",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+            "date_start": "2024-05-12T20:42:45Z",
+            "date_end": "2024-05-12T21:42:52Z",
             "room": 2,
-            "course": null,
-            "language": 2
+            "course": 1,
+            "language": 1
         }
     },
     {
@@ -226,12 +172,12 @@
         "fields": {
             "type": "workshop",
             "name": "Atelier planning #FR",
-            "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-            "date_start": "2024-05-05T15:04:06Z",
-            "date_end": "2024-05-05T16:04:11Z",
-            "room": 1,
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+            "date_start": "2024-06-23T20:43:38Z",
+            "date_end": "2024-06-23T21:43:42Z",
+            "room": 2,
             "course": null,
-            "language": 2
+            "language": 1
         }
     },
     {
@@ -240,20 +186,40 @@
         "fields": {
             "type": "workshop",
             "name": "Atelier planning #EN",
-            "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
-            "date_start": "2024-05-05T15:04:45Z",
-            "date_end": "2024-05-05T16:04:48Z",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+            "date_start": "2024-06-23T20:44:09Z",
+            "date_end": "2024-06-23T21:44:10Z",
             "room": 3,
+            "course": null,
+            "language": 2
+        }
+    },
+    {
+        "model": "database.activity",
+        "pk": 5,
+        "fields": {
+            "type": "workshop",
+            "name": "Remédiation",
+            "description": "Lorem ipsum",
+            "date_start": "2024-05-09T12:00:00Z",
+            "date_end": "2024-05-09T15:15:00Z",
+            "room": 1,
             "course": null,
             "language": 1
         }
     },
     {
-        "model": "database.attend",
-        "pk": 1,
+        "model": "database.activity",
+        "pk": 6,
         "fields": {
-            "activity": 1,
-            "student": 3
+            "type": "workshop",
+            "name": "Remédiation",
+            "description": "Lorem ipsum",
+            "date_start": "2024-05-10T12:00:00Z",
+            "date_end": "2024-05-10T15:15:00Z",
+            "room": 1,
+            "course": null,
+            "language": 1
         }
     },
     {
@@ -262,6 +228,14 @@
         "fields": {
             "activity": 1,
             "student": 2
+        }
+    },
+    {
+        "model": "database.teacher",
+        "pk": 3,
+        "fields": {
+            "is_tutor": false,
+            "is_professor": true
         }
     },
     {
@@ -277,103 +251,91 @@
         "pk": 1,
         "fields": {
             "activity": 2,
-            "teacher": 4
+            "teacher": 3
         }
     },
     {
-        "model": "database.registered",
+        "model": "database.feedback",
         "pk": 1,
         "fields": {
-            "student": 3,
-            "course": 2
+            "user": 1,
+            "activity": 1,
+            "positive_point": true,
+            "negative_point": true,
+            "suggestion": true,
+            "additional_comment": false,
+            "date_start": "2024-05-05",
+            "date_end": "2024-06-30"
         }
     },
     {
-        "model": "database.feedbackactivity",
+        "model": "database.feedbackadditionalquestions",
         "pk": 1,
+        "fields": {
+            "feedback": 1,
+            "question": "Que pense tu de la 1er question ?"
+        }
+    },
+    {
+        "model": "database.feedbackadditionalquestions",
+        "pk": 2,
+        "fields": {
+            "feedback": 1,
+            "question": "La version mobile est correct ?"
+        }
+    },
+    {
+        "model": "database.feedbackstudent",
+        "pk": 10,
         "fields": {
             "student": 2,
-            "activity": 1,
-            "evaluation": 3,
-            "positive_point": "Bien",
-            "negative_point": "Non",
-            "suggestion": "Suggestion ici",
-            "additional_comment": "Ok",
-            "date_submitted": "2024-04-12"
-        }
-    },
-
-    {
-        "model": "database.Questionnaire",
-        "pk": 1,
-        "fields": {
-            "title": "superQuestionnaire",
-            "description": "superDescription",
-            "points_total": 20,
-            "date_start": "2024-04-24",
-            "date_end": "2024-04-24",
-            "course_id": 1,
-            "language_id": 1
-        }
-    },
-
-    {
-        "model": "database.Questionnaire",
-        "pk": 2,
-        "fields": {
-            "title": "superQuestionnaire2",
-            "description": "superDescription2",
-            "points_total": 20,
-            "date_start": "2024-04-24",
-            "date_end": "2024-04-24",
-            "course_id": 1,
-            "language_id": 1
+            "feedback": 1,
+            "evaluation": 4,
+            "positive_point": "trÞs chouette",
+            "negative_point": "rien Ó dire",
+            "suggestion": "",
+            "additional_comment": null,
+            "date_submitted": "2024-05-06"
         }
     },
     {
-        "model": "database.Questionnaire",
-        "pk": 2,
+        "model": "database.feedbackstudentadditionalquestions",
+        "pk": 3,
         "fields": {
-            "title": "superQuestionnaire2",
-            "description": "superDescription2",
-            "points_total": 20,
-            "date_start": "2024-04-24",
-            "date_end": "2024-04-24",
-            "course_id": 1,
-            "language_id": 1
+            "student": 2,
+            "feedback": 1,
+            "question": 1,
+            "answer": "Super question je trouve"
         }
     },
-
     {
-        "model": "database.Question",
-        "pk": 1,
+        "model": "database.feedbackstudentadditionalquestions",
+        "pk": 4,
         "fields": {
-            "question": "superQuestion",
-            "points": 5,
-            "type": "choice",
-            "questionnaire_id": 1
+            "student": 2,
+            "feedback": 1,
+            "question": 2,
+            "answer": "yep"
         }
     },
-
     {
-        "model": "database.Question",
-        "pk": 2,
+        "model": "database.feedbackstudentadditionalquestions",
+        "pk": 5,
         "fields": {
-            "question": "superQuestion2",
-            "points": 5,
-            "type": "open",
-            "questionnaire_id": 1
+            "student": 2,
+            "feedback": 1,
+            "question": 1,
+            "answer": "Bonne question"
         }
     },
-
     {
-        "model": "database.Question",
-        "pk": 2,
+        "model": "database.feedbackstudentadditionalquestions",
+        "pk": 6,
         "fields": {
-            "question": "superQuestion3",
-            "points": 5,
-            "type": "open",
-            "questionnaire_id": 1
+            "student": 2,
+            "feedback": 1,
+            "question": 2,
+            "answer": "C'est correct"
         }
     }
 ]

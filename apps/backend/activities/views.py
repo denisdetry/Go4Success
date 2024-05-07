@@ -68,7 +68,7 @@ class ActivityViewSet(viewsets.ModelViewSet):
 
         giveSerializer = GiveSerializer(data={
             'activity': serializer.data['id'], 
-            'teacher': request.user
+            'teacher': data['user']
         })
         self.perform_create(giveSerializer)
 

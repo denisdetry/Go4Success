@@ -16,6 +16,7 @@ import {
     usePostQuestion,
     useGetQuestions,
 } from "@/hooks/useQuestionnaire";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ClosedQuestion {
     questionnaire: number;
@@ -38,8 +39,16 @@ const QuestionBox = ({ questionnaireId }) => {
     const [closedQuestions, setClosedQuestions] = useState<
         { type: string; points: number; question: string }[]
     >([]);
-    const [closedQuestionsProcessed, setClosedQuestionsProcessed] = useState(false);
-    const { data: questions, errors, isLoadings } = useGetQuestions();
+    const {
+        data: questions,
+        errors,
+        isLoadings,
+        refetch: refetchQuestions,
+    } = useGetQuestions();
+    const [closedQuestionsProcessed, setClosedQuestionsProcessed] =
+        useState(false);
+
+    const queryClient = useQueryClient();
 
     const { mutate, error } = usePostQuestion();
 
@@ -58,6 +67,8 @@ const QuestionBox = ({ questionnaireId }) => {
                 id: question.id,
                 question: question.question,
             }));
+
+            console.log(questionsData);
         }
     }, [closedQuestionsProcessed, questions]);
 
@@ -73,7 +84,9 @@ const QuestionBox = ({ questionnaireId }) => {
                         text1: "Success",
                         text2: "Open question has been posted successfully",
                     });
+                    refetchQuestions();
                 },
+
                 onError: (error) => {
                     Toast.show({
                         type: "error",
@@ -83,7 +96,7 @@ const QuestionBox = ({ questionnaireId }) => {
                 },
             });
         });
-
+        console.log(questions);
         const closedQuestionPromises = closedQuestions.map((question) => {
             const { type, points, question: questionText } = question;
             const questionWithId = {
@@ -116,8 +129,6 @@ const QuestionBox = ({ questionnaireId }) => {
         } catch (error) {
             console.error("Error posting closed questions:", error);
         }
-
-        console.log(questions);
     };
     return (
         <View style={styles.container}>
@@ -157,8 +168,13 @@ const QuestionBox = ({ questionnaireId }) => {
                 }}
             >
                 <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Choisir le type de question :</Text>
-                    <Button title="Question ouverte" onPress={handleOpenQuestion} />
+                    <Text style={styles.modalText}>
+                        Choisir le type de question :
+                    </Text>
+                    <Button
+                        title="Question ouverte"
+                        onPress={handleOpenQuestion}
+                    />
                     <Button
                         title="Question fermée"
                         onPress={() => {
@@ -166,7 +182,10 @@ const QuestionBox = ({ questionnaireId }) => {
                             setModalVisible(false);
                         }}
                     />
-                    <Button title="Annuler" onPress={() => setModalVisible(false)} />
+                    <Button
+                        title="Annuler"
+                        onPress={() => setModalVisible(false)}
+                    />
                 </View>
             </Modal>
         </View>
@@ -231,22 +250,28 @@ const ClosedQuestionBox = ({ id, setClosedQuestions, questionnaireId }) => {
     const handleCheck = (index) => {
         setOptions((prevOptions) => {
             const newOptions = [...prevOptions];
-            newOptions[index] = [newOptions[index][0], !newOptions[index][1]] as [
-                string,
-                boolean,
-            ];
+            newOptions[index] = [
+                newOptions[index][0],
+                !newOptions[index][1],
+            ] as [string, boolean];
             return newOptions;
         });
     };
 
     const handleAddOption = () => {
-        setOptions((prevOptions) => [...prevOptions, ["", false] as [string, boolean]]);
+        setOptions((prevOptions) => [
+            ...prevOptions,
+            ["", false] as [string, boolean],
+        ]);
     };
 
     const handleOptionChange = (text, index) => {
         setOptions((prevOptions) => {
             const newOptions = [...prevOptions];
-            newOptions[index] = [text, newOptions[index][1]] as [string, boolean];
+            newOptions[index] = [text, newOptions[index][1]] as [
+                string,
+                boolean,
+            ];
             return newOptions;
         });
     };

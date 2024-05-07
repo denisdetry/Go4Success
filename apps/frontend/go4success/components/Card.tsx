@@ -397,10 +397,8 @@ const Card: React.FC<CardProps> = ({
                         <View style={styles.buttonContainer}>
                             {newDateEnd > currentDate ? (
                                 <ButtonComponent
-                                    text={t(
-                                        "translateRegisterActivity.registerButton",
-                                    )}
-                                    onPress={() => handleRegister.mutate()}
+                                    text={registerButtonText}
+                                    onPress={registerButtonOnPress}
                                     buttonType={"primary"}
                                 />
                             ) : attendOrActivity === "attend" ? (

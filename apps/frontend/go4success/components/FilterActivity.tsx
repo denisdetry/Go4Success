@@ -2,8 +2,6 @@ import React, { useCallback, useState } from "react";
 import {
     Modal,
     ScrollView,
-    SafeAreaView,
-    ScrollView,
     StyleSheet,
     Text,
     TextInput,

@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 
 from database.models import Activity, Attend, Room, Site, Language
@@ -7,7 +8,6 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-import json
 
 from .serializers import SiteSerializer, ActivitySerializer, \
     AttendSerializer, RoomSerializer, RegisterToActivitySerializer, \
@@ -66,11 +66,14 @@ class ActivityViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
-        giveSerializer = GiveSerializer(data={
-            'activity': serializer.data['id'], 
+        created_instance = serializer.instance
+
+        give_serializer = GiveSerializer(data={
+            'activity': created_instance.id,
             'teacher': data['user']
         })
-        self.perform_create(giveSerializer)
+        give_serializer.is_valid(raise_exception=True)
+        self.perform_create(give_serializer)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 

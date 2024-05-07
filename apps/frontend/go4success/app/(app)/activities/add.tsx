@@ -186,7 +186,6 @@ export default function Add() {
                 )
                 .set("minute", Number(data.endTime.value.split(":")[1]))
                 .toJSON();
-
             return [beginHour, endHour];
         });
         const errors = [];

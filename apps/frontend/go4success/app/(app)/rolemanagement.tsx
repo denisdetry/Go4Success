@@ -5,15 +5,17 @@ import { Picker } from "@react-native-picker/picker";
 import { fetchBackend } from "@/utils/fetchBackend";
 import { queryClient } from "@/app/_layout";
 import { useAuth } from "@/context/Auth";
+import { useTranslation } from "react-i18next";
 
 const roles = [
-    { key: "professor", value: "Professor" },
-    { key: "tutor", value: "Tutor" },
-    { key: "student", value: "Student" },
-    { key: "superuser", value: "Superuser" },
+    { key: "professor", value: "translationRole.Professor" },
+    { key: "tutor", value: "translationRole.Tutor" },
+    { key: "student", value: "translationRole.Student" },
+    { key: "superuser", value: "translationRole.Superuser" },
 ];
 
 export default function RoleManagement() {
+    const { t } = useTranslation();
     const { user } = useAuth();
     const { users } = useUsers();
     const { teachers } = useTeachers();
@@ -60,7 +62,8 @@ export default function RoleManagement() {
                 <View style={customStyles.listItem}>
                     <View style={customStyles.userInfo}>
                         <Text>
-                            ID : {item.id} Prénom : {item.firstName} Nom :{" "}
+                            ID : {item.id} {t("translationRole.surname")} :{" "}
+                            {item.firstName} {t("translationRole.name")} :{" "}
                             {item.lastName}
                         </Text>
                     </View>
@@ -68,7 +71,7 @@ export default function RoleManagement() {
                     {user.id === item.id ? (
                         <View style={customStyles.userNot}>
                             <Text>
-                                Vous ne pouvez pas modifier votre propre rôle
+                                {t("translationRole.canNotChangeOwnRole")}
                             </Text>
                         </View>
                     ) : (

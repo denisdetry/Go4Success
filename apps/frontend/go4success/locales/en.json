@@ -188,5 +188,14 @@
         "neutral": "Neutral",
         "unsatisfied": "Unsatisfied",
         "veryUnsatisfied": "Very unsatisfied"
+    },
+    "translationRole": {
+        "Professor": "Professor",
+        "Student": "Student",
+        "Superuser": "Superuser",
+        "Tutor": "Tutor",
+        "name": "Name",
+        "surname": "Surname",
+        "canNotChangeOwnRole": "You can not change your own role"
     }
 }

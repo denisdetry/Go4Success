@@ -462,7 +462,7 @@
             "user": 1,
             "content_type": 16,
             "object_id": "3",
-            "object_repr": "Feedback for RemÚdiation by uclouvainadmin",
+            "object_repr": "Feedback for Remédiation by uclouvainadmin",
             "action_flag": 3,
             "change_message": ""
         }
@@ -1841,7 +1841,7 @@
         "pk": 5,
         "fields": {
             "type": "workshop",
-            "name": "RemÚdiation",
+            "name": "Remédiation",
             "description": "Lorem ipsum",
             "date_start": "2024-05-09T12:00:00Z",
             "date_end": "2024-05-09T15:15:00Z",
@@ -1855,7 +1855,7 @@
         "pk": 6,
         "fields": {
             "type": "workshop",
-            "name": "RemÚdiation",
+            "name": "Remédiation",
             "description": "Lorem ipsum",
             "date_start": "2024-05-10T12:00:00Z",
             "date_end": "2024-05-10T15:15:00Z",

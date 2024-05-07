@@ -287,6 +287,42 @@ export default function Layout() {
                             },
                         }}
                     />
+                    <Drawer.Screen
+                        name="viewCourse"
+                        options={{
+                            drawerItemStyle: {
+                                display:
+                                    user?.is_superuser || user?.is_staff
+                                        ? "flex"
+                                        : "none",
+                            },
+                            drawerLabel: t("translationMenu.viewCourse"),
+                            headerTitle: t("translationMenu.viewCourse"),
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name="people"
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
+                    <Drawer.Screen
+                        name="questionnaire"
+                        options={{
+                            drawerItemStyle: {
+                                display: "none",
+                            },
+                        }}
+                    />
+                    <Drawer.Screen
+                        name="question"
+                        options={{
+                            drawerItemStyle: {
+                                display: "none",
+                            },
+                        }}
+                    />
                 </Drawer>
             </AuthProvider>
         </GestureHandlerRootView>

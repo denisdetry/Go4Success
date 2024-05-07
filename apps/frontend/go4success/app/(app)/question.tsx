@@ -15,7 +15,9 @@ import {
     usePostOpenQuestion,
     usePostQuestion,
     useGetQuestions,
+    usePostClosedQuestion,
 } from "@/hooks/useQuestionnaire";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ClosedQuestion {
     questionnaire: number;
@@ -32,17 +34,40 @@ interface OpenQuestion {
     points: number;
 }
 
+interface refetchedQuestions {
+    id: number;
+    question: string;
+}
+
+interface closedQuestionToSend {
+    question: number;
+    options: string;
+    checked: boolean;
+}
+
 const QuestionBox = ({ questionnaireId }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [openQuestions, setOpenQuestions] = useState([]);
     const [closedQuestions, setClosedQuestions] = useState<
         { type: string; points: number; question: string }[]
     >([]);
-    const [closedQuestionsProcessed, setClosedQuestionsProcessed] = useState(false);
-    const { data: questions, errors, isLoadings } = useGetQuestions();
+    const {
+        data: questions,
+        errors,
+        isLoadings,
+        refetch: refetchQuestions,
+    } = useGetQuestions();
+    const [closedQuestionsProcessed, setClosedQuestionsProcessed] =
+        useState(false);
+    const [refetchQuestionsData, setRefetchQuestionsData] = useState<
+        refetchedQuestions[]
+    >([]);
+
+    const queryClient = useQueryClient();
 
     const { mutate, error } = usePostQuestion();
-
+    const { mutateAsync: mutateOption, error: errorOption } =
+        usePostClosedQuestion();
     const handleOpenQuestion = () => {
         setOpenQuestions((prevQuestions) => [...prevQuestions, {}]);
         setModalVisible(false);
@@ -59,11 +84,20 @@ const QuestionBox = ({ questionnaireId }) => {
                 question: question.question,
             }));
 
-            console.log(questionsData);
+            // Mettre les données refetchées dans la structure de données refetchQuestions
+            const data: refetchQuestions[] =
+                questionsData.data?.map((question) => ({
+                    id: question.id,
+                    question: question.question,
+                })) || [];
+
+            // Mettre à jour l'état avec les données refetchées
+            setRefetchQuestionsData(questionsData);
+            console.log("refetchedQuetion", refetchQuestionsData);
         }
     }, [closedQuestionsProcessed, questions]);
 
-    const handleSaveOpenQuestions = () => {
+    const handleSaveOpenQuestions = async () => {
         openQuestions.forEach((question) => {
             // Ajouter questionnaireId à chaque question
             const questionWithId = { ...question, questionnaireId };
@@ -75,7 +109,10 @@ const QuestionBox = ({ questionnaireId }) => {
                         text1: "Success",
                         text2: "Open question has been posted successfully",
                     });
+
+                    refetchQuestions();
                 },
+
                 onError: (error) => {
                     Toast.show({
                         type: "error",
@@ -85,8 +122,7 @@ const QuestionBox = ({ questionnaireId }) => {
                 },
             });
         });
-
-        closedQuestions.forEach((question) => {
+        const closedQuestionPromises = closedQuestions.map((question) => {
             const { type, points, question: questionText } = question;
             const questionWithId = {
                 questionnaire: questionnaireId,
@@ -95,14 +131,56 @@ const QuestionBox = ({ questionnaireId }) => {
                 points,
             };
 
-            mutate(questionWithId);
+            return new Promise((resolve, reject) => {
+                mutate(questionWithId, {
+                    onSuccess: () => {
+                        resolve(null);
+                    },
+                    onError: (error) => {
+                        Toast.show({
+                            type: "error",
+                            text1: "Error",
+                            text2: error.message,
+                        });
+                        reject(error);
+                    },
+                });
+            });
         });
-        setClosedQuestionsProcessed(true);
 
-        const questionsData = questions?.map((question) => ({
-            id: question.id,
-            question: question.question,
-        }));
+        try {
+            await Promise.all(closedQuestionPromises);
+            setClosedQuestionsProcessed(true);
+        } catch (error) {
+            console.error("Error posting closed questions:", error);
+        }
+
+        const closedQuestionsToSend: closedQuestionToSend[] =
+            closedQuestions.flatMap((closedQuestion) => {
+                // Trouver l'ID de la question correspondante dans refetchedQuestions
+                const refetchedQuestion = refetchQuestionsData.find(
+                    (refetchedQuestion) =>
+                        refetchedQuestion.question == closedQuestion.question,
+                );
+
+                if (!refetchedQuestion) {
+                    // Si aucune question correspondante n'est trouvée dans refetchedQuestions, retourner un tableau vide
+                    return [];
+                }
+
+                console.log("refetchedQuestion", refetchedQuestion);
+
+                // Transformer chaque option de ClosedQuestion en un objet closedQuestionToSend
+                return closedQuestion.options.map(([option, checked]) => ({
+                    question: refetchedQuestion.id,
+                    options: option,
+                    checked,
+                }));
+            });
+
+        for (const closedQuestion of closedQuestionsToSend) {
+            mutateOption(closedQuestion);
+        }
     };
     return (
         <View style={styles.container}>
@@ -130,7 +208,15 @@ const QuestionBox = ({ questionnaireId }) => {
             <View style={styles.saveButtonContainer}>
                 <Button
                     title="Sauvegarder le questionnaire"
-                    onPress={handleSaveOpenQuestions}
+                    onPress={() => {
+                        handleSaveOpenQuestions();
+                    }}
+                />
+                <Button
+                    title="envoyer le questionnaire"
+                    onPress={() => {
+                        handleSaveOpenQuestions();
+                    }}
                 />
             </View>
             <Modal
@@ -142,8 +228,13 @@ const QuestionBox = ({ questionnaireId }) => {
                 }}
             >
                 <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Choisir le type de question :</Text>
-                    <Button title="Question ouverte" onPress={handleOpenQuestion} />
+                    <Text style={styles.modalText}>
+                        Choisir le type de question :
+                    </Text>
+                    <Button
+                        title="Question ouverte"
+                        onPress={handleOpenQuestion}
+                    />
                     <Button
                         title="Question fermée"
                         onPress={() => {
@@ -151,7 +242,10 @@ const QuestionBox = ({ questionnaireId }) => {
                             setModalVisible(false);
                         }}
                     />
-                    <Button title="Annuler" onPress={() => setModalVisible(false)} />
+                    <Button
+                        title="Annuler"
+                        onPress={() => setModalVisible(false)}
+                    />
                 </View>
             </Modal>
         </View>
@@ -216,22 +310,28 @@ const ClosedQuestionBox = ({ id, setClosedQuestions, questionnaireId }) => {
     const handleCheck = (index) => {
         setOptions((prevOptions) => {
             const newOptions = [...prevOptions];
-            newOptions[index] = [newOptions[index][0], !newOptions[index][1]] as [
-                string,
-                boolean,
-            ];
+            newOptions[index] = [
+                newOptions[index][0],
+                !newOptions[index][1],
+            ] as [string, boolean];
             return newOptions;
         });
     };
 
     const handleAddOption = () => {
-        setOptions((prevOptions) => [...prevOptions, ["", false] as [string, boolean]]);
+        setOptions((prevOptions) => [
+            ...prevOptions,
+            ["", false] as [string, boolean],
+        ]);
     };
 
     const handleOptionChange = (text, index) => {
         setOptions((prevOptions) => {
             const newOptions = [...prevOptions];
-            newOptions[index] = [text, newOptions[index][1]] as [string, boolean];
+            newOptions[index] = [text, newOptions[index][1]] as [
+                string,
+                boolean,
+            ];
             return newOptions;
         });
     };
@@ -256,7 +356,6 @@ const ClosedQuestionBox = ({ id, setClosedQuestions, questionnaireId }) => {
             text2: "question enregistrée",
         });
     };
-    console.log(options);
     return (
         <View style={styles.closedQuestionContainer}>
             <Text style={styles.questionText}>Choix multiple #{id + 1}</Text>

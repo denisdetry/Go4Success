@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 import DateTimePicker, { DateType, ModeType } from "react-native-ui-datepicker";
 import dayjs from "dayjs";
 
@@ -19,7 +19,9 @@ const DatePicker: React.FC<DatePickerProps> = ({ onDateRangeChange }) => {
         endDate: DateType;
     }>({ startDate: undefined, endDate: undefined });
 
-    type ParamsType = { date: DateType } | { startDate: DateType; endDate: DateType };
+    type ParamsType =
+        | { date: DateType }
+        | { startDate: DateType; endDate: DateType };
 
     const onChange = useCallback(
         (params: ParamsType) => {

@@ -1,14 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { SelectItem } from "@/components/SelectSearch";
+import { SelectItem } from "@/types/SelectItem";
 import { fetchBackend } from "@/utils/fetchBackend";
+import { useTranslation } from "react-i18next";
 
 export type Site = {
     id: string;
     name: string;
 };
 
-export function useSites(siteId?: string) {
-    const backend_url = process.env.EXPO_PUBLIC_API_URL;
+export function useSites(siteId?: string, allValues: boolean = false) {
+    const { t } = useTranslation();
 
     const {
         isPending,
@@ -30,10 +31,20 @@ export function useSites(siteId?: string) {
                 throw new Error(error);
             }
 
-            return data.map((site: { name: any; id: any }) => ({
-                label: site.name,
-                value: site.id,
-            }));
+            const sitesList = data.map(
+                (site: { id: string; name: string }) => ({
+                    key: site.id,
+                    value: site.name,
+                }),
+            );
+            if (allValues) {
+                return [
+                    { key: "", value: t("translationHooks.AllValuesM") },
+                    ...sitesList,
+                ];
+            } else {
+                return sitesList;
+            }
         },
     });
 

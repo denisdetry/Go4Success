@@ -55,8 +55,14 @@ export function usePostQuestionnaire() {
 }
 
 export function usePostQuestion() {
+    const queryClient = useQueryClient(); // Assurez-vous d'importer useQueryClient
+
     return useMutation({
         mutationFn: postQuestion,
+        onSettled: () => {
+            // Ici, invalidez et rafraîchissez toutes les requêtes dépendantes
+            queryClient.invalidateQueries(["getQuestions"]);
+        },
     });
 }
 
@@ -110,13 +116,16 @@ async function postQuestionnaire(questionnaireData) {
 async function postQuestion(questionData) {
     const backend_url = process.env.EXPO_PUBLIC_API_URL;
 
-    const response = await fetch(`${backend_url}/postquestionnaire/postquestion/`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
+    const response = await fetch(
+        `${backend_url}/postquestionnaire/postquestion/`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(questionData),
         },
-        body: JSON.stringify(questionData),
-    });
+    );
 
     if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -128,13 +137,16 @@ async function postQuestion(questionData) {
 async function usePostOpenQuestion(questionOpenData) {
     const backend_url = process.env.EXPO_PUBLIC_API_URL;
 
-    const response = await fetch(`${backend_url}/postquestionnaire/openquestion/`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
+    const response = await fetch(
+        `${backend_url}/postquestionnaire/openquestion/`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(questionOpenData),
         },
-        body: JSON.stringify(questionOpenData),
-    });
+    );
 
     if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -143,16 +155,25 @@ async function usePostOpenQuestion(questionOpenData) {
     return response.json();
 }
 
-async function usePostClosedQuestion(questionClosedData) {
+export function usePostClosedQuestion() {
+    return useMutation({
+        mutationFn: postClosedQuestion,
+    });
+}
+
+async function postClosedQuestion(questionClosedData) {
     const backend_url = process.env.EXPO_PUBLIC_API_URL;
 
-    const response = await fetch(`${backend_url}/postquestionnaire/closedquestion/`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
+    const response = await fetch(
+        `${backend_url}/postquestionnaire/closedquestion/`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(questionClosedData),
         },
-        body: JSON.stringify(questionClosedData),
-    });
+    );
 
     if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -164,7 +185,7 @@ async function usePostClosedQuestion(questionClosedData) {
 export function useGetQuestions() {
     const backend_url = process.env.EXPO_PUBLIC_API_URL;
 
-    const { data, error, isLoading } = useQuery({
+    const { data, error, isLoading, refetch } = useQuery({
         queryKey: "getQuestions",
         queryFn: async () => {
             const response = await fetchBackend({
@@ -184,5 +205,5 @@ export function useGetQuestions() {
         },
     });
 
-    return { data, error, isLoading };
+    return { data, error, isLoading, refetch };
 }

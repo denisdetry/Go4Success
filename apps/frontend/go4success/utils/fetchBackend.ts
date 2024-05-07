@@ -1,15 +1,14 @@
-//import { API_BASE_URL } from "@/constants/ConfigApp";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchError } from "@/utils/fetchError";
 import { t } from "i18next";
 
 export async function fetchBackend(options: {
-    readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE";
+    readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE" | "OPTIONS";
     url: string;
     readonly params?: any;
     readonly data?: any;
 }): Promise<any> {
-    const backendURL = process.env.EXPO_PUBLIC_API_URL;
+    const backendUrl = process.env.EXPO_PUBLIC_API_URL;
     const { type, params, data } = options;
     let { url } = options;
 
@@ -33,7 +32,7 @@ export async function fetchBackend(options: {
         });
     }
 
-    const response = await fetch(`${backendURL}/` + url, {
+    const response = await fetch(`${backendUrl}/` + url, {
         method: type,
         credentials: "include",
         headers,
@@ -49,6 +48,9 @@ export async function fetchBackend(options: {
             return { data: "success" };
         }
     } else {
-        throw new fetchError(t("translationProfile.defaultErrorMessage"), response);
+        throw new fetchError(
+            t("translationProfile.defaultErrorMessage"),
+            response,
+        );
     }
 }

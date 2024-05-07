@@ -102,6 +102,9 @@
         "LoginSuccessText2": "Successful login! Welcome to Go4Success",
         "LoginInfoErrorText2": "Incorrect username or password. Please try again.",
         "RegisterSuccessText2": "Successful registration! Welcome to Go4Success",
+        "UnregisterActivityErrorText2": "An error occurred while unregistering for the workshop",
+        "AlreadyUnregisteredActivityText2": "You are already unregistered for this workshop",
+        "UnregisterActivitySuccessText2": "You have successfully unregistered for the workshop",
         "LogoutSuccessText1": "Successful logout",
         "LogoutSuccessText2": "See you soon on Go4Success! \uD83D\uDE0A",
         "RegisterActivitySuccessText2": "You are perfectly registered for the workshop:",
@@ -113,6 +116,7 @@
     },
     "translateRegisterActivity": {
         "registerButton": "Sign up",
+        "unregisterButton": "Unregister",
         "closeButton": "Close"
     },
     "translateCard": {

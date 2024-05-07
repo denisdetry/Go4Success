@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import {
     Modal,
+    ScrollView,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -138,6 +139,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 language={activity.language ? activity.language.name : ""}
                 dateEnd={activity.date_end}
                 attendOrActivity={filterType}
+                isAttend={filterType === "attend"}
             />
         );
     };
@@ -201,13 +203,8 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                 visible={modalVisible}
                 onRequestClose={toggleModal}
             >
-                <View style={modalStyle.centeredView}>
-                    <ScrollView
-                        contentContainerStyle={[
-                            modalStyle.modalView,
-                            { padding: 35 },
-                        ]}
-                    >
+                <ScrollView contentContainerStyle={modalStyle.centeredView}>
+                    <View style={[modalStyle.modalView, { padding: 35 }]}>
                         <TouchableOpacity
                             style={modalStyle.closeButton}
                             onPress={() => {
@@ -305,8 +302,8 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
                                 buttonType={"secondary"}
                             />
                         </View>
-                    </ScrollView>
-                </View>
+                    </View>
+                </ScrollView>
             </Modal>
 
             {/* Cards views for registered activity or filtered */}

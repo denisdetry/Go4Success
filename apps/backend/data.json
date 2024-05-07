@@ -1,341 +1,287 @@
 [
-  {
-    "model": "database.user",
-    "pk": 1,
-    "fields": {
-      "password": "pbkdf2_sha256$720000$2L1EpiCnU19qG7xtzDkgpb$F80d6t5MwiS+XMlQbdu9rg4e9wW8i9VeIiVMpDiMcpE=",
-      "username": "allmaxou",
-      "email": "max@gmail.com",
-      "first_name": "",
-      "last_name": "",
-      "noma": null,
-      "is_active": true,
-      "is_staff": true,
-      "is_superuser": true,
-      "date_join": "2024-05-05T20:37:20.975Z",
-      "last_login": "2024-05-05T20:38:36.041Z",
-      "groups": [],
-      "user_permissions": []
+    {
+        "model": "database.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$2L1EpiCnU19qG7xtzDkgpb$F80d6t5MwiS+XMlQbdu9rg4e9wW8i9VeIiVMpDiMcpE=",
+            "username": "allmaxou",
+            "email": "max@gmail.com",
+            "first_name": "",
+            "last_name": "",
+            "noma": null,
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "date_join": "2024-05-05T20:37:20.975Z",
+            "last_login": "2024-05-05T20:38:36.041Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "database.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$2L1EpiCnU19qG7xtzDkgpb$F80d6t5MwiS+XMlQbdu9rg4e9wW8i9VeIiVMpDiMcpE=",
+            "username": "student",
+            "email": "student@gmail.com",
+            "first_name": "FStudent",
+            "last_name": "LStudent",
+            "noma": "12345678",
+            "is_active": true,
+            "is_staff": false,
+            "is_superuser": false,
+            "date_join": "2024-05-05T20:40:23Z",
+            "last_login": null,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "database.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$2L1EpiCnU19qG7xtzDkgpb$F80d6t5MwiS+XMlQbdu9rg4e9wW8i9VeIiVMpDiMcpE=",
+            "username": "teacher",
+            "email": "teacher@gmail.com",
+            "first_name": "FTeacher",
+            "last_name": "LTeacher",
+            "noma": null,
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": false,
+            "date_join": "2024-05-05T20:40:45Z",
+            "last_login": null,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "database.user",
+        "pk": 4,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$3pc9akh2ajbCuUvJ3AR07M$V5ZKmrRi+rUDvYK9VU1o8TRQgqn4zgjJ+5gd2303b3M=",
+            "username": "uclouvainadmin",
+            "email": "admin@uclouvain.be",
+            "first_name": "Admin",
+            "last_name": "UCLouvain",
+            "noma": null,
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "date_join": "2024-05-05T21:21:13Z",
+            "last_login": null,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "database.course",
+        "pk": 1,
+        "fields": {
+            "code": "M01",
+            "name": "Math",
+            "user": 3
+        }
+    },
+    {
+        "model": "database.site",
+        "pk": 1,
+        "fields": {
+            "name": "Namur"
+        }
+    },
+    {
+        "model": "database.site",
+        "pk": 2,
+        "fields": {
+            "name": "Charleroi"
+        }
+    },
+    {
+        "model": "database.room",
+        "pk": 1,
+        "fields": {
+            "name": "I32",
+            "site": 1
+        }
+    },
+    {
+        "model": "database.room",
+        "pk": 2,
+        "fields": {
+            "name": "I32",
+            "site": 2
+        }
+    },
+    {
+        "model": "database.room",
+        "pk": 3,
+        "fields": {
+            "name": "I24",
+            "site": 1
+        }
+    },
+    {
+        "model": "database.language",
+        "pk": 1,
+        "fields": {
+            "name": "Français",
+            "code": "FR"
+        }
+    },
+    {
+        "model": "database.language",
+        "pk": 2,
+        "fields": {
+            "name": "English",
+            "code": "EN"
+        }
+    },
+    {
+        "model": "database.activity",
+        "pk": 1,
+        "fields": {
+            "type": "workshop",
+            "name": "Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
+            "description": "Trouver un équilibre entre les études et les loisirs est crucial pour maintenir une vie épanouissante et productive.",
+            "date_start": "2024-04-23T12:42:08Z",
+            "date_end": "2024-04-23T16:42:15Z",
+            "room": 1,
+            "course": null,
+            "language": 1
+        }
+    },
+    {
+        "model": "database.activity",
+        "pk": 2,
+        "fields": {
+            "type": "workshop",
+            "name": "Math recap",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+            "date_start": "2024-05-12T20:42:45Z",
+            "date_end": "2024-05-12T21:42:52Z",
+            "room": 2,
+            "course": 1,
+            "language": 1
+        }
+    },
+    {
+        "model": "database.activity",
+        "pk": 3,
+        "fields": {
+            "type": "workshop",
+            "name": "Atelier planning #FR",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+            "date_start": "2024-06-23T20:43:38Z",
+            "date_end": "2024-06-23T21:43:42Z",
+            "room": 2,
+            "course": null,
+            "language": 1
+        }
+    },
+    {
+        "model": "database.activity",
+        "pk": 4,
+        "fields": {
+            "type": "workshop",
+            "name": "Atelier planning #EN",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+            "date_start": "2024-06-23T20:44:09Z",
+            "date_end": "2024-06-23T21:44:10Z",
+            "room": 3,
+            "course": null,
+            "language": 2
+        }
+    },
+    {
+        "model": "database.activity",
+        "pk": 5,
+        "fields": {
+            "type": "workshop",
+            "name": "Remédiation",
+            "description": "Lorem ipsum",
+            "date_start": "2024-05-09T12:00:00Z",
+            "date_end": "2024-05-09T15:15:00Z",
+            "room": 1,
+            "course": null,
+            "language": 1
+        }
+    },
+    {
+        "model": "database.activity",
+        "pk": 6,
+        "fields": {
+            "type": "workshop",
+            "name": "Remédiation",
+            "description": "Lorem ipsum",
+            "date_start": "2024-05-10T12:00:00Z",
+            "date_end": "2024-05-10T15:15:00Z",
+            "room": 1,
+            "course": null,
+            "language": 1
+        }
+    },
+    {
+        "model": "database.attend",
+        "pk": 2,
+        "fields": {
+            "activity": 1,
+            "student": 2
+        }
+    },
+    {
+        "model": "database.teacher",
+        "pk": 3,
+        "fields": {
+            "is_tutor": false,
+            "is_professor": true
+        }
+    },
+    {
+        "model": "database.teacher",
+        "pk": 4,
+        "fields": {
+            "is_tutor": false,
+            "is_professor": true
+        }
+    },
+    {
+        "model": "database.give",
+        "pk": 1,
+        "fields": {
+            "activity": 2,
+            "teacher": 3
+        }
+    },
+    {
+        "model": "database.feedback",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "activity": 1,
+            "positive_point": true,
+            "negative_point": true,
+            "suggestion": true,
+            "additional_comment": false,
+            "date_start": "2024-05-05",
+            "date_end": "2024-06-30"
+        }
+    },
+    {
+        "model": "database.feedbackadditionalquestions",
+        "pk": 1,
+        "fields": {
+            "feedback": 1,
+            "question": "Que penses-tu des cours cette année ?"
+        }
+    },
+    {
+        "model": "database.feedbackadditionalquestions",
+        "pk": 2,
+        "fields": {
+            "feedback": 1,
+            "question": "Disposez-vous de loisirs ?"
+        }
     }
-  },
-  {
-    "model": "database.user",
-    "pk": 2,
-    "fields": {
-      "password": "pbkdf2_sha256$720000$2L1EpiCnU19qG7xtzDkgpb$F80d6t5MwiS+XMlQbdu9rg4e9wW8i9VeIiVMpDiMcpE=",
-      "username": "student",
-      "email": "student@gmail.com",
-      "first_name": "FStudent",
-      "last_name": "LStudent",
-      "noma": "12345678",
-      "is_active": true,
-      "is_staff": false,
-      "is_superuser": false,
-      "date_join": "2024-05-05T20:40:23Z",
-      "last_login": null,
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "database.user",
-    "pk": 3,
-    "fields": {
-      "password": "pbkdf2_sha256$720000$2L1EpiCnU19qG7xtzDkgpb$F80d6t5MwiS+XMlQbdu9rg4e9wW8i9VeIiVMpDiMcpE=",
-      "username": "teacher",
-      "email": "teacher@gmail.com",
-      "first_name": "FTeacher",
-      "last_name": "LTeacher",
-      "noma": null,
-      "is_active": true,
-      "is_staff": true,
-      "is_superuser": false,
-      "date_join": "2024-05-05T20:40:45Z",
-      "last_login": null,
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "database.user",
-    "pk": 4,
-    "fields": {
-      "password": "pbkdf2_sha256$720000$3pc9akh2ajbCuUvJ3AR07M$V5ZKmrRi+rUDvYK9VU1o8TRQgqn4zgjJ+5gd2303b3M=",
-      "username": "uclouvainadmin",
-      "email": "admin@uclouvain.be",
-      "first_name": "Admin",
-      "last_name": "UCLouvain",
-      "noma": null,
-      "is_active": true,
-      "is_staff": true,
-      "is_superuser": true,
-      "date_join": "2024-05-05T21:21:13Z",
-      "last_login": null,
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "database.course",
-    "pk": 1,
-    "fields": {
-      "code": "M01",
-      "name": "Math",
-      "user": 3
-    }
-  },
-  {
-    "model": "database.site",
-    "pk": 1,
-    "fields": {
-      "name": "Namur"
-    }
-  },
-  {
-    "model": "database.site",
-    "pk": 2,
-    "fields": {
-      "name": "Charleroi"
-    }
-  },
-  {
-    "model": "database.room",
-    "pk": 1,
-    "fields": {
-      "name": "I32",
-      "site": 1
-    }
-  },
-  {
-    "model": "database.room",
-    "pk": 2,
-    "fields": {
-      "name": "I32",
-      "site": 2
-    }
-  },
-  {
-    "model": "database.room",
-    "pk": 3,
-    "fields": {
-      "name": "I24",
-      "site": 1
-    }
-  },
-  {
-    "model": "database.language",
-    "pk": 1,
-    "fields": {
-      "name": "Français",
-      "code": "FR"
-    }
-  },
-  {
-    "model": "database.language",
-    "pk": 2,
-    "fields": {
-      "name": "English",
-      "code": "EN"
-    }
-  },
-  {
-    "model": "database.activity",
-    "pk": 1,
-    "fields": {
-      "type": "workshop",
-      "name": "Comment concilier l'étude et les loisirs et construire un bon planning hebdomadaire ?",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-      "date_start": "2024-04-23T12:42:08Z",
-      "date_end": "2024-04-23T16:42:15Z",
-      "room": 1,
-      "course": null,
-      "language": 1
-    }
-  },
-  {
-    "model": "database.activity",
-    "pk": 2,
-    "fields": {
-      "type": "workshop",
-      "name": "Math recap",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-      "date_start": "2024-05-12T20:42:45Z",
-      "date_end": "2024-05-12T21:42:52Z",
-      "room": 2,
-      "course": 1,
-      "language": 1
-    }
-  },
-  {
-    "model": "database.activity",
-    "pk": 3,
-    "fields": {
-      "type": "workshop",
-      "name": "Atelier planning #FR",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-      "date_start": "2024-06-23T20:43:38Z",
-      "date_end": "2024-06-23T21:43:42Z",
-      "room": 2,
-      "course": null,
-      "language": 1
-    }
-  },
-  {
-    "model": "database.activity",
-    "pk": 4,
-    "fields": {
-      "type": "workshop",
-      "name": "Atelier planning #EN",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-      "date_start": "2024-06-23T20:44:09Z",
-      "date_end": "2024-06-23T21:44:10Z",
-      "room": 3,
-      "course": null,
-      "language": 2
-    }
-  },
-  {
-    "model": "database.activity",
-    "pk": 5,
-    "fields": {
-      "type": "workshop",
-      "name": "Remédiation",
-      "description": "Lorem ipsum",
-      "date_start": "2024-05-09T12:00:00Z",
-      "date_end": "2024-05-09T15:15:00Z",
-      "room": 1,
-      "course": null,
-      "language": 1
-    }
-  },
-  {
-    "model": "database.activity",
-    "pk": 6,
-    "fields": {
-      "type": "workshop",
-      "name": "Remédiation",
-      "description": "Lorem ipsum",
-      "date_start": "2024-05-10T12:00:00Z",
-      "date_end": "2024-05-10T15:15:00Z",
-      "room": 1,
-      "course": null,
-      "language": 1
-    }
-  },
-  {
-    "model": "database.attend",
-    "pk": 2,
-    "fields": {
-      "activity": 1,
-      "student": 2
-    }
-  },
-  {
-    "model": "database.teacher",
-    "pk": 3,
-    "fields": {
-      "is_tutor": false,
-      "is_professor": true
-    }
-  },
-  {
-    "model": "database.teacher",
-    "pk": 4,
-    "fields": {
-      "is_tutor": false,
-      "is_professor": true
-    }
-  },
-  {
-    "model": "database.give",
-    "pk": 1,
-    "fields": {
-      "activity": 2,
-      "teacher": 3
-    }
-  },
-  {
-    "model": "database.feedback",
-    "pk": 1,
-    "fields": {
-      "user": 1,
-      "activity": 1,
-      "positive_point": true,
-      "negative_point": true,
-      "suggestion": true,
-      "additional_comment": false,
-      "date_start": "2024-05-05",
-      "date_end": "2024-06-30"
-    }
-  },
-  {
-    "model": "database.feedbackadditionalquestions",
-    "pk": 1,
-    "fields": {
-      "feedback": 1,
-      "question": "Que pense tu de la 1er question ?"
-    }
-  },
-  {
-    "model": "database.feedbackadditionalquestions",
-    "pk": 2,
-    "fields": {
-      "feedback": 1,
-      "question": "La version mobile est correct ?"
-    }
-  },
-  {
-    "model": "database.feedbackstudent",
-    "pk": 10,
-    "fields": {
-      "student": 2,
-      "feedback": 1,
-      "evaluation": 4,
-      "positive_point": "trÞs chouette",
-      "negative_point": "rien Ó dire",
-      "suggestion": "",
-      "additional_comment": null,
-      "date_submitted": "2024-05-06"
-    }
-  },
-  {
-    "model": "database.feedbackstudentadditionalquestions",
-    "pk": 3,
-    "fields": {
-      "student": 2,
-      "feedback": 1,
-      "question": 1,
-      "answer": "Super question je trouve"
-    }
-  },
-  {
-    "model": "database.feedbackstudentadditionalquestions",
-    "pk": 4,
-    "fields": {
-      "student": 2,
-      "feedback": 1,
-      "question": 2,
-      "answer": "yep"
-    }
-  },
-  {
-    "model": "database.feedbackstudentadditionalquestions",
-    "pk": 5,
-    "fields": {
-      "student": 2,
-      "feedback": 1,
-      "question": 1,
-      "answer": "Bonne question"
-    }
-  },
-  {
-    "model": "database.feedbackstudentadditionalquestions",
-    "pk": 6,
-    "fields": {
-      "student": 2,
-      "feedback": 1,
-      "question": 2,
-      "answer": "C'est correct"
-    }
-  }
 ]

@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 
-from database.models import Activity, Attend, Room, Site, Language
+from database.models import Activity, Attend, Give, Room, Site, Language
 from django.db.models import Q
 from django.utils import timezone
 from rest_framework import viewsets, permissions, status
@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import SiteSerializer, ActivitySerializer, \
+from .serializers import GiveSerializer, SiteSerializer, ActivitySerializer, \
     AttendSerializer, RoomSerializer, RegisterToActivitySerializer, \
     LanguageSerializer, ActivityCreateSerializer, GiveSerializer
 
@@ -59,8 +59,10 @@ class ActivityViewSet(viewsets.ModelViewSet):
         data['language'] = data['language']['key']
 
         # Get time and date and convert to local time
-        data['date_start'] = timezone.localtime(datetime.fromisoformat(data['dateStart']))
-        data['date_end'] = timezone.localtime(datetime.fromisoformat(data['dateEnd']))
+        data['date_start'] = timezone.localtime(
+            datetime.fromisoformat(data['dateStart']))
+        data['date_end'] = timezone.localtime(
+            datetime.fromisoformat(data['dateEnd']))
 
         serializer = ActivityCreateSerializer(data=data)
         serializer.is_valid(raise_exception=True)
@@ -90,6 +92,7 @@ class AttendViewSet(viewsets.ModelViewSet):
 
 def filter_queryset(self, qs, param=""):
     none = [None, 'undefined', 'null', '']
+    id = self.request.query_params.get('id')
     name = self.request.query_params.get('name')
     site = self.request.query_params.get('site')
     room = self.request.query_params.get('room')
@@ -97,6 +100,8 @@ def filter_queryset(self, qs, param=""):
     date_end = self.request.query_params.get('date_end')
     language = self.request.query_params.get(
         'language')
+    if id not in none:
+        qs = qs.filter(**{f"{param}id": id})
     if name not in none:
         qs = qs.filter(**{f"{param}name__icontains": name})
     if site not in none:
@@ -121,7 +126,6 @@ def filter_queryset(self, qs, param=""):
 
 class RegisterToActivityView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
-
     queryset = Attend.objects.all()
     serializer_class = RegisterToActivitySerializer
 
@@ -140,3 +144,20 @@ class UnregisterFromActivityView(APIView):
 
         except json.JSONDecodeError:
             return Response({'message': 'Invalid JSON'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GiveViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Give.objects.all()
+    serializer_class = GiveSerializer
+
+    def get_queryset(self):
+        none = [None, 'undefined', 'null', '']
+        qs = super().get_queryset()
+        activity = self.request.query_params.get('activity', None)
+        teacher = self.request.query_params.get('teacher', None)
+        if activity not in none:
+            qs = qs.filter(activity_id=activity)
+        if teacher not in none:
+            qs = qs.filter(teacher_id=teacher)
+        return qs

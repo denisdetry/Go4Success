@@ -53,7 +53,16 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
 
     const deniedRoutesForNonSuperUser = [["(app)", "rolemanagement"]];
 
-    const deniedRoutesForNonStaff = [["(app)", "activities", "add"]];
+    const deniedRoutesForNonStaff = [
+        [
+            "(app)",
+            "activities",
+            "add",
+            "feedbackcreate",
+            "feedbacklistdetails",
+            "feedbacklist",
+        ],
+    ];
 
     const isSuperUser = user?.is_superuser;
 

@@ -18,6 +18,12 @@ import { queryClient } from "@/app/_layout";
 import { useMutation } from "@tanstack/react-query";
 import { fetchError } from "@/utils/fetchError";
 import { Ionicons } from "@expo/vector-icons";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
+
+type RootStackParamList = {
+    feedbackanswer: { activityId: string };
+};
 
 interface CardProps {
     readonly id: string;
@@ -29,97 +35,126 @@ interface CardProps {
     readonly description: string;
     readonly language: string;
     readonly isAttend: boolean;
+    readonly dateEnd: string;
+    readonly attendOrActivity: string;
 }
 
+type FeedbackAnswerScreenNavigationProp = StackNavigationProp<
+    RootStackParamList,
+    "feedbackanswer"
+>;
+
 const styleFunctions = {
-    getModalViewTitleStyle: (type: string) => {
-        switch (type) {
-            case "Important":
-                return {
-                    ...styles.modalViewTitle,
-                    backgroundColor: Colors.importantColor,
-                };
-            case "Warning":
-                return {
-                    ...styles.modalViewTitle,
-                    backgroundColor: Colors.warningColor,
-                };
-            case "Appointment":
-                return {
-                    ...styles.modalViewTitle,
-                    backgroundColor: Colors.appointmentColor,
-                };
-            case "Workshop":
-                return {
-                    ...styles.modalViewTitle,
-                    backgroundColor: Colors.workshopColor,
-                };
-            default:
-                return {
-                    ...styles.modalViewTitle,
-                    backgroundColor: Colors.primaryColor,
-                };
+    getModalViewTitleStyle: (
+        type: string,
+        newDateEnd: Date,
+        currentDate: Date,
+    ) => {
+        if (newDateEnd > currentDate) {
+            switch (type) {
+                case "Important":
+                    return {
+                        ...styles.modalViewTitle,
+                        backgroundColor: Colors.importantColor,
+                    };
+                case "Warning":
+                    return {
+                        ...styles.modalViewTitle,
+                        backgroundColor: Colors.warningColor,
+                    };
+                case "Appointment":
+                    return {
+                        ...styles.modalViewTitle,
+                        backgroundColor: Colors.appointmentColor,
+                    };
+                case "Workshop":
+                    return {
+                        ...styles.modalViewTitle,
+                        backgroundColor: Colors.workshopColor,
+                    };
+                default:
+                    return {
+                        ...styles.modalViewTitle,
+                        backgroundColor: Colors.primaryColor,
+                    };
+            }
         }
+        return {
+            ...styles.modalViewTitle,
+            backgroundColor: Colors.workshopColorDateEnd,
+        };
     },
 
-    getModalDataStyle: (type: string) => {
-        switch (type) {
-            case "Important":
-                return {
-                    ...styles.modalData,
-                    backgroundColor: Colors.importantLightColor,
-                };
-            case "Warning":
-                return {
-                    ...styles.modalData,
-                    backgroundColor: Colors.warningLightColor,
-                };
-            case "Appointment":
-                return {
-                    ...styles.modalData,
-                    backgroundColor: Colors.appointmentLightColor,
-                };
-            case "Workshop":
-                return {
-                    ...styles.modalData,
-                    backgroundColor: Colors.workshopLightColor,
-                };
-            default:
-                return {
-                    ...styles.modalData,
-                    backgroundColor: Colors.normalLightColor,
-                };
+    getModalDataStyle: (type: string, newDateEnd: Date, currentDate: Date) => {
+        if (newDateEnd > currentDate) {
+            switch (type) {
+                case "Important":
+                    return {
+                        ...styles.modalData,
+                        backgroundColor: Colors.importantLightColor,
+                    };
+                case "Warning":
+                    return {
+                        ...styles.modalData,
+                        backgroundColor: Colors.warningLightColor,
+                    };
+                case "Appointment":
+                    return {
+                        ...styles.modalData,
+                        backgroundColor: Colors.appointmentLightColor,
+                    };
+                case "Workshop":
+                    return {
+                        ...styles.modalData,
+                        backgroundColor: Colors.workshopLightColor,
+                    };
+                default:
+                    return {
+                        ...styles.modalData,
+                        backgroundColor: Colors.normalLightColor,
+                    };
+            }
         }
+        return {
+            ...styles.modalData,
+            backgroundColor: Colors.workshopLightColor,
+        };
     },
 
-    getCardStyle: (type: string) => {
-        switch (type) {
-            case "Important":
-                return {
-                    ...styles.card,
-                    backgroundColor: Colors.importantColor,
-                };
-            case "Warning":
-                return {
-                    ...styles.card,
-                    backgroundColor: Colors.warningColor,
-                };
-            case "Appointment":
-                return {
-                    ...styles.card,
-                    backgroundColor: Colors.appointmentColor,
-                };
-            case "Workshop":
-                return {
-                    ...styles.card,
-                    backgroundColor: Colors.workshopColor,
-                };
-            default:
-                return {
-                    ...styles.card,
-                    backgroundColor: Colors.primaryColor,
-                };
+    getCardStyle: (type: string, newDateEnd: Date, currentDate: Date) => {
+        if (newDateEnd > currentDate) {
+            switch (type) {
+                case "Important":
+                    return {
+                        ...styles.card,
+                        backgroundColor: Colors.importantColor,
+                    };
+                case "Warning":
+                    return {
+                        ...styles.card,
+                        backgroundColor: Colors.warningColor,
+                    };
+                case "Appointment":
+                    return {
+                        ...styles.card,
+                        backgroundColor: Colors.appointmentColor,
+                    };
+                case "Workshop":
+                    return {
+                        ...styles.card,
+                        backgroundColor: Colors.workshopColor,
+                    };
+                default:
+                    return {
+                        ...styles.card,
+                        backgroundColor: Colors.primaryColor,
+                    };
+            }
         }
+        return {
+            ...styles.card,
+            backgroundColor: Colors.workshopColorDateEnd,
+        };
     },
 };
 
@@ -133,10 +168,24 @@ const Card: React.FC<CardProps> = ({
     description,
     language,
     isAttend,
+    dateEnd,
+    attendOrActivity,
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const { user } = useAuth();
     const { t } = useTranslation();
+    const navigation = useNavigation<FeedbackAnswerScreenNavigationProp>();
+    const currentDate = new Date();
+    const [datePart, timePart] = dateEnd?.split(" - ") || [];
+    const [day, month, year] = datePart?.split("-") || [];
+    const [partHour, partMinute] = timePart?.split(":") || [];
+    const newDateEnd = new Date(
+        parseInt(year),
+        parseInt(month) - 1,
+        parseInt(day),
+        parseInt(partHour),
+        parseInt(partMinute),
+    );
 
     const handleRegister = useMutation({
         mutationFn: async () => {
@@ -283,7 +332,11 @@ const Card: React.FC<CardProps> = ({
                 <View style={styles.centeredViewModal}>
                     <View style={styles.modalView}>
                         <View
-                            style={styleFunctions.getModalViewTitleStyle(type)}
+                            style={styleFunctions.getModalViewTitleStyle(
+                                type,
+                                newDateEnd,
+                                currentDate,
+                            )}
                         >
                             <Text style={styles.modalTitle}>{title}</Text>
                             <TouchableOpacity
@@ -300,7 +353,11 @@ const Card: React.FC<CardProps> = ({
 
                         <View
                             style={[
-                                styleFunctions.getModalDataStyle(type),
+                                styleFunctions.getModalDataStyle(
+                                    type,
+                                    newDateEnd,
+                                    currentDate,
+                                ),
                                 {
                                     flexWrap: "wrap",
                                     justifyContent: "center",
@@ -337,17 +394,30 @@ const Card: React.FC<CardProps> = ({
 
                             <View style={styles.separator} />
                             <ModalTextComponent
-                                title={"Description"}
+                                title={t("translateCard.description")}
                                 content={description}
                             />
                         </View>
 
                         <View style={styles.buttonContainer}>
-                            <ButtonComponent
-                                text={registerButtonText}
-                                onPress={registerButtonOnPress}
-                                buttonType={"primary"}
-                            />
+                            {newDateEnd > currentDate ? (
+                                <ButtonComponent
+                                    text={registerButtonText}
+                                    onPress={registerButtonOnPress}
+                                    buttonType={"primary"}
+                                />
+                            ) : attendOrActivity === "attend" ? (
+                                <ButtonComponent
+                                    text={t("translateFeedback.feedback")}
+                                    onPress={() => {
+                                        navigation.navigate("feedbackanswer", {
+                                            activityId: id,
+                                        });
+                                        setModalVisible(false);
+                                    }}
+                                    buttonType={"secondary"}
+                                />
+                            ) : null}
                             <ButtonComponent
                                 text={t(
                                     "translateRegisterActivity.closeButton",
@@ -362,7 +432,11 @@ const Card: React.FC<CardProps> = ({
 
             {/* Card content */}
             <TouchableOpacity
-                style={styleFunctions.getCardStyle(type)}
+                style={styleFunctions.getCardStyle(
+                    type,
+                    newDateEnd,
+                    currentDate,
+                )}
                 onPress={() => setModalVisible(true)}
             >
                 <Text style={styles.title}>{title}</Text>

@@ -208,7 +208,15 @@ const QuestionBox = ({ questionnaireId }) => {
             <View style={styles.saveButtonContainer}>
                 <Button
                     title="Sauvegarder le questionnaire"
-                    onPress={handleSaveOpenQuestions}
+                    onPress={() => {
+                        handleSaveOpenQuestions();
+                    }}
+                />
+                <Button
+                    title="envoyer le questionnaire"
+                    onPress={() => {
+                        handleSaveOpenQuestions();
+                    }}
                 />
             </View>
             <Modal

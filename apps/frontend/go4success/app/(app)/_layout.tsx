@@ -210,7 +210,7 @@ export default function Layout() {
                         options={{
                             drawerItemStyle: {
                                 display:
-                                    user?.is_superuser || user?.isStaff
+                                    user?.is_superuser || user?.is_staff
                                         ? "flex"
                                         : "none",
                             },
@@ -227,6 +227,63 @@ export default function Layout() {
                                     color={color}
                                 />
                             ),
+                        }}
+                    />
+
+                    <Drawer.Screen
+                        name="feedbacklist"
+                        options={{
+                            drawerItemStyle: {
+                                display:
+                                    user?.is_superuser || user?.is_staff
+                                        ? "flex"
+                                        : "none",
+                            },
+                            drawerLabel: t("translateFeedback.show"),
+                            headerTitle: t("translateFeedback.show"),
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name="albums-outline"
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
+                    <Drawer.Screen
+                        name="feedbackcreate"
+                        options={{
+                            drawerItemStyle: {
+                                display:
+                                    user?.is_superuser || user?.is_staff
+                                        ? "flex"
+                                        : "none",
+                            },
+                            drawerLabel: t("translateFeedback.create"),
+                            headerTitle: t("translateFeedback.create"),
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name="create-outline"
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
+                    <Drawer.Screen
+                        name="feedbackanswer"
+                        options={{
+                            drawerItemStyle: {
+                                display: "none",
+                            },
+                        }}
+                    />
+                    <Drawer.Screen
+                        name="feedbacklistdetails"
+                        options={{
+                            drawerItemStyle: {
+                                display: "none",
+                            },
                         }}
                     />
                 </Drawer>

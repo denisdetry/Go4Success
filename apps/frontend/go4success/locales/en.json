@@ -109,7 +109,10 @@
         "LogoutSuccessText2": "See you soon on Go4Success! \uD83D\uDE0A",
         "RegisterActivitySuccessText2": "You are perfectly registered for the workshop:",
         "RegisterActivityErrorText2": "An error occurred when registering for the workshop",
-        "AlreadyRegisteredActivityText2": "You are already registered for this workshop"
+        "AlreadyRegisteredActivityText2": "You are already registered for this workshop",
+        "SelectSatisfaction": "Please select a satisfaction level",
+        "SelectActivity": "Please select an activity",
+        "AnswerAllQuestions": "Please answer all questions"
     },
     "translateRegisterActivity": {
         "registerButton": "Sign up",
@@ -121,7 +124,8 @@
         "hour": "Hour",
         "place": "Place",
         "type": "Type",
-        "language": "Language"
+        "language": "Language",
+        "description": "Description"
     },
     "translationActivities": {
         "addActivity": "Add an activity",
@@ -151,5 +155,37 @@
         "AllValuesM": "All",
         "AllValuesF": "All",
         "NoRoomsFound": "No rooms found"
+    },
+    "translateFeedback": {
+        "feedback": "Feedback",
+        "create": "Creating feedback",
+        "show": "See feedback",
+        "student": "Student",
+        "activity": "Activity",
+        "course": "Course",
+        "evaluation": "Evaluation",
+        "positivePoint": "Positive point",
+        "negativePoint": "Negative point",
+        "suggestion": "Suggestion",
+        "additionalComment": "Additional comment",
+        "dateSubmitted": "Date submitted",
+        "open": "Open",
+        "send": "Send",
+        "for": "Feedback for ",
+        "defaultSelect": "Default select",
+        "moreQuestions": "Additional questions",
+        "enterQuestion": "Enter your question",
+        "addQuestion": "Add more question",
+        "dateEnd": "Date end",
+        "nofeedback": "No feedback for this activity",
+        "answerTo": "Answer to question ",
+        "selectSatisfaction": "Select a satisfaction level"
+    },
+    "satisfactionLevels": {
+        "verySatisfied": "Very satisfied",
+        "satisfied": "Satisfied",
+        "neutral": "Neutral",
+        "unsatisfied": "Unsatisfied",
+        "veryUnsatisfied": "Very unsatisfied"
     }
 }

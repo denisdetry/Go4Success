@@ -8,21 +8,23 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
+import DateTimePicker, { DateType } from "react-native-ui-datepicker";
+import { useTranslation } from "react-i18next";
+
 import Card from "./Card";
 import ButtonComponent from "./ButtonComponent";
-import stylesGlobal from "../styles/global";
-import DateTimePicker, { DateType } from "react-native-ui-datepicker";
-import dayjs from "dayjs";
+import { convertDateToISO } from "@/utils/dateUtils";
+import RenderCarousel from "@/components/RenderCarousel";
 import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
 import { Activity, useActivities } from "@/hooks/useActivities";
-import { useTranslation } from "react-i18next";
-import RenderCarousel from "@/components/RenderCarousel";
 import { useLanguages } from "@/hooks/useLanguages";
 import modalStyle from "@/styles/modal";
-import { Ionicons } from "@expo/vector-icons";
-import Colors from "@/constants/Colors";
 import InputAutocomplete from "@/components/selectors/InputAutocomplete";
+import { Ionicons } from "@expo/vector-icons";
+
+import Colors from "../constants/Colors";
+import stylesGlobal from "../styles/global";
 
 interface Attend {
     activity: Activity;
@@ -49,10 +51,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
     const { sites, error: siteError } = useSites(undefined, true);
 
-    const { rooms, error: roomError } = useRooms(
-        selectedSiteKey ? selectedSiteKey : "",
-        true,
-    );
+    const { rooms, error: roomError } = useRooms(selectedSiteKey || "", true);
 
     const { languages, error: languageError } = useLanguages(undefined, true);
 
@@ -84,22 +83,9 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
         [setSelectedLanguageKey],
     );
 
-    const convertDateToISO = (date: DateType): string | null => {
-        if (date instanceof Date) {
-            return date.toISOString().split("T")[0];
-        } else if (typeof date === "string" && date !== "") {
-            return date;
-        } else if (typeof date === "number") {
-            return new Date(date).toISOString().split("T")[0];
-        } else if (date instanceof dayjs) {
-            return date.format("YYYY-MM-DD");
-        } else {
-            return null;
-        }
-    };
-
     const { data: registeredActivities } = useActivities(
         "attends",
+        "",
         searchName,
         selectedRoomKey,
         selectedSiteKey,
@@ -110,6 +96,7 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
 
     const { data: allActivities } = useActivities(
         "activity",
+        "",
         searchName,
         selectedRoomKey,
         selectedSiteKey,
@@ -121,22 +108,35 @@ const FilterActivity = ({ filterType }: FilterActivityProps) => {
     const renderCards = ({ item }: { item: ActivityOrAttend }) => {
         const activity = "activity" in item ? item.activity : item;
 
-        const activityDate = activity.date_start.split(" - ")[0];
-        const activityHour =
-            activity.date_start.split(" - ")[1] +
-            " - " +
-            activity.date_end.split(" - ")[1];
+        let activityDate = "";
+        let activityHour = "";
+
+        if (activity.date_start && activity.date_end) {
+            activityDate = activity.date_start.split(" - ")[0];
+            activityHour =
+                activity.date_start.split(" - ")[1] +
+                " - " +
+                activity.date_end.split(" - ")[1];
+        }
 
         return (
             <Card
                 id={activity.id}
                 title={activity.name}
-                location={activity.room.name + " - " + activity.room.site.name}
+                location={
+                    (activity.room ? activity.room.name : "") +
+                    " - " +
+                    (activity.room && activity.room.site
+                        ? activity.room.site.name
+                        : "")
+                }
                 date={activityDate}
                 hour={activityHour}
                 type={activity.type}
                 description={activity.description}
-                language={activity.language.name}
+                language={activity.language ? activity.language.name : ""}
+                dateEnd={activity.date_end}
+                attendOrActivity={filterType}
                 isAttend={filterType === "attend"}
             />
         );

@@ -1,9 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import Colors from "../constants/Colors";
+import { Ionicons } from "@expo/vector-icons";
 
 type ButtonComponentProps = {
-    readonly text: string;
+    readonly icon?: any;
+    readonly text?: string;
     readonly onPress: () => void;
     readonly buttonType:
         | "primary"
@@ -12,11 +14,13 @@ type ButtonComponentProps = {
         | "danger"
         | "close"
         | "clear"
-        | "filter";
+        | "filter"
+        | "littlePrimary";
     readonly style?: any;
 };
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({
+    icon,
     text,
     onPress,
     buttonType,
@@ -34,6 +38,12 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
         },
         primary: {
             backgroundColor: Colors.primaryColor,
+        },
+        littlePrimary: {
+            backgroundColor: Colors.primaryColor,
+            borderRadius: 10,
+            padding: 5,
+            margin: 2,
         },
         secondary: {
             backgroundColor: Colors.secondaryColor,
@@ -69,6 +79,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
             style={[styles.common, styles[buttonType], style]}
             onPress={onPress}
         >
+            {icon && <Ionicons name={icon} size={35} color="white" />}
             <Text style={styles.common}>{text}</Text>
         </TouchableOpacity>
     );

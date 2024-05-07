@@ -1,13 +1,15 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .views import ActivityViewSet, SiteViewSet, AttendViewSet, RoomViewSet, RegisterToActivityView, LanguageViewSet, UnregisterFromActivityView
+from .views import ActivityViewSet, SiteViewSet, AttendViewSet, RoomViewSet, \
+    RegisterToActivityView, LanguageViewSet, UnregisterFromActivityView, GiveViewSet
 
 router = DefaultRouter()
 
 router.register(r'sites', SiteViewSet, basename='sites')
 router.register(r'attends', AttendViewSet, basename='attends')
 router.register(r'rooms', RoomViewSet, basename='rooms')
+router.register(r'give', GiveViewSet, basename='give')
 router.register(r'activity', ActivityViewSet, basename='activity')
 router.register(r'create', ActivityViewSet, basename='create')
 router.register(r'register_activity', RegisterToActivityView,

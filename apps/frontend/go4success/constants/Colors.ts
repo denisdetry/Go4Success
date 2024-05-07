@@ -9,6 +9,7 @@ const importantColor = "#92241D";
 const warningColor = "#B57A23";
 const appointmentColor = "#146200";
 const workshopColor = "#11324F";
+const workshopColorDateEnd = "#2f3d4a";
 
 const importantLightColor = "#D1BBBB";
 const warningLightColor = "#d4b485";
@@ -46,4 +47,5 @@ export default {
     appointmentLightColor,
     workshopLightColor,
     lightBackgroundColor,
+    workshopColorDateEnd,
 };

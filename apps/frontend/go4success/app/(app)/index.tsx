@@ -1,6 +1,5 @@
 import { ScrollView, Text, View } from "react-native";
 import React, { useState } from "react";
-import { FlatList } from "react-native-gesture-handler";
 import styles from "@/styles/global";
 import { useAuth } from "@/context/Auth";
 import { useTranslation } from "react-i18next";
@@ -44,21 +43,21 @@ export default function Index() {
             </View>
 
             {/* Message container */}
-            <View style={styles.container}>
-                <Text style={styles.title}>{t("translation.message")}</Text>
+            {/*<View style={styles.container}>*/}
+            {/*    <Text style={styles.title}>{t("translation.message")}</Text>*/}
 
-                {allMessages.length > 0 ? (
-                    <FlatList
-                        contentContainerStyle={styles.containerCard}
-                        data={allMessages}
-                        renderItem={renderMessages}
-                    />
-                ) : (
-                    <Text style={styles.text}>
-                        {t("translation.noMessage")}
-                    </Text>
-                )}
-            </View>
+            {/*    {allMessages.length > 0 ? (*/}
+            {/*        <FlatList*/}
+            {/*            contentContainerStyle={styles.containerCard}*/}
+            {/*            data={allMessages}*/}
+            {/*            renderItem={renderMessages}*/}
+            {/*        />*/}
+            {/*    ) : (*/}
+            {/*        <Text style={styles.text}>*/}
+            {/*            {t("translation.noMessage")}*/}
+            {/*        </Text>*/}
+            {/*    )}*/}
+            {/*</View>*/}
 
             {/* Registered Activities container */}
             <View style={styles.container}>
@@ -75,12 +74,12 @@ export default function Index() {
             </View>
 
             {/* Calendar container */}
-            <View style={styles.container}>
-                <Text style={styles.title}>{t("translation.calendar")}</Text>
-                <Text style={styles.text}>
-                    {t("translation.calendarWorking")}
-                </Text>
-            </View>
+            {/*<View style={styles.container}>*/}
+            {/*    <Text style={styles.title}>{t("translation.calendar")}</Text>*/}
+            {/*    <Text style={styles.text}>*/}
+            {/*        {t("translation.calendarWorking")}*/}
+            {/*    </Text>*/}
+            {/*</View>*/}
         </ScrollView>
     );
 }

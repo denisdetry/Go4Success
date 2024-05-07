@@ -397,7 +397,7 @@ const handleDeleteUser = useMutation({
             url: "auth/delete_user/" + user.id + "/",
         });
     },
-    onSettled: () => {
+    onSuccess: () => {
         // {...} gestion de la suppression du profil avec des Toast ou autre
         void queryClient.invalidateQueries({ queryKey: ["current_user"] });
     },
@@ -420,7 +420,7 @@ import { queryClient } from "@/app/_layout";
 import { useTranslation } from "react-i18next";
 
 const { t } = useTranslation();
-const { user, signIn } = useAuth();
+const { user } = useAuth();
 
 const fetchData = useMutation({
     mutationFn: async () => {
@@ -439,7 +439,6 @@ const fetchData = useMutation({
     onSuccess: () => {
         // {...} gestion du success du changement de mot de passe avec des Toast ou autre
         void queryClient.invalidateQueries({ queryKey: ["current_user"] });
-        signIn({ username: user.username, password: newPassword }); // on reconnecte l'utilisateur avec son nouveau mot de passe
     },
 
     onError: async (error: fetchError) => {

@@ -216,6 +216,11 @@ const QuestionBox = ({ questionnaireId }) => {
                     title="envoyer le questionnaire"
                     onPress={() => {
                         handleSaveOpenQuestions();
+                        Toast.show({
+                            type: "success",
+                            text1: "Success",
+                            text2: "Questionnaire has been sent successfully",
+                        });
                     }}
                 />
             </View>

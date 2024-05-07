@@ -383,7 +383,7 @@ const handleDeleteUser = useMutation({
             url: "auth/delete_user/" + user.id + "/",
         });
     },
-    onSettled: () => {
+    onSuccess: () => {
         // {...} gestion de la suppression du profil avec des Toast ou autre
         void queryClient.invalidateQueries({ queryKey: ["current_user"] });
     },

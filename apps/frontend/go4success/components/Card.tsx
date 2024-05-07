@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import { fetchBackend } from "@/utils/fetchBackend";
 import Toast from "react-native-toast-message";
 import { queryClient } from "@/app/_layout";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { fetchError } from "@/utils/fetchError";
 import { Ionicons } from "@expo/vector-icons";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -203,7 +203,10 @@ const Card: React.FC<CardProps> = ({
             Toast.show({
                 type: "success",
                 text1: t("translateToast.SuccessText1"),
-                text2: t("translateToast.RegisterActivitySuccessText2") + title,
+                text2:
+                    t("translateToast.RegisterActivitySuccessText2") +
+                    " " +
+                    title,
             });
             void queryClient.invalidateQueries({
                 queryKey: ["activities"],
@@ -277,7 +280,9 @@ const Card: React.FC<CardProps> = ({
                 type: "success",
                 text1: t("translateToast.SuccessText1"),
                 text2:
-                    t("translateToast.UnregisterActivitySuccessText2") + title,
+                    t("translateToast.UnregisterActivitySuccessText2") +
+                    " : " +
+                    title,
             });
             void queryClient.invalidateQueries({
                 queryKey: ["activities"],
@@ -303,8 +308,8 @@ const Card: React.FC<CardProps> = ({
         },
     });
 
-    var registerButtonText: string;
-    var registerButtonOnPress: any;
+    let registerButtonText: string;
+    let registerButtonOnPress: any;
     if (isAttend) {
         registerButtonText = t("translateRegisterActivity.unregisterButton");
         registerButtonOnPress = handleUnregister.mutate;

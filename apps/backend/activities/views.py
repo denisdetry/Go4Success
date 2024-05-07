@@ -11,7 +11,7 @@ import json
 
 from .serializers import GiveSerializer, SiteSerializer, ActivitySerializer, \
     AttendSerializer, RoomSerializer, RegisterToActivitySerializer, \
-    LanguageSerializer, ActivityCreateSerializer
+    LanguageSerializer, ActivityCreateSerializer, GiveSerializer
 
 
 class RoomViewSet(viewsets.ReadOnlyModelViewSet):
@@ -67,6 +67,13 @@ class ActivityViewSet(viewsets.ModelViewSet):
         serializer = ActivityCreateSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+
+        giveSerializer = GiveSerializer(data={
+            'activity': serializer.data['id'], 
+            'teacher': data['user']
+        })
+        self.perform_create(giveSerializer)
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 

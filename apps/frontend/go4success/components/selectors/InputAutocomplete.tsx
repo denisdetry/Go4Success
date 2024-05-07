@@ -51,7 +51,6 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     toReturn = "all",
     icon,
 }) => {
-    console.log(items);
     const [visible, setVisible] = React.useState(false);
     const [filteredData, setFilteredData] = React.useState<SelectItem[]>(items);
 

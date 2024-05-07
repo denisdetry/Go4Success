@@ -1,4 +1,4 @@
-from database.models import Activity, Attend, Give, Site, Room, Course, Language
+from database.models import Activity, Attend, Site, Room, Course, Language, Give
 from rest_framework import serializers
 
 
@@ -50,6 +50,14 @@ class ActivitySerializer(serializers.ModelSerializer):
         if obj.course:
             return f"{obj.course.code} - {obj.course.name}"
         return
+
+
+class GiveSerializer(serializers.ModelSerializer):
+    activity = ActivitySerializer(read_only=True)
+
+    class Meta:
+        model = Give
+        fields = ('activity', 'teacher')
 
 
 class ActivityCreateSerializer(serializers.ModelSerializer):

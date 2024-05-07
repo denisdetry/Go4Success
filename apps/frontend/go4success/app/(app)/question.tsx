@@ -15,6 +15,7 @@ import {
     usePostOpenQuestion,
     usePostQuestion,
     useGetQuestions,
+    usePostClosedQuestion,
 } from "@/hooks/useQuestionnaire";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -33,6 +34,17 @@ interface OpenQuestion {
     points: number;
 }
 
+interface refetchedQuestions {
+    id: number;
+    question: string;
+}
+
+interface closedQuestionToSend {
+    question: number;
+    options: string;
+    checked: boolean;
+}
+
 const QuestionBox = ({ questionnaireId }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [openQuestions, setOpenQuestions] = useState([]);
@@ -47,11 +59,15 @@ const QuestionBox = ({ questionnaireId }) => {
     } = useGetQuestions();
     const [closedQuestionsProcessed, setClosedQuestionsProcessed] =
         useState(false);
+    const [refetchQuestionsData, setRefetchQuestionsData] = useState<
+        refetchedQuestions[]
+    >([]);
 
     const queryClient = useQueryClient();
 
     const { mutate, error } = usePostQuestion();
-
+    const { mutateOption: mutate, errorOption: error } =
+        usePostClosedQuestion();
     const handleOpenQuestion = () => {
         setOpenQuestions((prevQuestions) => [...prevQuestions, {}]);
         setModalVisible(false);
@@ -68,7 +84,16 @@ const QuestionBox = ({ questionnaireId }) => {
                 question: question.question,
             }));
 
-            console.log(questionsData);
+            // Mettre les données refetchées dans la structure de données refetchQuestions
+            const data: refetchQuestions[] =
+                questionsData.data?.map((question) => ({
+                    id: question.id,
+                    question: question.question,
+                })) || [];
+
+            // Mettre à jour l'état avec les données refetchées
+            setRefetchQuestionsData(questionsData);
+            console.log("refetchedQuetion", refetchQuestionsData);
         }
     }, [closedQuestionsProcessed, questions]);
 
@@ -84,6 +109,7 @@ const QuestionBox = ({ questionnaireId }) => {
                         text1: "Success",
                         text2: "Open question has been posted successfully",
                     });
+
                     refetchQuestions();
                 },
 
@@ -96,7 +122,6 @@ const QuestionBox = ({ questionnaireId }) => {
                 },
             });
         });
-        console.log(questions);
         const closedQuestionPromises = closedQuestions.map((question) => {
             const { type, points, question: questionText } = question;
             const questionWithId = {
@@ -129,6 +154,31 @@ const QuestionBox = ({ questionnaireId }) => {
         } catch (error) {
             console.error("Error posting closed questions:", error);
         }
+
+        const closedQuestionsToSend: closedQuestionToSend[] =
+            closedQuestions.flatMap((closedQuestion) => {
+                // Trouver l'ID de la question correspondante dans refetchedQuestions
+                const refetchedQuestion = refetchQuestionsData.find(
+                    (refetchedQuestion) =>
+                        refetchedQuestion.question == closedQuestion.question,
+                );
+
+                if (!refetchedQuestion) {
+                    // Si aucune question correspondante n'est trouvée dans refetchedQuestions, retourner un tableau vide
+                    return [];
+                }
+
+                console.log("refetchedQuestion", refetchedQuestion);
+
+                // Transformer chaque option de ClosedQuestion en un objet closedQuestionToSend
+                return closedQuestion.options.map(([option, checked]) => ({
+                    question: refetchedQuestion.id,
+                    options: option,
+                    checked,
+                }));
+            });
+
+        console.log("closedQuestionsToSend", closedQuestionsToSend);
     };
     return (
         <View style={styles.container}>
@@ -296,7 +346,6 @@ const ClosedQuestionBox = ({ id, setClosedQuestions, questionnaireId }) => {
             text2: "question enregistrée",
         });
     };
-    console.log(options);
     return (
         <View style={styles.closedQuestionContainer}>
             <Text style={styles.questionText}>Choix multiple #{id + 1}</Text>

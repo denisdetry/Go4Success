@@ -155,7 +155,13 @@ async function usePostOpenQuestion(questionOpenData) {
     return response.json();
 }
 
-async function usePostClosedQuestion(questionClosedData) {
+export function usePostClosedQuestion() {
+    return useMutation({
+        mutationFn: postClosedQuestion,
+    });
+}
+
+async function postClosedQuestion(questionClosedData) {
     const backend_url = process.env.EXPO_PUBLIC_API_URL;
 
     const response = await fetch(

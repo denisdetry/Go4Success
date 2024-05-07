@@ -10,7 +10,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Toast from "react-native-toast-message";
 
 import Question from "./question";
-
+import ButtonComponent from "@/components/ButtonComponent";
+import stylesGlobal from "@/styles/global";
 import {
     StyleSheet,
     View,
@@ -80,77 +81,101 @@ const QuestionnaireComponent: React.FC<QuestionnaireComponentProps> = ({
         });
         onNext();
     };
-    if (error) return <Text style={styles.errorText}>Error: {error.message}</Text>;
+    if (error)
+        return <Text style={styles.errorText}>Error: {error.message}</Text>;
 
     return (
-        <ScrollView>
-            <Text style={styles.title}>Create Questionnaire for {courseName}</Text>
-            <TextInput
-                style={styles.input}
-                onChangeText={(text) => handleChange("title", text)}
-                value={formData.title}
-                placeholder="Title of the questionnaire"
-            />
-            <TextInput
-                style={styles.input}
-                onChangeText={(text) => handleChange("description", text)}
-                value={formData.description}
-                placeholder="Description"
-                multiline
-            />
-            <TextInput
-                style={styles.input}
-                onChangeText={(text) => handleChange("points_total", text)}
-                value={formData.points_total}
-                placeholder="Total points"
-                multiline
-            />
-            <View style={{ flexDirection: "row" }}>
-                <View style={styles.labelContainer}>
-                    <Text style={styles.label}>Start:</Text>
-                    <DateTimePicker
-                        mode="single"
-                        locale="fr"
-                        date={startdate}
-                        onChange={(params) =>
-                            setStartDate(params.date ? dayjs(params.date) : dayjs())
-                        }
-                        selectedItemColor={Colors.primaryColor}
-                        headerContainerStyle={{
-                            backgroundColor: "white",
-                        }}
-                        headerTextStyle={{ color: Colors.thirdColor }}
+        <ScrollView contentContainerStyle={stylesGlobal.mainContainer}>
+            <View style={stylesGlobal.container}>
+                <Text style={stylesGlobal.title}>
+                    Create Questionnaire for {courseName}
+                </Text>
+                <View style={[stylesGlobal.inputField]}>
+                    <TextInput
+                        style={stylesGlobal.input}
+                        onChangeText={(text) => handleChange("title", text)}
+                        value={formData.title}
+                        placeholder="Title of the questionnaire"
                     />
                 </View>
-                <View style={[styles.labelContainer, { marginLeft: 80 }]}>
-                    <Text style={styles.label}>end:</Text>
-                    <DateTimePicker
-                        mode="single"
-                        locale="fr"
-                        date={enddate}
-                        onChange={(params) =>
-                            setEndDate(params.date ? dayjs(params.date) : dayjs())
+                <View style={[stylesGlobal.inputField]}>
+                    <TextInput
+                        style={stylesGlobal.input}
+                        onChangeText={(text) =>
+                            handleChange("description", text)
                         }
-                        selectedItemColor={Colors.primaryColor}
-                        headerContainerStyle={{
-                            backgroundColor: "white",
-                        }}
-                        headerTextStyle={{ color: Colors.thirdColor }}
+                        value={formData.description}
+                        placeholder="Description"
+                        multiline
                     />
                 </View>
+                <View style={[stylesGlobal.inputField]}>
+                    <TextInput
+                        style={stylesGlobal.input}
+                        onChangeText={(text) =>
+                            handleChange("points_total", text)
+                        }
+                        value={formData.points_total}
+                        placeholder="Total points"
+                        multiline
+                    />
+                </View>
+                <View style={{ flexDirection: "row" }}>
+                    <View style={styles.labelContainer}>
+                        <Text style={styles.label}>Start:</Text>
+                        <DateTimePicker
+                            mode="single"
+                            locale="fr"
+                            date={startdate}
+                            onChange={(params) =>
+                                setStartDate(
+                                    params.date ? dayjs(params.date) : dayjs(),
+                                )
+                            }
+                            selectedItemColor={Colors.primaryColor}
+                            headerContainerStyle={{
+                                backgroundColor: "white",
+                            }}
+                            headerTextStyle={{ color: Colors.thirdColor }}
+                        />
+                    </View>
+                    <View style={[styles.labelContainer, { marginLeft: 80 }]}>
+                        <Text style={styles.label}>end:</Text>
+                        <DateTimePicker
+                            mode="single"
+                            locale="fr"
+                            date={enddate}
+                            onChange={(params) =>
+                                setEndDate(
+                                    params.date ? dayjs(params.date) : dayjs(),
+                                )
+                            }
+                            selectedItemColor={Colors.primaryColor}
+                            headerContainerStyle={{
+                                backgroundColor: "white",
+                            }}
+                            headerTextStyle={{ color: Colors.thirdColor }}
+                        />
+                    </View>
+                </View>
+
+                <Picker
+                    style={styles.picker}
+                    selectedValue={formData.language}
+                    onValueChange={(itemValue, itemIndex) =>
+                        handleChange("language", itemValue)
+                    }
+                >
+                    <Picker.Item label="Select Language" value="" />
+                    <Picker.Item label="English" value="1" />
+                    <Picker.Item label="French" value="2" />
+                </Picker>
+                <ButtonComponent
+                    text={"Next"}
+                    onPress={handleSubmit}
+                    buttonType={"secondary"}
+                />
             </View>
-            <Picker
-                style={styles.picker}
-                selectedValue={formData.language}
-                onValueChange={(itemValue, itemIndex) =>
-                    handleChange("language", itemValue)
-                }
-            >
-                <Picker.Item label="Select Language" value="" />
-                <Picker.Item label="English" value="1" />
-                <Picker.Item label="French" value="2" />
-            </Picker>
-            <Button title="Next" onPress={handleSubmit} color="#0066cc" />
         </ScrollView>
     );
 };

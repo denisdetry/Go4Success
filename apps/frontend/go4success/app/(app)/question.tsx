@@ -18,7 +18,8 @@ import {
     usePostClosedQuestion,
 } from "@/hooks/useQuestionnaire";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
+import ButtonComponent from "@/components/ButtonComponent";
+import stylesGlobal from "@/styles/global";
 interface ClosedQuestion {
     questionnaire: number;
     type: string;
@@ -184,7 +185,7 @@ const QuestionBox = ({ questionnaireId }) => {
     };
     return (
         <View style={styles.container}>
-            <ScrollView>
+            <ScrollView contentContainerStyle={stylesGlobal.mainContainer}>
                 {openQuestions.map((_, index) => (
                     <OpenQuestionBox
                         key={index}
@@ -203,17 +204,22 @@ const QuestionBox = ({ questionnaireId }) => {
                 ))}
             </ScrollView>
             <View style={styles.addButtonContainer}>
-                <Button title="+" onPress={() => setModalVisible(true)} />
+                <ButtonComponent
+                    text={"Ajouter une question"}
+                    onPress={() => setModalVisible(true)}
+                    buttonType={"primary"}
+                />
             </View>
             <View style={styles.saveButtonContainer}>
-                <Button
-                    title="Sauvegarder le questionnaire"
+                <ButtonComponent
+                    text={"Sauvegarder le questionnaire"}
                     onPress={() => {
                         handleSaveOpenQuestions();
                     }}
+                    buttonType={"primary"}
                 />
-                <Button
-                    title="envoyer le questionnaire"
+                <ButtonComponent
+                    text={"Envoyer le questionnaire"}
                     onPress={() => {
                         handleSaveOpenQuestions();
                         Toast.show({
@@ -222,6 +228,7 @@ const QuestionBox = ({ questionnaireId }) => {
                             text2: "Questionnaire has been sent successfully",
                         });
                     }}
+                    buttonType={"secondary"}
                 />
             </View>
             <Modal
@@ -236,20 +243,23 @@ const QuestionBox = ({ questionnaireId }) => {
                     <Text style={styles.modalText}>
                         Choisir le type de question :
                     </Text>
-                    <Button
-                        title="Question ouverte"
+                    <ButtonComponent
+                        text={"Question ouverte"}
                         onPress={handleOpenQuestion}
+                        buttonType={"secondary"}
                     />
-                    <Button
-                        title="Question fermée"
+                    <ButtonComponent
+                        text={"Question fermée"}
                         onPress={() => {
                             handleAddClosedQuestion();
                             setModalVisible(false);
                         }}
+                        buttonType={"secondary"}
                     />
-                    <Button
-                        title="Annuler"
+                    <ButtonComponent
+                        text={"Annuler"}
                         onPress={() => setModalVisible(false)}
+                        buttonType={"secondary"}
                     />
                 </View>
             </Modal>
@@ -285,22 +295,32 @@ const OpenQuestionBox = ({ id, setOpenQuestions, questionnaireId }) => {
     return (
         <View style={styles.openQuestionContainer}>
             <Text style={styles.questionText}>Question ouverte #{id + 1}</Text>
-            <TextInput
-                style={styles.input}
-                onChangeText={setQuestion}
-                value={question}
-                placeholder="Ecrivez votre question ici..."
-            />
+            <Text style={styles.optionText}>Question : </Text>
+            <View style={[stylesGlobal.inputField]}>
+                <TextInput
+                    style={stylesGlobal.input}
+                    onChangeText={setQuestion}
+                    value={question}
+                    placeholder="Ecrivez votre question ici..."
+                />
+            </View>
 
-            <TextInput
-                style={styles.pointsInput}
-                onChangeText={(value) => setPoints(Number(value))}
-                value={String(points)}
-                placeholder="Entrez les points ici"
-                keyboardType="numeric"
-            />
+            <Text style={styles.optionText}>Points : </Text>
+            <View style={[stylesGlobal.inputField]}>
+                <TextInput
+                    style={stylesGlobal.input}
+                    onChangeText={(value) => setPoints(Number(value))}
+                    value={String(points)}
+                    placeholder="Entrez les points ici"
+                    keyboardType="numeric"
+                />
+            </View>
 
-            <Button title="Sauvegarder question" onPress={handleSaveQuestion} />
+            <ButtonComponent
+                text={"Sauvegarder question"}
+                onPress={handleSaveQuestion}
+                buttonType={"secondary"}
+            />
         </View>
     );
 };
@@ -364,13 +384,14 @@ const ClosedQuestionBox = ({ id, setClosedQuestions, questionnaireId }) => {
     return (
         <View style={styles.closedQuestionContainer}>
             <Text style={styles.questionText}>Choix multiple #{id + 1}</Text>
-            <Text style={styles.optionText}>question : </Text>
-
-            <TextInput
-                style={styles.optionInput}
-                onChangeText={(text) => setQuestion(text)}
-                value={question}
-            />
+            <Text style={styles.optionText}>Question : </Text>
+            <View style={[stylesGlobal.inputField]}>
+                <TextInput
+                    style={stylesGlobal.input}
+                    onChangeText={(text) => setQuestion(text)}
+                    value={question}
+                />
+            </View>
 
             {options.map((option, index) => (
                 <View key={index} style={styles.optionContainer}>
@@ -387,18 +408,28 @@ const ClosedQuestionBox = ({ id, setClosedQuestions, questionnaireId }) => {
                 </View>
             ))}
             <View style={styles.addButton}>
-                <Button title="Ajouter une option" onPress={handleAddOption} />
+                <ButtonComponent
+                    text={"Ajouter une option"}
+                    onPress={handleAddOption}
+                    buttonType={"secondary"}
+                />
             </View>
 
-            <TextInput
-                style={styles.pointsInput}
-                onChangeText={(value) => setPoints(Number(value))}
-                value={String(points)}
-                placeholder="Entrez les points ici"
-                keyboardType="numeric"
+            <Text style={styles.optionText}>Points : </Text>
+            <View style={[stylesGlobal.inputField]}>
+                <TextInput
+                    style={stylesGlobal.input}
+                    onChangeText={(value) => setPoints(Number(value))}
+                    value={String(points)}
+                    placeholder="Entrez les points ici"
+                    keyboardType="numeric"
+                />
+            </View>
+            <ButtonComponent
+                text={"Sauvegarder question"}
+                onPress={handleSaveQuestion}
+                buttonType={"secondary"}
             />
-
-            <Button title="Sauvegarder question" onPress={handleSaveQuestion} />
         </View>
     );
 };
@@ -507,7 +538,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     addButton: {
-        width: "40%", // adjust this value as needed
+        width: "100%", // adjust this value as needed
         // ... rest of your styles ...
     },
 

@@ -101,7 +101,7 @@ django et ses paramètres (avec le fichiers setting, urls, ...).
 
         -   serializers : afin de gérer les rôles nous avons besoin de trois class 'UserSerializer' : qui permet de récupérer les données de l'utilisateur et son rôle
 
-        'TeacherSerializer' : Permet de récupérer le rôle de l'utilisateur, s'il est proffeseur ou tuteur.
+        'TeacherSerializer' : Permet de récupérer le rôle de l'utilisateur, s'il est professeur ou tuteur.
 
         'EditRoleSerializer' : permet d'editer le rôle d'un utiliateur.
 
@@ -121,20 +121,26 @@ ateliers.
 
 #### Vues (Activities)
 
-(à completer)
+-   **RoomViewSet:** Ce viewset fournit un accès en lecture seule au modèle Room. Il comprend une méthode get_rooms_by_site qui prend un site_id en paramètre et renvoie toutes les salles associées à ce site.
+-   **SiteViewSet:** Ce viewset fournit un accès complet CRUD (Create, Read, Update, Delete) au modèle Site.
+-   **LanguageViewSet:** Ce viewset fournit un accès complet CRUD au modèle Language.
+-   **ActivityViewSet:** Ce viewset fournit un accès complet CRUD au modèle Activity. Il surcharge la méthode get_queryset pour ne renvoyer que les activités pour lesquelles l'utilisateur actuel ne s'est pas inscrit. La méthode create est également surchargée pour gérer une manipulation spécifique des données avant de créer une activité.
+-   **AttendViewSet:** Ce viewset fournit un accès complet CRUD au modèle Attend. Il surcharge la méthode get_queryset pour ne renvoyer que les participations associées à l'utilisateur actuel.
+-   **filter_queryset:** Il s'agit d'une fonction d'aide utilisée dans ActivityViewSet et AttendViewSet pour filtrer le queryset en fonction des paramètres de la requête. Elle supporte le filtrage par name, site, room, date_start, date_end, et language.
+-   **RegisterToActivityView:** Ce viewset fournit un accès complet CRUD au modèle Attend pour les utilisateurs authentifiés. Il utilise le RegisterToActivitySerializer pour gérer la sérialisation des données.
 
-#### Serializers (Activities)
+### Serializers (Activities)
 
 Nous allons pas détailler les serializers, car ils sont très simples et sont utilisés pour la validation des données.
 Nous allons néanmoins les citer et les décrire brièvement.
 
--   **RoomSerializer:** Ce serializer est utilisé
--   **CourseSerializer:**
--   **LanguageSerializer:**
--   **ActivitySerializer:**
--   **AttendSerializer:**
--   **SiteSerializer:**
--   **RegisterToActivitySerializer:**
+-   **RoomSerializer:** Ce serializer est utilisé pour valider les données des locaux.
+-   **CourseSerializer:** Ce serializer est utilisé pour valider les données des cours.
+-   **LanguageSerializer:** Ce serializer est utilisé pour valider les données des langues.
+-   **ActivitySerializer:** Ce serializer est utilisé pour valider les données des activités.
+-   **AttendSerializer:** Ce serializer est utilisé pour valider les données des activités où un utilisateurs authentifié est inscrit.
+-   **SiteSerializer:** Ce serializer est utilisé pour valider les données des villes.
+-   **RegisterToActivitySerializer:** Ce serializer est utilisé pour valider les données d'inscription à une activité.
 
 #### Urls (Activities)
 
@@ -144,7 +150,14 @@ Les différentes urls de l'application _activities_ sont définies dans le fichi
 
 Conntient un ensemble de tests pour vérifier les éléments suivants :
 
--   \*\*
+-   **RoomViewSetTestCase:**
+    -   _test_get_room_ : Ce test vérifie que l'API renvoie correctement toutes les salles.
+    -   _test_get_room_not_found_ : Ce test vérifie que l'API renvoie une erreur 404 lorsque l'on tente d'accéder à une salle qui n'existe pas.
+-   **ActivityViewSetTestCase:**
+    -   _test_get_all_activities_ : Ce test vérifie que l'API renvoie correctement toutes les activités.
+-   **AttendSerializerTest:**
+    -   _test_attend_serializer_ : Ce test vérifie que le sérialiseur Attend fonctionne correctement et renvoie les données attendues.
+    -   _test_unattend_activity_ : Ce test vérifie que l'API permet à un utilisateur de se désinscrire d'une activité et renvoie le code de statut HTTP 204. Il vérifie également que l'objet Attend est correctement supprimé de la base de données.
 
 ### Authentication
 
@@ -357,7 +370,8 @@ const fetchData = useMutation({
     onError: async (error: fetchError) => {
         const errorResponse = await error.responseError.json();
         const errorMessages =
-            errorResponse[dataKey] || t("translationProfile.defaultErrorMessage");
+            errorResponse[dataKey] ||
+            t("translationProfile.defaultErrorMessage");
         // {...} gestion de l'erreur avec des toast ou autre
     },
 });
@@ -572,18 +586,44 @@ Voici les différents modèles :
     -   **annoucement** : L'annonce émis par un professeur (modèle Teacher).
     -   **user** : L'utilisateur.
 
--   **FeedbackActivity :** Ce modèle represente un feedback d'un étudiant envers l'activité d'un professeur. Il contient
+-   **Feedback :** Ce modèle represente un feedback pour une activité. Il contient
     les attributs suivants :
 
-    -   **id** : l'identifiant du feedback pour la base de données.
-    -   **student** : L'étudiant qui a donné le feedback.
+    -   **id** : L'identifiant du feedback pour la base de données.
+    -   **user** : L'étudiant qui a donné le feedback.
     -   **activity** : L'activité pour laquelle le feedback est donné.
-    -   **evaluation** : L'évaluation de l'activité (échelle de 1 à 10).
-    -   **positive_point** : Les points positifs de l'activité.
-    -   **negative_point** : Les points négatifs de l'activité.
+    -   **positive_point** : Si le feedback doit contenir des points positifs de l'activité.
+    -   **negative_point** : Si le feedback doit contenir des points négatifs de l'activité.
+    -   **suggestion** : Si le feedback doit contenir des suggestions pour améliorer l'activité.
+    -   **additional_comment** : Si le feedback doit contenir des commentaires additionnels.
+    -   **date_start** : La date de début du feedback.
+    -   **date_end** : La date de fin du feedback.
+
+-   **Feedback_Additional_Question :** Ce modèle permet d'ajouter des questions supplémentaires au feedback. Il contient les attributs suivants :
+
+    -   **id**: L'identifiant de la question supplémentaire.
+    -   **feedback** : Le feedback qui contient la question supplémentaire.
+    -   **question** : La question supplémentaire.
+
+-   **Feedback_Student :** Ce modèle represente la réponse pour un feedback écrit par un étudiant. Il contient les attributs suivants :
+
+    -   **id** : L'identifiant du feedback pour la base de données.
+    -   **student** : L'étudiant qui a donné le feedback.
+    -   **feedback** : Le feedback à remplir.
+    -   **evaluation** : Niveau statisification de l'acitivté (0-5).
+    -   **positive_point** :Les points positifs de l'activité.
+    -   **negative_point** :Les points négatifs de l'activité.
     -   **suggestion** : Les suggestions pour améliorer l'activité.
     -   **additional_comment** : Les commentaires additionnels.
     -   **date_submitted** : La date à laquelle le feedback a été soumis.
+
+-   **Feedback_Student_Additional_Question :** Ce modèle permet de répondre aux questions supplémentaires d'un feedback. Il contient les attributs suivants :
+
+    -   **id**: L'identifiant de la question supplémentaire.
+    -   **student** : L'étudiant qui répond à la question.
+    -   **feedback** : Le feedback qui contient la question supplémentaire.
+    -   **question** : La question supplémentaire.
+    -   **answer** : La réponse de l'étudiant à la question.
 
 -   **Questionnaire :** Ce modèle représentaire un questionnaire qu'un profeseur peut créer pour tel cours. Il contient
     les attributs suivants :
@@ -637,9 +677,24 @@ disponible, qui peut être ouvert avec le logiciel **DB-Main**, afin de modifier
 
 Cette application aura pour objectif de gérer les feedback pour diverses activités. À la fin d'une activité, les utilisateurs auront la possibilité de soumettre un feedback personnalisé.
 
+#### Vues (Feedback)
+
+-   **FeedbackCreateView:** Cette vue permet de créer un nouvel objet Feedback. Elle utilise le sérialiseur FeedbackSerializer pour valider les données entrantes et créer l'objet Feedback.
+-   **FeedbackListView:** Cette vue renvoie une liste de tous les objets Feedback. Elle utilise le sérialiseur FeedbackSerializer. Elle filtre également le queryset en fonction des paramètres de requête id, activity_id et user_id.
+-   **FeedbackAdditionalQuestionsView:** Cette vue renvoie une liste de tous les objets FeedbackAdditionalQuestions. Elle utilise le sérialiseur FeedbackAdditionalQuestionsSerializer. Elle filtre également le queryset en fonction du paramètre de requête feedback.
+-   **FeedbackStudentView:** Cette vue permet de créer et de récupérer des objets FeedbackStudent. Elle utilise le sérialiseur FeedbackStudentSerializer pour valider les données entrantes et créer l'objet FeedbackStudent. Elle filtre également le queryset en fonction du paramètre de requête feedback. Avant de créer un FeedbackStudent, elle valide que l'étudiant est dans l'activité, que l'activité est terminée, que le feedback n'existe pas déjà, et que les dates de début et de fin du feedback sont valides.
+-   **FeedbackStudentAdditionalQuestionsView:** Cette vue renvoie une liste de tous les objets FeedbackStudentAdditionalQuestions. Elle utilise le sérialiseur FeedbackStudentAdditionalQuestionsSerializer. Elle filtre également le queryset en fonction des paramètres de requête feedback et student_id.
+
 #### Serializers (Feedback)
 
-(à completer)
+Nous allons pas détailler les serializers, car ils sont très simples et sont utilisés pour la validation des données. Nous allons néanmoins les citer et les décrire brièvement.
+
+-   **ActivitySerializer:** Ce serializer est utilisé pour valider les données des activités.
+-   **UserSerializer:** Ce serializer est utilisé pour valider les données des users.
+-   **FeedbackSerializer:** Ce serializer est utilisé pour valider les données des feedbacks.
+-   **FeedbackAdditionalQuestionsSerializer:** Ce serializer est utilisé pour valider les données des questions supplémentaires aux feedbacks.
+-   **FeedbackStudentSerializer:** Ce serializer est utilisé pour valider les données des réponses aux feedbacks.
+-   **FeedbackStudentAdditionalQuestionsSerializer:** Ce serializer est utilisé pour valider les données des réponses aux questions supplémentaire à un feedback.
 
 #### Tests (Feedback)
 
@@ -649,15 +704,11 @@ Conntient un ensemble de tests pour vérifier les éléments suivants :
 
 #### Urls (Feedback)
 
-Les différentes urls de l'application _feedback_ sont définies dans le fichier _urls.py_. Elles sont en liens avec les vues décrites plus bas.
+Les différentes urls de l'application _feedback_ sont définies dans le fichier _urls.py_. Elles sont en liens avec les vues décrites plus haut.
 
 #### Validations (Feedback)
 
 Dans le fichier _validations.py_ de l'application _feedback_, nous avons des méthodes qui s'occupent de valider les différents data donnés par un utilisateur lorsqu'il remplit un feedback.
-
-#### Vues (Feedback)
-
-(à completer)
 
 ### Rolemanagement
 

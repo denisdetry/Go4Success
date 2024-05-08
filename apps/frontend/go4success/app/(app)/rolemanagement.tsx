@@ -8,10 +8,10 @@ import { useAuth } from "@/context/Auth";
 import { useTranslation } from "react-i18next";
 
 const roles = [
-    { key: "professor", value: "translationRole.Professor" },
-    { key: "tutor", value: "translationRole.Tutor" },
-    { key: "student", value: "translationRole.Student" },
-    { key: "superuser", value: "translationRole.Superuser" },
+    { key: "professor", value: {t("translationRole.Professor")} },
+    { key: "tutor", value: {t("translationRole.Tutor")} },
+    { key: "student", value: {t("translationRole.Student")} },
+    { key: "superuser", value: {t("translationRole.Superuser")} },
 ];
 
 export default function RoleManagement() {

@@ -2,13 +2,18 @@ from django.contrib import admin
 
 from .models import User, Teacher, Give, Announcement, \
     Registered, Message, See, Site, Room, Activity, Attend, Course, \
-    Language, FeedbackActivity, Questionnaire, Question, \
-    OpenAnswer, ChoiceAnswer, ChoiceAnswerInstance
+    Language, Feedback, FeedbackAdditionalQuestions, \
+    FeedbackStudent, FeedbackStudentAdditionalQuestions,  Questionnaire, \
+    Question, OpenAnswer, ChoiceAnswer, ChoiceAnswerInstance, ExpoToken
 
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'email', 'first_name',
-                    'last_name', 'noma', 'is_active')
+                    'last_name', 'noma', 'is_active', 'is_staff', 'is_superuser')
+
+
+class ExpoTokenAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'token', "is_active")
 
 
 class SiteAdmin(admin.ModelAdmin):
@@ -33,7 +38,7 @@ class AttendAdmin(admin.ModelAdmin):
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'code', 'name')
+    list_display = ('id', 'code', 'name', 'user')
 
 
 class TeacherAdmin(admin.ModelAdmin):
@@ -62,9 +67,22 @@ class SeeAdmin(admin.ModelAdmin):
     list_display = ("announcement", "user")
 
 
-class FeedbackActivityAdmin(admin.ModelAdmin):
-    list_display = ("id", "student", "activity", "evaluation", "positive_point",
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "activity", "positive_point",
+                    "negative_point", "suggestion", "additional_comment", "date_start", "date_end")
+
+
+class FeedbackAdditionalQuestionsAdmin(admin.ModelAdmin):
+    list_display = ("id", "feedback", "question")
+
+
+class FeedbackStudentAdmin(admin.ModelAdmin):
+    list_display = ("id", "student", "feedback", "evaluation", "positive_point",
                     "negative_point", "suggestion", "additional_comment", "date_submitted")
+
+
+class FeedbackStudentAdditionalQuestionsAdmin(admin.ModelAdmin):
+    list_display = ("id", "student", "feedback", "question", "answer")
 
 
 class QuestionnaireAdmin(admin.ModelAdmin):
@@ -89,6 +107,7 @@ class ChoiceAnswerInstanceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(ExpoToken, ExpoTokenAdmin)
 admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(Give, GiveAdmin)
 admin.site.register(Announcement, AnnouncementAdmin)
@@ -101,7 +120,12 @@ admin.site.register(Language, LanguageAdmin)
 admin.site.register(Activity, ActivityAdmin)
 admin.site.register(Attend, AttendAdmin)
 admin.site.register(Course, CourseAdmin)
-admin.site.register(FeedbackActivity, FeedbackActivityAdmin)
+admin.site.register(Feedback, FeedbackAdmin)
+admin.site.register(FeedbackAdditionalQuestions,
+                    FeedbackAdditionalQuestionsAdmin)
+admin.site.register(FeedbackStudent, FeedbackStudentAdmin)
+admin.site.register(FeedbackStudentAdditionalQuestions,
+                    FeedbackStudentAdditionalQuestionsAdmin)
 admin.site.register(Questionnaire, QuestionnaireAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(OpenAnswer, OpenAnswerAdmin)

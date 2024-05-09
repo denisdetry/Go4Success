@@ -4,15 +4,19 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { AuthProvider, useAuth } from "@/context/Auth";
 import Colors from "@/constants/Colors";
-import { DrawerContentScrollView, DrawerItem, DrawerItemList } from "@react-navigation/drawer";
+import {
+    DrawerContentScrollView,
+    DrawerItem,
+    DrawerItemList,
+} from "@react-navigation/drawer";
 import { Image, Platform, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-
 import profilePicture from "@/assets/images/profile-picture.jpg";
+import useUser from "@/hooks/useUser";
 
-function customDrawerContent(props: any) {
+function CustomDrawerContent(props: any) {
     const router = useRouter();
     const { t } = useTranslation();
     const { signOut } = useAuth();
@@ -37,7 +41,10 @@ function customDrawerContent(props: any) {
                     />
                 </TouchableOpacity>
                 <DrawerItemList {...props} />
-                <DrawerItem label={t("translationMenu.disconnect")} onPress={signOut} />
+                <DrawerItem
+                    label={t("translationMenu.disconnect")}
+                    onPress={signOut}
+                />
             </DrawerContentScrollView>
             {Platform.OS === "web" && <LanguageSwitcher />}
         </>
@@ -46,12 +53,15 @@ function customDrawerContent(props: any) {
 
 export default function Layout() {
     const router = useRouter();
+
+    const { user } = useUser();
+
     const { t } = useTranslation();
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <AuthProvider>
                 <Drawer
-                    drawerContent={customDrawerContent}
+                    drawerContent={CustomDrawerContent}
                     screenOptions={{
                         drawerHideStatusBarOnOpen: true,
                         drawerActiveBackgroundColor: Colors.primaryColor,
@@ -79,32 +89,36 @@ export default function Layout() {
                                             router.push("/");
                                         }}
                                     >
-                                        <Ionicons name="home" size={24} color="#fff" />
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            console.log("Open notifications");
-                                        }}
-                                    >
                                         <Ionicons
-                                            name="notifications"
+                                            name="home"
                                             size={24}
                                             color="#fff"
                                         />
                                     </TouchableOpacity>
 
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            router.push("/calendar");
-                                        }}
-                                    >
-                                        <Ionicons
-                                            name="calendar"
-                                            size={24}
-                                            color="#fff"
-                                        />
-                                    </TouchableOpacity>
+                                    {/*<TouchableOpacity*/}
+                                    {/*    onPress={() => {*/}
+                                    {/*        console.log("Open notifications");*/}
+                                    {/*    }}*/}
+                                    {/*>*/}
+                                    {/*    <Ionicons*/}
+                                    {/*        name="notifications"*/}
+                                    {/*        size={24}*/}
+                                    {/*        color="#fff"*/}
+                                    {/*    />*/}
+                                    {/*</TouchableOpacity>*/}
+
+                                    {/*<TouchableOpacity*/}
+                                    {/*    onPress={() => {*/}
+                                    {/*        router.push("/calendar");*/}
+                                    {/*    }}*/}
+                                    {/*>*/}
+                                    {/*    <Ionicons*/}
+                                    {/*        name="calendar"*/}
+                                    {/*        size={24}*/}
+                                    {/*        color="#fff"*/}
+                                    {/*    />*/}
+                                    {/*</TouchableOpacity>*/}
 
                                     <TouchableOpacity
                                         onPress={() => {
@@ -146,8 +160,8 @@ export default function Layout() {
                     <Drawer.Screen
                         name="profile"
                         options={{
-                            drawerLabel: t("translationMenu.profil"),
-                            headerTitle: t("translationMenu.profil"),
+                            drawerLabel: t("translationMenu.profile"),
+                            headerTitle: t("translationMenu.profile"),
                             drawerIcon: ({ size, color }) => (
                                 <FontAwesome
                                     name="user-circle"
@@ -163,8 +177,13 @@ export default function Layout() {
                         options={{
                             drawerLabel: t("translationMenu.calendar"),
                             headerTitle: t("translationMenu.calendar"),
+                            drawerItemStyle: { display: "none" },
                             drawerIcon: ({ size, color }) => (
-                                <Ionicons name="calendar" size={size} color={color} />
+                                <Ionicons
+                                    name="calendar"
+                                    size={size}
+                                    color={color}
+                                />
                             ),
                         }}
                     />
@@ -172,11 +191,136 @@ export default function Layout() {
                     <Drawer.Screen
                         name="rolemanagement"
                         options={{
-                            drawerLabel: "Gestion des rôles",
-                            headerTitle: "Gestion des rôles",
+                            drawerItemStyle: {
+                                display: user?.is_superuser ? "flex" : "none",
+                            },
+                            drawerLabel: t("translationMenu.roleManagement"),
+                            headerTitle: t("translationMenu.roleManagement"),
                             drawerIcon: ({ size, color }) => (
-                                <Ionicons name="people" size={size} color={color} />
+                                <Ionicons
+                                    name="people"
+                                    size={size}
+                                    color={color}
+                                />
                             ),
+                        }}
+                    />
+
+                    <Drawer.Screen
+                        name="activities/add"
+                        options={{
+                            drawerItemStyle: {
+                                display:
+                                    user?.is_superuser || user?.is_staff
+                                        ? "flex"
+                                        : "none",
+                            },
+                            drawerLabel: t(
+                                "translationMenu.activityManagement",
+                            ),
+                            headerTitle: t(
+                                "translationMenu.activityManagement",
+                            ),
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name="school"
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
+
+                    <Drawer.Screen
+                        name="feedbacklist"
+                        options={{
+                            drawerItemStyle: {
+                                display:
+                                    user?.is_superuser || user?.is_staff
+                                        ? "flex"
+                                        : "none",
+                            },
+                            drawerLabel: t("translateFeedback.show"),
+                            headerTitle: t("translateFeedback.show"),
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name="albums-outline"
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
+                    <Drawer.Screen
+                        name="feedbackcreate"
+                        options={{
+                            drawerItemStyle: {
+                                display:
+                                    user?.is_superuser || user?.is_staff
+                                        ? "flex"
+                                        : "none",
+                            },
+                            drawerLabel: t("translateFeedback.create"),
+                            headerTitle: t("translateFeedback.create"),
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name="create-outline"
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
+                    <Drawer.Screen
+                        name="feedbackanswer"
+                        options={{
+                            drawerItemStyle: {
+                                display: "none",
+                            },
+                        }}
+                    />
+                    <Drawer.Screen
+                        name="feedbacklistdetails"
+                        options={{
+                            drawerItemStyle: {
+                                display: "none",
+                            },
+                        }}
+                    />
+                    <Drawer.Screen
+                        name="viewCourse"
+                        options={{
+                            drawerItemStyle: {
+                                display:
+                                    user?.is_superuser || user?.is_staff
+                                        ? "flex"
+                                        : "none",
+                            },
+                            drawerLabel: t("translationMenu.viewCourse"),
+                            headerTitle: t("translationMenu.viewCourse"),
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name="people"
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
+                    <Drawer.Screen
+                        name="questionnaire"
+                        options={{
+                            drawerItemStyle: {
+                                display: "none",
+                            },
+                        }}
+                    />
+                    <Drawer.Screen
+                        name="question"
+                        options={{
+                            drawerItemStyle: {
+                                display: "none",
+                            },
                         }}
                     />
                 </Drawer>

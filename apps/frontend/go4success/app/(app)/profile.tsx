@@ -1,4 +1,11 @@
-import { Image, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+    Image,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 import React from "react";
 import stylesGlobal from "@/styles/global";
 import { useAuth } from "@/context/Auth";
@@ -15,7 +22,9 @@ import { DeleteUserAccount } from "@/components/userProfile/DeleteUserAccount";
 const UserProfileFieldsTitle = ({ title }: { readonly title: string }) => {
     return (
         <>
-            <Text style={[stylesGlobal.titleNoPadding, { textAlign: "center" }]}>
+            <Text
+                style={[stylesGlobal.titleNoPadding, { textAlign: "center" }]}
+            >
                 {title}
             </Text>
             <Divider />
@@ -30,7 +39,10 @@ export default function Profile() {
         <ScrollView contentContainerStyle={stylesGlobal.mainContainer}>
             <View style={stylesGlobal.container}>
                 <Text
-                    style={[stylesGlobal.title, { fontSize: 30, textAlign: "center" }]}
+                    style={[
+                        stylesGlobal.title,
+                        { fontSize: 30, textAlign: "center" },
+                    ]}
                 >
                     {t("translationProfile.title")}
                 </Text>
@@ -46,9 +58,10 @@ export default function Profile() {
                             style={styles.userProfilePicture}
                         />
                         <Button
-                            text={t("translationProfile.changeProfilePictureButton")}
-                            onPress={() => {
-                            }}
+                            text={t(
+                                "translationProfile.changeProfilePictureButton",
+                            )}
+                            onPress={() => {}}
                             buttonType={"primary"}
                         />
                     </View>
@@ -131,6 +144,7 @@ const styles = StyleSheet.create({
     },
 
     userProfileFields: {
+        alignContent: "center",
         alignSelf: Platform.OS === "web" ? "auto" : "center",
         gap: 10,
     },

@@ -189,4 +189,11 @@ data
 # Backend
 apps/backend/Pipfile
 apps/backend/Pipfile.lock
-apps/backend/authentification/migrations/0001_initial.py
+apps/backend/authentification/migrations/*
+apps/backend/database/migrations/*
+apps/backend/activities/migrations/*
+apps/backend/rolemanagment/migrations/*
+apps/backend/server/migrations/*
+
+# Frontend
+.expo

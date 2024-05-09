@@ -1,12 +1,12 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import UserView, EditRoleView
+
+from .views import UserView, TeacherView, EditRoleView
 
 router = routers.DefaultRouter()
-router.register(r'rolemanagement', UserView, "rolemanagment")
+router.register(r'users', UserView, "users")
+router.register(r'teachers', TeacherView, "teachers")
 router.register(r'editRole', EditRoleView, "editroleview")
-router.register(r'getuser', UserView)
-router.register(r'editRole', EditRoleView)
 
 urlpatterns = [
     path('', include(router.urls)),

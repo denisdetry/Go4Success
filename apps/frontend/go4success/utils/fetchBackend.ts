@@ -1,16 +1,24 @@
-import { API_BASE_URL } from "@/constants/ConfigApp";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchError } from "@/utils/fetchError";
 import { t } from "i18next";
 
 export async function fetchBackend(options: {
-    readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE";
+    readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE" | "OPTIONS";
     url: string;
     readonly params?: any;
     readonly data?: any;
 }): Promise<any> {
+    const backendUrl = process.env.EXPO_PUBLIC_API_URL;
     const { type, params, data } = options;
     let { url } = options;
+
+    const token = await AsyncStorage.getItem("accessToken");
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+
+    if (token) {
+        headers.append("Authorization", `Bearer ${token}`);
+    }
 
     if (params && type === "GET") {
         url += "?";
@@ -24,13 +32,10 @@ export async function fetchBackend(options: {
         });
     }
 
-    const response = await fetch(`${API_BASE_URL}/` + url, {
+    const response = await fetch(`${backendUrl}/` + url, {
         method: type,
         credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": await AsyncStorage.getItem("csrf_token"),
-        },
+        headers,
         ...(data && { body: JSON.stringify(data) }),
     });
 
@@ -43,6 +48,9 @@ export async function fetchBackend(options: {
             return { data: "success" };
         }
     } else {
-        throw new fetchError(t("translationProfile.defaultErrorMessage"), response);
+        throw new fetchError(
+            t("translationProfile.defaultErrorMessage"),
+            response,
+        );
     }
 }

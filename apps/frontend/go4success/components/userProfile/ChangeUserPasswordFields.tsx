@@ -17,7 +17,7 @@ export const ChangeUserPasswordFields = () => {
     const { t } = useTranslation();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editable, setEditable] = useState(false);
-    const { user, signIn } = useAuth();
+    const { user } = useAuth();
 
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -42,7 +42,9 @@ export const ChangeUserPasswordFields = () => {
     const fetchData = useMutation({
         mutationFn: async () => {
             await fetchBackend({
-                type: "PUT", url: "auth/change_password/" + user.id + "/", data: {
+                type: "PUT",
+                url: "auth/change_password/" + user.id + "/",
+                data: {
                     // eslint-disable-next-line camelcase
                     old_password: oldPassword,
                     password: newPassword,
@@ -51,15 +53,15 @@ export const ChangeUserPasswordFields = () => {
             });
         },
 
-        onSuccess: () => {
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["current_user"] });
             Toast.show({
                 type: "success",
                 text1: t("translateToast.SuccessText1"),
                 text2: t("translationProfile.successPasswordChange"),
             });
-            void queryClient.invalidateQueries({ queryKey: ["current_user"] });
-            signIn({ username: user.username, password: newPassword });
             clearFields();
+            switchEdit();
         },
 
         onError: async (error: fetchError) => {
@@ -79,7 +81,9 @@ export const ChangeUserPasswordFields = () => {
             Toast.show({
                 type: "error",
                 text1: t("translationProfile.error"),
-                text2: errorMessages || t("translationProfile.defaultErrorMessage"),
+                text2:
+                    errorMessages ||
+                    t("translationProfile.defaultErrorMessage"),
             });
         },
     });
@@ -117,6 +121,7 @@ export const ChangeUserPasswordFields = () => {
                         style={styles.input}
                         value={value}
                         placeholder={editable ? "" : "*".repeat(8)}
+                        placeholderTextColor={"grey"}
                         onChangeText={onChangeText}
                         clearButtonMode={"while-editing"}
                         editable={editable}
@@ -144,7 +149,9 @@ export const ChangeUserPasswordFields = () => {
                 isVisible={isModalVisible}
                 onCancel={handleCancel}
                 onConfirm={handleConfirm}
-                dataLabelName={t("translationProfile.passwordTitle").toLowerCase()}
+                dataLabelName={t(
+                    "translationProfile.passwordTitle",
+                ).toLowerCase()}
             />
 
             {passwordFields(
@@ -180,7 +187,9 @@ export const ChangeUserPasswordFields = () => {
                         }}
                     >
                         <ButtonComponent
-                            text={t("translationProfile.cancelPasswordChangeButton")}
+                            text={t(
+                                "translationProfile.cancelPasswordChangeButton",
+                            )}
                             onPress={() => {
                                 switchEdit();
                                 clearFields();
@@ -188,7 +197,9 @@ export const ChangeUserPasswordFields = () => {
                             buttonType={"danger"}
                         />
                         <ButtonComponent
-                            text={t("translationProfile.confirmPasswordChangeButton")}
+                            text={t(
+                                "translationProfile.confirmPasswordChangeButton",
+                            )}
                             onPress={() => {
                                 setIsModalVisible(true);
                             }}

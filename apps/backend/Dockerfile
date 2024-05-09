@@ -1,8 +1,11 @@
 # syntax=docker/dockerfile:1
 FROM python:3.12
+# Set the working directory
 WORKDIR /app
 
-COPY . /app
-COPY requirements.txt /code/
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install -r requirements.txt
+# Copy the application code
+COPY . .

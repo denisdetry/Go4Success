@@ -17,27 +17,37 @@ def custom_validation(data):
     if not email or UserModel.objects.filter(email=email).exists():
         return Response('choisir une autre adresse mail, celui-ci existe déjà', status=status.HTTP_400_BAD_REQUEST)
 
+    # Password length
     if not password or len(password) < 8:
-        # Vérification des caractères spéciaux, des majuscules et des minuscules
-        if not re.search(r'[!@#$%^&*(),.?":{}|<>-_+]', password):
-            return Response('Le mot de passe doit contenir au moins un caractère spécial',
-                            status=status.HTTP_400_BAD_REQUEST)
-        if not re.search(r'[A-Z]', password):
-            return Response('Le mot de passe doit contenir au moins une majuscule', status=status.HTTP_400_BAD_REQUEST)
-        if not re.search(r'[a-z]', password):
-            return Response('Le mot de passe doit contenir au moins une minuscule', status=status.HTTP_400_BAD_REQUEST)
-
         return Response('Le mot de passe doit contenir au moins 8 caractères', status=status.HTTP_400_BAD_REQUEST)
+
+    if not re.search(r'[0-9]', password):
+        return Response('Le mot de passe doit contenir au moins un chiffre', status=status.HTTP_400_BAD_REQUEST)
+
+    # Vérification des caractères spéciaux, des majuscules et des minuscules
+    if not re.search(r'[!@#\$%\^&\*\(\),\.\?":{}\|<>\-_+]', password):
+        return Response('Le mot de passe doit contenir au moins un caractère spécial',
+                        status=status.HTTP_400_BAD_REQUEST)
+
+    # Vérification des majuscules
+    if not re.search(r'[A-Z]', password):
+        return Response('Le mot de passe doit contenir au moins une majuscule', status=status.HTTP_400_BAD_REQUEST)
+
+    # Vérification des minuscules
+    if not re.search(r'[a-z]', password):
+        return Response('Le mot de passe doit contenir au moins une minuscule', status=status.HTTP_400_BAD_REQUEST)
 
     # Username
     if not username or UserModel.objects.filter(username=username).exists():
-        return Response('choisir un autre nom d’utilisateur, celui-ci existe déjà', status=status.HTTP_400_BAD_REQUEST)
+        return Response("choisir un autre nom d'utilisateur, celui-ci existe déjà", status=status.HTTP_400_BAD_REQUEST)
 
     if 'noma' in data:
         noma = data['noma'].strip()
         if UserModel.objects.filter(noma=noma).exists() and noma != "":
             return Response('choisir un autre noma, celui-ci est déjà utilisé',
                             status=status.HTTP_400_BAD_REQUEST)
+        if not noma.isdigit() or len(noma) != 8:
+            return Response('Le noma doit contenir 8 chiffres', status=status.HTTP_400_BAD_REQUEST)
     return data
 
 

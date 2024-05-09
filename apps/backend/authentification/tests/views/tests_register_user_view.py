@@ -26,7 +26,7 @@ class TestRegisterUserView(APITestCase):
 
     def test_register_user_fail_email_required(self):
         data = json.dumps({
-            "username": "test",
+            "username": "testuser",
             "email": "",
             # email is required. This is what we are testing. We can test with other required fields either.
             "last_name": "user",

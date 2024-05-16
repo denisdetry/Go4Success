@@ -6,21 +6,26 @@ from database.models import Attend, Course, Feedback, FeedbackStudent, Activity,
 from .serializers import FeedbackSerializer
 from datetime import datetime, timedelta
 from django.utils import timezone
+from rest_framework.test import APITestCase, APIClient
 
 from database.models import Course, Feedback, FeedbackAdditionalQuestions, \
-    FeedbackStudent, FeedbackStudentAdditionalQuestions, Activity, Room, Site, Teacher, User, Give
+    FeedbackStudent, FeedbackStudentAdditionalQuestions, Activity, Room, Site, User
 from .serializers import ActivitySerializer, UserSerializer, FeedbackSerializer, FeedbackAdditionalQuestionsSerializer, \
     FeedbackStudentSerializer, FeedbackStudentAdditionalQuestionsSerializer
 
 
 today = datetime.now()
-yesterday = today - timedelta(days=1)
-tomorrow = today + timedelta(days=1)
+
+start_activity = today - timedelta(days=5)
+end_activity = today + timedelta(days=4)
+start_feedback = end_activity
+end_feedback = today + timedelta(days=1)
+
 today_str = today.strftime('%Y-%m-%d')
-tomorrow_str = tomorrow.strftime('%Y-%m-%d')
-yesterday_str = yesterday.strftime('%Y-%m-%d')
-tomorrowTime_str = tomorrow.strftime('%Y-%m-%dT%H:%M:%SZ')
-yesterdayTime_str = yesterday.strftime('%Y-%m-%dT%H:%M:%SZ')
+start_activity_str = start_activity.strftime('%Y-%m-%dT%H:%M:%SZ')
+end_activty_str = end_activity.strftime('%Y-%m-%dT%H:%M:%SZ')
+start_feedback_str = start_feedback.strftime('%Y-%m-%d')
+end_feedback_str = end_feedback.strftime('%Y-%m-%d')
 
 
 class FeedbackViewSetTestCase(TestCase):
@@ -38,8 +43,8 @@ class FeedbackViewSetTestCase(TestCase):
             room=self.room,
             type="workshop",
             description="Test Activity",
-            date_start=yesterdayTime_str,
-            date_end=tomorrowTime_str,
+            date_start=start_activity_str,
+            date_end=end_activty_str,
             course=self.course
         )
         self.feedback = Feedback.objects.create(
@@ -49,9 +54,8 @@ class FeedbackViewSetTestCase(TestCase):
             negative_point=True,
             suggestion=True,
             additional_comment=True,
-            date_start=yesterday_str,
-            date_end=tomorrow_str
-        )
+            date_start=start_feedback_str,
+            date_end=end_feedback_str)
         self.url = reverse('feedbacks-list')
 
     def test_get_all_feedbacks(self):
@@ -134,3 +138,53 @@ class FeedbackViewSetTestCase(TestCase):
         self.feedback.date_start = tomorrow
         with self.assertRaisesMessage(Exception, 'The feedback date has not started yet. No feedbacks can be created.'):
             validate_feedback_date_start(self.feedback)
+
+
+# class FeedbackStudentViewTest(APITestCase):
+#    def setUp(self):
+#        self.client = APIClient()
+#        self.userAdmin = User.objects.create(
+#            id=1, username="testAdmin", password="testpassword", email="admin@example.com")
+#        self.userStudent = User.objects.create(
+#            id=2, username="testStudent", password="testpassword", email="student@example.com")
+#        self.site = Site.objects.create(name="Namur")
+#        self.room = Room.objects.create(name="Room1", site=self.site)
+#        self.course = Course.objects.create(code="Course1", name="Test Course")
+#        self.activity = Activity.objects.create(
+#            name="Activity1",
+#            room=self.room,
+#            type="workshop",
+#            description="Test Activity",
+#            date_start=start_activity_str,
+#            date_end=end_activty_str,
+#            course=self.course
+#        )
+#        self.feedback = Feedback.objects.create(
+#            user_id=1,
+#            activity=self.activity,
+#            positive_point=True,
+#            negative_point=True,
+#            suggestion=True,
+#            additional_comment=True,
+#            date_start=start_feedback_str,
+#            date_end=end_feedback_str
+#        )
+#
+#    def test_create_feedback_student(self):
+#        data = {
+#            'student': self.userStudent.id,
+#            'feedback': self.feedback.id,
+#            'evaluation': 5,
+#            'date_submitted': today_str,
+#            'positive_point': "Good",
+#            'negative_point': "Nothing",
+#            'additional_comment': "/",
+#            'suggestion': "/",
+#        }
+#        response = self.client.post(
+#            reverse('feedbackstudent-list'), data, format='json')
+#        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+#        self.assertEqual(FeedbackStudent.objects.count(), 1)
+#        self.assertEqual(
+#            FeedbackStudent.objects.get().student.id, data['student'])
+#

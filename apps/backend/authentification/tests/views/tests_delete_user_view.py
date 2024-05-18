@@ -16,8 +16,7 @@ class DeleteUserView(APITestCase):
             noma="20200574"
         )
         refresh = RefreshToken.for_user(self.user)
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {
-                                refresh.access_token}')
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
 
     def test_delete_user_ok(self):
         data = {"password": "Testpassword123_"}

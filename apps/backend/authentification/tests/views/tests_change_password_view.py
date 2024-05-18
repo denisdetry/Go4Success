@@ -13,8 +13,7 @@ class ChangePasswordViewTest(APITestCase):
             password='Testpassword123_'
         )
         refresh = RefreshToken.for_user(self.user)
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {
-                                refresh.access_token}')
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
 
     def test_change_password_ok(self):
         data = {
@@ -38,7 +37,7 @@ class ChangePasswordViewTest(APITestCase):
             reverse("change_password", kwargs={'id': self.user.id}), data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data["old_password"], {
-                         "old_password": "L'ancien mot de passe est incorrect"})
+            "old_password": "L'ancien mot de passe est incorrect"})
 
     def test_change_password_no_old_password(self):
         data = {
@@ -49,7 +48,7 @@ class ChangePasswordViewTest(APITestCase):
             reverse("change_password", kwargs={'id': self.user.id}), data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data["old_password"], [
-                         "This field is required."])
+            "This field is required."])
 
     def test_change_password_no_password(self):
         data = {
@@ -60,7 +59,7 @@ class ChangePasswordViewTest(APITestCase):
             reverse("change_password", kwargs={'id': self.user.id}), data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data["password"], [
-                         "This field is required."])
+            "This field is required."])
 
     def test_change_password_no_password2(self):
         data = {
@@ -71,7 +70,7 @@ class ChangePasswordViewTest(APITestCase):
             reverse("change_password", kwargs={'id': self.user.id}), data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data["password2"], [
-                         "This field is required."])
+            "This field is required."])
 
     def test_change_password_no_user(self):
         data = {
@@ -108,7 +107,7 @@ class ChangePasswordViewTest(APITestCase):
             reverse("change_password", kwargs={'id': self.user.id}), data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data["password"], [
-                         "Les mots de passe ne correspondent pas"])
+            "Les mots de passe ne correspondent pas"])
 
     def test_change_password_password_too_short(self):
         data = {

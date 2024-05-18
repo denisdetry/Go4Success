@@ -768,6 +768,7 @@ INSTALLED_APPS = [
     "activities",
     "database",
     "rolemanagement",
+    "feedback",
 ]
 ```
 

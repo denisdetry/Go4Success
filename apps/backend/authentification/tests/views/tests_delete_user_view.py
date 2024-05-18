@@ -22,7 +22,6 @@ class DeleteUserView(APITestCase):
         data = {"password": "Testpassword123_"}
         response = self.client.delete(
             reverse('delete_user', kwargs={"id": self.user.id}), data)
-        print(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, {"User deleted"})
 
@@ -42,7 +41,6 @@ class DeleteUserView(APITestCase):
     def test_delete_user_no_user(self):
         response = self.client.delete(reverse('delete_user', kwargs={"id": 2}))
         self.assertEqual(response.status_code, 404)
-        print(response.data)
         self.assertEqual(response.data["detail"],
                          "No User matches the given query.")
 

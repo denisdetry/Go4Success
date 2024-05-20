@@ -185,5 +185,8 @@ signOut: async () => {
 }
 ```
 
+# Notes pour le web
 
-    
+Par manque de temps pour finaliser le système, nous n'avons pas pu tester les notifications push sur le web. C'est
+pourquoi, nous avons mis à certains endroit des conditions if pour éviter les erreurs.
+Un exemple concret, dans le fichier `usePushNotifications.ts` ou `Auth.tsx` avec la fonction `SignOut`.

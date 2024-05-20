@@ -7,6 +7,11 @@ pour vous créer un compte et lié le projet à expo : https://expo.dev/
 Il vous faudra également un compte Firebase pour pouvoir utiliser les notifications push. Voici le site pour vous créer
 un compte et créer un projet Firebase : https://firebase.google.com/
 
+Je vous invite à regarder cette vidéo pour en apprendre davantage sur l'installation et la configuration des notifications avec Expo : 
+https://www.youtube.com/watch?v=V-hois8dgM4
+
+## Fichier `usePushNotifications.ts`
+
 Ce fichier contient le hook personnalisé `usePushNotifications`, qui est utilisé pour gérer les notifications push dans
 l'application. Il utilise les fonctions d'Expo pour enregistrer l'appareil pour les notifications push, envoyer des
 notifications. En voici la documentation officiel pour plus

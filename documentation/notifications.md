@@ -23,8 +23,7 @@ lors de son initialisation. Il enregistre également deux handlers de notificati
 et un pour les réponses aux notifications. Il renvoie le token de notification push Expo et la dernière notification
 reçue.
 
-Un useEffect est mise en place pour ce système, et nous avons ajouter les rêquetes à notre serveur django pour ajouter (
-si nécessaire), ou mettre à jour l'attribut is_active de la table ExpoToken de la base de données.
+Un useEffect est mise en place pour ce système, et nous avons ajouter les rêquetes à notre serveur `django` pour ajouter (si nécessaire), ou mettre à jour l'attribut `is_active` de la table ExpoToken de la base de données.
 
 ### Fonction `registerForPushNotificationsAsync`
 

@@ -68,7 +68,7 @@ utilisant le hook `usePushNotifications`. Ensuite, vous pouvez utiliser les
 fonctions `sendPushNotification`, `sendNotificationsToAllUsers` et `schedulePushNotification` pour envoyer et planifier
 des notifications push.
 
-Pour adapter le système de notifications à notre application, nous avons appelé le hook usePushNotifications dans le
+Pour adapter le système de notifications à notre application, nous avons appelé le hook `usePushNotifications` dans le
 contexte `Auth.tsx`. Voici comment nous avons fait :
 
 ### Auth.tsx
@@ -144,3 +144,46 @@ export default function Notifications() {
 
 }
 ```
+
+### Mise à jour de la base de données lors de la déconnexion dans `Auth.tsx`
+
+```tsx 
+signOut: async () => {
+    try {
+        if (Platform.OS !== "web") {
+            await fetchBackend({
+                type: "PATCH",
+                url:
+                    "auth/update_expo_token/" +
+                    user.id +
+                    "/" +
+                    expoPushToken +
+                    "/",
+                data: {
+                    // eslint-disable-next-line camelcase
+                    is_active: false,
+                },
+            });
+        }
+
+        await AsyncStorage.removeItem("accessToken");
+        await AsyncStorage.removeItem("refreshToken");
+
+        await queryClient.invalidateQueries({
+            queryKey: ["current_user"],
+        });
+
+        Toast.show({
+            type: "success",
+            text1: t("translateToast.LogoutSuccessText1"),
+            text2: t("translateToast.LogoutSuccessText2"),
+        });
+    } catch (error) {
+        const err = error as fetchError;
+        console.log(err.responseError);
+    }
+}
+```
+
+
+    

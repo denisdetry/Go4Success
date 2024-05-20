@@ -12,7 +12,9 @@ Django pour faire communiquer le serveur et le client.
 
 ### Front-end
 
-Du côté client, puisqu'il faisait partie des éxigences du projet que l'application tourne sur web et sur mobile, nous avons opté pour l'utilisation du framework JavaScript React Native. Tous nos fichiers de code source du front-end sont écrits en TypeScript.
+Du côté client, puisqu'il faisait partie des éxigences du projet que l'application tourne sur web et sur mobile, nous
+avons opté pour l'utilisation du framework JavaScript React Native. Tous nos fichiers de code source du front-end sont
+écrits en TypeScript.
 
 ### Base de donnée
 
@@ -28,7 +30,7 @@ votre disposition pour pouvoir visionner les schémas.
 
 ### Racine du projet
 
--   _.prettierrc_ : contient les règles utilisées par _Prettier_ pour formatter le code.
+- _.prettierrc_ : contient les règles utilisées par _Prettier_ pour formatter le code.
 
 ### _apps/frontend/_
 
@@ -39,36 +41,36 @@ Docker.
 
 #### _go4success/_
 
--   **_app/_** contient le code source de l'application
--   **_assets/_** contient les images et autres éléments statiques affichés dans l'application.
--   **_components/_** contient tous les composants react que nous réutilisons à travers l'application.
--   **_constants/_** contient toutes constantes utilisées dans l'application. Notamment les couleurs, les tailles de
-    d'écran pour les différentes platformes, etc.
--   **_context/_** contient les contextes react que nous utilisons à travers toute l'application. Essentiellement pour
-    l'authentification de l'utilisateur, donc c'est **une partie centrale du code frontend.**
--   **_hooks/_** contient les différents hooks react utilisés dans l'application.
--   **_locales/_** contient les json pour les dictionnaires de traduction i18n pour les langues de l'application.
--   **_styles/_** contient les fichiers de style "css". Ici, nous avons essentiellement mis une fiche de style dites
-    global, réutilisé un peu partout dans l'application, car les fiches de style un peu plus locale sont directement dans
-    les fichiers de code .tsx
--   **_types/_** contient les différents types typescript utilisés à travers l'application.
--   **_utils/_** contient des fonctions utilitaires (pour faire des requetes au serveur django ou autre) que nous
-    détailleront plus en détails dans la doc technique, avec des
-    exemples d'utilisation.
+- **_app/_** contient le code source de l'application
+- **_assets/_** contient les images et autres éléments statiques affichés dans l'application.
+- **_components/_** contient tous les composants react que nous réutilisons à travers l'application.
+- **_constants/_** contient toutes constantes utilisées dans l'application. Notamment les couleurs, les tailles de
+  d'écran pour les différentes platformes, etc.
+- **_context/_** contient les contextes react que nous utilisons à travers toute l'application. Essentiellement pour
+  l'authentification de l'utilisateur, donc c'est **une partie centrale du code frontend.**
+- **_hooks/_** contient les différents hooks react utilisés dans l'application.
+- **_locales/_** contient les json pour les dictionnaires de traduction i18n pour les langues de l'application.
+- **_styles/_** contient les fichiers de style "css". Ici, nous avons essentiellement mis une fiche de style dites
+  global, réutilisé un peu partout dans l'application, car les fiches de style un peu plus locale sont directement dans
+  les fichiers de code .tsx
+- **_types/_** contient les différents types typescript utilisés à travers l'application.
+- **_utils/_** contient des fonctions utilitaires (pour faire des requetes au serveur django ou autre) que nous
+  détailleront plus en détails dans la doc technique, avec des
+  exemples d'utilisation.
 
 #### _go4success/app/_
 
 Ce dossier contient deux parties de l'application :
 
--   **_(auth)_** contient les pages permettant l'inscription et la connexion d'utilisateurs. **L'utilisateur pourra
-    accéder
-    à ces pages uniquement s'il n'est pas encore connecté à l'application.**
--   **_(app)_** contient le reste de l'application, **accessible uniquement si l'utilisateur est connecté**. Il est
-    important de noter que chaque fichier dans ce dossier
-    correspond à une page s'affichant dans le menu de l'application.
--   **Notes :** La gestion d'accès aux pages d'authentification et au reste de l'application, selon le statut de
-    l'utilisateur (connecté ou non) est géré par le contexte **Auth.tsx**, situé dans le dossier
-    **apps/frontend/go4success/context/**
+- **_(auth)_** contient les pages permettant l'inscription et la connexion d'utilisateurs. **L'utilisateur pourra
+  accéder
+  à ces pages uniquement s'il n'est pas encore connecté à l'application.**
+- **_(app)_** contient le reste de l'application, **accessible uniquement si l'utilisateur est connecté**. Il est
+  important de noter que chaque fichier dans ce dossier
+  correspond à une page s'affichant dans le menu de l'application.
+- **Notes :** La gestion d'accès aux pages d'authentification et au reste de l'application, selon le statut de
+  l'utilisateur (connecté ou non) est géré par le contexte **Auth.tsx**, situé dans le dossier
+  **apps/frontend/go4success/context/**
 
 ### _apps/backend/_
 
@@ -79,36 +81,39 @@ Le backend possède plusieurs applications django (activities, authentication, d
 dossier backend, et portant un nom représentant la fonctionnaité, ormis le dossier **server**, qui gère l'application
 django et ses paramètres (avec le fichiers setting, urls, ...).
 
--   **apps/backend**
+- **apps/backend**
 
-    -   **activities**
-        -   (...) _# application django_
-    -   **authentication**
-        -   (...)
-    -   **database**
-        -   (...)
-    -   **feedback**
-        -   (...)
-    -   **rolemanagement**
+    - **activities**
+        - (...) _# application django_
+    - **authentication**
+        - (...)
+    - **database**
+        - (...)
+    - **feedback**
+        - (...)
+    - **rolemanagement**
 
-        -   rolemanagement gére la gestion des rôles dans le projet, elle sert à changer l'état d'un utlisateur (etudiant,tuteur,professeur,superuser)
+        - rolemanagement gére la gestion des rôles dans le projet, elle sert à changer l'état d'un utlisateur (
+          etudiant,tuteur,professeur,superuser)
 
-        -   view :
+        - view :
 
-        'UserView' : permet de faire des requêtes GET/PATCH/POST sur le serializer 'UserSerializer'
+      'UserView' : permet de faire des requêtes GET/PATCH/POST sur le serializer 'UserSerializer'
 
-        'EditRoleView' : permet de faire des requêtes GET/PATCH/POST sur le serializer 'EditRoleSerializer'
+      'EditRoleView' : permet de faire des requêtes GET/PATCH/POST sur le serializer 'EditRoleSerializer'
 
-        -   serializers : afin de gérer les rôles nous avons besoin de trois class 'UserSerializer' : qui permet de récupérer les données de l'utilisateur et son rôle
+        - serializers : afin de gérer les rôles nous avons besoin de trois class 'UserSerializer' : qui permet de
+          récupérer les données de l'utilisateur et son rôle
 
-        'TeacherSerializer' : Permet de récupérer le rôle de l'utilisateur, s'il est professeur ou tuteur.
+      'TeacherSerializer' : Permet de récupérer le rôle de l'utilisateur, s'il est professeur ou tuteur.
 
-        'EditRoleSerializer' : permet d'editer le rôle d'un utiliateur.
+      'EditRoleSerializer' : permet d'editer le rôle d'un utiliateur.
 
-        -   permissions : Afin d'éviter que les utilisateurs non superuser change le rôles des utilisateurs, la class 'IsSuperUser' permet de vérifier que l'utilisateur courant est un superuser
+        - permissions : Afin d'éviter que les utilisateurs non superuser change le rôles des utilisateurs, la class '
+          IsSuperUser' permet de vérifier que l'utilisateur courant est un superuser
 
-    -   **server**
-        -   (...) _# serveur django_
+    - **server**
+        - (...) _# serveur django_
 
 ## Applications django en détails
 
@@ -121,43 +126,56 @@ ateliers.
 
 #### Vues (Activities)
 
--   **RoomViewSet:** Ce viewset fournit un accès en lecture seule au modèle Room. Il comprend une méthode get_rooms_by_site qui prend un site_id en paramètre et renvoie toutes les salles associées à ce site.
--   **SiteViewSet:** Ce viewset fournit un accès complet CRUD (Create, Read, Update, Delete) au modèle Site.
--   **LanguageViewSet:** Ce viewset fournit un accès complet CRUD au modèle Language.
--   **ActivityViewSet:** Ce viewset fournit un accès complet CRUD au modèle Activity. Il surcharge la méthode get_queryset pour ne renvoyer que les activités pour lesquelles l'utilisateur actuel ne s'est pas inscrit. La méthode create est également surchargée pour gérer une manipulation spécifique des données avant de créer une activité.
--   **AttendViewSet:** Ce viewset fournit un accès complet CRUD au modèle Attend. Il surcharge la méthode get_queryset pour ne renvoyer que les participations associées à l'utilisateur actuel.
--   **filter_queryset:** Il s'agit d'une fonction d'aide utilisée dans ActivityViewSet et AttendViewSet pour filtrer le queryset en fonction des paramètres de la requête. Elle supporte le filtrage par name, site, room, date_start, date_end, et language.
--   **RegisterToActivityView:** Ce viewset fournit un accès complet CRUD au modèle Attend pour les utilisateurs authentifiés. Il utilise le RegisterToActivitySerializer pour gérer la sérialisation des données.
+- **RoomViewSet:** Ce viewset fournit un accès en lecture seule au modèle Room. Il comprend une méthode
+  get_rooms_by_site qui prend un site_id en paramètre et renvoie toutes les salles associées à ce site.
+- **SiteViewSet:** Ce viewset fournit un accès complet CRUD (Create, Read, Update, Delete) au modèle Site.
+- **LanguageViewSet:** Ce viewset fournit un accès complet CRUD au modèle Language.
+- **ActivityViewSet:** Ce viewset fournit un accès complet CRUD au modèle Activity. Il surcharge la méthode get_queryset
+  pour ne renvoyer que les activités pour lesquelles l'utilisateur actuel ne s'est pas inscrit. La méthode create est
+  également surchargée pour gérer une manipulation spécifique des données avant de créer une activité.
+- **AttendViewSet:** Ce viewset fournit un accès complet CRUD au modèle Attend. Il surcharge la méthode get_queryset
+  pour ne renvoyer que les participations associées à l'utilisateur actuel.
+- **filter_queryset:** Il s'agit d'une fonction d'aide utilisée dans ActivityViewSet et AttendViewSet pour filtrer le
+  queryset en fonction des paramètres de la requête. Elle supporte le filtrage par name, site, room, date_start,
+  date_end, et language.
+- **RegisterToActivityView:** Ce viewset fournit un accès complet CRUD au modèle Attend pour les utilisateurs
+  authentifiés. Il utilise le RegisterToActivitySerializer pour gérer la sérialisation des données.
 
 ### Serializers (Activities)
 
 Nous allons pas détailler les serializers, car ils sont très simples et sont utilisés pour la validation des données.
 Nous allons néanmoins les citer et les décrire brièvement.
 
--   **RoomSerializer:** Ce serializer est utilisé pour valider les données des locaux.
--   **CourseSerializer:** Ce serializer est utilisé pour valider les données des cours.
--   **LanguageSerializer:** Ce serializer est utilisé pour valider les données des langues.
--   **ActivitySerializer:** Ce serializer est utilisé pour valider les données des activités.
--   **AttendSerializer:** Ce serializer est utilisé pour valider les données des activités où un utilisateurs authentifié est inscrit.
--   **SiteSerializer:** Ce serializer est utilisé pour valider les données des villes.
--   **RegisterToActivitySerializer:** Ce serializer est utilisé pour valider les données d'inscription à une activité.
+- **RoomSerializer:** Ce serializer est utilisé pour valider les données des locaux.
+- **CourseSerializer:** Ce serializer est utilisé pour valider les données des cours.
+- **LanguageSerializer:** Ce serializer est utilisé pour valider les données des langues.
+- **ActivitySerializer:** Ce serializer est utilisé pour valider les données des activités.
+- **AttendSerializer:** Ce serializer est utilisé pour valider les données des activités où un utilisateurs authentifié
+  est inscrit.
+- **SiteSerializer:** Ce serializer est utilisé pour valider les données des villes.
+- **RegisterToActivitySerializer:** Ce serializer est utilisé pour valider les données d'inscription à une activité.
 
 #### Urls (Activities)
 
-Les différentes urls de l'application _activities_ sont définies dans le fichier _urls.py_. Elles sont en liens avec les vues décrites plus haut.
+Les différentes urls de l'application _activities_ sont définies dans le fichier _urls.py_. Elles sont en liens avec les
+vues décrites plus haut.
 
 #### Tests (Activities)
 
 Conntient un ensemble de tests pour vérifier les éléments suivants :
 
--   **RoomViewSetTestCase:**
-    -   _test_get_room_ : Ce test vérifie que l'API renvoie correctement toutes les salles.
-    -   _test_get_room_not_found_ : Ce test vérifie que l'API renvoie une erreur 404 lorsque l'on tente d'accéder à une salle qui n'existe pas.
--   **ActivityViewSetTestCase:**
-    -   _test_get_all_activities_ : Ce test vérifie que l'API renvoie correctement toutes les activités.
--   **AttendSerializerTest:**
-    -   _test_attend_serializer_ : Ce test vérifie que le sérialiseur Attend fonctionne correctement et renvoie les données attendues.
-    -   _test_unattend_activity_ : Ce test vérifie que l'API permet à un utilisateur de se désinscrire d'une activité et renvoie le code de statut HTTP 204. Il vérifie également que l'objet Attend est correctement supprimé de la base de données.
+- **RoomViewSetTestCase:**
+    - _test_get_room_ : Ce test vérifie que l'API renvoie correctement toutes les salles.
+    - _test_get_room_not_found_ : Ce test vérifie que l'API renvoie une erreur 404 lorsque l'on tente d'accéder à une
+      salle qui n'existe pas.
+- **ActivityViewSetTestCase:**
+    - _test_get_all_activities_ : Ce test vérifie que l'API renvoie correctement toutes les activités.
+- **AttendSerializerTest:**
+    - _test_attend_serializer_ : Ce test vérifie que le sérialiseur Attend fonctionne correctement et renvoie les
+      données attendues.
+    - _test_unattend_activity_ : Ce test vérifie que l'API permet à un utilisateur de se désinscrire d'une activité et
+      renvoie le code de statut HTTP 204. Il vérifie également que l'objet Attend est correctement supprimé de la base
+      de données.
 
 ### Authentication
 
@@ -171,17 +189,17 @@ de plusieurs sortes : APIView, ViewSet, etc.
 
 Nous vous mettons les liens de la documentation des APIView et des ViewSet, pour plus d'information sur ces vues.
 
--   APIView : https://www.django-rest-framework.org/api-guide/views/
--   ViewSet : https://www.django-rest-framework.org/api-guide/viewsets/
--   ModelViewSet : https://www.django-rest-framework.org/api-guide/viewsets/#modelviewset
--   GenericAPIView : https://www.django-rest-framework.org/api-guide/generic-views/
--   UpdateAPIView : https://www.django-rest-framework.org/api-guide/generic-views/#updateapiview
--   DestroyAPIView : https://www.django-rest-framework.org/api-guide/generic-views/#destroyapiview
+- APIView : https://www.django-rest-framework.org/api-guide/views/
+- ViewSet : https://www.django-rest-framework.org/api-guide/viewsets/
+- ModelViewSet : https://www.django-rest-framework.org/api-guide/viewsets/#modelviewset
+- GenericAPIView : https://www.django-rest-framework.org/api-guide/generic-views/
+- UpdateAPIView : https://www.django-rest-framework.org/api-guide/generic-views/#updateapiview
+- DestroyAPIView : https://www.django-rest-framework.org/api-guide/generic-views/#destroyapiview
 
 Les vues sont les suivantes :
 
--   **_UserRegisterView_** : La vue qui s'occupe d'inscrire les utilisateurs. Elle reçoit les information de l'inscription
-    dans la requête POST.
+- **_UserRegisterView_** : La vue qui s'occupe d'inscrire les utilisateurs. Elle reçoit les information de l'inscription
+  dans la requête POST.
 
 ```tsx
 // Exemple d'interaction de la vue UserRegisterView en frontend avec react
@@ -233,11 +251,11 @@ const signUp = async (userData: UserRegister) => {
 };
 ```
 
--   **_TokenObtainPairView_ (LoginView)** : Cette vue vient directement du framework **rest_framework_simple_jwt** et
-    s'occupe de
-    vérifier les credentials de l'utilisateur pour que celui-ci puisse se connecter. La vue fait des requetes POST, en
-    utilisant une username et un password, et renvoie un token d'authentification (access et refresh token) si les
-    credentials sont valides.
+- **_TokenObtainPairView_ (LoginView)** : Cette vue vient directement du framework **rest_framework_simple_jwt** et
+  s'occupe de
+  vérifier les credentials de l'utilisateur pour que celui-ci puisse se connecter. La vue fait des requetes POST, en
+  utilisant une username et un password, et renvoie un token d'authentification (access et refresh token) si les
+  credentials sont valides.
 
 ```tsx
 // Exemple d'interaction de la vue TokenObtainPairView en frontend avec react
@@ -281,8 +299,8 @@ const signIn = async (userData: UserLogin) => {
 };
 ```
 
--   **_LogoutView_** : Il n'y pas de vue de déconnexion, car la déconnexion se fait automatiquement en supprimant le
-    token (access et refresh) de l'utilisateur. Cela se fait en frontend, en supprimant les tokens du local storage.
+- **_LogoutView_** : Il n'y pas de vue de déconnexion, car la déconnexion se fait automatiquement en supprimant le
+  token (access et refresh) de l'utilisateur. Cela se fait en frontend, en supprimant les tokens du local storage.
 
 ```tsx
 // Exemple de déconnexion en frontend avec react
@@ -310,8 +328,8 @@ const signOut = async () => {
 };
 ```
 
--   **_CurrentUserView_** : fonctionne avec un GET uniquement. Renvoie les informations de l'utilisateur connecté dans la
-    session actuelle.
+- **_CurrentUserView_** : fonctionne avec un GET uniquement. Renvoie les informations de l'utilisateur connecté dans la
+  session actuelle.
 
 ```tsx
 import { useQuery } from "@tanstack/react-query";
@@ -338,10 +356,10 @@ export default function useUser() {
 }
 ```
 
--   **_UpdateProfileView_** : Permet à l'utilisateur de mettre à jour son profil. La vue fait une requête PATCH avec les
-    nouvelles informations de l'utilisateur. Dans notre application, on utilise le PATCH pour mettre à jour seulement un
-    attribut de l'utilisateur (comme le prénom uniquement par exemple). Mais le PUT peut être utilisé pour mettre à jour
-    tout l'objet utilisateur.
+- **_UpdateProfileView_** : Permet à l'utilisateur de mettre à jour son profil. La vue fait une requête PATCH avec les
+  nouvelles informations de l'utilisateur. Dans notre application, on utilise le PATCH pour mettre à jour seulement un
+  attribut de l'utilisateur (comme le prénom uniquement par exemple). Mais le PUT peut être utilisé pour mettre à jour
+  tout l'objet utilisateur.
 
 ```tsx
 // Exemple de mise à jour du profil en frontend avec react
@@ -379,8 +397,8 @@ const fetchData = useMutation({
 });
 ```
 
--   **_DeleteUserView_** : Permet à l'utilisateur de supprimer son compte. La vue fait une requête DELETE pour supprimer
-    l'utilisateur.
+- **_DeleteUserView_** : Permet à l'utilisateur de supprimer son compte. La vue fait une requête DELETE pour supprimer
+  l'utilisateur.
 
 ```tsx
 // Exemple de suppression du profil en frontend avec react
@@ -410,8 +428,8 @@ const handleDeleteUser = useMutation({
 });
 ```
 
--   **_ChangePasswordView_** : Permet à l'utilisateur de changer son mot de passe. La vue fait une requête PUT pour
-    changer le mot de passe de l'utilisateur.
+- **_ChangePasswordView_** : Permet à l'utilisateur de changer son mot de passe. La vue fait une requête PUT pour
+  changer le mot de passe de l'utilisateur.
 
 ```tsx
 // Exemple de changement de mot de passe en frontend avec react
@@ -458,10 +476,10 @@ veuillez consulter la section _locales_ du dossier _go4success_.
 Nous allons pas détailler les serializers, car ils sont très simples et sont utilisés pour la validation des données.
 Nous allons néanmoins les citer et les décrire brièvement.
 
--   **UserRegistrationSerializer:** Ce serializer est utilisé pour valider les données d'inscription d'un utilisateur.
--   **UserSerializer:** Ce serializer est utilisé pour valider les données de l'utilisateur.
--   **UpdateUserSerializer:** Ce serializer est utilisé pour valider les données de mise à jour de l'utilisateur.
--   **ChangePasswordSerializer:** Ce serializer est utilisé pour valider les données de changement de mot de passe.
+- **UserRegistrationSerializer:** Ce serializer est utilisé pour valider les données d'inscription d'un utilisateur.
+- **UserSerializer:** Ce serializer est utilisé pour valider les données de l'utilisateur.
+- **UpdateUserSerializer:** Ce serializer est utilisé pour valider les données de mise à jour de l'utilisateur.
+- **ChangePasswordSerializer:** Ce serializer est utilisé pour valider les données de changement de mot de passe.
 
 #### Validation (Authentication)
 
@@ -472,7 +490,8 @@ matricule étudiant).
 
 #### Urls (Authentication)
 
-Les différentes urls de l'application _authentication_ sont définies dans le fichier _urls.py_. Elles sont en liens avec les vues décrites plus haut.
+Les différentes urls de l'application _authentication_ sont définies dans le fichier _urls.py_. Elles sont en liens avec
+les vues décrites plus haut.
 
 ### Database
 
@@ -482,191 +501,205 @@ Comme son nom l'indique, cette application va gérer les base de données avec l
 
 Voici les différents modèles :
 
--   **User :** Ce modèle représente l'utilisateur de l'application. Nous avons pour créer un modèle d'user par dessus
-    celui
-    fourni par django, afin d'y ajouter notamment le noma (matricule étudiant) Il contient les attributs suivants :
+- **User :** Ce modèle représente l'utilisateur de l'application. Nous avons pour créer un modèle d'user par dessus
+  celui
+  fourni par django, afin d'y ajouter notamment le noma (matricule étudiant) Il contient les attributs suivants :
 
-    -   **id** : l'identifiant de l'utilisateur pour la base de données.
-    -   **username** : Le nom d'utilisateur de l'utilisateur.
-    -   **email** : L'email de l'utilisateur.
-    -   **first_name** : Le prénom de l'utilisateur.
-    -   **last_name** : Le nom de famille de l'utilisateur.
-    -   **noma** : Le matricule de l'utilisateur.
-    -   **is_active** : Un booléen qui indique si l'utilisateur est actif.
-    -   **is_staff** : Un booléen qui indique si l'utilisateur est un membre du staff.
-    -   **is_superuser** : Un booléen qui indique si l'utilisateur est un super utilisateur.
-    -   **date_join** : La date à laquelle l'utilisateur s'est inscrit.
-    -   **last_login** : La date à laquelle l'utilisateur s'est connecté pour la dernière fois.
+    - **id** : l'identifiant de l'utilisateur pour la base de données.
+    - **username** : Le nom d'utilisateur de l'utilisateur.
+    - **email** : L'email de l'utilisateur.
+    - **first_name** : Le prénom de l'utilisateur.
+    - **last_name** : Le nom de famille de l'utilisateur.
+    - **noma** : Le matricule de l'utilisateur.
+    - **is_active** : Un booléen qui indique si l'utilisateur est actif.
+    - **is_staff** : Un booléen qui indique si l'utilisateur est un membre du staff.
+    - **is_superuser** : Un booléen qui indique si l'utilisateur est un super utilisateur.
+    - **date_join** : La date à laquelle l'utilisateur s'est inscrit.
+    - **last_login** : La date à laquelle l'utilisateur s'est connecté pour la dernière fois.
 
--   **Course :** Ce modèle représente un cours. Il contient les attributs suivants :
+- **Course :** Ce modèle représente un cours. Il contient les attributs suivants :
 
-    -   **id** : l'identifiant du cours pour la base de données.
-    -   **code** : La code du cours.
-    -   **name** : Le nom du cours.
-    -   **user** : Le professeur du cours.
+    - **id** : l'identifiant du cours pour la base de données.
+    - **code** : La code du cours.
+    - **name** : Le nom du cours.
+    - **user** : Le professeur du cours.
 
--   **Site :** Ce modèle représente un site. Un site est le nom du campus. Il contient les attributs suivants :
+- **Site :** Ce modèle représente un site. Un site est le nom du campus. Il contient les attributs suivants :
 
-    -   **id** : l'identifiant du site pour la base de données.
-    -   **name** : Le nom du site.
+    - **id** : l'identifiant du site pour la base de données.
+    - **name** : Le nom du site.
 
--   **Room :** Ce modèle représente une classe/auditoire/amphithéatre. Il contient les attributs suivants :
+- **Room :** Ce modèle représente une classe/auditoire/amphithéatre. Il contient les attributs suivants :
 
-    -   **id** : l'identifiant de la classe pour la base de données.
-    -   **name** : Le nom de la classe.
-    -   **site** : Le site où est situé la classe.
+    - **id** : l'identifiant de la classe pour la base de données.
+    - **name** : Le nom de la classe.
+    - **site** : Le site où est situé la classe.
 
--   **Language :** Ce modèle représente une langue. Il contient les attributs suivants :
+- **Language :** Ce modèle représente une langue. Il contient les attributs suivants :
 
-    -   **id** : l'identifiant de la langue pour la base de données.
-    -   **name** : Le nom de la langue (Exemple: Français)s.
-    -   **code** : Le code de la langue (Exemple: FR).
+    - **id** : l'identifiant de la langue pour la base de données.
+    - **name** : Le nom de la langue (Exemple: Français)s.
+    - **code** : Le code de la langue (Exemple: FR).
 
--   **Activity :** Ce modèle représente une activité. Il contient les attributs suivants :
+- **Activity :** Ce modèle représente une activité. Il contient les attributs suivants :
 
-    -   **id** : l'identifiant de l'activité pour la base de données.
-    -   **name** : Le nom de l'activité.
-    -   **description** : La description de l'activité.
-    -   **start_date** : La date de début de l'activité.
-    -   **end_date** : La date de fin de l'activité.
-    -   **course** : Le cours de l'activité.
-    -   **room** : La classe de l'activité.
-    -   **language** : La langue de l'activité.
+    - **id** : l'identifiant de l'activité pour la base de données.
+    - **name** : Le nom de l'activité.
+    - **description** : La description de l'activité.
+    - **start_date** : La date de début de l'activité.
+    - **end_date** : La date de fin de l'activité.
+    - **course** : Le cours de l'activité.
+    - **room** : La classe de l'activité.
+    - **language** : La langue de l'activité.
 
--   **Attend :** Ce modèle représente la relation entre un utilisateur et une activité. Il permet de savoir quel
-    utilisateur est inscrit à quelle activité. Il contient les attributs :
-    suivants :
+- **Attend :** Ce modèle représente la relation entre un utilisateur et une activité. Il permet de savoir quel
+  utilisateur est inscrit à quelle activité. Il contient les attributs :
+  suivants :
 
-    -   **activity** : L'activité.
-    -   **student** : L'étudiant.
+    - **activity** : L'activité.
+    - **student** : L'étudiant.
 
-    **Notes :** Ici, l'identifiant pour la base de données est le tuple (activity, student) qui doit être unique.
+  **Notes :** Ici, l'identifiant pour la base de données est le tuple (activity, student) qui doit être unique.
 
--   **Teacher :** Ce modèle représente un professeur. Il contient les attributs suivants :
+- **Teacher :** Ce modèle représente un professeur. Il contient les attributs suivants :
 
-    -   **user** : L'utilisateur.
-    -   **is_tutor** : Un booléan qui permet de savoir si l'utilisateur est un tuteur.
-    -   **is_professor**: Un booléan qui permet de savoir si l'utilisateur est un professeur.
-        **Notes:** Une contrainte est mise en place pour que l'utilisateur soit soit un tuteur, soit un professeur. Voir
-        plus en détail dans la méthode _clean()_ du modèle.
+    - **user** : L'utilisateur.
+    - **is_tutor** : Un booléan qui permet de savoir si l'utilisateur est un tuteur.
+    - **is_professor**: Un booléan qui permet de savoir si l'utilisateur est un professeur.
+      **Notes:** Une contrainte est mise en place pour que l'utilisateur soit soit un tuteur, soit un professeur. Voir
+      plus en détail dans la méthode _clean()_ du modèle.
 
--   **Give :** Ce modèle est une relation entre activité et professeur. Il permet de savoir quel professeur donne quel
-    cours. Il contient les attributs suivants :
+- **Give :** Ce modèle est une relation entre activité et professeur. Il permet de savoir quel professeur donne quel
+  cours. Il contient les attributs suivants :
 
-    -   **activity** : L'activité.
-    -   **teacher** : Le professeur.
+    - **activity** : L'activité.
+    - **teacher** : Le professeur.
 
--   **Annoucement :** Ce modèle représente une annonce. Les annonces sont donnés par les professeur envers tous les
-    étudiants. Il contient les attributs suivants :
+- **Annoucement :** Ce modèle représente une annonce. Les annonces sont donnés par les professeur envers tous les
+  étudiants. Il contient les attributs suivants :
 
-    -   **id** : l'identifiant de l'annonce pour la base de données.
-    -   **title** : Le titre de l'annonce.
-    -   **description** : La description de l'annonce.
-    -   **publication_date** : La date de publication de l'annonce.
-    -   **teacher** : Le professeur qui a posté l'annonce.
+    - **id** : l'identifiant de l'annonce pour la base de données.
+    - **title** : Le titre de l'annonce.
+    - **description** : La description de l'annonce.
+    - **publication_date** : La date de publication de l'annonce.
+    - **teacher** : Le professeur qui a posté l'annonce.
 
--   **Registered :** Ce modèle représente une relation entre un étudiant et un cours. Elle permet de savoir quel étudiant
-    est inscrit à quel cours. Il contient les attributs suivants :
+- **Registered :** Ce modèle représente une relation entre un étudiant et un cours. Elle permet de savoir quel étudiant
+  est inscrit à quel cours. Il contient les attributs suivants :
 
-    -   **student** : L'étudiant.
-    -   **course** : Le cours.
+    - **student** : L'étudiant.
+    - **course** : Le cours.
 
--   **Message :** Ce modèle représente un message. Un message est émis entre deux étudiants. Il contient les attributs
-    suivants :
+- **Message :** Ce modèle représente un message. Un message est émis entre deux étudiants. Il contient les attributs
+  suivants :
 
-    -   **id** : l'identifiant du message pour la base de données.
-    -   **content** : Le contenu du message.
-    -   **date** : La date du message.
-    -   **to_user** : L'envoyeur du message.
-    -   **from_user** : Le receveur du message.
+    - **id** : l'identifiant du message pour la base de données.
+    - **content** : Le contenu du message.
+    - **date** : La date du message.
+    - **to_user** : L'envoyeur du message.
+    - **from_user** : Le receveur du message.
 
--   **See :** Ce modèle représente une relation entre une annonce et un utilisateur. Il permet de savoir quel utilisateur
-    a
-    vu quel announce. Il contient les attributs suivants :
+- **See :** Ce modèle représente une relation entre une annonce et un utilisateur. Il permet de savoir quel utilisateur
+  a
+  vu quel announce. Il contient les attributs suivants :
 
-    -   **annoucement** : L'annonce émis par un professeur (modèle Teacher).
-    -   **user** : L'utilisateur.
+    - **annoucement** : L'annonce émis par un professeur (modèle Teacher).
+    - **user** : L'utilisateur.
 
--   **Feedback :** Ce modèle represente un feedback pour une activité. Il contient
-    les attributs suivants :
+- **Feedback :** Ce modèle represente un feedback pour une activité. Il contient
+  les attributs suivants :
 
-    -   **id** : L'identifiant du feedback pour la base de données.
-    -   **user** : L'étudiant qui a donné le feedback.
-    -   **activity** : L'activité pour laquelle le feedback est donné.
-    -   **positive_point** : Si le feedback doit contenir des points positifs de l'activité.
-    -   **negative_point** : Si le feedback doit contenir des points négatifs de l'activité.
-    -   **suggestion** : Si le feedback doit contenir des suggestions pour améliorer l'activité.
-    -   **additional_comment** : Si le feedback doit contenir des commentaires additionnels.
-    -   **date_start** : La date de début du feedback.
-    -   **date_end** : La date de fin du feedback.
+    - **id** : L'identifiant du feedback pour la base de données.
+    - **user** : L'étudiant qui a donné le feedback.
+    - **activity** : L'activité pour laquelle le feedback est donné.
+    - **positive_point** : Si le feedback doit contenir des points positifs de l'activité.
+    - **negative_point** : Si le feedback doit contenir des points négatifs de l'activité.
+    - **suggestion** : Si le feedback doit contenir des suggestions pour améliorer l'activité.
+    - **additional_comment** : Si le feedback doit contenir des commentaires additionnels.
+    - **date_start** : La date de début du feedback.
+    - **date_end** : La date de fin du feedback.
 
--   **Feedback_Additional_Question :** Ce modèle permet d'ajouter des questions supplémentaires au feedback. Il contient les attributs suivants :
+- **Feedback_Additional_Question :** Ce modèle permet d'ajouter des questions supplémentaires au feedback. Il contient
+  les attributs suivants :
 
-    -   **id**: L'identifiant de la question supplémentaire.
-    -   **feedback** : Le feedback qui contient la question supplémentaire.
-    -   **question** : La question supplémentaire.
+    - **id**: L'identifiant de la question supplémentaire.
+    - **feedback** : Le feedback qui contient la question supplémentaire.
+    - **question** : La question supplémentaire.
 
--   **Feedback_Student :** Ce modèle represente la réponse pour un feedback écrit par un étudiant. Il contient les attributs suivants :
+- **Feedback_Student :** Ce modèle represente la réponse pour un feedback écrit par un étudiant. Il contient les
+  attributs suivants :
 
-    -   **id** : L'identifiant du feedback pour la base de données.
-    -   **student** : L'étudiant qui a donné le feedback.
-    -   **feedback** : Le feedback à remplir.
-    -   **evaluation** : Niveau statisification de l'acitivté (0-5).
-    -   **positive_point** :Les points positifs de l'activité.
-    -   **negative_point** :Les points négatifs de l'activité.
-    -   **suggestion** : Les suggestions pour améliorer l'activité.
-    -   **additional_comment** : Les commentaires additionnels.
-    -   **date_submitted** : La date à laquelle le feedback a été soumis.
+    - **id** : L'identifiant du feedback pour la base de données.
+    - **student** : L'étudiant qui a donné le feedback.
+    - **feedback** : Le feedback à remplir.
+    - **evaluation** : Niveau statisification de l'acitivté (0-5).
+    - **positive_point** :Les points positifs de l'activité.
+    - **negative_point** :Les points négatifs de l'activité.
+    - **suggestion** : Les suggestions pour améliorer l'activité.
+    - **additional_comment** : Les commentaires additionnels.
+    - **date_submitted** : La date à laquelle le feedback a été soumis.
 
--   **Feedback_Student_Additional_Question :** Ce modèle permet de répondre aux questions supplémentaires d'un feedback. Il contient les attributs suivants :
+- **Feedback_Student_Additional_Question :** Ce modèle permet de répondre aux questions supplémentaires d'un feedback.
+  Il contient les attributs suivants :
 
-    -   **id**: L'identifiant de la question supplémentaire.
-    -   **student** : L'étudiant qui répond à la question.
-    -   **feedback** : Le feedback qui contient la question supplémentaire.
-    -   **question** : La question supplémentaire.
-    -   **answer** : La réponse de l'étudiant à la question.
+    - **id**: L'identifiant de la question supplémentaire.
+    - **student** : L'étudiant qui répond à la question.
+    - **feedback** : Le feedback qui contient la question supplémentaire.
+    - **question** : La question supplémentaire.
+    - **answer** : La réponse de l'étudiant à la question.
 
--   **Questionnaire :** Ce modèle représentaire un questionnaire qu'un profeseur peut créer pour tel cours. Il contient
-    les attributs suivants :
+- **Questionnaire :** Ce modèle représentaire un questionnaire qu'un profeseur peut créer pour tel cours. Il contient
+  les attributs suivants :
 
-    -   **id** : l'identifiant du questionnaire pour la base de données.
-    -   **course** : Le cours pour lequel le questionnaire est créé.
-    -   **title** : Le titre du questionnaire.
-    -   **description** : La description du questionnaire.
-    -   **points_total** : Le nombre de points total du questionnaire.
-    -   **date_start** : La date à laquelle le questionnaire a été créé.
-    -   **date_end** : La date limite à laquelle le questionnaire prendra fin.
-    -   **language** : La langue du questionnaire.
+    - **id** : l'identifiant du questionnaire pour la base de données.
+    - **course** : Le cours pour lequel le questionnaire est créé.
+    - **title** : Le titre du questionnaire.
+    - **description** : La description du questionnaire.
+    - **points_total** : Le nombre de points total du questionnaire.
+    - **date_start** : La date à laquelle le questionnaire a été créé.
+    - **date_end** : La date limite à laquelle le questionnaire prendra fin.
+    - **language** : La langue du questionnaire.
 
--   **Question :** Ce modèle représente une question d'un questionnaire. Il contient les attributs suivants :
+- **Question :** Ce modèle représente une question d'un questionnaire. Il contient les attributs suivants :
 
-    -   **id** : l'identifiant de la question pour la base de données.
-    -   **questionnaire** : Le questionnaire auquel la question appartient.
-    -   **question** : La question (ouvert, choix multiple, etc...).
-    -   **points** : Le nombre de points de la question.
+    - **id** : l'identifiant de la question pour la base de données.
+    - **questionnaire** : Le questionnaire auquel la question appartient.
+    - **question** : La question (ouvert, choix multiple, etc...).
+    - **points** : Le nombre de points de la question.
 
--   **OpenAnswer** : Ce modèle représente une réponse ouverte à une question. Il contient les attributs suivants :
+- **OpenAnswer** : Ce modèle représente une réponse ouverte à une question. Il contient les attributs suivants :
 
-    -   **id** : l'identifiant de la réponse pour la base de données.
-    -   **question** : La question à laquelle la réponse est donnée.
-    -   **student** : L'étudiant qui a donné la réponse.
-    -   **answer** : La réponse donnée par l'étudiant.
-    -   **is_correct** : Un booléen qui indique si la réponse est correcte.
+    - **id** : l'identifiant de la réponse pour la base de données.
+    - **question** : La question à laquelle la réponse est donnée.
+    - **student** : L'étudiant qui a donné la réponse.
+    - **answer** : La réponse donnée par l'étudiant.
+    - **is_correct** : Un booléen qui indique si la réponse est correcte.
 
--   **ChoiceAnswer :** Ce modèle représente une réponse à choix multiple à une question. Il contient les attributs
-    suivants
-    :
+- **ChoiceAnswer :** Ce modèle représente une réponse à choix multiple à une question. Il contient les attributs
+  suivants
+  :
 
-    -   **id** : l'identifiant de la réponse pour la base de données.
-    -   **question** : La question à laquelle la réponse est donnée.
-    -   **student** : L'étudiant qui a donné la réponse.
+    - **id** : l'identifiant de la réponse pour la base de données.
+    - **question** : La question à laquelle la réponse est donnée.
+    - **student** : L'étudiant qui a donné la réponse.
 
--   **ChoiceAnswerInstance :** Ce modèle représente une instance de réponse à choix multiple. Il contient les attributs
-    suivants :
-    -   **id** : l'identifiant de l'instance de réponse pour la base de données.
-    -   **choice_answer** : La réponse à choix multiple.
-    -   **choice** : Le choix de l'étudiant.
-    -   **is_correct** : Un booléen qui indique si le choix est correct.
+- **ChoiceAnswerInstance :** Ce modèle représente une instance de réponse à choix multiple. Il contient les attributs
+  suivants :
+    - **id** : l'identifiant de l'instance de réponse pour la base de données.
+    - **choice_answer** : La réponse à choix multiple.
+    - **choice** : Le choix de l'étudiant.
+    - **is_correct** : Un booléen qui indique si le choix est correct.
+
+- **ExpoToken :** Ce modèle sert à stocker les tokens expo pour les notifications. Il contient les attributs suivants :
+
+    - **id** : l'identifiant du token pour la base de données.
+    - **user** : L'utilisateur qui a le token.
+    - **token** : Le token expo de l'utilisateur.
+    - **is_active** : Un booléen qui indique si le token est actif.
+    - **Notes :** Un utilisateur peut avoir
+      le même token car elle est unique pour l'appareil mais l'attribut is_active définit si l'appareil en question
+      recevra
+      une notification si et seulement si l'attribut est **True**.
 
 **Notes :** Pour plus d'informations sur les modèles, veuillez consulter les fichiers _models.py_ de l'application
 django _database_. De plus, un schéma de la base donnée, sous sa forme entité relation et relationnel, est disponible
@@ -676,40 +709,57 @@ disponible, qui peut être ouvert avec le logiciel **DB-Main**, afin de modifier
 
 ### Feedback
 
-Cette application aura pour objectif de gérer les feedback pour diverses activités. À la fin d'une activité, les utilisateurs auront la possibilité de soumettre un feedback personnalisé.
+Cette application aura pour objectif de gérer les feedback pour diverses activités. À la fin d'une activité, les
+utilisateurs auront la possibilité de soumettre un feedback personnalisé.
 
 #### Vues (Feedback)
 
--   **FeedbackCreateView:** Cette vue permet de créer un nouvel objet Feedback. Elle utilise le sérialiseur FeedbackSerializer pour valider les données entrantes et créer l'objet Feedback.
--   **FeedbackListView:** Cette vue renvoie une liste de tous les objets Feedback. Elle utilise le sérialiseur FeedbackSerializer. Elle filtre également le queryset en fonction des paramètres de requête id, activity_id et user_id.
--   **FeedbackAdditionalQuestionsView:** Cette vue renvoie une liste de tous les objets FeedbackAdditionalQuestions. Elle utilise le sérialiseur FeedbackAdditionalQuestionsSerializer. Elle filtre également le queryset en fonction du paramètre de requête feedback.
--   **FeedbackStudentView:** Cette vue permet de créer et de récupérer des objets FeedbackStudent. Elle utilise le sérialiseur FeedbackStudentSerializer pour valider les données entrantes et créer l'objet FeedbackStudent. Elle filtre également le queryset en fonction du paramètre de requête feedback. Avant de créer un FeedbackStudent, elle valide que l'étudiant est dans l'activité, que l'activité est terminée, que le feedback n'existe pas déjà, et que les dates de début et de fin du feedback sont valides.
--   **FeedbackStudentAdditionalQuestionsView:** Cette vue renvoie une liste de tous les objets FeedbackStudentAdditionalQuestions. Elle utilise le sérialiseur FeedbackStudentAdditionalQuestionsSerializer. Elle filtre également le queryset en fonction des paramètres de requête feedback et student_id.
+- **FeedbackCreateView:** Cette vue permet de créer un nouvel objet Feedback. Elle utilise le sérialiseur
+  FeedbackSerializer pour valider les données entrantes et créer l'objet Feedback.
+- **FeedbackListView:** Cette vue renvoie une liste de tous les objets Feedback. Elle utilise le sérialiseur
+  FeedbackSerializer. Elle filtre également le queryset en fonction des paramètres de requête id, activity_id et
+  user_id.
+- **FeedbackAdditionalQuestionsView:** Cette vue renvoie une liste de tous les objets FeedbackAdditionalQuestions. Elle
+  utilise le sérialiseur FeedbackAdditionalQuestionsSerializer. Elle filtre également le queryset en fonction du
+  paramètre de requête feedback.
+- **FeedbackStudentView:** Cette vue permet de créer et de récupérer des objets FeedbackStudent. Elle utilise le
+  sérialiseur FeedbackStudentSerializer pour valider les données entrantes et créer l'objet FeedbackStudent. Elle filtre
+  également le queryset en fonction du paramètre de requête feedback. Avant de créer un FeedbackStudent, elle valide que
+  l'étudiant est dans l'activité, que l'activité est terminée, que le feedback n'existe pas déjà, et que les dates de
+  début et de fin du feedback sont valides.
+- **FeedbackStudentAdditionalQuestionsView:** Cette vue renvoie une liste de tous les objets
+  FeedbackStudentAdditionalQuestions. Elle utilise le sérialiseur FeedbackStudentAdditionalQuestionsSerializer. Elle
+  filtre également le queryset en fonction des paramètres de requête feedback et student_id.
 
 #### Serializers (Feedback)
 
-Nous allons pas détailler les serializers, car ils sont très simples et sont utilisés pour la validation des données. Nous allons néanmoins les citer et les décrire brièvement.
+Nous allons pas détailler les serializers, car ils sont très simples et sont utilisés pour la validation des données.
+Nous allons néanmoins les citer et les décrire brièvement.
 
--   **ActivitySerializer:** Ce serializer est utilisé pour valider les données des activités.
--   **UserSerializer:** Ce serializer est utilisé pour valider les données des users.
--   **FeedbackSerializer:** Ce serializer est utilisé pour valider les données des feedbacks.
--   **FeedbackAdditionalQuestionsSerializer:** Ce serializer est utilisé pour valider les données des questions supplémentaires aux feedbacks.
--   **FeedbackStudentSerializer:** Ce serializer est utilisé pour valider les données des réponses aux feedbacks.
--   **FeedbackStudentAdditionalQuestionsSerializer:** Ce serializer est utilisé pour valider les données des réponses aux questions supplémentaire à un feedback.
+- **ActivitySerializer:** Ce serializer est utilisé pour valider les données des activités.
+- **UserSerializer:** Ce serializer est utilisé pour valider les données des users.
+- **FeedbackSerializer:** Ce serializer est utilisé pour valider les données des feedbacks.
+- **FeedbackAdditionalQuestionsSerializer:** Ce serializer est utilisé pour valider les données des questions
+  supplémentaires aux feedbacks.
+- **FeedbackStudentSerializer:** Ce serializer est utilisé pour valider les données des réponses aux feedbacks.
+- **FeedbackStudentAdditionalQuestionsSerializer:** Ce serializer est utilisé pour valider les données des réponses aux
+  questions supplémentaire à un feedback.
 
 #### Tests (Feedback)
 
 Conntient un ensemble de tests pour vérifier les éléments suivants :
 
--   \*\*
+- \*\*
 
 #### Urls (Feedback)
 
-Les différentes urls de l'application _feedback_ sont définies dans le fichier _urls.py_. Elles sont en liens avec les vues décrites plus haut.
+Les différentes urls de l'application _feedback_ sont définies dans le fichier _urls.py_. Elles sont en liens avec les
+vues décrites plus haut.
 
 #### Validations (Feedback)
 
-Dans le fichier _validations.py_ de l'application _feedback_, nous avons des méthodes qui s'occupent de valider les différents data donnés par un utilisateur lorsqu'il remplit un feedback.
+Dans le fichier _validations.py_ de l'application _feedback_, nous avons des méthodes qui s'occupent de valider les
+différents data donnés par un utilisateur lorsqu'il remplit un feedback.
 
 ### Rolemanagement
 
@@ -729,7 +779,7 @@ l'autre et allouer certaines permissions à chaque role.
 
 Conntient un ensemble de tests pour vérifier les éléments suivants :
 
--   \*\*
+- \*\*
 
 #### Urls (Rolemanagement)
 
@@ -883,27 +933,51 @@ urlpatterns = [
 ```
 
 [//]: # "### Vues Django"
+
 [//]: # "Les vues fonctionnent en utilisant l'APIView de l'API rest. Chaque vue possède une méthode _post_ et/ou _get_ qui sont"
+
 [//]: # "appelées quand la vue est appelée avec une requête HTTP GET ou POST."
+
 [//]: #
+
 [//]: # "- **UserRegisterView** : La vue qui s'occupe d'inscrire les utilisateurs. Elle reçoit les information de l'inscription"
+
 [//]: # "  dans la requête POST."
+
 [//]: #
+
 [//]: # "- **LoginView** : s'occupe de vérifier les credentials de l'utilisateur pour que celui-ci puisse se connecter. La vue"
+
 [//]: # "  fait appel aux méthodes _validate_username_ et _validate_password_ pour faire la validation des credentials."
+
 [//]: #
+
 [//]: # "- **LogoutView** : s'occupe de fermer la session de l'utilisateur."
+
 [//]: #
+
 [//]: # "- **CurrentUserView** : fonctionne avec un GET uniquement. Renvoie les informations de l'utilisateur connecté dans la"
+
 [//]: # "  session actuelle."
+
 [//]: #
+
 [//]: # "- **ActivityViewSet** :"
+
 [//]: #
+
 [//]: # "- **AttendViewSet** : renvoie toutes les _Activity_ auxquelles l'uilisateur est inscrit. Utilisée dans la page d'accueil"
+
 [//]: # "  et le calendrier."
+
 [//]: #
+
 [//]: # "- **RegisterToActivityView** : Permet d'inscrire un utilisateur à une activité."
+
 [//]: #
+
 [//]: # "### _validations.py_"
+
 [//]: #
+
 [//]: # "Ce fichier contient des méthodes qui s'occupe de valider les différents credentials donnés par un utilisateur."

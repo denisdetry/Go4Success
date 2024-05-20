@@ -17,19 +17,19 @@ l'application. Il utilise les fonctions d'Expo pour enregistrer l'appareil pour 
 notifications. En voici la documentation officiel pour plus
 d'informations : https://docs.expo.dev/versions/latest/sdk/notifications/
 
+Ce hook utilise la fonction `registerForPushNotificationsAsync` pour enregistrer l'appareil pour les notifications push
+lors de son initialisation. Il enregistre également deux handlers de notifications : un pour les notifications reçues
+et un pour les réponses aux notifications. Il renvoie le token de notification push Expo et la dernière notification
+reçue.
+
+Un useEffect est mise en place pour ce système, et nous avons ajouter les rêquetes à notre serveur django pour ajouter (si nécessaire), ou mettre à jour l'attribut is_active de la table ExpoToken de la base de données.
+
 ### Fonction `registerForPushNotificationsAsync`
 
 Cette fonction est utilisée pour enregistrer l'appareil pour les notifications push. Elle vérifie d'abord si l'appareil
 est un appareil Android et configure le canal de notification par défaut. Ensuite, elle vérifie si l'appareil est un
 appareil physique et non une plateforme web. Si c'est le cas, elle demande la permission de recevoir des notifications
 push. Si la permission est accordée, elle récupère le token de notification push Expo.
-
-### Hook `usePushNotifications`
-
-Ce hook utilise la fonction `registerForPushNotificationsAsync` pour enregistrer l'appareil pour les notifications push
-lors de son initialisation. Il enregistre également deux écouteurs de notifications : un pour les notifications reçues
-et un pour les réponses aux notifications. Il renvoie le token de notification push Expo et la dernière notification
-reçue.
 
 ## Fichier `sendNotification.ts`
 

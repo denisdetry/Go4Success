@@ -13,6 +13,7 @@ import { useSites } from "@/hooks/useSites";
 import { useRooms } from "@/hooks/useRooms";
 import dayjs from "dayjs";
 import { useLanguages } from "@/hooks/useLanguages";
+import { useAuth } from "@/context/Auth";
 import * as yup from "yup";
 import { InferType } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -40,6 +41,7 @@ export default function Add() {
     const timezoneOffset = dayjs().utcOffset() / 60;
     const { t } = useTranslation();
     const { allExpoTokens } = useAllExpoTokens();
+    const { user } = useAuth();
 
     const schema = yup.object().shape({
         title: yup
@@ -191,7 +193,6 @@ export default function Add() {
                 )
                 .set("minute", Number(data.endTime.value.split(":")[1]))
                 .toJSON();
-
             return [beginHour, endHour];
         });
         const errors = [];
@@ -205,6 +206,7 @@ export default function Add() {
                 language: data.language,
                 dateStart: date[0],
                 dateEnd: date[1],
+                user: user.id,
             };
             try {
                 await fetchBackend({

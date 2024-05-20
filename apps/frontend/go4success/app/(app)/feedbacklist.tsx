@@ -1,0 +1,83 @@
+import React from "react";
+import { ScrollView, Text, View } from "react-native";
+import { TableColumn } from "react-data-table-component";
+import { useTranslation } from "react-i18next";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
+
+import { useFeedback } from "@/hooks/useFeedback";
+import { Feedback } from "@/types/Feedback";
+import ButtonComponent from "@/components/ButtonComponent";
+import FeedbackTable from "@/components/FeedbackTable";
+
+import styles from "@/styles/global";
+import { useAuth } from "@/context/Auth";
+
+type RootStackParamList = {
+    feedbacklistdetails: { feedbackId: string; activityName: string };
+};
+
+type FeedbackListDetailsScreenNavigationProp = StackNavigationProp<
+    RootStackParamList,
+    "feedbacklistdetails"
+>;
+
+export default function FeedbackList() {
+    const { user } = useAuth();
+    const { feedbacks, error: feedbackError } = useFeedback(
+        "",
+        "",
+        user?.is_superuser ? undefined : user?.id,
+    );
+    const { t } = useTranslation();
+    const navigation = useNavigation<FeedbackListDetailsScreenNavigationProp>();
+
+    const columns: TableColumn<Feedback>[] = [
+        {
+            name: "ID",
+            selector: (row: Feedback) => row.id.toString(),
+            sortable: true,
+            grow: 1,
+        },
+        {
+            name: t("translateFeedback.activity"),
+            selector: (row: Feedback) => row.activity.name,
+            sortable: true,
+            grow: 10,
+        },
+        {
+            name: t("translateFeedback.open"),
+            cell: (row: Feedback) => (
+                <ButtonComponent
+                    buttonType={"littlePrimary"}
+                    text={t("translateFeedback.open")}
+                    onPress={() => {
+                        navigation.navigate("feedbacklistdetails", {
+                            feedbackId: row.id.toString(),
+                            activityName: row.activity.name,
+                        });
+                    }}
+                />
+            ),
+            sortable: true,
+            grow: 1,
+        },
+    ];
+
+    if (feedbackError) {
+        return (
+            <View>
+                <Text> Error: {feedbackError.message} </Text>
+            </View>
+        );
+    }
+
+    return (
+        <ScrollView contentContainerStyle={styles.mainContainer}>
+            <View style={styles.container}>
+                <Text style={styles.title}>Feedback</Text>
+                <FeedbackTable feedbacks={feedbacks} columns={columns} />
+            </View>
+        </ScrollView>
+    );
+}

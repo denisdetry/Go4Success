@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "rolemanagment",
     "activities",
     "corsheaders",
+    "feedback",
 ]
 
 MIDDLEWARE = [

@@ -87,7 +87,7 @@ class Course(models.Model):
     id = models.AutoField(primary_key=True)
     code = models.CharField(max_length=63)
     name = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return "%s - %s" % (self.code, self.name)
@@ -241,10 +241,34 @@ class See(models.Model):
         return "%s sees %s" % (self.user.username, self.announcement)
 
 
-class FeedbackActivity(models.Model):
+class Feedback(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    positive_point = models.BooleanField(null=False, blank=False)
+    negative_point = models.BooleanField(null=False, blank=False)
+    suggestion = models.BooleanField(null=False, blank=False)
+    additional_comment = models.BooleanField(null=False, blank=False)
+    date_start = models.DateField(auto_now_add=True)
+    date_end = models.DateField(auto_now_add=False)
+
+    def __str__(self):
+        return f"Feedback for {self.activity.name} by {self.user.username}"
+
+
+class FeedbackAdditionalQuestions(models.Model):
+    id = models.AutoField(primary_key=True)
+    feedback = models.ForeignKey(Feedback, on_delete=models.CASCADE)
+    question = models.TextField(null=False, blank=False)
+
+    def __str__(self):
+        return f"Additional question :  {self.question} for {self.feedback.activity.name}"
+
+
+class FeedbackStudent(models.Model):
     id = models.AutoField(primary_key=True)
     student = models.ForeignKey(User, on_delete=models.CASCADE)
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    feedback = models.ForeignKey(Feedback, on_delete=models.CASCADE)
     evaluation = models.IntegerField(null=False, blank=False)
     positive_point = models.TextField(null=True, blank=True)
     negative_point = models.TextField(null=True, blank=True)
@@ -253,7 +277,19 @@ class FeedbackActivity(models.Model):
     date_submitted = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f"Feedback for {self.activity.name} by {self.student.username}"
+        return f"Feedback answer for {self.feedback.activity.name} by {self.student.username}"
+
+
+class FeedbackStudentAdditionalQuestions(models.Model):
+    id = models.AutoField(primary_key=True)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    feedback = models.ForeignKey(Feedback, on_delete=models.CASCADE)
+    question = models.ForeignKey(
+        FeedbackAdditionalQuestions, on_delete=models.CASCADE)
+    answer = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Additional question answer for :  {self.question.question} -  {self.answer}"
 
 
 class Questionnaire(models.Model):
@@ -318,7 +354,7 @@ class ChoiceAnswerInstance(models.Model):
 
 class OpenQuestion(models.Model):
     id = models.AutoField(primary_key=True)
-    question = models.OneToOneField(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     question_text = models.TextField()
 
     def __str__(self):
@@ -327,7 +363,7 @@ class OpenQuestion(models.Model):
 
 class ClosedQuestion(models.Model):
     id = models.AutoField(primary_key=True)
-    question = models.OneToOneField(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     options = models.TextField()
     checked = models.BooleanField()
 

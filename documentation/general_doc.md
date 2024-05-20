@@ -212,7 +212,7 @@ const signUp = async (userData: UserRegister) => {
 
         if (success) {
             // Ces instructions sont essentiels pour la déconnexion.
-            // Elles ajoutent les tokens du local storage
+            // Elles ajoutent les tokens dans le local storage
             // et mettent à jour le contexte de l'utilisateur.
             await AsyncStorage.setItem("accessToken", success.access);
             await AsyncStorage.setItem("refreshToken", success.refresh);
@@ -260,7 +260,7 @@ const signIn = async (userData: UserLogin) => {
 
         if (success) {
             // Ces instructions sont essentiels pour la déconnexion.
-            // Elles ajoutent les tokens du local storage
+            // Elles ajoutent les tokens dans le local storage
             // et mettent à jour le contexte de l'utilisateur.
             await AsyncStorage.setItem("accessToken", success.access);
             await AsyncStorage.setItem("refreshToken", success.refresh);
@@ -328,6 +328,8 @@ export default function useUser() {
                 });
                 return response;
             } catch (err) {
+                await AsyncStorage.removeItem("accessToken");
+                await AsyncStorage.removeItem("refreshToken");
                 return null;
             }
         },
@@ -766,6 +768,7 @@ INSTALLED_APPS = [
     "activities",
     "database",
     "rolemanagement",
+    "feedback",
 ]
 ```
 

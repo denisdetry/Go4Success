@@ -7,7 +7,8 @@ pour vous créer un compte et lié le projet à expo : https://expo.dev/
 Il vous faudra également un compte Firebase pour pouvoir utiliser les notifications push. Voici le site pour vous créer
 un compte et créer un projet Firebase : https://firebase.google.com/
 
-Je vous invite à regarder cette vidéo pour en apprendre davantage sur l'installation et la configuration des notifications avec Expo : 
+Je vous invite à regarder cette vidéo pour en apprendre davantage sur l'installation et la configuration des
+notifications avec Expo :
 https://www.youtube.com/watch?v=V-hois8dgM4
 
 ## Fichier `usePushNotifications.ts`
@@ -22,7 +23,8 @@ lors de son initialisation. Il enregistre également deux handlers de notificati
 et un pour les réponses aux notifications. Il renvoie le token de notification push Expo et la dernière notification
 reçue.
 
-Un useEffect est mise en place pour ce système, et nous avons ajouter les rêquetes à notre serveur django pour ajouter (si nécessaire), ou mettre à jour l'attribut is_active de la table ExpoToken de la base de données.
+Un useEffect est mise en place pour ce système, et nous avons ajouter les rêquetes à notre serveur django pour ajouter (
+si nécessaire), ou mettre à jour l'attribut is_active de la table ExpoToken de la base de données.
 
 ### Fonction `registerForPushNotificationsAsync`
 
@@ -48,7 +50,10 @@ appelle la fonction `sendPushNotification` pour chaque token actif.
 ### Fonction `schedulePushNotification`
 
 Cette fonction planifie une notification push pour être envoyée après un certain délai. Elle crée un contenu de
-notification et un déclencheur, puis planifie la notification avec l'API de notifications d'Expo.
+notification et un déclencheur, puis planifie la notification avec l'API de notifications d'Expo. **Attention**, cette
+fonction n'est pas utilisé dans le projet mais nous l'avons inclut pour vous montrer son existance. Je vous invite à
+vous informer avec la documention pour plus d'informations :
+https://docs.expo.dev/versions/latest/sdk/notifications/#scheduling-notifications
 
 ## Fichier `useAllExpoTokens.ts`
 
@@ -62,6 +67,32 @@ Pour utiliser le système de notifications, vous devez d'abord enregistrer l'app
 utilisant le hook `usePushNotifications`. Ensuite, vous pouvez utiliser les
 fonctions `sendPushNotification`, `sendNotificationsToAllUsers` et `schedulePushNotification` pour envoyer et planifier
 des notifications push.
+
+Pour adapter le système de notifications à notre application, nous avons appelé le hook usePushNotifications dans le
+contexte `Auth.tsx`. Voici comment nous avons fait :
+
+### Auth.tsx
+
+```tsx
+const AuthContext = React.createContext<any>(null);
+
+export function useAuth() {
+    return React.useContext(AuthContext);
+}
+
+export function AuthProvider({ children }: React.PropsWithChildren) {
+    const { t } = useTranslation();
+    const rootSegment = useSegments();
+
+    const { isPending, user } = useUser();
+    const { expoPushToken, notification } = usePushNotifications(user);
+
+    // {...} reste du code
+}
+
+```
+
+### Cas d'utilisation concret
 
 ```tsx 
 import { Text, View } from "react-native";
@@ -112,5 +143,4 @@ export default function Notifications() {
     );
 
 }
-
 ```

@@ -81,8 +81,7 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: React.PropsWithChildren) {
-    const { t } = useTranslation();
-    const rootSegment = useSegments();
+    // {...} reste du code
 
     const { isPending, user } = useUser();
     const { expoPushToken, notification } = usePushNotifications(user);

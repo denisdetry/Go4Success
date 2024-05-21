@@ -1159,3 +1159,66 @@ urlpatterns = [
 [//]: #
 
 [//]: # "Ce fichier contient des méthodes qui s'occupe de valider les différents credentials donnés par un utilisateur."
+
+
+# Pipeline de développement (Devops)
+
+
+## Introduction
+Cette documentation décrit une pipeline DevOps illustrée par un cycle continu, intégrant les étapes clés du développement et des opérations. Cette approche vise à améliorer la collaboration entre les équipes de développement (Dev) et d'opérations (Ops), à augmenter la fréquence des déploiements et à garantir une livraison continue et de haute qualité des applications logicielles.
+
+## Étapes de la Pipeline
+![DevOps Pipeline](./devops.png)
+
+
+
+
+### 1. Plan
+- **Outil associé** : Trello
+- **Description** : La phase de planification implique la définition des objectifs, la création des tâches et la gestion des projets. Trello est utilisé pour organiser les tâches, gérer les flux de travail et suivre l'avancement du projet.
+
+### 2. Code
+- **Outil associé** : Git
+- **Description** : Les développeurs écrivent le code source du projet. Git est utilisé comme système de contrôle de version pour gérer et suivre les modifications du code, facilitant la collaboration et le suivi des contributions.
+
+### 3. Build
+- **Outils associés** : Django, React
+- **Description** : Le code est compilé et les dépendances sont résolues pour créer une version exécutable de l'application en local. Django et React sont utilisés pour construire des applications web, respectivement sur le backend et le frontend.
+
+### 4. Test
+- **Frameworks associés** : Django, React Native
+- **Description** : Les tests automatisés sont exécutés pour s'assurer que le code est fonctionnel avec un certains degré de confiance. Django et React Native fournissent des frameworks de test natifs pour exécuter des tests unitaires, d'intégration. Ces tests garantissent la qualité et la fiabilité du logiciel.
+
+### 5. Release
+- **Description** : Une fois les tests passés, la version est prête à être déployée dans un environnement de production ou de pré-production. Cette étape peut inclure des approbations manuelles ou automatiques pour valider le déploiement.
+
+### 6. Deploy
+- **Outil associé** : PortainerIO
+- **Description** : L'application est déployée sur les serveurs de production. PortainerIO est utilisé pour gérer les environnements de conteneurs, assurant une portabilité et une consistance entre les environnements de développement et de production.
+
+### 7. Operate
+- **Description** : L'application est en production et utilisée par les clients. Les opérations quotidiennes incluent la gestion des performances, l'application des correctifs et la gestion des incidents pour assurer une disponibilité continue.
+
+### 8. Monitor
+- **Outil associé** : SonarQube
+- **Description** : La performance de l'application est surveillée pour détecter les problèmes et les erreurs en temps réel. SonarQube est utilisé pour analyser la qualité du code, identifier les vulnérabilités et fournir des rapports sur les métriques de performance.
+
+## Boucle DevOps
+Le cycle DevOps est itératif et continu, chaque phase étant constamment revisitée pour améliorer le processus global. Les feedbacks de la phase "Monitor" alimentent la phase "Plan", créant une boucle continue de développement, d'amélioration et de déploiement.
+
+## Outils 
+- **[Django](https://www.djangoproject.com)** : Un framework web pour le développement backend.
+- **[React Native](https://reactnative.dev)** : Un framework pour le développement d'applications mobiles.
+- **[Trello](https://trello.com)** : Un outil de gestion de projet et de suivi des tâches.
+- **[SonarQube](https://www.sonarqube.org)** : Un outil d'inspection continue de la qualité du code.
+- **[Git](https://git-scm.com)** : Un système de contrôle de version distribué.
+- **[PortainerIO](https://www.portainer.io)** : Une plateforme de gestion de conteneurs pour automatiser le déploiement des applications.
+
+## Conclusion
+Cette pipeline DevOps intègre les meilleures pratiques de développement et de gestion des opérations pour offrir une livraison continue et de haute qualité des applications logicielles. En utilisant les outils et les méthodologies appropriés, les équipes peuvent collaborer plus efficacement, augmenter la fréquence des déploiements et garantir la satisfaction des utilisateurs finaux.
+
+
+
+
+
+

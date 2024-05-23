@@ -3,15 +3,13 @@ from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from . import views
-from .views import UpdateProfileView
 
 router = routers.DefaultRouter()
 
-router.register(r'user_profile', UpdateProfileView, "user_profile")
-
 urlpatterns = [
     path('register/', views.UserRegisterView.as_view(), name='register'),
-    path('current_user/', views.CurrentUserView.as_view(), name='users'),
+    path('current_user/', views.CurrentUserView.as_view(), name='current_user'),
+    path("user_profile/<int:id>/", views.UpdateProfileView.as_view(), name='user_profile'),
     path('change_password/<int:id>/',
          views.ChangePasswordView.as_view(), name='change_password'),
     path('delete_user/<int:id>/', views.DeleteUserView.as_view(), name='delete_user'),

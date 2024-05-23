@@ -70,11 +70,17 @@ export const ChangeUserPasswordFields = () => {
             const response = await error.responseError.json();
             if (response) {
                 if (response.old_password) {
-                    errorMessages = response.old_password.old_password;
+                    if (response.old_password.old_password)
+                        errorMessages = response.old_password.old_password;
+                    else {
+                        errorMessages = response.old_password[0];
+                    }
                 } else if (response.password && response.password[0]) {
                     errorMessages = response.password[0];
                 } else if (response.password2 && response.password2[0]) {
                     errorMessages = response.password2[0];
+                } else if (response.error) {
+                    errorMessages = response.error;
                 }
             }
 

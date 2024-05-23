@@ -682,7 +682,7 @@ les vues décrites plus haut.
 
 #### Tests (Authentication)
 
-Pour les tests concernant l'authentification, veuillez consulter le fichier tests_authentication.md du dossier courant.
+Pour les tests concernant l'authentification, veuillez consulter le fichier `tests_authentication.md` du dossier courant.
 
 ### Database
 

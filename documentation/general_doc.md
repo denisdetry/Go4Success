@@ -39,7 +39,6 @@ Ce dossier contient tout le code frontend du programme.
 Vous trouverez à la racine du dossier deux fichiers docker permettant de lancer le client du programme dans un container
 Docker.
 
-
 #### _go4success/_
 
 - **_app/_** contient le code source de l'application
@@ -74,9 +73,9 @@ Ce dossier contient deux parties de l'application :
   **apps/frontend/go4success/context/**
 
 - **apps/frontend/go4success/app/(app)/questionnaire.tsx**
-    
-    ##### Importations
-    Le code importe plusieurs modules et composants nécessaires :
+
+  ##### Importations
+  Le code importe plusieurs modules et composants nécessaires :
     - `React`, `useEffect`, `useState` de `react` pour la gestion de l'état et des effets.
     - Des hooks personnalisés `useCourses` et `usePostQuestionnaire` pour les opérations liées aux questionnaires.
     - Diverses fonctionnalités de navigation depuis `@react-navigation/native` et `@react-navigation/stack`.
@@ -86,47 +85,50 @@ Ce dossier contient deux parties de l'application :
     - `dayjs` pour la manipulation des dates.
     - Styles et constantes personnalisées de l'application (`stylesGlobal`, `Colors`).
 
-    ##### Types
-    Le code définit plusieurs types TypeScript pour la validation et l'auto-complétion :
+  ##### Types
+  Le code définit plusieurs types TypeScript pour la validation et l'auto-complétion :
     - `RouteParams` : contient les paramètres `courseCode` et `courseName`.
     - `RootStackParamList` : type de navigation pour le questionnaire.
     - `QuestionnaireRouteProp` : type de la route pour le questionnaire.
     - `QuestionnaireComponentProps` : type des props pour `QuestionnaireComponent`.
 
-    ##### Composant `QuestionnaireComponent`
-    Ce composant gère l'affichage du formulaire de création de questionnaire.
+  ##### Composant `QuestionnaireComponent`
+  Ce composant gère l'affichage du formulaire de création de questionnaire.
 
-    ##### États locaux
+  ##### États locaux
     - `startdate` et `enddate` : gèrent les dates de début et de fin du questionnaire.
     - `formData` : gère les données du formulaire.
 
-    ##### Effet `useEffect`
-    Mise à jour des dates de début et de fin dans les données du formulaire chaque fois que les dates changent.
+  ##### Effet `useEffect`
+  Mise à jour des dates de début et de fin dans les données du formulaire chaque fois que les dates changent.
 
-    ###### Méthodes
+  ###### Méthodes
     - `handleChange` : met à jour les données du formulaire en fonction des modifications de l'utilisateur.
-    - `handleSubmit` : envoie les données du formulaire lorsque l'utilisateur soumet le formulaire et affiche une notification de succès.
+    - `handleSubmit` : envoie les données du formulaire lorsque l'utilisateur soumet le formulaire et affiche une
+      notification de succès.
 
-    ##### Rendu
-    Le composant rend un formulaire de création de questionnaire avec :
+  ##### Rendu
+  Le composant rend un formulaire de création de questionnaire avec :
     - Des champs de texte pour le titre, la description et les points totaux.
     - Des sélecteurs de date pour les dates de début et de fin.
     - Un sélecteur de langue.
     - Un bouton pour soumettre le formulaire.
 
-    ##### Gestion des erreurs
-    Si une erreur se produit lors de l'envoi du formulaire, elle est affichée à l'utilisateur.
+  ##### Gestion des erreurs
+  Si une erreur se produit lors de l'envoi du formulaire, elle est affichée à l'utilisateur.
 
-    #### Fonction principale `App`
+  #### Fonction principale `App`
     - Gère l'état `showQuestion` pour afficher soit le composant `QuestionnaireComponent`, soit le composant `Question`.
 
-    #### Styles
-    Le fichier contient des styles personnalisés pour divers éléments du formulaire, définis avec `StyleSheet.create`.
+  #### Styles
+  Le fichier contient des styles personnalisés pour divers éléments du formulaire, définis avec `StyleSheet.create`.
 
-    #### Utilisation
-    Pour utiliser ce composant dans une application React Native, il faut s'assurer que les hooks `useCourses` et `usePostQuestionnaire`, ainsi que les styles et constantes personnalisés (`stylesGlobal`, `Colors`), soient correctement définis et importés.
+  #### Utilisation
+  Pour utiliser ce composant dans une application React Native, il faut s'assurer que les hooks `useCourses`
+  et `usePostQuestionnaire`, ainsi que les styles et constantes personnalisés (`stylesGlobal`, `Colors`), soient
+  correctement définis et importés.
 
-    #### Exemple d'utilisation
+  #### Exemple d'utilisation
     ```jsx
     import React from 'react';
     import { NavigationContainer } from '@react-navigation/native';
@@ -148,97 +150,104 @@ Ce dossier contient deux parties de l'application :
 
 
 - **apps/frontend/go4success/app/(app)/questionnaire.tsx**
-    ##### Description générale
-    Ce fichier définit plusieurs composants pour gérer la création et l'affichage de questions dans un questionnaire, notamment des questions ouvertes et des questions fermées. Il utilise diverses bibliothèques et hooks pour faciliter les opérations CRUD sur les questions.
+  ##### Description générale
+  Ce fichier définit plusieurs composants pour gérer la création et l'affichage de questions dans un questionnaire,
+  notamment des questions ouvertes et des questions fermées. Il utilise diverses bibliothèques et hooks pour faciliter
+  les opérations CRUD sur les questions.
 
-    ##### Importations
-    Le code importe plusieurs modules et composants nécessaires :
+  ##### Importations
+  Le code importe plusieurs modules et composants nécessaires :
     - `React`, `useState`, `useEffect` de `react` pour la gestion de l'état et des effets.
     - Divers composants UI de `react-native` pour la mise en page et les interactions utilisateur.
     - `Toast` de `react-native-toast-message` pour afficher des notifications.
-    - Plusieurs hooks personnalisés (`useLastQuestionnaire`, `usePostOpenQuestion`, `usePostQuestion`, `useGetQuestions`, `usePostClosedQuestion`) pour les opérations liées aux questionnaires.
+    - Plusieurs hooks
+      personnalisés (`useLastQuestionnaire`, `usePostOpenQuestion`, `usePostQuestion`, `useGetQuestions`, `usePostClosedQuestion`)
+      pour les opérations liées aux questionnaires.
     - `useMutation`, `useQueryClient` de `@tanstack/react-query` pour la gestion des requêtes et mutations.
     - `ButtonComponent` pour les boutons personnalisés.
     - `stylesGlobal` pour les styles globaux de l'application.
 
-    ##### Types
-    Le code définit plusieurs interfaces TypeScript pour la validation et l'auto-complétion :
+  ##### Types
+  Le code définit plusieurs interfaces TypeScript pour la validation et l'auto-complétion :
     - `ClosedQuestion` : définit la structure d'une question fermée.
     - `OpenQuestion` : définit la structure d'une question ouverte.
     - `refetchedQuestions` : définit la structure des questions récupérées.
     - `closedQuestionToSend` : définit la structure des questions fermées à envoyer.
 
-    ##### Composant `QuestionBox`
-    Ce composant gère l'affichage et la manipulation des questions d'un questionnaire.
+  ##### Composant `QuestionBox`
+  Ce composant gère l'affichage et la manipulation des questions d'un questionnaire.
 
-    ##### États locaux
+  ##### États locaux
     - `modalVisible` : contrôle la visibilité de la modal.
     - `openQuestions` : stocke les questions ouvertes.
     - `closedQuestions` : stocke les questions fermées.
     - `closedQuestionsProcessed` : indique si les questions fermées ont été traitées.
     - `refetchQuestionsData` : stocke les données des questions récupérées.
 
-    ##### Méthodes
+  ##### Méthodes
     - `handleOpenQuestion` : ajoute une question ouverte.
     - `handleAddClosedQuestion` : ajoute une question fermée.
     - `handleSaveOpenQuestions` : sauvegarde les questions ouvertes et fermées, et affiche une notification.
 
-    ##### Effet `useEffect`
-    Met à jour les données des questions récupérées lorsque les questions fermées sont traitées.
+  ##### Effet `useEffect`
+  Met à jour les données des questions récupérées lorsque les questions fermées sont traitées.
 
-    ##### Rendu
-    Le composant rend un formulaire pour créer des questions ouvertes et fermées, avec des options pour ajouter des questions et les sauvegarder.
+  ##### Rendu
+  Le composant rend un formulaire pour créer des questions ouvertes et fermées, avec des options pour ajouter des
+  questions et les sauvegarder.
 
-    ##### Composant `OpenQuestionBox`
-    Ce composant gère l'affichage et la manipulation d'une question ouverte.
+  ##### Composant `OpenQuestionBox`
+  Ce composant gère l'affichage et la manipulation d'une question ouverte.
 
-    ##### États locaux
+  ##### États locaux
     - `question` : texte de la question ouverte.
     - `points` : points attribués à la question.
 
-    ##### Méthodes
+  ##### Méthodes
     - `handleSaveQuestion` : sauvegarde la question ouverte et affiche une notification.
 
-    ##### Rendu
-    Le composant rend un formulaire pour entrer le texte et les points de la question ouverte, avec un bouton pour sauvegarder la question.
+  ##### Rendu
+  Le composant rend un formulaire pour entrer le texte et les points de la question ouverte, avec un bouton pour
+  sauvegarder la question.
 
-    ##### Composant `ClosedQuestionBox`
-    Ce composant gère l'affichage et la manipulation d'une question fermée.
+  ##### Composant `ClosedQuestionBox`
+  Ce composant gère l'affichage et la manipulation d'une question fermée.
 
-    ##### États locaux
+  ##### États locaux
     - `question` : texte de la question fermée.
     - `options` : options de la question fermée.
     - `points` : points attribués à la question.
 
-    ##### Méthodes
+  ##### Méthodes
     - `handleCheck` : coche ou décoche une option.
     - `handleAddOption` : ajoute une nouvelle option.
     - `handleOptionChange` : modifie le texte d'une option.
     - `handleSaveQuestion` : sauvegarde la question fermée et affiche une notification.
 
-    ##### Rendu
-    Le composant rend un formulaire pour entrer le texte et les points de la question fermée, gérer les options, et un bouton pour sauvegarder la question.
+  ##### Rendu
+  Le composant rend un formulaire pour entrer le texte et les points de la question fermée, gérer les options, et un
+  bouton pour sauvegarder la question.
 
-    ##### Composant `Question`
-    Ce composant gère l'affichage du composant `QuestionBox` et des questions fermées.
+  ##### Composant `Question`
+  Ce composant gère l'affichage du composant `QuestionBox` et des questions fermées.
 
-    ##### États locaux
+  ##### États locaux
     - `closedQuestionVisible` : contrôle la visibilité des questions fermées.
     - `questionCount` : compte le nombre de questions.
     - `questionnaire` : récupère le dernier questionnaire.
 
-    ##### Méthodes
+  ##### Méthodes
     - `handleAddQuestion` : ajoute une nouvelle question fermée.
 
-    ##### Rendu
-    Le composant rend un formulaire pour ajouter et afficher les questions du questionnaire.
+  ##### Rendu
+  Le composant rend un formulaire pour ajouter et afficher les questions du questionnaire.
 
-    ##### Styles
-    Le fichier contient des styles personnalisés pour divers éléments du formulaire, définis avec `StyleSheet.create`.
+  ##### Styles
+  Le fichier contient des styles personnalisés pour divers éléments du formulaire, définis avec `StyleSheet.create`.
 
-    ##### Utilisation
-    Pour utiliser ce composant dans une application React Native, il faut s'assurer que les hooks et composants nécessaires soient correctement définis et importés.
-
+  ##### Utilisation
+  Pour utiliser ce composant dans une application React Native, il faut s'assurer que les hooks et composants
+  nécessaires soient correctement définis et importés.
 
 ### _apps/backend/_
 
@@ -282,14 +291,14 @@ django et ses paramètres (avec le fichiers setting, urls, ...).
 
     - **server**
         - (...) _# serveur django_
-    
 
     - **postQuestionnaire**
         - QuestionnaireView : Permet de faire des requêtes GET/POST sur le serializer 'QuestionnaireSerializer'
         - QuestionView :  Permet de faire des requêtes GET/POST sur le serializer 'QuestionnSerializer'
         - CourseView :  Permet de faire des requêtes GET/POST sur le serializer 'CourseSerializer'
         - LanguageView : Permet de faire des requêtes GET/POST sur le serializer 'LanguageSerializer'
-        - ChoiceAnswerInstanceView :  Permet de faire des requêtes GET/POST sur le serializer 'ChoiceAnswerInstanceSerializer'
+        - ChoiceAnswerInstanceView :  Permet de faire des requêtes GET/POST sur le serializer '
+          ChoiceAnswerInstanceSerializer'
         - OpenQuestionView :  Permet de faire des requêtes GET/POST sur le serializer 'OpenQuestionSerializer'
         - ClosedQuestionView :  Permet de faire des requêtes GET/POST sur le serializer 'ClosedQuestionSerializer'
 
@@ -670,6 +679,10 @@ matricule étudiant).
 
 Les différentes urls de l'application _authentication_ sont définies dans le fichier _urls.py_. Elles sont en liens avec
 les vues décrites plus haut.
+
+#### Tests (Authentication)
+
+Pour les tests concernant l'authentification, veuillez consulter le fichier tests_authentication.md du dossier courant.
 
 ### Database
 
@@ -1160,62 +1173,92 @@ urlpatterns = [
 
 [//]: # "Ce fichier contient des méthodes qui s'occupe de valider les différents credentials donnés par un utilisateur."
 
-
 # Pipeline de développement (Devops)
 
-
 ## Introduction
-Cette documentation décrit une pipeline DevOps illustrée par un cycle continu, intégrant les étapes clés du développement et des opérations. Cette approche vise à améliorer la collaboration entre les équipes de développement (Dev) et d'opérations (Ops), à augmenter la fréquence des déploiements et à garantir une livraison continue et de haute qualité des applications logicielles.
+
+Cette documentation décrit une pipeline DevOps illustrée par un cycle continu, intégrant les étapes clés du
+développement et des opérations. Cette approche vise à améliorer la collaboration entre les équipes de développement (
+Dev) et d'opérations (Ops), à augmenter la fréquence des déploiements et à garantir une livraison continue et de haute
+qualité des applications logicielles.
 
 ## Étapes de la Pipeline
+
 ![DevOps Pipeline](./devops.png)
 
-
-
-
 ### 1. Plan
+
 - **Outil associé** : Trello
-- **Description** : La phase de planification implique la définition des objectifs, la création des tâches et la gestion des projets. Trello est utilisé pour organiser les tâches, gérer les flux de travail et suivre l'avancement du projet.
+- **Description** : La phase de planification implique la définition des objectifs, la création des tâches et la gestion
+  des projets. Trello est utilisé pour organiser les tâches, gérer les flux de travail et suivre l'avancement du projet.
 
 ### 2. Code
+
 - **Outil associé** : Git
-- **Description** : Les développeurs écrivent le code source du projet. Git est utilisé comme système de contrôle de version pour gérer et suivre les modifications du code, facilitant la collaboration et le suivi des contributions.
+- **Description** : Les développeurs écrivent le code source du projet. Git est utilisé comme système de contrôle de
+  version pour gérer et suivre les modifications du code, facilitant la collaboration et le suivi des contributions.
 
 ### 3. Build
+
 - **Outils associés** : Django, React
-- **Description** : Le code est compilé et les dépendances sont résolues pour créer une version exécutable de l'application en local. Django et React sont utilisés pour construire des applications web, respectivement sur le backend et le frontend.
+- **Description** : Le code est compilé et les dépendances sont résolues pour créer une version exécutable de
+  l'application en local. Django et React sont utilisés pour construire des applications web, respectivement sur le
+  backend et le frontend.
 
 ### 4. Test
+
 - **Frameworks associés** : Django, React Native
-- **Description** : Les tests automatisés sont exécutés pour s'assurer que le code est fonctionnel avec un certains degré de confiance. Django et React Native fournissent des frameworks de test natifs pour exécuter des tests unitaires, d'intégration. Ces tests garantissent la qualité et la fiabilité du logiciel.
+- **Description** : Les tests automatisés sont exécutés pour s'assurer que le code est fonctionnel avec un certains
+  degré de confiance. Django et React Native fournissent des frameworks de test natifs pour exécuter des tests
+  unitaires, d'intégration. Ces tests garantissent la qualité et la fiabilité du logiciel.
 
 ### 5. Release
-- **Description** : Une fois les tests passés, la version est prête à être déployée dans un environnement de production ou de pré-production. Cette étape peut inclure des approbations manuelles ou automatiques pour valider le déploiement.
+
+- **Description** : Une fois les tests passés, la version est prête à être déployée dans un environnement de production
+  ou de pré-production. Cette étape peut inclure des approbations manuelles ou automatiques pour valider le déploiement.
 
 ### 6. Deploy
+
 - **Outil associé** : PortainerIO
-- **Description** : L'application est déployée sur les serveurs de production. PortainerIO est utilisé pour gérer les environnements de conteneurs, assurant une portabilité et une consistance entre les environnements de développement et de production.
+- **Description** : L'application est déployée sur les serveurs de production. PortainerIO est utilisé pour gérer les
+  environnements de conteneurs, assurant une portabilité et une consistance entre les environnements de développement et
+  de production.
 
 ### 7. Operate
-- **Description** : L'application est en production et utilisée par les clients. Les opérations quotidiennes incluent la gestion des performances, l'application des correctifs et la gestion des incidents pour assurer une disponibilité continue.
+
+- **Description** : L'application est en production et utilisée par les clients. Les opérations quotidiennes incluent la
+  gestion des performances, l'application des correctifs et la gestion des incidents pour assurer une disponibilité
+  continue.
 
 ### 8. Monitor
+
 - **Outil associé** : SonarQube
-- **Description** : La performance de l'application est surveillée pour détecter les problèmes et les erreurs en temps réel. SonarQube est utilisé pour analyser la qualité du code, identifier les vulnérabilités et fournir des rapports sur les métriques de performance.
+- **Description** : La performance de l'application est surveillée pour détecter les problèmes et les erreurs en temps
+  réel. SonarQube est utilisé pour analyser la qualité du code, identifier les vulnérabilités et fournir des rapports
+  sur les métriques de performance.
 
 ## Boucle DevOps
-Le cycle DevOps est itératif et continu, chaque phase étant constamment revisitée pour améliorer le processus global. Les feedbacks de la phase "Monitor" alimentent la phase "Plan", créant une boucle continue de développement, d'amélioration et de déploiement.
 
-## Outils 
+Le cycle DevOps est itératif et continu, chaque phase étant constamment revisitée pour améliorer le processus global.
+Les feedbacks de la phase "Monitor" alimentent la phase "Plan", créant une boucle continue de développement,
+d'amélioration et de déploiement.
+
+## Outils
+
 - **[Django](https://www.djangoproject.com)** : Un framework web pour le développement backend.
 - **[React Native](https://reactnative.dev)** : Un framework pour le développement d'applications mobiles.
 - **[Trello](https://trello.com)** : Un outil de gestion de projet et de suivi des tâches.
 - **[SonarQube](https://www.sonarqube.org)** : Un outil d'inspection continue de la qualité du code.
 - **[Git](https://git-scm.com)** : Un système de contrôle de version distribué.
-- **[PortainerIO](https://www.portainer.io)** : Une plateforme de gestion de conteneurs pour automatiser le déploiement des applications.
+- **[PortainerIO](https://www.portainer.io)** : Une plateforme de gestion de conteneurs pour automatiser le déploiement
+  des applications.
 
 ## Conclusion
-Cette pipeline DevOps intègre les meilleures pratiques de développement et de gestion des opérations pour offrir une livraison continue et de haute qualité des applications logicielles. En utilisant les outils et les méthodologies appropriés, les équipes peuvent collaborer plus efficacement, augmenter la fréquence des déploiements et garantir la satisfaction des utilisateurs finaux.
+
+Cette pipeline DevOps intègre les meilleures pratiques de développement et de gestion des opérations pour offrir une
+livraison continue et de haute qualité des applications logicielles. En utilisant les outils et les méthodologies
+appropriés, les équipes peuvent collaborer plus efficacement, augmenter la fréquence des déploiements et garantir la
+satisfaction des utilisateurs finaux.
 
 
 

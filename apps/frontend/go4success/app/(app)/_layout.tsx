@@ -96,29 +96,29 @@ export default function Layout() {
                                         />
                                     </TouchableOpacity>
 
-                                    {/*<TouchableOpacity*/}
-                                    {/*    onPress={() => {*/}
-                                    {/*        console.log("Open notifications");*/}
-                                    {/*    }}*/}
-                                    {/*>*/}
-                                    {/*    <Ionicons*/}
-                                    {/*        name="notifications"*/}
-                                    {/*        size={24}*/}
-                                    {/*        color="#fff"*/}
-                                    {/*    />*/}
-                                    {/*</TouchableOpacity>*/}
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            console.log("Open notifications");
+                                        }}
+                                    >
+                                        <Ionicons
+                                            name="notifications"
+                                            size={24}
+                                            color="#fff"
+                                        />
+                                    </TouchableOpacity>
 
-                                    {/*<TouchableOpacity*/}
-                                    {/*    onPress={() => {*/}
-                                    {/*        router.push("/calendar");*/}
-                                    {/*    }}*/}
-                                    {/*>*/}
-                                    {/*    <Ionicons*/}
-                                    {/*        name="calendar"*/}
-                                    {/*        size={24}*/}
-                                    {/*        color="#fff"*/}
-                                    {/*    />*/}
-                                    {/*</TouchableOpacity>*/}
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            router.push("/calendar");
+                                        }}
+                                    >
+                                        <Ionicons
+                                            name="calendar"
+                                            size={24}
+                                            color="#fff"
+                                        />
+                                    </TouchableOpacity>
 
                                     <TouchableOpacity
                                         onPress={() => {
@@ -177,7 +177,6 @@ export default function Layout() {
                         options={{
                             drawerLabel: t("translationMenu.calendar"),
                             headerTitle: t("translationMenu.calendar"),
-                            drawerItemStyle: { display: "none" },
                             drawerIcon: ({ size, color }) => (
                                 <Ionicons
                                     name="calendar"

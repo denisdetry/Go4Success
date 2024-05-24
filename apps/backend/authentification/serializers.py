@@ -2,6 +2,8 @@ from database.models import User, ExpoToken
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from .validations import validate_password
+
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,6 +48,17 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError(
                 {"password": "Les mots de passe ne correspondent pas"})
+
+        check_password = validate_password(attrs['password'])
+        check_password2 = validate_password(attrs['password2'])
+
+        if check_password:
+            raise serializers.ValidationError(
+                {"error": check_password.data})
+        if check_password2:
+            raise serializers.ValidationError(
+                {"error": check_password2.data})
+
         return attrs
 
     def validate_old_password(self, value):
@@ -54,6 +67,14 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"old_password": "L'ancien mot de passe est incorrect"})
         return value
+
+    # @staticmethod
+    # def validate_password(value):
+    #     return validate_password(value)
+    #
+    # @staticmethod
+    # def validate_password2(value):
+    #     validate_password(value)
 
     def update(self, instance, validated_data):
 

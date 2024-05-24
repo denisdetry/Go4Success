@@ -5,7 +5,6 @@ from django.middleware import csrf
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status, generics
-from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -44,10 +43,11 @@ class CurrentUserView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class UpdateProfileView(viewsets.ModelViewSet):
+class UpdateProfileView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UpdateUserSerializer
+    lookup_field = 'id'
 
 
 class DeleteUserView(generics.DestroyAPIView):

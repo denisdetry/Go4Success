@@ -103,8 +103,8 @@ django), nous explorerons en détail le contenu de chaque application.
 
 # Application React - Front-End
 
-Les différents fichiers de l'application front-end sont décrits dans le dossier `documentation/Frontend/`. Chaque
-fichier décrit une fichier du dossier `apps/frontend/go4success/app/(app)` ou `apps/frontend/go4success/app/(auth)`, un
+Les différents fichiers de l'application front-end sont documentés dans le dossier `documentation/Frontend/`. Chaque
+fichier décrit un fichier du dossier `apps/frontend/go4success/app/(app)` ou `apps/frontend/go4success/app/(auth)`, un
 composant, un hook, un contexte ou autre fichier du frontend.
 
 **Notes :** Certains fichiers sont documentés directement dans le code source et nous avons pas jugé nécessaire de les
@@ -112,7 +112,7 @@ documenter dans le dossier `documentation/Frontend/`.
 
 # Applications Django - Back-End
 
-Les différentes applications django sont décrites dans le dossier `documentation/Backend/`. Chaque fichier décrit une
+Les différentes applications django sont documentés dans le dossier `documentation/Backend/`. Chaque fichier décrit une
 application django, un modèle, une vue, un serializer, un test ou autre fichier du backend.
 
 # Pipeline de développement (Devops)

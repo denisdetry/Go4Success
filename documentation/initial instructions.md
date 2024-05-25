@@ -37,7 +37,7 @@ Pour utiliser Commitizen
 2. cz commit
 3. git push
 
-Pour tout installer (packages, dépendances) c'est simple:
+Pour tout installer (packages, dépendances):
 
 1. Pour le backend vous allez dans le dossier backend et il faut juste faire un:
 
@@ -52,6 +52,11 @@ npm install
 ```
 
 Normalement ça devrait fonctionner mais dites toujours s'il y a un truc qui bloque
+
+
+### mise en place des variable d'environnement
+
+   export 
 
 ### Utilisation des linters
 

@@ -17,12 +17,24 @@ Cette application va s'occuper des questionnaire et des questions.
 
 TODO
 
+
 #### Tests (PostQuestionnaire)
 
-Conntient un ensemble de tests pour vérifier les éléments suivants :
+Contient un ensemble de tests pour vérifier les éléments suivants :
 
-- \*\*
-  TODO
+- **QuestionnaireTestCase**
+
+Cette classe fournit des cas de test pour les fonctionnalités liées à la création de questionnaires dans le système.
+
+- **Environnement de test**
+     factory (APIRequestFactory) : instance d'APIRequestFactory utilisée pour créer des requêtes.
+     userCreation (User) : une instance de superutilisateur créée à des fins de test.
+     userCreation2 (User) : une instance d'utilisateur standard créée à des fins de test.
+
+- **Tests**
+     - *test_create_questionnaire_invalid* : Teste la création d'un questionnaire avec une authentification utilisateur invalide.
+     - *test_create_questionnaire_valid* : Teste la création d'un questionnaire avec une authentification utilisateur valide.
+     - *test_create_empty_questionnaire* : Teste la création d'un questionnaire vide avec une authentification utilisateur valide.
 
 #### Urls (PostQuestionnaire)
 

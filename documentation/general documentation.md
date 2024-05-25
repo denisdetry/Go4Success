@@ -107,8 +107,9 @@ Les différents fichiers de l'application front-end sont décrits dans le dossie
 fichier décrit une fichier du dossier `apps/frontend/go4success/app/(app)` ou `apps/frontend/go4success/app/(auth)`, un
 composant, un hook, un contexte ou autre fichier du frontend.
 
-**Notes :** Certains fichiers sont documentés directement dans le code source et nous avons pas jugé nécessaire de les
-documenter dans le dossier `documentation/Frontend/`.
+**Notes :** Certains fichiers sont documentés directement dans le code source ou ils sont considérés comme étant du
+code `self-documented` et donc, nous avons pas jugé nécessaire de les documenter dans le
+dossier `documentation/Frontend/`.
 
 # Applications Django - Back-End
 

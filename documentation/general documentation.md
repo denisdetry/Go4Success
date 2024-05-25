@@ -104,7 +104,11 @@ django), nous explorerons en détail le contenu de chaque application.
 # Application React - Front-End
 
 Les différents fichiers de l'application front-end sont décrits dans le dossier `documentation/Frontend/`. Chaque
-fichier décrit une fichier dans (app), un composant, un hook, un contexte ou autre fichier du frontend.
+fichier décrit une fichier du dossier `apps/frontend/go4success/app/(app)` ou `apps/frontend/go4success/app/(auth)`, un
+composant, un hook, un contexte ou autre fichier du frontend.
+
+**Notes :** Certains fichiers sont documentés directement dans le code source et nous avons pas jugé nécessaire de les
+documenter dans le dossier `documentation/Frontend/`.
 
 # Applications Django - Back-End
 

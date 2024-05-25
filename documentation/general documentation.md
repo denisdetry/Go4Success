@@ -1228,7 +1228,7 @@ Cette application va s'occuper de la gestion des roles des utilisateurs. Pour ra
 
 #### Serializers (Rolemanagement)
 
--   **UserSerializer** : qui permet de récupérer les données de l'utilisateur et son rôle
+-   **UserSerializer** :  permet de récupérer les données de l'utilisateur et son rôle
 -   **TeacherSerializer** : Permet de récupérer le rôle de l'utilisateur, s'il est professeur ou tuteur.
 -   **EditRoleSerializer** : permet d'editer le rôle d'un utiliateur.
 
@@ -1236,8 +1236,9 @@ Cette application va s'occuper de la gestion des roles des utilisateurs. Pour ra
 
 Conntient un ensemble de tests pour vérifier les éléments suivants :
 
--   \*\*
-    TODO
+- Vérifier que l'utilisateur soit superUser
+- Vérifier qu'il est possible de changer les rôles
+- Vérifier que un utilisateur non superUser ne puisse pas faire des requêtes sur la page.
 
 #### Urls (Rolemanagement)
 
@@ -1264,7 +1265,23 @@ Cette application va s'occuper des questionnaire et des questions.
 
 #### Serializers (PostQuestionnaire)
 
-TODO
+- **QuestionnaireSerializer** : permet de récupérer les données d'un questionnaire, y compris son identifiant, le cours associé, le titre, la description, le total des points, les dates de début et de fin, et la langue.
+
+- **QuestionSerializer** : permet de récupérer les informations d'une question, y compris les choix de type de question, l'identifiant, le questionnaire associé, le texte de la question, le type de question, et les points attribués.
+
+- **OpenAnswerSerializer** : permet de récupérer les données d'une réponse ouverte, y compris l'identifiant, la question associée, l'étudiant ayant répondu, la réponse de l'étudiant et si la réponse est correcte.
+
+- **ChoiceAnswerSerializer** : permet de récupérer les données d'une réponse à choix, y compris l'identifiant, la question associée et l'étudiant ayant répondu.
+
+- **ChoiceAnswerInstanceSerializer** : permet de récupérer les données d'une instance de réponse à choix, y compris l'identifiant, la réponse à choix associée, le choix sélectionné et si le choix est correct.
+
+- **CourseSerializer** : permet de récupérer les informations d'un cours, y compris l'identifiant, le code et le nom du cours.
+
+- **LanguageSerializer** : permet de récupérer les informations d'une langue, y compris l'identifiant, le nom et le code de la langue.
+
+- **OpenQuestionSerializer** : permet de récupérer les données d'une question ouverte, y compris l'identifiant, la question associée et le texte de la question.
+
+- **ClosedQuestionSerializer** : permet de récupérer les données d'une question fermée, y compris l'identifiant, la question associée, les options de réponse et si l'option est sélectionnée.
 
 #### Tests (PostQuestionnaire)
 

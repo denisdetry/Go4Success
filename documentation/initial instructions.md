@@ -54,9 +54,7 @@ npm install
 Normalement ça devrait fonctionner mais dites toujours s'il y a un truc qui bloque
 
 
-### mise en place des variable d'environnement
-
-   export 
+### mise en place des variables d'environnement
 
 ### Utilisation des linters
 

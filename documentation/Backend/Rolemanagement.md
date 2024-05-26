@@ -17,10 +17,12 @@ l'autre et allouer certaines permissions à chaque role.
 
 #### Tests (Rolemanagement)
 
-Conntient un ensemble de tests pour vérifier les éléments suivants :
+Contient un ensemble de tests pour vérifier les éléments suivants :
 
-- \*\*
-  TODO
+- Vérifier que l'utilisateur soit superUser
+- Vérifier qu'il est possible de changer les rôles
+- Vérifier que un utilisateur non superUser ne puisse pas faire des requêtes sur la page.
+
 
 #### Urls (Rolemanagement)
 

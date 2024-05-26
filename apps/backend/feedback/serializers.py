@@ -1,5 +1,5 @@
 from database.models import Feedback, FeedbackAdditionalQuestions, \
-    FeedbackStudent, FeedbackStudentAdditionalQuestions, Activity, Teacher, User, Give
+    FeedbackStudent, FeedbackStudentAdditionalQuestions, Activity, User
 from rest_framework import serializers
 
 

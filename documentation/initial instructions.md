@@ -66,7 +66,7 @@ Je ne sais pas si je peux améliorer le process, mais pour l'instant il faut les
 flake8
 ```
 
-2. Pour le typescritp, vous allez dans le dossier frontend et vous exécutez la commande:
+2. Pour le typescript, vous allez dans le dossier frontend et vous exécutez la commande:
 
 ```bash 
 npm run lint

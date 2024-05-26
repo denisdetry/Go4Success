@@ -28,8 +28,15 @@ import DateTimePicker from "react-native-ui-datepicker";
 import { sendNotificationsToAllUsers } from "@/utils/sendNotification";
 import useAllExpoTokens from "@/hooks/useAllExpoTokens";
 
+// List of hours and quarters for the begin and end time (proposed values)
 const hourQuarterList = generateHourQuarterList();
 
+/**
+ * Function to add an activity with a form to fill in:
+ * the title, description, site, room, language,
+ * activity date, begin time and end time
+ * @returns {JSX.Element} - Add activity form
+ */
 export default function Add() {
     const timezoneOffset = dayjs().utcOffset() / 60;
     const { t } = useTranslation();

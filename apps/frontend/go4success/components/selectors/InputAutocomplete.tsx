@@ -21,11 +21,19 @@ export interface InputAutocompleteProps {
     readonly icon?: any;
 }
 
+/**
+ * Props for the Item component
+ */
 type ItemProps = {
     readonly item: SelectItem;
     readonly onPress: () => void;
 };
 
+/**
+ * Item component
+ * @param item SelectItem object to display
+ * @param onPress Function to call when the item is pressed
+ */
 const Item = ({ item, onPress }: ItemProps) => {
     const [isHovered, setIsHovered] = useState(false);
     return (
@@ -43,6 +51,18 @@ const Item = ({ item, onPress }: ItemProps) => {
         </View>
     );
 };
+
+/**
+ * InputAutocomplete component to display an input field with autocomplete dropdown
+ * User can select an item from the dropdown and type in the input field to filter the items
+ * will return the key, value or the whole object when an item is selected
+ * @param items List of items to display in the autocomplete dropdown
+ * @param placeholder Placeholder text for the input
+ * @param onChange Function to call when the input value changes
+ * @param readOnly Boolean to make the input read only
+ * @param toReturn String to determine what to return when an item is selected
+ * @param icon Icon to display in the input
+ */
 const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     items,
     placeholder,

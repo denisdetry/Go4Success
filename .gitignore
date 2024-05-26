@@ -197,3 +197,6 @@ apps/backend/server/migrations/*
 
 # Frontend
 .expo
+
+# others
+.idea/

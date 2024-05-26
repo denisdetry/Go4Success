@@ -31,7 +31,19 @@ const Item = ({ item, onPress }: ItemProps) => {
         </Pressable>
     );
 };
-const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
+
+/**
+ * !! Implementation needs to be updated !!
+ * InputAutocompleteMultiple component to display an input field with autocomplete dropdown
+ * User can select multiple items from the dropdown and type in the input field to filter the items
+ * will return the selected items when an item is selected
+ * @param items List of items to display in the autocomplete dropdown
+ * @param placeholder Placeholder text for the input
+ * @param searchPlaceholder Placeholder text for the search input
+ * @param onChange Function to call when an item is selected
+ * @param readOnly Boolean to make the input field read-only
+ **/
+const InputAutocompleteMultiple: React.FC<InputAutocompleteProps> = ({
     items,
     placeholder,
     searchPlaceholder,
@@ -131,4 +143,4 @@ const InputAutocomplete: React.FC<InputAutocompleteProps> = ({
     );
 };
 
-export default InputAutocomplete;
+export default InputAutocompleteMultiple;

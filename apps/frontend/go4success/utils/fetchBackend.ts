@@ -2,6 +2,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchError } from "@/utils/fetchError";
 import { t } from "i18next";
 
+/**
+ * Fetch data from the backend with the given options and return the response else throw an error
+ * Also manage the token for the request if it exists in the AsyncStorage
+ * @param options Options for the fetch request:
+ * type: Type of the request (POST, GET, PUT, PATCH, DELETE, OPTIONS)
+ * url: endpoint to fetch data from
+ * params: query parameters for the request
+ * data: data to send with the request
+ */
 export async function fetchBackend(options: {
     readonly type: "POST" | "GET" | "PUT" | "PATCH" | "DELETE" | "OPTIONS";
     url: string;

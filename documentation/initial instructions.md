@@ -54,11 +54,13 @@ npm install
 Normalement ça devrait fonctionner mais dites toujours s'il y a un truc qui bloque
 
 
-### mise en place des variables d'environnement
+### mise en place des variables d'environnement afin de pouvoir communiquer avec le backend
 
+- Windows : EXPO_PUBLIC_API_URL=http://example.com:8000
+- Mac OS & linux : export EXPO_PUBLIC_API_URL=http://example.com:8000
 ### Utilisation des linters
 
-Je ne sais pas si je peux améliorer le process, mais pour l'instant il faut les run indépendamment.
+   
 
 1. Pour le python, vous allez dans le dossier server et vous exécutez la commande:
 

@@ -208,7 +208,7 @@ Voici les différents modèles :
       une notification si et seulement si l'attribut est **True**.
 
 **Notes :** Pour plus d'informations sur les modèles, veuillez consulter les fichiers _models.py_ de l'application
-django _database_. De plus, un schéma de la base donnée, sous sa forme entité relation et relationnel, est disponible
-dans le dossier _database_. Ils portent les noms de _**g4s_ER.png**_ et _**g4s_rel_model.png**_. Un fichier .lun est
+django `apps/backend/database`. De plus, un schéma de la base donnée, sous sa forme entité relation et relationnel, est disponible
+dans le dossier `apps/database`. Ils portent les noms de _**g4s_ER.png**_ et _**g4s_rel_model.png**_. Un fichier .lun est
 aussi
 disponible, qui peut être ouvert avec le logiciel **DB-Main**, afin de modifier les schémas.
